@@ -2,33 +2,171 @@ var charWidth = 5
 var charHeight = 5
 
 // draw text centered at point xy
-function drawText(g,x,y,s){
+function drawText(g,x,y,s,center=true,scale=1){
     let cw = charWidth
     let ch = charHeight
-    let tps = global.textPixelSize 
-    let dx = tps * cw + tps * global.textLetterSpace  
+    let tps = global.textPixelSize * scale 
+    let tls = global.textLetterSpace * scale
+    let dx = tps * cw + tps * tls
     
-    // compute total size
-    let tw = dx*s.length + tps*cw
-    let th = tps*ch
-    x -= tw/2
-    y -= th/2
+    if( center ){
+        let [tw,th] = getTextDims(s,scale)
+        x -= tw/2
+        y -= th/2
+    }
     
     for( const c of s ){
-        let layout = charLayouts[c]
-        for( let iy = 0 ; iy < ch ; iy++ ){
-            let ix = 0
-            for( const b of layout[iy] ){
-                if( b!=' ' ) g.fillRect(x+tps*ix,y+tps*iy,tps,tps)
-                ix += 1
-            }
-        }
-        
+        drawLayout(g,x,y,charLayouts[c],false,0,scale)        
         x += dx
     }
 }
 
+function getTextDims(s,scale=1){
+    let cw = charWidth
+    let ch = charHeight
+    let tps = global.textPixelSize 
+    let tls = global.textLetterSpace  
+    let dx = tps * cw + tps * tls
+    let tw = dx*s.length - tps*tls
+    let th = tps*ch
+    return [tw*scale,th*scale]
+}
+
+function drawLayout(g,x,y, layout, center=true, pad=0, scale=1){
+    if( !layout ) return
+    
+    let tps = global.textPixelSize*scale
+    let tls = global.textLetterSpace*scale
+    let ch = charHeight
+    
+    if( center ){
+        x -= tps*layout[0].length/2
+        y -= tps*layout.length/2
+    }
+    
+    for( let iy = 0 ; iy < ch ; iy++ ){
+        let ix = 0
+        for( const b of layout[iy] ){
+            if( b!=' ' ) g.fillRect(x+tps*ix-pad,y+tps*iy-pad,tps+pad*2,tps+pad*2)
+            ix += 1
+        }
+    }
+}
+
 var charLayouts = {
+    
+'%': [
+    '#   #',
+    '#  # ',
+    '  #  ',
+    ' #  #',
+    '#   #'
+],
+
+'/': [
+    '    #',
+    '   # ',
+    '  #  ',
+    ' #   ',
+    '#    '
+],
+
+'(': [
+    '  ## ',
+    ' #   ',
+    '#    ',
+    ' #   ',
+    '  ## '
+],
+
+')': [
+    '##   ',
+    '   # ',
+    '    #',
+    '   # ',
+    '##   '
+],
+
+'0': [
+    ' ### ',
+    '#   #',
+    '#   #',
+    '#   #',
+    ' ### '
+],
+
+'1': [
+    '  #  ',
+    ' ##  ',
+    '  #  ',
+    '  #  ',
+    ' ### '
+],
+
+'2': [
+    ' ### ',
+    '#   #',
+    '   # ',
+    '  #  ',
+    '#####'
+],
+
+'3': [
+    '###  ',
+    '   # ',
+    ' ### ',
+    '   # ',
+    '###  '
+],
+
+'4': [
+    '#   #',
+    '#   #',
+    '#####',
+    '    #',
+    '    #'
+],
+
+'5': [
+    '#####',
+    '#    ',
+    '#####',
+    '    #',
+    '#####'
+],
+
+'6': [
+    ' ### ',
+    '#    ',
+    '#####',
+    '#   #',
+    ' ### '
+],
+
+'7': [
+    '#####',
+    '   # ',
+    '  #  ',
+    ' #   ',
+    '#    '
+],
+
+'8': [
+    ' ### ',
+    '#   #',
+    ' ### ',
+    '#   #',
+    ' ### '
+],
+
+'9': [
+    ' ### ',
+    '#   #',
+    ' ####',
+    '    #',
+    ' ### '
+],
+
     
     'A': [
         ' ### ',

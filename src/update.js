@@ -1,7 +1,16 @@
 
 
 function update(dt) {    
+    if( global.gameState==GameStates.pauseMenu ) return
+    
     global.t += dt
+    
+    // trigger passive tool behavior
+    toolList[global.selectedToolIndex].update(dt)
+    
+    
+    // shrink all pois and prepare for draw
+    global.allPois = global.allPois.filter( p => p.update(dt) )
     
     // check for resized window
     fitToContainer()    

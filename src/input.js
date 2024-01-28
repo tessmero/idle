@@ -25,26 +25,30 @@ function updateMousePos(event){
 function mouseMove(e){
     updateMousePos(e)
     
-    // apply user-set motion
-    global.autoMoveCountdown = global.autoMoveDelay
-    global.innerFocus = global.mousePos.x
-    global.outerFocus = global.mousePos.y
-    
+    // trigger selected tool movement behavior
+    toolList[global.selectedToolIndex].mouseMove(global.mousePos)
 }
 
 function mouseDown(e){
     if( global.mouseDownDisabled ) return
     global.mouseDown = true
     
-    // trigger clickable elements
+    // trigger clickable gui
     let gui = global.allGuis[global.gameState]
-    gui.clickableElements.forEach( e => {
-        if( inRect(global.mousePos,...e.rect) ){
-            e.click()
-        }
-    })
+    let clickedGui = gui.clickableElements.some( e => 
+        e.rect && inRect(global.mousePos,...e.rect) && !e.click() )
+    if( clickedGui ) return
+    
+    // or trigger selected tool
+    toolList[global.selectedToolIndex].mouseDown(global.mousePos)
+    
 }
 function mouseUp(e){
     global.mouseDownDisabled = false
     global.mouseDown = false
+    
+    // release tool if it was being held down
+    toolList[global.selectedToolIndex].mouseUp(global.mousePos)
+    
+    global.allPois.forEach(p => p.isHeld = false )
 }

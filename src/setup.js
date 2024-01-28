@@ -24,8 +24,12 @@ function init() {
 }
 
 function resetGame(){
+    
+    global.nParticles = 100
+    global.particlesCollected = 0
+    
     resetRand(hard = true)
-    fitToContainer()    
+    fitToContainer()       
     quit()
 }
 

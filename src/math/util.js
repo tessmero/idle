@@ -11,6 +11,10 @@ function rectCenter(x,y,w,h){
     return [x+w/2,y+h/2]
 }
 
+function padRect(x,y,w,h,p){
+    return [x-p,y-p,w+2*p,h+2*p]
+}
+
 function inRect(p,x,y,w,h){
     return (p.x>=x) && (p.x<=(x+w)) && (p.y>=y) && (p.y<=(y+h))
 }

@@ -1,10 +1,17 @@
 
 
-
+- support large number of procedural particles
+    positions computed on draw and not remembered between frames
+    but also support grabbing/eating of individual particles
+- consider only distances squared instead of actual distances (avoid square roots)
+- for circles, radius-squared also used as an analogue for the area of the circle
+    
+    
+    
 
 ## Demo
 
-https://tessmero.github.io/star.html
+https://tessmero.github.io/idle.html
 
 ## Usage
 
