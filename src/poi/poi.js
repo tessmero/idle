@@ -1,15 +1,22 @@
 class Poi {
-    constructor(p,dropCount){
+    constructor(p){
         this.pos = p
         this.vel = v(0,0)
-        this.md2 = global.poiStartArea + global.poiGrowthRate*dropCount
+        this.md2 = global.poiStartArea
         if( this.md2 > global.poiMaxArea ) this.md2 = global.poiMaxArea
         
         
         this.pressure = 0 //0-1 increases when held by player
+        this.pressurePattern = null//instance of PressurePattern
     }
     
     update(dt){
+        // push on-screen
+        var sc = global.screenCorners
+        if( this.pos.x < sc[0].x ) this.pos.x = sc[0].x
+        if( this.pos.x > sc[2].x ) this.pos.x = sc[2].x
+        if( this.pos.y < sc[0].y ) this.pos.y = sc[0].y
+        if( this.pos.y > sc[2].y ) this.pos.y = sc[2].y
         
         this.vel = this.vel.mul(1.0-dt*global.poiFriction)
         this.pos = this.pos.add(this.vel.mul(dt))
@@ -17,6 +24,7 @@ class Poi {
         if( this.isHeld ){
             
             // build pressure
+            if( !this.pressurePattern ) this.pressurePattern = randomPressurePattern()
             this.pressure = Math.min(1, this.pressure+dt*global.poiPressureBuildRate)
             
         } else if(this.pressure > 0) {
@@ -26,10 +34,15 @@ class Poi {
             let p1 = Math.max(0,this.pressure - dt*global.poiPressureReleaseRate)
             let dp = p0-p1
             this.pressure = p1
+            if( this.pressure == 0 ) this.pressurePattern = null
             let n = Math.floor( dp * this.md2 * global.poiParticlesReleased )
-            for( let i = 0 ; i < n ; i++ )
-                global.grabbedParticles.add(global.nParticles+i)
-            global.nParticles += n
+            if( n > 0 ){
+                for( let i = 0 ; i < n ; i++ )
+                    global.grabbedParticles.add(global.nParticles+i)
+                global.nParticles += n
+                global.activeReleasePatterns.push(randomReleasePattern(n,...this.pos.xy(),Math.sqrt(this.md2)))
+            }
+
         }
         
         // shrink gradually
@@ -48,33 +61,30 @@ class Poi {
     }
     
     draw(g){
-        let p = this.pos.xy()
+        let p
+        if( (this.pressure > 0) && this.pressurePattern ){
+            // indicate pressure
+            let off = this.pressurePattern.getOffset(
+                                global.t,this.pressure)
+            p = this.pos.add(off)
+        } else {
+            p = this.pos
+        }
+        p = p.xy()
+        
         let r = Math.sqrt(this.md2)
         g.beginPath()
         g.moveTo(...p)
         g.arc(...p,r,0,twopi)
         g.fill()
         
-        g.fillStyle = global.backgroundColor
-        drawText(g,...p,this.pressure.toFixed(2).toString())
-        g.fillStyle = global.lineColor
         
-        // indicate pressure
-        if( this.pressure > 0 ){
-            g.beginPath()
-            let rr = r*.1
-            let n = 50
-            let da = twopi/n
-            let prs = this.pressure
-            let amp = r*.2*prs
-            let off = randRange(0,twopi)
-            let period = randRange(100,300)
-            for( let i = 0 ; i < n ; i++ ){
-                p = this.pos.add(vp(da*i,r+amp*Math.cos(global.t/period/twopi * Math.floor(rand()*10)))).xy()
-                g.moveTo(...p)
-                g.arc(...p,rr,0,twopi)
-            }
-            g.fill()
+        if( false ){
+            
+            // debug pressure level
+            g.fillStyle = global.backgroundColor
+            drawText(g,...p,this.pressure.toFixed(2).toString())
+            g.fillStyle = global.lineColor
         }
         
     }

@@ -24,7 +24,7 @@ class BuildTool extends Tool{
    
     mouseDown(){
         if( global.allPois.length < global.maxPoiCount ){
-            global.allPois.push(new Poi(global.mousePos,100))
+            global.allPois.push(new Poi(global.mousePos))
         }
         global.selectedToolIndex = 0
     }

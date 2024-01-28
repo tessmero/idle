@@ -26,6 +26,7 @@ class DefaultTool extends Tool{
         if( this.held instanceof Poi ){
             
             //held on poi
+            drawLayout(g,...p,this.iconLayout,false,pad) 
             
             
         } else if( this.held ){
@@ -59,9 +60,19 @@ class DefaultTool extends Tool{
         if( this.held instanceof Poi ){
             
             //held on poi
+            
             // build pressure
             let poi = this.held
             poi.pressure = Math.min(1, poi.pressure+dt*global.poiPressureBuildRate)
+            
+            //apply force
+            let d = global.mousePos.sub(poi.pos)
+            let d2 = d.getD2()
+            if( d2 < 1e-4 ) return
+            let angle = d.getAngle()
+            
+            let accel = vp( angle, global.poiPlayerF/poi.md2 )
+            poi.vel = poi.vel.add(accel.mul(dt))
             
         } else if( this.held ){
             
@@ -73,6 +84,7 @@ class DefaultTool extends Tool{
                     if( !global.grabbedParticles.has(i) ){
                         global.grabbedParticles.add(i)
                         grabbedCount += 1
+                        global.particlesCollected += 1
                     }
                 })
             }

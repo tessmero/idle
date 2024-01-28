@@ -12,15 +12,15 @@ function draw(fps, t) {
     ctx.fillStyle = global.backgroundColor
     ctx.fillRect( ...global.screenRect )
     
-    // draw particles
+    // draw falling particles
     ctx.fillStyle = global.lineColor
     resetRand()
     let n_particles = global.nParticles
     let sc = global.screenCorners
     let sr = global.screenRect
     let anim_angle = global.t*1e-4
-    let particle_radius = .005
-    let particle_wiggle = .05
+    let particle_radius = global.particle_radius
+    let particle_wiggle = global.particle_wiggle
     let md2 = Math.pow(global.mouseGrabRadius,2)
     global.particlesInGrabRange.clear()
     for( var i = 0 ; i < n_particles ; i++ ){
@@ -28,8 +28,8 @@ function draw(fps, t) {
         var r = randRange(0,particle_wiggle)
         var x = sr[0] + rand() * sr[2] + r*Math.cos(a * Math.floor(rand()*10))
         var yr = randRange(0,sr[3])
-        var rawy = 3e-5*global.t+yr
-        var prawy = 3e-5*lastDrawTime+yr
+        var rawy = global.fallSpeed*global.t+yr
+        var prawy = global.fallSpeed*lastDrawTime+yr
         
         // if this particle just looped, ungrab it
         if( Math.floor( rawy / sr[3] ) != Math.floor( prawy / sr[3] ) ){
@@ -48,7 +48,6 @@ function draw(fps, t) {
         if( d2 < md2 ){
             if( !global.particlesInGrabRange.has(i) ){
                 global.particlesInGrabRange.add(i)
-                global.particlesCollected += 1
             }
         }
         
@@ -64,6 +63,12 @@ function draw(fps, t) {
         
     }
     lastDrawTime = global.t
+    
+    // draw released particles
+    resetRand()
+    global.activeReleasePatterns.forEach(rp => {
+        rp.draw(ctx,global.t)
+    })
     
     // draw pois
     global.allPois.forEach( p => p.draw(ctx) )
