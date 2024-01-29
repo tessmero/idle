@@ -11,7 +11,7 @@
 
 ## Demo
 
-https://tessmero.github.io/idle.html
+https://tessmero.github.io/raincatcher.html
 
 ## Usage
 
