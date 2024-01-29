@@ -11,6 +11,8 @@ class Poi {
     }
     
     update(dt){
+        this.r = Math.sqrt(this.md2) // only allowed sqrt
+        
         // push on-screen
         var sc = global.screenCorners
         if( this.pos.x < sc[0].x ) this.pos.x = sc[0].x
@@ -40,7 +42,7 @@ class Poi {
                 for( let i = 0 ; i < n ; i++ )
                     global.grabbedParticles.add(global.nParticles+i)
                 global.nParticles += n
-                global.activeReleasePatterns.push(randomReleasePattern(n,...this.pos.xy(),Math.sqrt(this.md2)))
+                global.activeReleasePatterns.push(randomReleasePattern(n,...this.pos.xy(),this.r))
             }
 
         }
@@ -56,7 +58,7 @@ class Poi {
         
         g.beginPath()
         g.moveTo(...p)
-        g.arc(...p,Math.sqrt(this.md2),0,twopi)
+        g.arc(...p,this.r,0,twopi)
         g.fill()
     }
     
@@ -65,14 +67,14 @@ class Poi {
         if( (this.pressure > 0) && this.pressurePattern ){
             // indicate pressure
             let off = this.pressurePattern.getOffset(
-                                global.t,this.pressure)
+                                global.t,this.r,this.pressure)
             p = this.pos.add(off)
         } else {
             p = this.pos
         }
         p = p.xy()
         
-        let r = Math.sqrt(this.md2)
+        let r = this.r
         g.beginPath()
         g.moveTo(...p)
         g.arc(...p,r,0,twopi)

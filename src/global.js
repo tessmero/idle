@@ -41,6 +41,7 @@ const global = {
     // game advancement
     nParticles: 100, // particles on screen at once
     particlesCollected: 0,
+    particlesRequiredToStart: -1, //
     activeReleasePatterns: [], //list of ReleasePattern instances
     
     //
@@ -66,6 +67,7 @@ const global = {
     canvasMousePos: v(0,0),     //pixels
     mousePos: v(0,0),           //virtual units
     mouseGrabRadius: .05,
+    mouseGrabMd2: .05*.05,
     grabbedParticles: new Set(), // particle indices
     particlesInGrabRange: new Set(),
     

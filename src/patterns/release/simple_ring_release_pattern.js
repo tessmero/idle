@@ -1,4 +1,5 @@
 class SimpleRingReleasePattern extends ReleasePattern{
+    
     // draw released particles 
     draw(g,t){ 
         let speed = global.fallSpeed*5

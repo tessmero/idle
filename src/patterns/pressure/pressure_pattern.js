@@ -5,5 +5,5 @@ class PressurePattern {
     constructor(){}
     
     //get xy for given pressure 0-1
-    getOffset(t,pressure) { throw new Error('not implemented') }
+    getOffset(t,r, pressure) { throw new Error('not implemented') }
 }

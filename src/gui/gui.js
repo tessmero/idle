@@ -27,7 +27,7 @@ class Gui {
         let ch = charHeight
         let tps = global.textPixelSize 
         drawLayout(g,xy[0],xy[1],icon,false,0,scale) //character.js
-        drawText(g,...xy, s,false,.5)
+        drawText(g,...xy, s,false,0,.5)
     }
     
     // draw button with pixel art icon 
@@ -37,10 +37,10 @@ class Gui {
     }
     
     // draw typical button
-    drawButton(g,rect,label=null){
+    drawButton(g,rect,label=null,hoverable=true){
         let lineCol = global.lineColor
         let labelCol = global.lineColor
-        if(inRect(global.mousePos,...rect)){
+        if(hoverable && inRect(global.mousePos,...rect)){
             lineCol = 'white'
         }
         g.fillStyle = global.backgroundColor
@@ -53,5 +53,13 @@ class Gui {
             g.fillStyle = labelCol
             drawText(g, ...rectCenter(...rect), label)
         }
+    }
+    
+    // draw typical label
+    drawLabel(g,rect,label){
+        g.fillStyle = global.backgroundColor
+        drawText(g, ...rectCenter(...rect), label, true, .05)
+        g.fillStyle = global.lineColor
+        drawText(g, ...rectCenter(...rect), label, true, 0)
     }
 }

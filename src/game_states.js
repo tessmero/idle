@@ -14,10 +14,20 @@ function rebuildGuis(){
     }
 }
 
-function play(){
+function resume(){
     global.selectedToolIndex = 0
     global.gameState = GameStates.playing
     document.getElementById("navbar").style.display = "none";
+}
+
+function play(){
+    //reset progress
+    global.nParticles = 100
+    global.particlesCollected = 0
+    global.allPois = []
+    global.grabbedParticles = new Set()
+    
+    resume()
 }
 
 function stats(){
@@ -37,4 +47,5 @@ function quit(){
     global.selectedToolIndex = 0
     global.gameState = GameStates.startMenu
     document.getElementById("navbar").style.display = "block";
+    resetGame()
 }

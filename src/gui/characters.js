@@ -2,7 +2,7 @@ var charWidth = 5
 var charHeight = 5
 
 // draw text centered at point xy
-function drawText(g,x,y,s,center=true,scale=1){
+function drawText(g,x,y,s,center=true,pad=0,scale=1){
     let cw = charWidth
     let ch = charHeight
     let tps = global.textPixelSize * scale 
@@ -16,7 +16,7 @@ function drawText(g,x,y,s,center=true,scale=1){
     }
     
     for( const c of s ){
-        drawLayout(g,x,y,charLayouts[c],false,0,scale)        
+        drawLayout(g,x,y,charLayouts[c],false,pad,scale)        
         x += dx
     }
 }

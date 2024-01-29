@@ -16,8 +16,8 @@ function init() {
     global.canvas = cvs
     global.ctx = cvs.getContext("2d");
     
-    // 
-    resetGame()
+    // go to start menu
+    quit()
     
     //
     requestAnimationFrame(gameLoop);
@@ -25,12 +25,12 @@ function init() {
 
 function resetGame(){
     
-    global.nParticles = 100
+    global.nParticles = 1000
     global.particlesCollected = 0
-    
+    global.grabbedParticles = new Set()
+    global.allPois = []
     resetRand(hard = true)
-    fitToContainer()       
-    quit()
+    fitToContainer()   
 }
 
 

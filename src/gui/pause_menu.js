@@ -24,7 +24,7 @@ class PauseMenu extends Gui {
                 // resume button
                 rect: slots[0],
                 draw: g => this.drawButton(g,slots[0],'RESUME'),//gui.js
-                click: play, //game_states.js
+                click: resume, //game_states.js
             },
             {
                 // quit button

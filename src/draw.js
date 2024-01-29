@@ -21,7 +21,7 @@ function draw(fps, t) {
     let anim_angle = global.t*1e-4
     let particle_radius = global.particle_radius
     let particle_wiggle = global.particle_wiggle
-    let md2 = Math.pow(global.mouseGrabRadius,2)
+    let md2 = global.mouseGrabMd2
     global.particlesInGrabRange.clear()
     for( var i = 0 ; i < n_particles ; i++ ){
         var a = anim_angle + rand() * Math.PI*2
@@ -71,6 +71,7 @@ function draw(fps, t) {
     })
     
     // draw pois
+    resetRand()
     global.allPois.forEach( p => p.draw(ctx) )
     
     // draw gui

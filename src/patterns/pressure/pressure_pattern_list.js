@@ -1,5 +1,6 @@
 let allPressurePatterns = [
-    new SpinPressurePattern()
+    new SpinPressurePattern(),
+    new ShakePressurePattern(),
 ]
 
 
