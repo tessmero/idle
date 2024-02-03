@@ -31,6 +31,14 @@ function mouseMove(e){
 
 function mouseDown(e){
     if( global.mouseDownDisabled ) return
+    
+    // update mouse position
+    if( e.touches ){
+        mouseMove(e.touches[0])
+    } else {
+        mouseMove(e)
+    }
+    
     global.mouseDown = true
     
     // trigger clickable gui
