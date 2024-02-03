@@ -11,7 +11,7 @@ class ReleasePattern {
         this.startTime = global.t
     }
     
-    // draw particles 
-    // released t ms ago
-    draw(g,t){ throw new Error('not implemented') }
+    // draw particles
+    // return the number of particles that just passed off-screen
+    draw(g){ throw new Error('not implemented') }
 }

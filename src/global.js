@@ -1,4 +1,3 @@
-resetRand()
 
 const global = {
     

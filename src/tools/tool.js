@@ -4,7 +4,7 @@
 
 class Tool{
    
-    drawToolbarIcon(g,rect){ throw new Error("not implemented") }
+    getToolbarIcon(){ throw new Error("not implemented") }
    
     drawCursor(g,p){ throw new Error("not implemented") }
    

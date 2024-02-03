@@ -32,17 +32,22 @@ class Poi {
         } else if(this.pressure > 0) {           
             
             // release pressure
-            let p0 = this.pressure
-            let p1 = Math.max(0,this.pressure - dt*global.poiPressureReleaseRate)
-            let dp = p0-p1
-            this.pressure = p1
-            if( this.pressure == 0 ) this.pressurePattern = null
-            let n = Math.round( dp * this.md2 * global.poiParticlesReleased )
-            if( n > 0 ){
-                for( let i = 0 ; i < n ; i++ )
-                    global.grabbedParticles.add(global.nParticles+i)
-                global.nParticles += n
+            if( !this.isReleasing ){
+                
+                // just started releasing, generate new pattern
+                this.isReleasing = true
+                let n = Math.round( this.pressure * this.md2 * global.poiParticlesReleased )
                 global.activeReleasePatterns.push(randomReleasePattern(n,...this.pos.xy(),this.r))
+            }
+            
+            // ongoing gradual release animation
+            this.pressure = Math.max(0,this.pressure - dt*global.poiPressureReleaseRate)
+            
+            if( this.pressure == 0 ){
+                
+                // finished release animation
+                this.pressurePattern = null
+                this.isReleasing = false
             }
 
         }

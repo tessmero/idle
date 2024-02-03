@@ -17,10 +17,6 @@ class DefaultTool extends Tool{
         //otherwise -> mouse pressed on background
         this.held = null 
     }
-    
-    drawToolbarIcon(g,rect){ 
-        drawLayout(g,...rectCenter(...rect),this.iconLayout)
-    }
    
     drawCursor(g,p,pad){ 
         if( this.held instanceof Poi ){
@@ -77,16 +73,32 @@ class DefaultTool extends Tool{
         } else if( this.held ){
             
             // held on background
-            // grab procedural particles
-            if( (this.held) && global.particlesInGrabRange ){ //draw.js
-                let grabbedCount = 0
+            // grab particles from ongoing rain
+            if( global.particlesInGrabRange ){ //draw.js
                 global.particlesInGrabRange.forEach( i => {
                     if( !global.grabbedParticles.has(i) ){
                         global.grabbedParticles.add(i)
-                        grabbedCount += 1
                         global.particlesCollected += 1
                     }
                 })
+            }
+            
+            // grab particles from release patterns
+            if( global.activeReleasePatterns ){
+                let totalGrabbed = 0
+                global.activeReleasePatterns.forEach(rp => {
+                    rp.inGrabRange.forEach(i => {
+                        rp.offScreen[i] = true
+                        global.particlesCollected += 1
+                        totalGrabbed += 1
+                    })
+                    rp.inGrabRange.length = 0
+                })
+                
+                // add to ongoing rain
+                for( let i = 0 ; i < totalGrabbed ; i++ )
+                    global.grabbedParticles.add(global.nParticles+i)
+                global.nParticles += totalGrabbed
             }
         }
     }

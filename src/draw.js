@@ -66,9 +66,28 @@ function draw(fps, t) {
     
     // draw released particles
     resetRand()
+    let passed_offscreen_count = 0
     global.activeReleasePatterns.forEach(rp => {
-        rp.draw(ctx,global.t)
+        passed_offscreen_count += rp.draw(ctx,global.t)
+        
+        //check if in mouse grab radius
+        let p = v(x,y)
+        let d2 = global.mousePos.sub(p).getD2()
+        if( d2 < md2 ){
+            if( !global.particlesInGrabRange.has(i) ){
+                global.particlesInGrabRange.add(i)
+            }
+        }
+        
     })
+        
+    // given the total number of released particles 
+    // that just passed off-screen,
+    // add to ongoing rain
+    for( let i = 0 ; i < passed_offscreen_count ; i++ )
+        global.grabbedParticles.add(global.nParticles+i)
+    global.nParticles += passed_offscreen_count
+    
     
     // draw pois
     resetRand()

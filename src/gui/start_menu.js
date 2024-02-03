@@ -36,29 +36,9 @@ class StartMenu extends Gui {
             slots.push([x,y+i*(h+pad),w,h])
         
         return [
-            {
-                // message banner
-                rect: null,
-                draw: g => this.drawLabel(g,slots[2],message),//gui.js
-                click: null, //game_states.js
-            }, 
-            {
-                // message banner
-                rect: null,
-                draw: g => this.drawLabel(g,slots[3],'TO CATCH RAIN'),//gui.js
-                click: null, //game_states.js
-            }, 
-            {
-                // start button
-                rect: slots[8],
-                draw: g => {
-                    if( global.particlesCollected>global.particlesRequiredToStart ) this.drawButton(g,slots[8],'PLAY')
-                },//gui.js
-                click: () => {
-                    if( global.particlesCollected>global.particlesRequiredToStart ) play() //game_state.js
-                    else return true
-                }
-            }
+            new TextLabel(slots[2],message),
+            new TextLabel(slots[3],'TO CATCH RAIN'),
+            new TextButton(slots[8],'PLAY',play),  //game_state.js
         ]
     }
 }

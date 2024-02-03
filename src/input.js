@@ -44,7 +44,7 @@ function mouseDown(e){
     // trigger clickable gui
     let gui = global.allGuis[global.gameState]
     let clickedGui = gui.clickableElements.some( e => 
-        e.rect && inRect(global.mousePos,...e.rect) && !e.click() )
+        e.rect && vInRect(global.mousePos,...e.rect) && !e.click() )
     if( clickedGui ) return
     
     // or trigger selected tool

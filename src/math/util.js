@@ -7,6 +7,7 @@ var phi = 1.618033988749894
 function v(){return new Vector(...arguments)}
 function vp(){return Vector.polar(...arguments)}
 
+
 function rectCenter(x,y,w,h){
     return [x+w/2,y+h/2]
 }
@@ -15,8 +16,12 @@ function padRect(x,y,w,h,p){
     return [x-p,y-p,w+2*p,h+2*p]
 }
 
-function inRect(p,x,y,w,h){
+function vInRect(p,x,y,w,h){
     return (p.x>=x) && (p.x<=(x+w)) && (p.y>=y) && (p.y<=(y+h))
+}
+
+function inRect(px,py,x,y,w,h){
+    return (px>=x) && (px<=(x+w)) && (py>=y) && (py<=(y+h))
 }
 
 function randRange(min,max){

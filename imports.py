@@ -1,0 +1,79 @@
+import os
+
+# get all source file paths
+base_folder = 'src'
+all_src_paths = {}
+for foldername, subfolders, filenames in os.walk(base_folder):
+    for filename in filenames:
+        if filename.endswith('.js'):
+            relative_path = os.path.relpath(os.path.join(foldername, filename), base_folder).replace("\\","/")
+            all_src_paths[filename] = f"{base_folder}/{relative_path}"
+
+
+# get apping of classes to filenames
+class_filenames = {}
+for filename in all_src_paths:
+    file_path = all_src_paths[filename]
+    with open(file_path, 'r') as file:
+        for line in file:
+            if line.startswith('class '):
+                tokens = line.split()
+                class_name = tokens[1].strip(':\n{')
+                class_filenames[class_name] = filename
+
+# get mapping of classes to their base classes
+class_hierarchy = {}
+for filename in all_src_paths:
+    file_path = all_src_paths[filename]
+    with open(file_path, 'r') as file:
+        for line in file:
+            if line.startswith('class ') and 'extends' in line:
+                tokens = line.split()
+                class_name = tokens[1]
+                extends_index = tokens.index('extends')
+                base_class = tokens[extends_index + 1].strip(':\n{')
+                class_hierarchy[filename] = class_filenames[base_class]
+
+# start planning order of import statements
+order = sorted(list(all_src_paths.keys()))
+def toFirst(my_list, element_to_move):
+    assert element_to_move in my_list, f"'{element_to_move}' must exist in the list"
+    my_list.remove(element_to_move)
+    return [element_to_move] + my_list
+
+def toLast(my_list, element_to_move):
+    assert element_to_move in my_list, f"'{element_to_move}' must exist in the list"
+    my_list.remove(element_to_move)
+    return my_list + [element_to_move]
+
+
+
+# Separate class files and non-class files
+class_files = [filename for filename in order if filename in class_filenames.values()]
+non_class_files = [filename for filename in order if filename not in class_filenames.values()]
+
+# Define a function to get the depth of a class in the hierarchy
+def get_hierarchy_depth(class_fname):
+    depth = 0
+    while class_fname in class_hierarchy.keys():
+        class_fname = class_hierarchy[class_fname]
+        depth += 1
+    return depth
+
+# Sort the class names based on their hierarchy depth
+class_files = sorted(class_files, key=get_hierarchy_depth)
+
+# Concatenate class files and non-class files
+order = class_files + non_class_files
+
+# vector.js, util.js must be first
+order = toFirst(order, 'util.js')
+order = toFirst(order, 'vector.js')
+
+# setup.js must be last
+order = toLast(order, 'setup.js')
+
+# print import statements
+for fname in order:
+    path = all_src_paths[fname]
+    print(f'<script src="{path}"></script>')

@@ -1,7 +1,7 @@
 
 class PauseMenu extends Gui {
     
-    // implement gui
+    // implement Gui
     buildElements(){
         let sc = global.screenCorners
         let sr = global.screenRect
@@ -20,18 +20,8 @@ class PauseMenu extends Gui {
         
         
         return [
-            {
-                // resume button
-                rect: slots[0],
-                draw: g => this.drawButton(g,slots[0],'RESUME'),//gui.js
-                click: resume, //game_states.js
-            },
-            {
-                // quit button
-                rect: slots[1],
-                draw: g => this.drawButton(g,slots[1],'QUIT'),//gui.js
-                click: quit, //game_states.js
-            }
+            new TextButton(slots[0],'RESUME',resume),//game_states.js
+            new TextButton(slots[2],'QUIT',quit)//game_states.js
         ]
     }
 }
