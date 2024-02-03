@@ -21,11 +21,13 @@ function resume(){
 }
 
 function play(){
-    //reset progress
+    
+    // reset progress
     global.nParticles = 100
     global.particlesCollected = 0
     global.allPois = []
     global.grabbedParticles = new Set()
+    global.activeReleasePatterns = []
     
     resume()
 }

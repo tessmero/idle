@@ -37,10 +37,14 @@ function init() {
 
 function resetGame(){
     
+    // init start menu background sim
     global.nParticles = 1000
     global.particlesCollected = 0
     global.grabbedParticles = new Set()
     global.allPois = []
+    global.activeReleasePatterns = []
+    
+    
     resetRand(hard = true)
     fitToContainer()   
 }
