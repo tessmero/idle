@@ -95,6 +95,11 @@ function draw(fps, t) {
         g.arc(c.x,c.y,global.mouseGrabRadius,0,twopi)
         g.stroke()
     }
+    
+    //debug
+    if( false && global.debug ){
+        drawText(ctx,.5,.5,global.debug)
+    }
 
 
     if( false ){

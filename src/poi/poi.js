@@ -29,7 +29,7 @@ class Poi {
             if( !this.pressurePattern ) this.pressurePattern = randomPressurePattern()
             this.pressure = Math.min(1, this.pressure+dt*global.poiPressureBuildRate)
             
-        } else if(this.pressure > 0) {
+        } else if(this.pressure > 0) {           
             
             // release pressure
             let p0 = this.pressure
@@ -37,7 +37,7 @@ class Poi {
             let dp = p0-p1
             this.pressure = p1
             if( this.pressure == 0 ) this.pressurePattern = null
-            let n = Math.floor( dp * this.md2 * global.poiParticlesReleased )
+            let n = Math.round( dp * this.md2 * global.poiParticlesReleased )
             if( n > 0 ){
                 for( let i = 0 ; i < n ; i++ )
                     global.grabbedParticles.add(global.nParticles+i)
