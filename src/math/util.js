@@ -17,7 +17,8 @@ function padRect(x,y,w,h,p){
 }
 
 function vInRect(p,x,y,w,h){
-    return (p.x>=x) && (p.x<=(x+w)) && (p.y>=y) && (p.y<=(y+h))
+    let result = (p.x>=x) && (p.x<=(x+w)) && (p.y>=y) && (p.y<=(y+h))   
+    return result
 }
 
 function inRect(px,py,x,y,w,h){

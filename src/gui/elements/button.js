@@ -1,11 +1,10 @@
 // abstract base class for typical rectangular buttons
 class Button extends GuiElement {
     constructor(rect,action){
-        super()
+        super(rect)
         
         this.rect = rect
         this.action = action
-        this.hoverable = true
     }
     
     click(){
@@ -14,15 +13,14 @@ class Button extends GuiElement {
     
     
     draw(g){
-        this.constructor._draw(g,this.rect,this.hoverable)
+        this.constructor._draw(g,this.rect,this.hovered)
     }
     
-    static _draw(g,rect,hoverable=true,fill=true)
+    static _draw(g,rect,hovered=false,fill=true)
     {
         let lineCol = global.lineColor
-        let labelCol = global.lineColor
         
-        if(this.hoverable && vInRect(global.mousePos,...rect)){
+        if(hovered){
             lineCol = 'white'
         }
         g.fillStyle = global.backgroundColor

@@ -8,6 +8,7 @@ class StatsMenu extends Gui {
         let bigCenterRect = [sc[0].x+m,sc[0].y+m, (sc[2].x-sc[0].x)-2*m, (sc[2].y-sc[0].y)-2*m]
         return [
             new TextButton(bigCenterRect,'STATS',toggleStats)//game_states.js
+                .withTooltip('nothing to see here')
         ]
     }
 }

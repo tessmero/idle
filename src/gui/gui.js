@@ -11,4 +11,8 @@ class Gui {
     draw(g){
         this.clickableElements.forEach(e => e.draw(g))
     }
+    
+    update(){
+        this.clickableElements.forEach(e => e.update())
+    }
 }

@@ -1,10 +1,22 @@
 // a line of unchanging on-screen text
 class TextLabel extends GuiElement {
     constructor(rect,label){
-        super()
+        super(rect)
         
         this.rect = rect
         this.label = label
+        this.scale = 1
+        this.pad = .005
+    }
+    
+    withScale(s){ 
+        this.scale = s
+        return this
+    }
+    
+    withPad(p){
+        this.pad = p
+        return this
     }
     
     // implement GuiElement
@@ -13,9 +25,9 @@ class TextLabel extends GuiElement {
         let label = this.label
         
         g.fillStyle = global.backgroundColor
-        drawText(g, ...rectCenter(...rect), label, true, .05)
+        drawText(g, ...rectCenter(...rect), label, true, this.pad, this.scale)
         g.fillStyle = global.lineColor
-        drawText(g, ...rectCenter(...rect), label, true, 0)
+        drawText(g, ...rectCenter(...rect), label, true, 0, this.scale)
     }
     
     // implement GuiElement

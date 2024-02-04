@@ -35,9 +35,11 @@ class StartMenu extends Gui {
         for( let i = 0 ; i < n ; i++ )
             slots.push([x,y+i*(h+pad),w,h])
         
+        let textPad = .01 // padding around letters' pixels
+        
         return [
-            new TextLabel(slots[2],message),
-            new TextLabel(slots[3],'TO CATCH RAIN'),
+            new TextLabel(slots[2],message).withPad(textPad),
+            new TextLabel(slots[3],'TO CATCH RAIN').withPad(textPad),
             new TextButton(slots[8],'PLAY',play),  //game_state.js
         ]
     }

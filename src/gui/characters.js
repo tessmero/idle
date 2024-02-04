@@ -3,6 +3,7 @@ var charHeight = 5
 
 // draw text centered at point xy
 function drawText(g,x,y,s,center=true,pad=0,scale=1){
+    s = s.toUpperCase()
     let cw = charWidth
     let ch = charHeight
     let tps = global.textPixelSize * scale 

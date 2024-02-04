@@ -93,9 +93,19 @@ function draw(fps, t) {
     resetRand()
     global.allPois.forEach( p => p.draw(ctx) )
     
+    // update gui hovering status and tooltip 
+    global.tooltipPopup = null
+    global.allGuis[global.gameState].update() // may set global.tooltipPopup
+    
     // draw gui
     ctx.lineWidth = global.lineWidth
-    global.allGuis[global.gameState].draw(ctx)
+    global.allGuis[global.gameState].draw(ctx) 
+
+    if( global.tooltipPopup ){
+        
+        // draw tooltip
+        global.tooltipPopup.draw(ctx)
+    }
 
     // draw cursor
     let p = global.mousePos.xy()

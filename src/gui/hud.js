@@ -77,22 +77,27 @@ class Hud extends Gui {
         let result = [
         
             // stats button
-            new IconButton(topLeft,this.statsIcon,toggleStats), //game_state.js
+            new IconButton(topLeft,this.statsIcon,toggleStats) //game_state.js
+                .withTooltip('show stats / upgrades'),
             
             // particles on screen
             new StatReadout(topClp,this.rainIcon,() => 
-                global.nParticles.toString()),
+                global.nParticles.toString())
+                .withTooltip('max raindrops on-screen'),
             
             // catch rate %
             new StatReadout(topCenterP,this.catchIcon,() => 
-                Math.floor(100*(global.grabbedParticles.size/global.nParticles)).toString()+'%'),
+                Math.floor(100*(global.grabbedParticles.size/global.nParticles)).toString()+'%')
+                .withDynamicTooltip(() => `caught ${global.grabbedParticles.size} / ${global.nParticles} raindrops`),
                 
             // total caught
             new StatReadout(topCrp,this.collectedIcon,() => 
-                global.particlesCollected.toString()),
+                global.particlesCollected.toString())
+                .withTooltip('total raindrops collected with default tool'),
             
             // pause button
-            new IconButton(topRight,this.pauseIcon,pause), //game_state.js
+            new IconButton(topRight,this.pauseIcon,pause) //game_state.js
+                .withTooltip('pause or quit the game'), 
         ]
         
         
@@ -100,6 +105,7 @@ class Hud extends Gui {
         for( let i = 0 ; i < toolList.length ; i++ ){
             result.push(
                 new ToolbarButton(slots[i],toolList[i].iconLayout,i)
+                    .withTooltip(toolList[i].tooltip)
             )
         }
         

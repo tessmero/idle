@@ -12,6 +12,8 @@ class DefaultTool extends Tool{
             '# ###',
             '   ##']
             
+        this.tooltip = 'default tool'
+            
         //null or falsey -> mouse not being pressed
         //Poi instance -> mouse pressed on poi
         //otherwise -> mouse pressed on background

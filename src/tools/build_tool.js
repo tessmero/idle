@@ -12,6 +12,8 @@ class BuildTool extends Tool{
             'wwwww',
             ' www '
         ]
+            
+        this.tooltip = 'build tool'
     }
     
     drawToolbarIcon(g,rect){ 
