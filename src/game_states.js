@@ -81,4 +81,8 @@ function setState(s){
     if( global.allGuis ) global.allGuis[global.gameState].close()
     global.gameState = s
     if( global.allGuis ) global.allGuis[global.gameState].open()
+        
+    
+    global.shiftHeld = false
+    global.controlHeld = false
 }

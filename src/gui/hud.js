@@ -43,7 +43,7 @@ class Hud extends Gui {
             // particles on screen
             new StatReadout(topClp,rainIcon,() => 
                 global.nParticles.toString())
-                .withTooltip('max raindrops on screen'),
+                .withDynamicTooltip(() => `max ${global.nParticles} raindrops on screen`),
             
             // catch rate %
             new StatReadout(topCenterP,catchIcon,() => 
@@ -53,7 +53,7 @@ class Hud extends Gui {
             // total caught
             new StatReadout(topCrp,collectedIcon,() => 
                 global.particlesCollected.toString())
-                .withTooltip('raindrops collected'),
+                .withDynamicTooltip(() => `${global.particlesCollected} raindrops collected`),
             
             // pause button
             new IconButton(topRight,pauseIcon,pause) //game_state.js

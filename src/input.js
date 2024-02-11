@@ -2,6 +2,20 @@ function keyDown(event){
   if (event.key === "Escape") {
     pause()
   }
+  if (event.which==16) {
+    global.shiftHeld = true
+  }
+  if (event.which==17) {
+    global.controlHeld = true
+  }
+}
+function keyUp(event){
+  if (event.which==16) {
+    global.shiftHeld = false
+  }
+  if (event.which==17) {
+    global.controlHeld = false
+  }
 }
 
 function updateMousePos(event){

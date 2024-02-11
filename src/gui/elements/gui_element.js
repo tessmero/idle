@@ -32,6 +32,7 @@ class GuiElement {
             let anchorPoint = TooltipPopup.pickMouseAnchorPoint()
             let rect = TooltipPopup.pickTooltipRect(anchorPoint,this.tooltip)
             global.tooltipPopup = new TooltipPopup(rect,this.tooltip)
+            if( this.tooltipScale ) global.tooltipPopup.scale = this.tooltipScale
         }
     }
 

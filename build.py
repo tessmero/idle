@@ -2,7 +2,6 @@
 # build production.js
 # by combining all the script tags in test.html
 
-from jsmin import jsmin
 
 # load all source code into a string
 all_source = ''
@@ -21,7 +20,13 @@ with open('test.html','r') as fhtml:
                 all_source += '\n' + fin.read() + '\n'
                     
 # write minified source to file
-minified = jsmin(all_source)
-print( f'reduced source from {len(all_source)} to {len(minified)} chars' )
+#from jsmin import jsmin
+#minified = jsmin(all_source)
+#print( f'reduced source from {len(all_source)} to {len(minified)} chars' )
+#with open('production.js','w') as fout:
+#    fout.write(minified)
+                    
+# write minified source to file
+print( f'writing non-minified source' )
 with open('production.js','w') as fout:
-    fout.write(minified)
+    fout.write(all_source)

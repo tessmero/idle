@@ -37,25 +37,30 @@ class UpgradeMenu extends Gui {
         let w = sr[2]-2*m
         let h = .1 
         let r0 = [sc[0].x+m,sc[0].y+m, w,h]
-        let result = [
-                
-            // particles on screen
-            new AdjustableGlobalVar(r0,"fallSpeed",3e-6)
-                .withTooltip('rain fall speed'),
-            
-        ]
+        let result = []
         
         let specs = [
             // variable names in global.js
+            ['nParticles',1,'max raindrops on screen'],
             ['fallSpeed',3e-6 , 'rain fall speed'],
             ['particle_radius',.001, 'size of falling rain drops'],
-            ['particle_wiggle',.01, 'horizontal movement of falling rain'],
+            ['particle_wiggle',.01, 'horizontal movement of drops'],
             ['poiFriction',1e-3, 'circle friction'],
+            ['baseAnimPeriod',100,'idle gui animations'],
         ]
         specs.forEach( row => {
+            let varname = row[0]
+            let inc = row[1]
             result.push(new AdjustableGlobalVar(
-                r0,row[0],row[1]) // rect, varname, increment,
-                .withTooltip(row[2])) // toolsip
+                r0,varname,inc) // rect, varname, increment,
+                .withDynamicTooltip(()=>{
+                    return [
+                        Math.floor(global[varname]/inc).toString() + ` : ${varname} `,
+                        row[2],
+                        'shift-click for 10x',
+                        'ctrl-click for 100x',
+                    ].join('\n')
+                })) // toolsip
             r0 = [...r0]
             r0[1] += h
         })

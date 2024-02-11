@@ -13,8 +13,18 @@ class AdjustableGlobalVar extends DynamicTextLabel {
         let r1 = [r0[0]+d+p,r[1]+p,d,d]
         
         this.children = [
-            new IconButton(r0,decreaseIcon,()=>{global[varname]-=inc}),
-            new IconButton(r1,increaseIcon,()=>{global[varname]+=inc}),
+            new IconButton(r0,decreaseIcon,()=>{
+                let m = 1
+                if( global.shiftHeld ) m = 10
+                if( global.controlHeld ) m = 100
+                global[varname]-=m*inc
+            }),
+            new IconButton(r1,increaseIcon,()=>{
+                let m = 1
+                if( global.shiftHeld ) m = 10
+                if( global.controlHeld ) m = 100
+                global[varname]+=m*inc
+            }),
         ]
         
         // disable changing dimensions in dynamic_text_label.js
@@ -22,6 +32,7 @@ class AdjustableGlobalVar extends DynamicTextLabel {
         
         // text drawing settings
         this.scale = .5
+        this.tooltipScale = .4
         this.center = false
         
     }

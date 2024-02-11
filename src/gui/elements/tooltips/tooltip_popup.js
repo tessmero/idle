@@ -18,11 +18,19 @@ class TooltipPopup extends GuiElement {
     draw(g){
         let rect = this.rect
         let label = this.label
+        let center = false
+        
+        
+        let p = rectCenter(...rect)
+        if( !center ){
+            p[0] = rect[0]
+            p[1] -= global.textPixelSize
+        }
         
         g.fillStyle = global.lineColor
-        drawText(g, ...rectCenter(...rect), label, true, .05, this.scale)
+        drawText(g, ...p, label, center, .05, this.scale) //characters.js
         g.fillStyle = global.backgroundColor
-        drawText(g, ...rectCenter(...rect), label, true, 0, this.scale)
+        drawText(g, ...p, label, center, 0, this.scale)
         
         new StatReadout()
     }
@@ -37,7 +45,8 @@ class TooltipPopup extends GuiElement {
     static pad(){ return .05 }
     
     // pick anchor point for pickTooltipRect
-    static pickMouseAnchorPoint(){
+    // called in gui_element.js
+    static pickMouseAnchorPoint(){ 
         let p = global.mousePos
         let sr = global.screenRect
         let offset = .1
@@ -53,9 +62,10 @@ class TooltipPopup extends GuiElement {
         return p
     }
     
-    // pick position for tooltip
+    // pick position for tooltip 
+    // called in gui_element.js
     static pickTooltipRect( anchorPoint, label ){
-        let [w,h] = getTextDims(label,TooltipPopup.scale())
+        let [w,h] = getTextDims(label,TooltipPopup.scale()) //character.js
         let sr = global.screenRect
         let ap = anchorPoint
         
