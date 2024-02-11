@@ -38,17 +38,4 @@ class StartMenu extends Gui {
             new TextButton(slots[8],'PLAY',play),  //game_state.js
         ]
     }
-    
-    draw(g){
-        
-        // update label position
-        if( this.slots && this.labels ){
-            
-            // use slots as center position
-            let x = this.slots[0][0] + .1*Math.sin(global.t/1e3)
-            this.labels.forEach(l => l.rect[0]=x)
-        }
-        
-        super.draw(g)
-    }
 }

@@ -7,7 +7,8 @@ class BuildTool extends Tool{
         
         this.icon = circleToolIcon
             
-        this.tooltip = 'build tool'
+        this.tooltip = 'build circles'
+        this.cursorCenter = true // tool.js
     }
    
     mouseDown(){

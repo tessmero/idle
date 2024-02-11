@@ -2,7 +2,8 @@
 class AdjustableGlobalVar extends DynamicTextLabel {
     
     constructor(rect,varname,inc){
-        super(rect,() => '      ' + Math.floor(global[varname]/inc).toString() )
+        super(rect,() => 
+            '        ' + Math.floor(global[varname]/inc).toString().padEnd(8,' ') + `${varname}`)
         
         
         let r = this.rect
@@ -18,6 +19,10 @@ class AdjustableGlobalVar extends DynamicTextLabel {
         
         // disable changing dimensions in dynamic_text_label.js
         this.fixedRect = true
+        
+        // text drawing settings
+        this.scale = .5
+        this.center = false
         
     }
     

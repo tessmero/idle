@@ -21,7 +21,7 @@ class UpgradeMenu extends Gui {
         this.transitionEffect = new Array(n).fill(false)
         
         this.maxTransitionRadius = sc[0].sub(sc[2]).getMagnitude()
-        this.transitionSpeed = 2e-3 // radius increase per ms
+        this.transitionSpeed = 6e-3 // radius increase per ms
         this.transitionCenter = v(.5,.5)//state
         this.transitionRadius = 0//state
         
@@ -33,15 +33,35 @@ class UpgradeMenu extends Gui {
         
         let sc = global.screenCorners
         let sr = global.screenRect
-        let m = .3
-        let r0 = [sc[0].x+m,sc[0].y+m, .4,.1]
-        return [
+        let m = .1*sr[2]
+        let w = sr[2]-2*m
+        let h = .1 
+        let r0 = [sc[0].x+m,sc[0].y+m, w,h]
+        let result = [
                 
             // particles on screen
             new AdjustableGlobalVar(r0,"fallSpeed",3e-6)
                 .withTooltip('rain fall speed'),
             
         ]
+        
+        let specs = [
+            // variable names in global.js
+            ['fallSpeed',3e-6 , 'rain fall speed'],
+            ['particle_radius',.001, 'size of falling rain drops'],
+            ['particle_wiggle',.01, 'horizontal movement of falling rain'],
+            ['poiFriction',1e-3, 'circle friction'],
+        ]
+        specs.forEach( row => {
+            result.push(new AdjustableGlobalVar(
+                r0,row[0],row[1]) // rect, varname, increment,
+                .withTooltip(row[2])) // toolsip
+            r0 = [...r0]
+            r0[1] += h
+        })
+        
+        return result
+        
     }
     
     //extend gui

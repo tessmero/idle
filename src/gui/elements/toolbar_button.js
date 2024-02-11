@@ -8,6 +8,10 @@ class ToolbarButton extends IconButton {
                 
     click(){ 
         global.selectedToolIndex = this.indexInToolbar
+        
+        // close the upgrades menu if it is open 
+        if( global.gameState==GameStates.upgradeMenu ) toggleStats()
+        
     }
     
     // override IconButton

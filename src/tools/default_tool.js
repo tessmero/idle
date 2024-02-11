@@ -8,6 +8,7 @@ class DefaultTool extends Tool{
         this.icon = defaultToolIcon
             
         this.tooltip = 'default tool'
+        this.cursorCenter = false // tool.js
             
         //null or falsey -> mouse not being pressed
         //Poi instance -> mouse pressed on poi

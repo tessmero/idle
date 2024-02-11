@@ -120,7 +120,7 @@ function draw(fps, t) {
     tool.drawCursor(ctx,p,0)
 
     // debug draw mouse
-    if( true ){
+    if( false ){
         let c = global.mousePos
         g.strokeStyle = 'red'
         g.beginPath()
