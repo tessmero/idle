@@ -1,3 +1,6 @@
+// base class for gui elements
+
+// instances represent rectangles positioned on-screen
 class GuiElement {
 
     constructor(rect){

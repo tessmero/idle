@@ -1,19 +1,17 @@
 const GameStates = {
     startMenu: 0,
     playing: 1,
-    statsMenu: 2,
+    upgradeMenu: 2,
     pauseMenu: 3,
 }
 
 function rebuildGuis(){
-    if( !global.allGuis ){
-        global.allGuis = [
-             new StartMenu(),
-             new Hud(),
-             new StatsMenu(),
-             new PauseMenu(),
-        ]
-    }
+    global.allGuis = [
+         new StartMenu(),
+         new Hud(),
+         new UpgradeMenu(),
+         new PauseMenu(),
+    ]
     global.allGuis.forEach(k => {
         k.clickableElements = k.buildElements()
     })
@@ -37,20 +35,17 @@ function showWebsiteOverlays(){
 
 // toggle the stats / upgrades menu overlay
 function toggleStats(){
-    if( global.gameState != GameStates.statsMenu ){
-        global.selectedToolIndex = 0
-        global.gameState = GameStates.statsMenu
+    if( global.gameState != GameStates.upgradeMenu ){
+        setState( GameStates.upgradeMenu )
     } else {
-        global.selectedToolIndex = 0
-        global.gameState = GameStates.playing
+        setState( GameStates.playing )
     }
     
 }
 
 // go from pause menu back to game
 function resume(){
-    global.selectedToolIndex = 0
-    global.gameState = GameStates.playing
+    setState( GameStates.playing )
     hideWebsiteOverlays()
 }
 
@@ -67,14 +62,23 @@ function play(){
 }
 
 function pause(){
-    global.selectedToolIndex = 0
-    global.gameState = GameStates.pauseMenu
+    if( global.gameState != GameStates.pauseMenu ){
+        setState( GameStates.pauseMenu )
+    } else {
+        setState( GameStates.playing )
+    }
     hideWebsiteOverlays()
 }
 
 function quit(){
-    global.selectedToolIndex = 0
-    global.gameState = GameStates.startMenu
+    setState( GameStates.startMenu )
     showWebsiteOverlays()
     resetGame()
+}
+
+function setState(s){
+    global.selectedToolIndex = 0
+    if( global.allGuis ) global.allGuis[global.gameState].close()
+    global.gameState = s
+    if( global.allGuis ) global.allGuis[global.gameState].open()
 }

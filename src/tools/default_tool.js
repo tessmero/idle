@@ -5,12 +5,7 @@ class DefaultTool extends Tool{
     constructor(){
         super()
         
-        this.iconLayout = [
-            '#### ',
-            '###  ',
-            '#### ',
-            '# ###',
-            '   ##']
+        this.icon = defaultToolIcon
             
         this.tooltip = 'default tool'
             
@@ -21,10 +16,11 @@ class DefaultTool extends Tool{
     }
    
     drawCursor(g,p,pad){ 
+            
         if( this.held instanceof Poi ){
             
             //held on poi
-            drawLayout(g,...p,this.iconLayout,false,pad) 
+            super.drawCursor(g,p,pad)
             
             
         } else if( this.held ){
@@ -32,14 +28,31 @@ class DefaultTool extends Tool{
             // held on background
             // catching rain
             let c = global.mousePos
+            let r = global.mouseGrabRadius
+            
+            g.strokeStyle = global.backgroundColor
+            g.lineWidth = .005
             g.beginPath()
-            g.moveTo(c.x+global.mouseGrabRadius,c.y)
-            g.arc(c.x,c.y,global.mouseGrabRadius,0,twopi)
+            g.moveTo(c.x+r,c.y)
+            g.arc(c.x,c.y,r,0,twopi)
+            g.stroke()
+            
+            g.strokeStyle = global.lineColor
+            g.lineWidth = .0025
+            g.beginPath()
+            g.moveTo(c.x+r,c.y)
+            g.arc(c.x,c.y,r,0,twopi)
             g.stroke()
             
         } else {
-            drawLayout(g,...p,this.iconLayout,false,pad) 
+            
+            // not held
+            super.drawCursor(g,p,pad)
         }
+    }
+   
+    mouseMove(p){
+        
     }
    
     mouseDown(p){ 

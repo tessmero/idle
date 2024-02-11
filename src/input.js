@@ -25,6 +25,9 @@ function updateMousePos(event){
 function mouseMove(e){
     updateMousePos(e)
     
+    // animate cursor if idle 
+    global.idleCountdown = global.idleDelay
+    
     // trigger selected tool movement behavior
     toolList[global.selectedToolIndex].mouseMove(global.mousePos)
 }
@@ -43,8 +46,12 @@ function mouseDown(e){
     
     // trigger clickable gui
     let gui = global.allGuis[global.gameState]
-    let clickedGui = gui.clickableElements.some( e => 
-        e.rect && vInRect(global.mousePos,...e.rect) && !e.click() )
+    let clickedGui = gui.click()
+    if( clickedGui ) return
+    if( gui.hasHudInBackground ){
+        let hud = global.allGuis[GameStates.playing]
+        clickedGui = hud.click()
+    }
     if( clickedGui ) return
     
     // or trigger selected tool

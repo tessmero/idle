@@ -24,10 +24,8 @@ class TextLabel extends GuiElement {
         let rect = this.rect
         let label = this.label
         
-        g.fillStyle = global.backgroundColor
-        drawText(g, ...rectCenter(...rect), label, true, this.pad, this.scale)
-        g.fillStyle = global.lineColor
-        drawText(g, ...rectCenter(...rect), label, true, 0, this.scale)
+        drawText(g, ...rectCenter(...rect), label, true, this.pad, this.scale, true)
+        drawText(g, ...rectCenter(...rect), label, true, 0, this.scale, false)
     }
     
     // implement GuiElement

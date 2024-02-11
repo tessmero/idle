@@ -3,53 +3,13 @@ class Hud extends Gui {
     
     constructor(){
         super()
-        
-        this.pauseIcon = [
-            'ww ww',
-            'ww ww',
-            'ww ww',
-            'ww ww',
-            'ww ww'
-        ]
-        
-        this.collectedIcon = [
-            'WWWWW',
-            'W   W',
-            'WWWWW',
-            'WWWWW',
-            'WWWWW',
-        ]
-        
-        this.rainIcon = [
-            'W   W',
-            '  W  ',
-            'W   W',
-            '  W  ',
-            'W   W',
-        ]
-        
-        this.catchIcon = [
-            'W   W',
-            'W WWW',
-            'WWWWW',
-            ' WWW ',
-            ' WWW ',
-        ]
-        
-        this.statsIcon = [
-            'W WWW',
-            '     ',
-            'W WWW',
-            '     ',
-            'W WWW',
-        ]
     }
     
     // implement gui
     buildElements(){
         let sc = global.screenCorners
         let sr = global.screenRect
-        let m = .1
+        let m = .08
         
         // layout buttons at top of screen
         let topRow = [sc[0].x,sc[0].y, (sc[2].x-sc[0].x), m]
@@ -77,26 +37,26 @@ class Hud extends Gui {
         let result = [
         
             // stats button
-            new IconButton(topLeft,this.statsIcon,toggleStats) //game_state.js
-                .withTooltip('show stats / upgrades'),
+            new IconButton(topLeft,statsIcon,toggleStats) //game_state.js
+                .withTooltip('toggle upgrades menu'),
             
             // particles on screen
-            new StatReadout(topClp,this.rainIcon,() => 
+            new StatReadout(topClp,rainIcon,() => 
                 global.nParticles.toString())
-                .withTooltip('max raindrops on-screen'),
+                .withTooltip('max raindrops on screen'),
             
             // catch rate %
-            new StatReadout(topCenterP,this.catchIcon,() => 
+            new StatReadout(topCenterP,catchIcon,() => 
                 Math.floor(100*(global.grabbedParticles.size/global.nParticles)).toString()+'%')
                 .withDynamicTooltip(() => `caught ${global.grabbedParticles.size} / ${global.nParticles} raindrops`),
                 
             // total caught
-            new StatReadout(topCrp,this.collectedIcon,() => 
+            new StatReadout(topCrp,collectedIcon,() => 
                 global.particlesCollected.toString())
-                .withTooltip('total raindrops collected with default tool'),
+                .withTooltip('raindrops collected'),
             
             // pause button
-            new IconButton(topRight,this.pauseIcon,pause) //game_state.js
+            new IconButton(topRight,pauseIcon,pause) //game_state.js
                 .withTooltip('pause or quit the game'), 
         ]
         
@@ -104,7 +64,7 @@ class Hud extends Gui {
         // build toolbar buttons
         for( let i = 0 ; i < toolList.length ; i++ ){
             result.push(
-                new ToolbarButton(slots[i],toolList[i].iconLayout,i)
+                new ToolbarButton(slots[i],toolList[i].icon,i)
                     .withTooltip(toolList[i].tooltip)
             )
         }

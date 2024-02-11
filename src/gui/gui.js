@@ -2,7 +2,6 @@ class Gui {
     
     constructor(){
         this.clickableElements = []
-        //clickableElements populated in game_states.js
     }
     
     // build list of GuiElement instances
@@ -12,7 +11,16 @@ class Gui {
         this.clickableElements.forEach(e => e.draw(g))
     }
     
-    update(){
+    update(dt){
         this.clickableElements.forEach(e => e.update())
     }
+    
+    click(){
+        return this.clickableElements.some( e => 
+            e.rect && vInRect(global.mousePos,...e.rect) && !e.click() )
+    }
+    
+    // hooks called in game_states.js
+    open(){}
+    close(){}
 }

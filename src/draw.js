@@ -9,8 +9,8 @@ function draw(fps, t) {
     var canvas = global.canvas
     
     // draw background
-    ctx.fillStyle = global.backgroundColor
-    ctx.fillRect( ...global.screenRect )
+    //ctx.fillStyle = global.backgroundColor
+    ctx.clearRect( ...global.screenRect )
     
     // draw falling particles
     ctx.fillStyle = global.lineColor
@@ -93,9 +93,13 @@ function draw(fps, t) {
     resetRand()
     global.allPois.forEach( p => p.draw(ctx) )
     
-    // update gui hovering status and tooltip 
-    global.tooltipPopup = null
-    global.allGuis[global.gameState].update() // may set global.tooltipPopup
+    // draw hud gui in background
+    if( global.allGuis[global.gameState].hasHudInBackground ){
+        global.allGuis[GameStates.playing].draw(ctx) 
+    }
+    
+    // draw upgrade menu gui transition effect
+    global.allGuis[GameStates.upgradeMenu].drawTransitionEffect(g) //upgrade_menu.js
     
     // draw gui
     ctx.lineWidth = global.lineWidth
@@ -116,12 +120,12 @@ function draw(fps, t) {
     tool.drawCursor(ctx,p,0)
 
     // debug draw mouse
-    if( false ){
+    if( true ){
         let c = global.mousePos
         g.strokeStyle = 'red'
         g.beginPath()
         g.moveTo(c.x,c.y)
-        g.arc(c.x,c.y,global.mouseGrabRadius,0,twopi)
+        g.arc(c.x,c.y,global.mouseGrabRadius/10,0,twopi)
         g.stroke()
     }
     

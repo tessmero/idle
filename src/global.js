@@ -23,6 +23,14 @@ const global = {
     textPixelSize: .01, //virtual units
     textLetterSpace: 1, // text pixels
     
+    
+    // syncronized gui elements idle animations
+    baseAnimPeriod: 500, //ms
+    
+    // start animating mouse cursor if idle
+    idleCountdown: 0, //state
+    idleDelay: 2000, //ms
+    
     //
     fallSpeed: 3e-5,
     particle_radius: .005,

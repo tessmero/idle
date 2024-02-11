@@ -23,9 +23,9 @@ class Button extends GuiElement {
         if(hovered){
             lineCol = 'white'
         }
-        g.fillStyle = global.backgroundColor
+        //g.fillStyle = global.backgroundColor
         g.strokeStyle = lineCol
-        if( fill ) g.fillRect(...rect)
+        if( fill ) g.clearRect(...rect)
         g.strokeRect(...rect)
         g.fillStyle = global.lineColor
     }

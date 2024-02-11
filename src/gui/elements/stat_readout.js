@@ -2,15 +2,12 @@
 class StatReadout extends DynamicTextLabel {
     
     constructor(rect,icon,labelFunc){
-        super(rect,labelFunc)
+        super(rect,function(){ return '  ' + labelFunc() })
         this.icon = icon
         this.scale = this.constructor.scale()
     }
     
     update(){
-        
-        
-        
         super.update()
     }
     
@@ -25,9 +22,9 @@ class StatReadout extends DynamicTextLabel {
         let ch = charHeight
         let tps = global.textPixelSize 
         
-        g.fillStyle = global.backgroundColor
-        drawLayout(g,xy[0],xy[1],this.icon,false,this.pad,this.scale) //character.js
-        g.fillStyle = global.lineColor
-        drawLayout(g,xy[0],xy[1],this.icon,false,0,this.scale) //character.js
+        let layout = this.icon.getCurrentAnimatedLayout()
+        
+        drawLayout(g,xy[0],xy[1],layout,false,this.pad,this.scale,true) //character.js
+        drawLayout(g,xy[0],xy[1],layout,false,0,this.scale,false) //character.js
     }
 }

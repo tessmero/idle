@@ -2,7 +2,7 @@ var charWidth = 5
 var charHeight = 5
 
 // draw text centered at point xy
-function drawText(g,x,y,s,center=true,pad=0,scale=1){
+function drawText(g,x,y,s,center=true,pad=0,scale=1, clear=false){
     s = s.toUpperCase()
     let cw = charWidth
     let ch = charHeight
@@ -17,7 +17,7 @@ function drawText(g,x,y,s,center=true,pad=0,scale=1){
     }
     
     for( const c of s ){
-        drawLayout(g,x,y,charLayouts[c],false,pad,scale)        
+        drawLayout(g,x,y,charLayouts[c],false,pad,scale,clear)        
         x += dx
     }
 }
@@ -33,12 +33,12 @@ function getTextDims(s,scale=1){
     return [tw*scale,th*scale]
 }
 
-function drawLayout(g,x,y, layout, center=true, pad=0, scale=1){
+function drawLayout(g,x,y, layout, center=true, pad=0, scale=1, clear=false){
     if( !layout ) return
     
     let tps = global.textPixelSize*scale
     let tls = global.textLetterSpace*scale
-    let ch = charHeight
+    let ch = layout.length//charHeight
     
     if( center ){
         x -= tps*layout[0].length/2
@@ -48,7 +48,13 @@ function drawLayout(g,x,y, layout, center=true, pad=0, scale=1){
     for( let iy = 0 ; iy < ch ; iy++ ){
         let ix = 0
         for( const b of layout[iy] ){
-            if( b!=' ' ) g.fillRect(x+tps*ix-pad,y+tps*iy-pad,tps+pad*2,tps+pad*2)
+            if( b!=' ' ){
+                if( clear ){
+                    g.clearRect(x+tps*ix-pad,y+tps*iy-pad,tps+pad*2,tps+pad*2)
+                }  else {
+                    g.fillRect(x+tps*ix-pad,y+tps*iy-pad,tps+pad*2,tps+pad*2)
+                }
+            }
             ix += 1
         }
     }

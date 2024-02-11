@@ -3,16 +3,6 @@ class StartMenu extends Gui {
     
     constructor(){
         super()
-            
-        
-        this.rainIcon = [
-            'W   W',
-            '  W  ',
-            'W   W',
-            '  W  ',
-            'W   W',
-        ]
-        
     }
     
     // implement gui
@@ -34,13 +24,31 @@ class StartMenu extends Gui {
         let slots = []
         for( let i = 0 ; i < n ; i++ )
             slots.push([x,y+i*(h+pad),w,h])
+        this.slots = slots
         
         let textPad = .01 // padding around letters' pixels
         
-        return [
+        this.labels = [
             new TextLabel(slots[2],message).withPad(textPad),
             new TextLabel(slots[3],'TO CATCH RAIN').withPad(textPad),
+        ]
+        
+        return [
+            ...this.labels,
             new TextButton(slots[8],'PLAY',play),  //game_state.js
         ]
+    }
+    
+    draw(g){
+        
+        // update label position
+        if( this.slots && this.labels ){
+            
+            // use slots as center position
+            let x = this.slots[0][0] + .1*Math.sin(global.t/1e3)
+            this.labels.forEach(l => l.rect[0]=x)
+        }
+        
+        super.draw(g)
     }
 }

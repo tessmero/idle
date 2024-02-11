@@ -5,23 +5,9 @@ class BuildTool extends Tool{
     constructor(){
         super()
         
-        this.iconLayout = [
-            ' www ',
-            'wwwww',
-            'wwwww',
-            'wwwww',
-            ' www '
-        ]
+        this.icon = circleToolIcon
             
         this.tooltip = 'build tool'
-    }
-    
-    drawToolbarIcon(g,rect){ 
-        drawLayout(g,...rectCenter(...rect),this.iconLayout)
-    }
-   
-    drawCursor(g,p){ 
-        drawLayout(g,...p,this.iconLayout) 
     }
    
     mouseDown(){

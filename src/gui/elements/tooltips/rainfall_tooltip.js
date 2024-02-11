@@ -1,6 +1,5 @@
-// a rectangle of text that appears on top of all other elements
-// considered static/immutable
-class TooltipPopup extends GuiElement {
+
+class RainfallTooltip extends TooltipPopup {
     constructor(rect,label){
         super(rect)
         
@@ -23,6 +22,8 @@ class TooltipPopup extends GuiElement {
         drawText(g, ...rectCenter(...rect), label, true, .05, this.scale)
         g.fillStyle = global.backgroundColor
         drawText(g, ...rectCenter(...rect), label, true, 0, this.scale)
+        
+        new StatReadout()
     }
     
     // implement GuiElement

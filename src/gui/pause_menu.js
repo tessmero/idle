@@ -1,6 +1,12 @@
 
 class PauseMenu extends Gui {
     
+    constructor(...p){
+        super(...p)
+        
+        this.hasHudInBackground = true // checked in draw.js
+    }
+    
     // implement Gui
     buildElements(){
         let sc = global.screenCorners

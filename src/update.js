@@ -1,6 +1,23 @@
 
 
 function update(dt) {    
+    
+    // check for resized window
+    fitToContainer()    
+    
+    // advance countdown for user to be considered idle
+    if( global.idleCountdown > 0 ){
+        global.idleCountdown -= dt
+    }
+    
+    // update gui hovering status and tooltip 
+    global.tooltipPopup = null
+    if( global.allGuis[global.gameState].hasHudInBackground ){
+        global.allGuis[GameStates.playing].update(dt) // hud may set global.tooltipPopup
+    }
+    global.allGuis[global.gameState].update(dt) // gui in front may set global.tooltipPopup
+    
+    //// stop if game is paused
     if( global.gameState==GameStates.pauseMenu ) return
     
     global.t += dt
@@ -8,12 +25,12 @@ function update(dt) {
     // trigger passive tool behavior
     toolList[global.selectedToolIndex].update(dt)
     
+    // upgrades menu transtiino effect
+    global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)
     
     // shrink all pois and prepare for draw
     global.allPois = global.allPois.filter( p => p.update(dt) )
     
-    // check for resized window
-    fitToContainer()    
 }
 
 var lastCanvasOffsetWidth = -1;

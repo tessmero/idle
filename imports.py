@@ -1,3 +1,8 @@
+# scan source files, generate html tags, and update test.html 
+# so all the js files get linked
+
+
+
 import os
 
 # get all source file paths
@@ -73,7 +78,37 @@ order = toFirst(order, 'vector.js')
 # setup.js must be last
 order = toLast(order, 'setup.js')
 
-# print import statements
+# generate import statements
+generated_html = ''
 for fname in order:
     path = all_src_paths[fname]
-    print(f'<script src="{path}"></script>')
+    generated_html += f'<script src="{path}"></script>\n'
+    
+    
+
+# Path to the existing HTML file
+existing_html_file_path = 'test.html'
+
+# Read the existing HTML content
+with open(existing_html_file_path, 'r') as file:
+    html_content = file.read()
+
+# Find the start and end indices of the special comment lines
+start_comment = '<!-- START_IMPORTS -->'
+end_comment = '<!-- END_IMPORTS -->'
+
+start_index = html_content.find(start_comment) + len(start_comment)
+end_index = html_content.find(end_comment)
+
+# Replace the content between the special comment lines
+new_html_content = (
+    html_content[:start_index] +
+    generated_html +
+    html_content[end_index:]
+)
+
+# Write the updated HTML content back to the file
+with open(existing_html_file_path, 'w') as file:
+    file.write(new_html_content)
+
+print("HTML content between special comment lines replaced successfully.")

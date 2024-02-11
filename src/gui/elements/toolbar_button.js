@@ -10,20 +10,25 @@ class ToolbarButton extends IconButton {
         global.selectedToolIndex = this.indexInToolbar
     }
     
+    // override IconButton
     draw(g){
-        let hovered = super.draw(g)//Button._draw(g,this.rect,this.hoverable,true)
-                    
+        
         // check if selected
-        if( this.indexInToolbar == global.selectedToolIndex ){
+        let selected = (this.indexInToolbar == global.selectedToolIndex )
+        
+        // draw pixel art icon (like in icon_button.js)
+        let layout = (this.hovered || ((global.gameState==GameStates.playing)&&selected) ) ? 
+            this.icon.getCurrentAnimatedLayout() : this.icon.frames[0] //icon.js
+        drawLayout(g,...rectCenter(...this.rect),layout) //character.js
+                    
+        
+        if( selected ){
+            
+            //draw extra rectangle to highlight selected
             let outer = this.rect
             let m = .005
             let inner = [outer[0]+m,outer[1]+m,outer[2]-2*m,outer[3]-2*m]
             Button._draw(g,inner,false,false)
         }
-        
-        // draw icon inside button
-        drawLayout(g,...rectCenter(...this.rect),this.icon) //character.js
-        
-        return hovered
     }
 }

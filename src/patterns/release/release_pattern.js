@@ -1,6 +1,6 @@
 
 // release procedural particles from a poi
-
+// each instance represents a specific event
 class ReleasePattern {
     
     constructor(n,x,y,r){
