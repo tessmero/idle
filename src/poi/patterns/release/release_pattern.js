@@ -11,7 +11,10 @@ class ReleasePattern {
         this.startTime = global.t
     }
     
-    // draw particles
-    // return the number of particles that just passed off-screen
-    draw(g){ throw new Error('not implemented') }
+    // return newly released particles' [x,y,vx,vy]
+    // return empty list to wait
+    // return null to finish
+    update(t){ 
+        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    }
 }

@@ -46,9 +46,11 @@ function resetGame(){
     // init start menu background sim
     global.nParticles = 1000
     global.particlesCollected = 0
-    global.grabbedParticles = new Set()
     global.allPois = []
+    global.rainGroup = new ProceduralPGroup()
+    global.physicsGroup = new PhysicsPGroup()
     global.activeReleasePatterns = []
+    global.grabbers = new Set()
     
     
     resetRand(hard = true)

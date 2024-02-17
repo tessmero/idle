@@ -14,6 +14,39 @@ class DefaultTool extends Tool{
         //Poi instance -> mouse pressed on poi
         //otherwise -> mouse pressed on background
         this.held = null 
+        
+        // prepare grabber instance that will be 
+        // added/removed from global.grabbers
+        this.grabber = new CircleGrabber(0,0,global.mouseGrabMd2)
+    }
+   
+    mouseMove(p){
+        this.grabber.x = p.x
+        this.grabber.y = p.y
+    }
+   
+    mouseDown(p){ 
+        // either grab the poi or start catching rain
+        this.held = global.allPois.find( poi => 
+            poi.pos.sub(p).getD2() < poi.md2 ) 
+        if(!this.held){
+            this.held = 'catching'
+        } else {
+            this.held.isHeld = true
+        }
+        
+        // toggle grabbing particles
+        if( this.held == 'catching' ){
+            global.grabbers.add(this.grabber)
+        } else {
+            global.grabbers.delete(this.grabber)
+        }
+    }
+    mouseUp(p){ 
+        this.held = null 
+        
+        //stop grabbing particles
+        global.grabbers.delete(this.grabber)
     }
    
     drawCursor(g,p,pad){ 
@@ -51,27 +84,12 @@ class DefaultTool extends Tool{
             super.drawCursor(g,p,pad)
         }
     }
-   
-    mouseMove(p){
-        
-    }
-   
-    mouseDown(p){ 
-        // either grab the poi or start catching rain
-        this.held = global.allPois.find( poi => 
-            poi.pos.sub(p).getD2() < poi.md2 ) 
-        if(!this.held){
-            this.held = 'catching'
-        } else {
-            this.held.isHeld = true
-        }
-    }
-    mouseUp(p){ this.held = null }
     
     update(dt){
+        
+        // check if holding poi
         if( this.held instanceof Poi ){
             
-            //held on poi
             
             // build pressure
             let poi = this.held
@@ -86,36 +104,6 @@ class DefaultTool extends Tool{
             let accel = vp( angle, global.poiPlayerF/poi.md2 )
             poi.vel = poi.vel.add(accel.mul(dt))
             
-        } else if( this.held ){
-            
-            // held on background
-            // grab particles from ongoing rain
-            if( global.particlesInGrabRange ){ //draw.js
-                global.particlesInGrabRange.forEach( i => {
-                    if( !global.grabbedParticles.has(i) ){
-                        global.grabbedParticles.add(i)
-                        global.particlesCollected += 1
-                    }
-                })
-            }
-            
-            // grab particles from release patterns
-            if( global.activeReleasePatterns ){
-                let totalGrabbed = 0
-                global.activeReleasePatterns.forEach(rp => {
-                    rp.inGrabRange.forEach(i => {
-                        rp.offScreen[i] = true
-                        global.particlesCollected += 1
-                        totalGrabbed += 1
-                    })
-                    rp.inGrabRange.length = 0
-                })
-                
-                // add to ongoing rain
-                for( let i = 0 ; i < totalGrabbed ; i++ )
-                    global.grabbedParticles.add(global.nParticles+i)
-                global.nParticles += totalGrabbed
-            }
         }
     }
     

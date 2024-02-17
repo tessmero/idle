@@ -50,6 +50,9 @@ const global = {
     particlesCollected: 0,
     particlesRequiredToStart: -1, //
     activeReleasePatterns: [], //list of ReleasePattern instances
+    rainGroup: null, //instance of ProceduralPGroup
+    physicsGroup: null, //instance of PhysicsPGroup
+    grabbers: new Set(), //instances of Grabber
     
     //
     poiShrinkRate: 1e-6,// vunits^2 area lost per ms
@@ -75,8 +78,7 @@ const global = {
     mousePos: v(0,0),           //virtual units
     mouseGrabRadius: .05,
     mouseGrabMd2: .05*.05,
-    grabbedParticles: new Set(), // particle indices
-    particlesInGrabRange: new Set(),
+    particlesInMouseRange: new Set(),
     
     //debug
     debugTileIndices: false,
