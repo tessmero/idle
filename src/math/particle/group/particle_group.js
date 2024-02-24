@@ -1,40 +1,38 @@
 // base class for groups of similar particles
-// they may be grabbed by "grabbers" 
-// grabbers are circles (x,y,r2) or rectangles (x,y,w,h)
+// they may be grabbed by Grabber instances
 class ParticleGroup {
     
     constructor(n){
         
         // indices of particels that have been grabbed
-        this.grabbedParticles = new Set()
+        this.grabbedParticles = new IntSet(n)
     }
     
     draw(g){
-        let r = global.particle_radius
+        let r = global.particleRadius
         let md2 = global.mouseGrabMd2
-        
+        let isEdgeGroup = (this==global.edgeGroup)
         // start iterating over particle positions
-        let i = 0
-        for( let [x,y,ungrab] of this.generateParticles() ){
+        for( let [i,x,y,grab,ungrab] of this.generateParticles() ){
             
             // check if previously grabbed
-            if( this.grabbedParticles.has(i)){
+            if( this.grabbedParticles.has(i) ){
+            
                 if( ungrab ){
                     this.grabbedParticles.delete(i)
                 }
+                
             }else{
                 
                 // check if newly grabbed
-                let grabbed = [...global.grabbers].some( gr => {
-                    return gr.grabbed(x,y)
-                    
-                    //if( poi.pos.sub(p).getD2() < poi.md2 ){ 
-                    //    poi.md2 += global.poiGrowthRate 
-                    //    if( poi.md2 > global.poiMaxArea ) poi.md2 = global.poiMaxArea
-                    //    this.grabbedParticles.add(i)
-                    //    return true
-                    //}
-                })
+                let grabbed = (grab || [...global.grabbers].some( gr => {
+                    if( isEdgeGroup && (!gr.canGrabEdgeParticle(i)) ) return false
+                    if( gr.contains(x,y) ){
+                        gr.grabbed(x,y)
+                        return true
+                    }
+                    return false
+                }))
                 if( grabbed ){
                     this.grabbedParticles.add(i)
                 } else {
@@ -43,8 +41,6 @@ class ParticleGroup {
                     g.fillRect( x-r, y-r, 2*r, 2*r )
                 }
             }
-            
-            i += 1
         }
     }
     

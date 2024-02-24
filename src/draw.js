@@ -10,31 +10,33 @@ function draw(fps, t) {
     
     // limit radius slider for 20240211 demo
     let lim = .005*5
-    if( global.particle_radius > lim ) global.particle_radius = lim
-    if( global.particle_radius < -lim ) global.particle_radius = -lim
+    if( global.particleRadius > lim ) global.particleRadius = lim
+    if( global.particleRadius < -lim ) global.particleRadius = -lim
     
     // draw background
     //ctx.fillStyle = global.backgroundColor
     ctx.clearRect( ...global.screenRect )
     
+    
+    // draw pois
+    resetRand()
+    global.allPois.forEach( p => p.draw(ctx) )
+    
     // draw particles
+    resetRand()
     ctx.fillStyle = global.lineColor
     global.rainGroup.draw(ctx)
     global.physicsGroup.draw(ctx)
+    global.edgeGroup.draw(ctx)
     passed_offscreen_count = 0
         
         
     // given the total number of released particles 
     // that just passed off-screen,
     // add to ongoing rain
-    for( let i = 0 ; i < passed_offscreen_count ; i++ )
-        global.grabbedParticles.add(global.nParticles+i)
-    global.nParticles += passed_offscreen_count
-    
-    
-    // draw pois
-    resetRand()
-    global.allPois.forEach( p => p.draw(ctx) )
+    //for( let i = 0 ; i < passed_offscreen_count ; i++ )
+    //    global.grabbedParticles.add(global.nParticles+i)
+    //global.nParticles += passed_offscreen_count
     
     // draw hud gui in background
     if( global.allGuis[global.gameState].hasHudInBackground ){

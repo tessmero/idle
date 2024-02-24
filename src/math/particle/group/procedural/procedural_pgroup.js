@@ -12,13 +12,13 @@ class ProceduralPGroup extends ParticleGroup {
         let sc = global.screenCorners
         let sr = global.screenRect
         let anim_angle = global.t*1e-4
-        let particle_radius = global.particle_radius
-        let particle_wiggle = global.particle_wiggle
+        let particleRadius = global.particleRadius
+        let particleWiggle = global.particleWiggle
         let md2 = global.mouseGrabMd2
         global.particlesInMouseRange.clear()
         for( var i = 0 ; i < n_particles ; i++ ){
             var a = anim_angle + rand() * Math.PI*2
-            var r = randRange(0,particle_wiggle)
+            var r = randRange(0,particleWiggle)
             var x = sr[0] + rand() * sr[2] + r*Math.cos(a * Math.floor(rand()*10))
             var yr = randRange(0,sr[3])
             var rawy = global.fallSpeed*global.t+yr
@@ -29,7 +29,7 @@ class ProceduralPGroup extends ParticleGroup {
             var y = sr[1] + nnmod( rawy, sr[3] ) //+ r*Math.sin(a)
             
             // yield one particle to possibly be drawn
-            yield [x,y,ungrab]
+            yield [i,x,y,false,ungrab]
         }
         this.lastDrawTime = global.t
     }

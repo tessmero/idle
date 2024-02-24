@@ -28,8 +28,16 @@ function update(dt) {
     // upgrades menu transtiino effect
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)
     
-    // shrink all pois and prepare for draw
-    global.allPois = global.allPois.filter( p => p.update(dt) )
+    // update pois
+    global.allPois = global.allPois.filter( p => {
+        let alive = p.update(dt)
+        if( !alive ){
+            global.grabbers.delete(p.grabber)
+            global.physicsGroup.deleteSubgroup(p.pps)
+            global.edgeGroup.deleteSubgroup(p.eps)
+        }
+        return alive
+    })
     
 }
 

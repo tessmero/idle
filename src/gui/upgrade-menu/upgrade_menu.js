@@ -43,8 +43,8 @@ class UpgradeMenu extends Gui {
             // variable names in global.js
             ['nParticles',1,'max raindrops on screen'],
             ['fallSpeed',3e-6 , 'rain fall speed'],
-            ['particle_radius',.001, 'size of falling rain drops'],
-            ['particle_wiggle',.01, 'horizontal movement of drops'],
+            ['particleRadius',.001, 'size of falling rain drops'],
+            ['particleWiggle',.01, 'horizontal movement of drops'],
             ['poiFriction',1e-3, 'circle friction'],
             ['baseAnimPeriod',100,'idle gui animations'],
         ]

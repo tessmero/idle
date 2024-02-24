@@ -47,8 +47,8 @@ class Hud extends Gui {
             
             // catch rate %
             new StatReadout(topCenterP,catchIcon,() => 
-                Math.floor(100*(global.grabbedParticles.size/global.nParticles)).toString()+'%')
-                .withDynamicTooltip(() => `caught ${global.grabbedParticles.size} / ${global.nParticles} raindrops`),
+                Math.floor(100*(global.rainGroup.grabbedParticles.size()/global.nParticles)).toString()+'%')
+                .withDynamicTooltip(() => `caught ${global.rainGroup.grabbedParticles.size()} / ${global.nParticles} raindrops`),
                 
             // total caught
             new StatReadout(topCrp,collectedIcon,() => 

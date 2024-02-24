@@ -31,10 +31,16 @@ const global = {
     idleCountdown: 0, //state
     idleDelay: 2000, //ms
     
-    //
-    fallSpeed: 3e-5,
-    particle_radius: .005,
-    particle_wiggle: .05,
+    // procedural particle settings
+    fallSpeed: 7e-5, // downward movement
+    particleRadius: .005,
+    particleWiggle: .05, //horizontal movement
+    
+    // physics particle settings
+    // physics_pgroup.js friction computed to match rain
+    //particleFriction: 1e-4, //fraction of speed lost per ms
+    particleG: v(0,1e-7), // gravity accel dist/ms/ms
+    
     
     // game state
     gameState: GameStates.startMenu,
@@ -52,6 +58,7 @@ const global = {
     activeReleasePatterns: [], //list of ReleasePattern instances
     rainGroup: null, //instance of ProceduralPGroup
     physicsGroup: null, //instance of PhysicsPGroup
+    edgeGroup: null, //instance of EdgePGroup
     grabbers: new Set(), //instances of Grabber
     
     //
@@ -62,16 +69,17 @@ const global = {
     poiPressureBuildRate: 2e-4, // pressure (max 1) increase per ms while held
     poiPressureReleaseRate: 1e-3, 
     poiParticlesReleased: 1e4,// total parts released per unit area at full pressure
+    poiDripChance: 1e-3, // chance per ms of particle unsticking from poi
     
     
     
     // strength of "forces" on poi
     // force=(area/accel) in vunits...ms...
-    poiPlayerF: 1e-7, // player clicking and dragging
+    poiPlayerF: 4e-8, // player clicking and dragging
     poiScreenF: 1e-7, // automatic correction if poi is off-screen
     poiNeighborF: 1e-7, // two overlapping pois push eachother
     
-    poiFriction: 1e-2, //fraction of speed lost per ms
+    poiFriction: 2e-3, //fraction of speed lost per ms
     
     // mouse
     canvasMousePos: v(0,0),     //pixels

@@ -49,6 +49,7 @@ function resetGame(){
     global.allPois = []
     global.rainGroup = new ProceduralPGroup()
     global.physicsGroup = new PhysicsPGroup()
+    global.edgeGroup = new EdgePGroup()
     global.activeReleasePatterns = []
     global.grabbers = new Set()
     

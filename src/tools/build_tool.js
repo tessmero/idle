@@ -13,7 +13,9 @@ class BuildTool extends Tool{
    
     mouseDown(){
         if( global.allPois.length < global.maxPoiCount ){
-            global.allPois.push(new Poi(global.mousePos))
+            let poi = new Poi(global.mousePos)
+            global.allPois.push(poi)
+            global.grabbers.add(poi.grabber)
         }
         global.selectedToolIndex = 0
     }

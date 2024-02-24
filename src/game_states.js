@@ -55,7 +55,7 @@ function play(){
     global.nParticles = 100
     global.particlesCollected = 0
     global.allPois = []
-    global.grabbedParticles = new Set()
+    global.rainGroup.grabbedParticles.clear()
     global.activeReleasePatterns = []
     
     resume()

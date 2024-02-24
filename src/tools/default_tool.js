@@ -17,12 +17,18 @@ class DefaultTool extends Tool{
         
         // prepare grabber instance that will be 
         // added/removed from global.grabbers
-        this.grabber = new CircleGrabber(0,0,global.mouseGrabMd2)
+        this.grabber = new CircleGrabber(v(0,0),
+            global.mouseGrabMd2,this.grabbed)
+    }
+    
+    // callback for this.grabber
+    // when a particle is grabbed (particle_group.js)
+    grabbed(x,y){
+        global.particlesCollected += 1
     }
    
     mouseMove(p){
-        this.grabber.x = p.x
-        this.grabber.y = p.y
+        this.grabber.p = p
     }
    
     mouseDown(p){ 
@@ -101,8 +107,8 @@ class DefaultTool extends Tool{
             if( d2 < 1e-4 ) return
             let angle = d.getAngle()
             
-            let accel = vp( angle, global.poiPlayerF/poi.md2 )
-            poi.vel = poi.vel.add(accel.mul(dt))
+            let acc = vp( angle, global.poiPlayerF/poi.md2 ).mul(dt)
+            poi.accel(acc)
             
         }
     }

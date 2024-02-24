@@ -8,10 +8,65 @@ class Poi {
         
         this.pressure = 0 //0-1 increases when held by player
         this.pressurePattern = null//instance of PressurePattern
+        
+        // prepare particle grabber instance
+        this.grabber = new CircleGrabber(v(0,0),
+            global.mouseGrabMd2,(x,y) => this.grabbed(x,y))
+            
+        // prepare to emit particles
+        // PPS = physics particle subgroup instance
+        // src/math/particle/group/physics_pgroup.js
+        this.pps = global.physicsGroup.newSubgroup()
+            
+        // prepare for particles sliding along edge
+        // EPS = edge particle subgroup instance
+        // src/math/particle/group/physics_pgroup.js
+        this.eps = global.edgeGroup.newSubgroup(
+            new CircleEdge(v(0,0),global.mouseGrabMd2))
+        this.grabber.eps = this.eps
+    }
+    
+    // callback for this.grabber
+    // when a particle is grabbed (particle_group.js)
+    grabbed(x,y){        
+        global.particlesCollected += 1
+        this.md2 += global.poiGrowthRate 
+        
+        if( this.md2 > global.poiMaxArea ){ 
+            this.md2 = global.poiMaxArea
+            
+            let a = v(x,y).sub(this.pos).getAngle()
+            
+            // stick particle to edge
+            this.eps.spawnParticle(a,0)
+                
+        }
+        
+    }
+    
+    // accelerate poi and attached particles
+    accel(acc){
+        this.vel = this.vel.add(acc)
+        this.eps.accel(acc)
     }
     
     update(dt){
-        this.r = Math.sqrt(this.md2) // only allowed sqrt
+        
+        // randomly emit attached particles
+        let dc = global.poiDripChance*dt * (1+1e5*this.eps.acc.getMagnitude())
+        for( let i = 0 ; i < this.eps.n ; i++ ){
+            if( (!this.eps.isGrabbed(i)) && (Math.random() < dc) ){
+                let [a,av] = this.eps.grab(i)
+                let r = this.r
+                let pos = this.pos.add(vp(a,r))
+                let vel = this.vel.add(vp(a+pio2,1e-3*av*r*dt))//vp(a,global.fallSpeed)
+                this.pps.spawnParticle(pos,vel)
+            }
+        }
+        
+        // advance physics for poi
+        this.vel = this.vel.mul(1.0-dt*global.poiFriction)
+        this.pos = this.pos.add(this.vel.mul(dt))
         
         // push on-screen
         var sc = global.screenCorners
@@ -20,8 +75,12 @@ class Poi {
         if( this.pos.y < sc[0].y ) this.pos.y = sc[0].y
         if( this.pos.y > sc[2].y ) this.pos.y = sc[2].y
         
-        this.vel = this.vel.mul(1.0-dt*global.poiFriction)
-        this.pos = this.pos.add(this.vel.mul(dt))
+        // update particle grabber instance
+        this.r = Math.sqrt(this.md2) 
+        this.grabber.p = this.pos
+        this.grabber.r2 = this.md2
+        this.eps.edgeShape.pos = this.pos
+        this.eps.edgeShape.rad = this.r
         
         if( this.isHeld ){
             
@@ -71,18 +130,18 @@ class Poi {
         let p
         if( (this.pressure > 0) && this.pressurePattern ){
             // indicate pressure
-            let off = this.pressurePattern.getOffset(
-                                global.t,this.r,this.pressure)
+            let off = v(0,0)//this.pressurePattern.getOffset(global.t,this.r,this.pressure)
             p = this.pos.add(off)
         } else {
             p = this.pos
         }
-        p = p.xy()
         
+        // draw circle
         let r = this.r
+        let c = p.xy()
         g.beginPath()
-        g.moveTo(...p)
-        g.arc(...p,r,0,twopi)
+        g.moveTo(...c)
+        g.arc(...c,r,0,twopi)
         g.fill()
         
         
