@@ -54,6 +54,7 @@ function play(){
     // reset progress
     global.nParticles = 100
     global.particlesCollected = 0
+    global.allPois.forEach( p => p.cleanup() )
     global.allPois = []
     global.rainGroup.grabbedParticles.clear()
     global.activeReleasePatterns = []

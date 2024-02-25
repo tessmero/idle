@@ -26,6 +26,12 @@ class Poi {
         this.grabber.eps = this.eps
     }
     
+    cleanup(){
+        global.grabbers.delete(this.grabber)
+        global.physicsGroup.deleteSubgroup(this.pps)
+        global.edgeGroup.deleteSubgroup(this.eps)
+    }
+    
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
     grabbed(x,y){        
@@ -59,7 +65,7 @@ class Poi {
                 let [a,av] = this.eps.grab(i)
                 let r = this.r
                 let pos = this.pos.add(vp(a,r))
-                let vel = this.vel.add(vp(a+pio2,1e-3*av*r*dt))//vp(a,global.fallSpeed)
+                let vel = this.vel.mul(.5).add(vp(a+pio2,1e-3*av*r*dt))//vp(a,global.fallSpeed)
                 this.pps.spawnParticle(pos,vel)
             }
         }

@@ -1,6 +1,7 @@
 
 
 function update(dt) {    
+    global.t += dt
     
     // check for resized window
     fitToContainer()    
@@ -8,6 +9,26 @@ function update(dt) {
     // advance countdown for user to be considered idle
     if( global.idleCountdown > 0 ){
         global.idleCountdown -= dt
+    }
+    
+    // advance start menu idle background animation
+    if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) && (global.gameState==GameStates.startMenu) && (global.allPois.length > 0) ){
+        
+        
+        // accel to target
+        let poi = global.allPois[0]
+        let d = global.startMenuTargetPos.sub(poi.pos)
+        let d2 = d.getD2()
+        if( d2 > 1e-4 )
+            poi.accel( vp( d.getAngle(), .5*global.poiPlayerF/poi.md2 ).mul(dt) )  
+        
+        // update target position
+        global.startMenuMoveCountdown -= dt
+        if( global.startMenuMoveCountdown < 0 ){
+            global.startMenuMoveCountdown = global.startMenuMoveDelay
+            let r = .3
+            global.startMenuTargetPos = v( .5-r + 2*r*Math.random(), .5-r + 2*r*Math.random() )
+        }
     }
     
     // update gui hovering status and tooltip 
@@ -32,9 +53,7 @@ function update(dt) {
     global.allPois = global.allPois.filter( p => {
         let alive = p.update(dt)
         if( !alive ){
-            global.grabbers.delete(p.grabber)
-            global.physicsGroup.deleteSubgroup(p.pps)
-            global.edgeGroup.deleteSubgroup(p.eps)
+            p.cleanup()
         }
         return alive
     })

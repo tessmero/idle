@@ -28,11 +28,11 @@ const global = {
     baseAnimPeriod: 500, //ms
     
     // start animating mouse cursor if idle
-    idleCountdown: 0, //state
+    idleCountdown: 2000, //state
     idleDelay: 2000, //ms
     
     // procedural particle settings
-    fallSpeed: 7e-5, // downward movement
+    fallSpeed: 2e-4, // downward movement
     particleRadius: .005,
     particleWiggle: .05, //horizontal movement
     
@@ -71,6 +71,10 @@ const global = {
     poiParticlesReleased: 1e4,// total parts released per unit area at full pressure
     poiDripChance: 1e-3, // chance per ms of particle unsticking from poi
     
+    // start menu background anim
+    startMenuTargetPos: v(.5,.5),
+    startMenuMoveDelay: 4000,
+    startMenuMoveCountdown: 0,
     
     
     // strength of "forces" on poi
