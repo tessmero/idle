@@ -59,13 +59,18 @@ class Poi {
     update(dt){
         
         // randomly emit attached particles
-        let dc = global.poiDripChance*dt * (1+1e5*this.eps.acc.getMagnitude())
+        let acc = this.eps.acc.add(v(0,-1e-3*dt))
+        let ang = acc.getAngle()
+        let mag = global.poiDripChance*dt*acc.getMagnitude()
         for( let i = 0 ; i < this.eps.n ; i++ ){
-            if( (!this.eps.isGrabbed(i)) && (Math.random() < dc) ){
-                let [a,av] = this.eps.grab(i)
+            if( this.eps.isGrabbed(i) ) continue
+            let [a,av] = this.eps.get(i)
+            let dc = mag*(1-Math.cos(a-ang)) // normal force
+            if( (Math.random() < dc) ){
+                this.eps.grab(i)
                 let r = this.r
                 let pos = this.pos.add(vp(a,r))
-                let vel = this.vel.mul(.5).add(vp(a+pio2,1e-3*av*r*dt))//vp(a,global.fallSpeed)
+                let vel = this.vel.mul(.5).add(vp(a+pio2,av*r))
                 this.pps.spawnParticle(pos,vel)
             }
         }

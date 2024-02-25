@@ -81,35 +81,39 @@ class PhysicsPGroup extends ParticleGroup {
         
         let vb = global.particleG.mul(dt)
         
-        for( let i = 0 ; i < n_particles ; i++ ){
+        
+        for( let pps of this.subgroups ){
+            for( let di = 0 ; di < pps.n ; di++ ){
+                let i = pps.i + di
             
-            // check if currently grabbed
-            if( this.grabbedParticles.has(i) ) continue
+                // check if currently grabbed
+                if( this.grabbedParticles.has(i) ) continue
+                
+                let x = this.state[i*nd+0]
+                let y = this.state[i*nd+1]
             
-            let x = this.state[i*nd+0]
-            let y = this.state[i*nd+1]
+                // advance physics
+                let vx = this.state[i*nd+2]
+                let vy = this.state[i*nd+3]
+                
+                vx = vm*vx + vb.x
+                vy = vm*vy + vb.y
+                x += vx*dt
+                y += vy*dt
+                
+                this.state[i*nd+0] = x
+                this.state[i*nd+1] = y
+                this.state[i*nd+2] = vx
+                this.state[i*nd+3] = vy
+                
+                // check if off-screen
+                let grab = !inRect(x,y,...global.screenRect) 
+                
+                // yield one particle to be grabbed/drawn
+                let ungrab = false
+                yield [i,x,y,grab,ungrab]
             
-            // advance physics
-            let vx = this.state[i*nd+2]
-            let vy = this.state[i*nd+3]
-            
-            vx = vm*vx + vb.x
-            vy = vm*vy + vb.y
-            x += vx*dt
-            y += vy*dt
-            
-            this.state[i*nd+0] = x
-            this.state[i*nd+1] = y
-            this.state[i*nd+2] = vx
-            this.state[i*nd+3] = vy
-            
-            // check if off-screen
-            let grab = !inRect(x,y,...global.screenRect) 
-            
-            // yield one particle to be grabbed/drawn
-            let ungrab = false
-            yield [i,x,y,grab,ungrab]
-            
+            }
         }
     }
 }

@@ -26,13 +26,17 @@ class EdgeParticleSubgroup{
         return this.parent.grabbedParticles.has(i)
     }
     
-    // set particle as grabbed and return angle
-    grab(i){
-        this.parent.grabbedParticles.add(i)
+    // get angle/vel of particle
+    get(i){
         let nd = this.parent.ndims
         let a = this.parent.state[i*nd]
         let av = this.parent.state[i*nd+1]
         return [a,av]
+    }
+    
+    // set particle as grabbed 
+    grab(i){
+        this.parent.grabbedParticles.add(i)
     }
     
     // move particles in reaction to edge moving

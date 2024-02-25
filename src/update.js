@@ -1,7 +1,6 @@
 
 
 function update(dt) {    
-    global.t += dt
     
     // check for resized window
     fitToContainer()    

@@ -72,8 +72,8 @@ class EdgePGroup extends ParticleGroup {
         
         // prepare to multiply and offset velocities
         // to apply gravity and accel to all particles
-        let f = 1e-2
-        let g = 1e-3
+        let f = 1e-3
+        let g = 1e-5
         let vm = (1-f*dt)
         let vb = g * dt
         let i = 0
@@ -81,8 +81,8 @@ class EdgePGroup extends ParticleGroup {
         
         for( let eps of this.subgroups ){
             
-            // prepare to apply subgroup forces like gravity
-            let am = 3e2*eps.acc.getMagnitude()
+            // prepare to apply subgroup-specific forces
+            let am = eps.acc.getMagnitude()
             let aa = eps.acc.getAngle()
             eps.acc = v(0,0)
         
@@ -96,9 +96,9 @@ class EdgePGroup extends ParticleGroup {
                 let a = this.state[i*nd+0]
                 let av = this.state[i*nd+1]
                 av += vb * Math.cos(a) // gravity
-                av += am * Math.sin(a-aa) // other forces
-                if( Math.abs(av)>1e-2 ) av *= vm // friction
-                a += av
+                av += am * Math.sin(a-aa) // subgroup forces
+                if( Math.abs(av)>1e-4 ) av *= vm // friction
+                a += av*dt
                 this.state[i*nd+0] = a
                 this.state[i*nd+1] = av
                 
