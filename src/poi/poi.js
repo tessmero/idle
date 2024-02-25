@@ -59,7 +59,7 @@ class Poi {
     update(dt){
         
         // randomly emit attached particles
-        let acc = this.eps.acc.add(v(0,-1e-3*dt))
+        let acc = this.eps.acc.add(v(0,-1e-6*dt))
         let ang = acc.getAngle()
         let mag = global.poiDripChance*dt*acc.getMagnitude()
         for( let i = 0 ; i < this.eps.n ; i++ ){

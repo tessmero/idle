@@ -69,7 +69,7 @@ const global = {
     poiPressureBuildRate: 2e-4, // pressure (max 1) increase per ms while held
     poiPressureReleaseRate: 1e-3, 
     poiParticlesReleased: 1e4,// total parts released per unit area at full pressure
-    poiDripChance: 5e-1, // chance of particle unsticking from poi
+    poiDripChance: 1e2, // chance of particle unsticking from poi
     
     // start menu background anim
     startMenuTargetPos: v(.5,.5),

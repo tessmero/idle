@@ -72,8 +72,8 @@ class EdgePGroup extends ParticleGroup {
         
         // prepare to multiply and offset velocities
         // to apply gravity and accel to all particles
-        let f = 1e-3
-        let g = 1e-5
+        let f = 5e-4
+        let g = 2e-6
         let vm = (1-f*dt)
         let vb = g * dt
         let i = 0
@@ -82,7 +82,7 @@ class EdgePGroup extends ParticleGroup {
         for( let eps of this.subgroups ){
             
             // prepare to apply subgroup-specific forces
-            let am = eps.acc.getMagnitude()
+            let am = 2*eps.acc.getMagnitude()
             let aa = eps.acc.getAngle()
             eps.acc = v(0,0)
         
