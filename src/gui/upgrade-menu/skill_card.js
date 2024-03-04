@@ -23,14 +23,14 @@ class SkillCard extends CompositeGuiElement {
         let tooltip = ''
         if( entry.status == 'locked' ){
             icon = lockIcon
-            let required = tree.specs[entry.requires].name
+            let required = tree.specs[entry.requires].skill.name
             tooltip = `locked\nrequires: ${required}`
             rr = padRect(x,y,w,h,-h/8)
         } else if( entry.status == 'available' ){
             icon = uncheckedIcon
             tooltip = `available`
             //if( entry.precludes ){
-            //    let precluded = tree.specs[entry.precludes].name
+            //    let precluded = tree.specs[entry.precludes].skill.name
             //    tooltip += `\nprecludes: ${precluded}`
             //}
         } else if( entry.status == 'purchased' ){
