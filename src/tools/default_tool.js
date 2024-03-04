@@ -24,7 +24,7 @@ class DefaultTool extends Tool{
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
     grabbed(x,y){
-        global.particlesCollected += 1
+        global.mainSim.particlesCollected += 1
     }
    
     mouseMove(p){
@@ -33,7 +33,7 @@ class DefaultTool extends Tool{
    
     mouseDown(p){ 
         // either grab the poi or start catching rain
-        this.held = global.allPois.find( poi => 
+        this.held = global.mainSim.allPois.find( poi => 
             poi.pos.sub(p).getD2() < poi.md2 ) 
         if(!this.held){
             this.held = 'catching'
@@ -43,16 +43,16 @@ class DefaultTool extends Tool{
         
         // toggle grabbing particles
         if( this.held == 'catching' ){
-            global.grabbers.add(this.grabber)
+            global.mainSim.grabbers.add(this.grabber)
         } else {
-            global.grabbers.delete(this.grabber)
+            global.mainSim.grabbers.delete(this.grabber)
         }
     }
     mouseUp(p){ 
         this.held = null 
         
         //stop grabbing particles
-        global.grabbers.delete(this.grabber)
+        global.mainSim.grabbers.delete(this.grabber)
     }
    
     drawCursor(g,p,pad){ 

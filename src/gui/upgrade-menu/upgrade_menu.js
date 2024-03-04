@@ -7,9 +7,6 @@ class UpgradeMenu extends Gui {
         // prepare for tiled transition effect
         let sc = global.screenCorners
         let sr = global.screenRect
-        let m = .1
-        m = .05
-        let bigCenterRect = [sc[0].x+m,sc[0].y+m, (sc[2].x-sc[0].x)-2*m, (sc[2].y-sc[0].y)-2*m]
         
         this.transitionRect = sr//bigCenterRect
         this.transitionTileSize = 10*global.textPixelSize
@@ -33,45 +30,24 @@ class UpgradeMenu extends Gui {
         
         let sc = global.screenCorners
         let sr = global.screenRect
-        let m = .1*sr[2]
+        let m = .1
         let w = sr[2]-2*m
-        let h = .1 
+        let h = sr[3]-2*m
         let r0 = [sc[0].x+m,sc[0].y+m, w,h]
-        let result = []
         
-        let specs = [
-            // variable names in global.js
-            ['nParticles',1,'max raindrops on screen'],
-            ['fallSpeed',3e-6 , 'rain fall speed'],
-            ['particleRadius',.001, 'size of falling rain drops'],
-            ['particleWiggle',.01, 'horizontal movement of drops'],
-            ['poiFriction',1e-3, 'circle friction'],
-            ['baseAnimPeriod',100,'idle gui animations'],
-        ]
-        specs.forEach( row => {
-            let varname = row[0]
-            let inc = row[1]
-            result.push(new AdjustableGlobalVar(
-                r0,varname,inc) // rect, varname, increment,
-                .withDynamicTooltip(()=>{
-                    return [
-                        Math.floor(global[varname]/inc).toString() + ` : ${varname} `,
-                        row[2],
-                        'shift-click for 10x',
-                        'ctrl-click for 100x',
-                    ].join('\n')
-                })) // toolsip
-            r0 = [...r0]
-            r0[1] += h
-        })
+        let tabLabels = ['skills','debug']
         
-        return result
+        let tabGroup = new TabPaneGroup(tabLabels,[...r0])
+        if( global.upgradeMenuTabIndex ) 
+            tabGroup.selectedTabIndex = global.upgradeMenuTabIndex
+        tabGroup.addTabChangeListener( i => 
+            global.upgradeMenuTabIndex = i )
         
-    }
-    
-    //extend gui
-    draw(g){
-        super.draw(g)
+        tabGroup.tabContent[0].children = buildSkillsTabContent([...r0]) // skills_tab.js
+        tabGroup.tabContent[1].children = buildDebugTabContent([...r0]) // debug_tab.js
+        
+        return [tabGroup]
+        
     }
     
     open(){

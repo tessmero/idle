@@ -12,10 +12,10 @@ class BuildTool extends Tool{
     }
    
     mouseDown(){
-        if( global.allPois.length < global.maxPoiCount ){
-            let poi = new Poi(global.mousePos)
-            global.allPois.push(poi)
-            global.grabbers.add(poi.grabber)
+        if( global.mainSim.allPois.length < global.maxPoiCount ){
+            let poi = new Poi(global.mainSim,global.mousePos)
+            global.mainSim.allPois.push(poi)
+            global.mainSim.grabbers.add(poi.grabber)
         }
         global.selectedToolIndex = 0
     }

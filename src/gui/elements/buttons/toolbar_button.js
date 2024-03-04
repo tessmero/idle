@@ -11,7 +11,8 @@ class ToolbarButton extends IconButton {
         
         // close the upgrades menu if it is open 
         if( global.gameState==GameStates.upgradeMenu ) toggleStats()
-        
+            
+        return true
     }
     
     // override IconButton

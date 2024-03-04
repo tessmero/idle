@@ -13,7 +13,7 @@ function rebuildGuis(){
          new PauseMenu(),
     ]
     global.allGuis.forEach(k => {
-        k.clickableElements = k.buildElements()
+        k.children = k.buildElements()
     })
 }
 
@@ -52,11 +52,12 @@ function resume(){
 function play(){
     
     // reset progress
-    global.nParticles = 100
-    global.particlesCollected = 0
-    global.allPois.forEach( p => p.cleanup() )
-    global.allPois = []
-    global.rainGroup.grabbedParticles.clear()
+    global.selectedToolIndex = 0
+    global.mainSim.rainGroup.n = 100
+    global.mainSim.particlesCollected = 0
+    global.mainSim.allPois.forEach( p => p.cleanup() )
+    global.mainSim.allPois = []
+    global.mainSim.rainGroup.grabbedParticles.clear()
     global.activeReleasePatterns = []
     
     resume()
@@ -78,7 +79,6 @@ function quit(){
 }
 
 function setState(s){
-    global.selectedToolIndex = 0
     if( global.allGuis ) global.allGuis[global.gameState].close()
     global.gameState = s
     if( global.allGuis ) global.allGuis[global.gameState].open()

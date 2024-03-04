@@ -1,9 +1,10 @@
 class Poi {
-    constructor(p){
+    constructor(sim,p){
+        this.parent = sim // ParticleSim instance
         this.pos = p
         this.vel = v(0,0)
         this.md2 = global.poiStartArea
-        if( this.md2 > global.poiMaxArea ) this.md2 = global.poiMaxArea
+        if( this.md2 > sim.poiMaxArea ) this.md2 = sim.poiMaxArea
         
         
         this.pressure = 0 //0-1 increases when held by player
@@ -16,30 +17,30 @@ class Poi {
         // prepare to emit particles
         // PPS = physics particle subgroup instance
         // src/math/particle/group/physics_pgroup.js
-        this.pps = global.physicsGroup.newSubgroup()
+        this.pps = this.parent.physicsGroup.newSubgroup()
             
         // prepare for particles sliding along edge
         // EPS = edge particle subgroup instance
         // src/math/particle/group/physics_pgroup.js
-        this.eps = global.edgeGroup.newSubgroup(
+        this.eps = this.parent.edgeGroup.newSubgroup(
             new CircleEdge(v(0,0),global.mouseGrabMd2))
         this.grabber.eps = this.eps
     }
     
     cleanup(){
-        global.grabbers.delete(this.grabber)
-        global.physicsGroup.deleteSubgroup(this.pps)
-        global.edgeGroup.deleteSubgroup(this.eps)
+        this.parent.grabbers.delete(this.grabber)
+        this.parent.physicsGroup.deleteSubgroup(this.pps)
+        this.parent.edgeGroup.deleteSubgroup(this.eps)
     }
     
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
     grabbed(x,y){        
-        global.particlesCollected += 1
+        this.parent.particlesCollected += 1
         this.md2 += global.poiGrowthRate 
         
-        if( this.md2 > global.poiMaxArea ){ 
-            this.md2 = global.poiMaxArea
+        if( this.md2 > this.parent.poiMaxArea ){ 
+            this.md2 = this.parent.poiMaxArea
             
             let a = v(x,y).sub(this.pos).getAngle()
             
@@ -123,7 +124,7 @@ class Poi {
         }
         
         // shrink gradually
-        if( !this.isHeld ) this.md2 -= dt*global.poiShrinkRate
+        if( !this.isHeld ) this.md2 -= dt*this.parent.poiShrinkRate
         return ( this.md2 > 0 )
     }
     

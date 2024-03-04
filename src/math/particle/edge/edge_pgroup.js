@@ -1,14 +1,12 @@
-// group of particles stuck to the edge of a shape
+// group of particles stuck to the edges of shapes
 //
-// global.edgeGroup should be the only instance (setup.js)
+// instantiated in particle_sim.js
 class EdgePGroup extends ParticleGroup {
     
     
-    constructor(){
-        super()
-        
-        // maximum total number of particles
-        const n = 1e4
+    constructor(parent,n){
+        super(parent,n)
+        this.isEdgeGroup = true // particle_group.js draw()
         
         // preare to keep track of up to 
         // n particles with 4 props a,av
@@ -18,9 +16,8 @@ class EdgePGroup extends ParticleGroup {
         
         // maximum number of particles per subgroup
         // subgroup = (garbage-collectable unit)
-        const nsub = 1e3
-        this.nsub = nsub
-        this.maxSubgroups = Math.floor(n/nsub)
+        this.maxSubgroups = 10
+        this.nsub = Math.floor(n/this.maxSubgroups)
         this.freeSubgroupIndices = new IntSet(this.maxSubgroups,true)
         
         // prepare to keep track of subgroups
@@ -55,19 +52,17 @@ class EdgePGroup extends ParticleGroup {
     
     *generateParticles(){
         resetRand()
-        let n_particles = global.nParticles
-        let sc = global.screenCorners
+        let n_particles = this.parent.n
         let sr = global.screenRect
-        let anim_angle = global.t*1e-4
-        let particleRadius = global.particleRadius
-        let particleWiggle = global.particleWiggle
+        let anim_angle = this.parent.t*1e-4
+        let particleRadius = this.parent.particleRadius
         let md2 = global.mouseGrabMd2
         let nd = this.ndims
         
         
         let dt = 0
-        if( this.lastDrawTime ) dt = global.t-this.lastDrawTime
-        this.lastDrawTime = global.t
+        if( this.lastDrawTime ) dt = this.parent.t-this.lastDrawTime
+        this.lastDrawTime = this.parent.t
         
         
         // prepare to multiply and offset velocities

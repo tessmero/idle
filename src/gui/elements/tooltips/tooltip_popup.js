@@ -4,7 +4,7 @@ class TooltipPopup extends GuiElement {
     constructor(rect,label){
         super(rect)
         
-        this.scale = TooltipPopup.scale()
+        this.scale = this.constructor.scale()
         this.rect = rect
         this.label = label
     }
@@ -40,7 +40,7 @@ class TooltipPopup extends GuiElement {
         //do nothing
     }
     
-    static scale(){ return .5 }
+    static scale(){ return .4 }
     
     static pad(){ return .05 }
     

@@ -1,14 +1,11 @@
 // group of bouncing particles
 //
-// global.physicsGroup should be the only instance (setup.js)
+// instantiated in particle_sim.js
 class PhysicsPGroup extends ParticleGroup {
     
     
-    constructor(){
-        super()
-        
-        // maximum total number of particles
-        const n = 1e4
+    constructor(parent,n){
+        super(parent,n)
         
         // preare to keep track of up to 
         // n particles with 4 props x,y,vx,vy
@@ -18,9 +15,8 @@ class PhysicsPGroup extends ParticleGroup {
         
         // maximum number of particles per subgroup
         // subgroup = (garbage-collectable unit)
-        const nsub = 1e3
-        this.nsub = nsub
-        this.maxSubgroups = Math.floor(n/nsub)
+        this.maxSubgroups = 10
+        this.nsub = Math.floor(n/this.maxSubgroups)
         this.freeSubgroupIndices = new IntSet(this.maxSubgroups,true)
         
         // prepare to keep track of subgroups
@@ -55,31 +51,27 @@ class PhysicsPGroup extends ParticleGroup {
     
     *generateParticles(){
         resetRand()
-        let n_particles = global.nParticles
-        let sc = global.screenCorners
-        let sr = global.screenRect
-        let anim_angle = global.t*1e-4
-        let particleRadius = global.particleRadius
-        let particleWiggle = global.particleWiggle
+        let n_particles = this.n
+        let particleRadius = this.parent.particleRadius
         let md2 = global.mouseGrabMd2
         let nd = this.ndims
         
         
         let dt = 0
-        if( this.lastDrawTime ) dt = global.t-this.lastDrawTime
-        this.lastDrawTime = global.t
+        if( this.lastDrawTime ) dt = this.parent.t-this.lastDrawTime
+        this.lastDrawTime = this.parent.t
         
         
         // set terminal velocity to match falling rain
-        let mg = global.particleG.getMagnitude()
-        let particleFriction = mg / global.fallSpeed
+        let mg = global.mainSim.particleG.getMagnitude()
+        let particleFriction = mg / this.parent.fallSpeed
         
         // prepare to multiply and offset velocities
         // to apply friction and gravity to all particles
         let vm = (1-particleFriction*dt)
         
         
-        let vb = global.particleG.mul(dt)
+        let vb = global.mainSim.particleG.mul(dt)
         
         
         for( let pps of this.subgroups ){
@@ -107,7 +99,7 @@ class PhysicsPGroup extends ParticleGroup {
                 this.state[i*nd+3] = vy
                 
                 // check if off-screen
-                let grab = !inRect(x,y,...global.screenRect) 
+                let grab = !inRect(x,y,...this.parent.rect) 
                 
                 // yield one particle to be grabbed/drawn
                 let ungrab = false

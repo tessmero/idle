@@ -16,8 +16,9 @@ function padRect(x,y,w,h,p){
     return [x-p,y-p,w+2*p,h+2*p]
 }
 
-function vInRect(p,x,y,w,h){
+function vInRect(p,x,y,w,h,debug=false){
     let result = (p.x>=x) && (p.x<=(x+w)) && (p.y>=y) && (p.y<=(y+h))   
+    if( debug ) console.log( p,x,y,w,h,result )
     return result
 }
 

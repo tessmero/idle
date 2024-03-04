@@ -1,17 +1,20 @@
 // base class for groups of similar particles
-// they may be grabbed by Grabber instances
+// particles may be grabbed by Grabber instances
 class ParticleGroup {
     
-    constructor(n){
+    constructor(parent,n){
+        // ParticleSim instance
+        this.parent = parent
         
         // indices of particels that have been grabbed
         this.grabbedParticles = new IntSet(n)
+        this.n = n
     }
     
     draw(g){
-        let r = global.particleRadius
+        let r = this.parent.particleRadius
         let md2 = global.mouseGrabMd2
-        let isEdgeGroup = (this==global.edgeGroup)
+        let isEdgeGroup = this.isEdgeGroup
         // start iterating over particle positions
         for( let [i,x,y,grab,ungrab] of this.generateParticles() ){
             
@@ -25,7 +28,7 @@ class ParticleGroup {
             }else{
                 
                 // check if newly grabbed
-                let grabbed = (grab || [...global.grabbers].some( gr => {
+                let grabbed = (grab || [...this.parent.grabbers].some( gr => {
                     if( isEdgeGroup && (!gr.canGrabEdgeParticle(i)) ) return false
                     if( gr.contains(x,y) ){
                         gr.grabbed(x,y)

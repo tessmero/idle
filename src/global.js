@@ -31,41 +31,34 @@ const global = {
     idleCountdown: 2000, //state
     idleDelay: 2000, //ms
     
-    // procedural particle settings
-    fallSpeed: 2e-4, // downward movement
-    particleRadius: .005,
-    particleWiggle: .05, //horizontal movement
+    // particle settings now in particle_sim.js
+    //fallSpeed: 2e-4, // downward movement
+    //particleRadius: .005,
+    //wiggle: .05, //horizontal movement
+    //particleG: v(0,1e-7), // gravity accel dist/ms/ms
     
     // physics particle settings
     // physics_pgroup.js friction computed to match rain
     //particleFriction: 1e-4, //fraction of speed lost per ms
-    particleG: v(0,1e-7), // gravity accel dist/ms/ms
     
     
     // game state
     gameState: GameStates.startMenu,
+    upgradeMenuTabIndex: 0,
     selectedToolIndex: 0,
     t: 0, // total ellapsed time
-    allPois: [], // Poi instances
-    maxPoiCount: 10,
+    maxPoiCount: 1,
    
     
    
     // game advancement
-    nParticles: 100, // particles on screen at once
     particlesCollected: 0,
     particlesRequiredToStart: -1, //
     activeReleasePatterns: [], //list of ReleasePattern instances
-    rainGroup: null, //instance of ProceduralPGroup
-    physicsGroup: null, //instance of PhysicsPGroup
-    edgeGroup: null, //instance of EdgePGroup
-    grabbers: new Set(), //instances of Grabber
-    
+    mainSim: null, //ParticleSim instance (setup.js)
     //
-    poiShrinkRate: 1e-6,// vunits^2 area lost per ms
     poiGrowthRate: 4e-3,// vunits^2 area gained per drop eaten
     poiStartArea: 1e-2, // free area for new poi
-    poiMaxArea: 1e-2,
     poiPressureBuildRate: 2e-4, // pressure (max 1) increase per ms while held
     poiPressureReleaseRate: 1e-3, 
     poiParticlesReleased: 1e4,// total parts released per unit area at full pressure
@@ -95,4 +88,36 @@ const global = {
     //debug
     debugTileIndices: false,
     
+}
+
+// access global var by dotpath string 
+// like "mainSim.rainGroup.n"
+// https://codereview.stackexchange.com/a/240907
+function isObj(obj){
+    return (typeof obj === 'object') &&
+        (!Array.isArray(obj)) &&
+        (obj !== null)
+}
+
+function set_global(propertyStr, value) {
+  const properties = propertyStr.split('.');
+  const lastProperty = properties.pop();
+  const lastObject = properties.reduce((a, prop) => isObj(a) ? a[prop] : null, global);
+  if (isObj(lastObject)) {
+    lastObject[lastProperty] = value;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function get_global(propertyStr){
+  const properties = propertyStr.split('.');
+  const lastProperty = properties.pop();
+  const lastObject = properties.reduce((a, prop) => isObj(a) ? a[prop] : null, global);
+  if (isObj(lastObject)) {
+    return lastObject[lastProperty]
+  } else {
+    return null;
+  }
 }

@@ -74,6 +74,14 @@ function drawLayout(g,x,y, layout, center=true, pad=0, scale=1, clear=false){
 
 var charLayouts = {
     
+'.': [
+    '     ',
+    '     ',
+    '     ',
+    '  #  ',
+    '     ',
+],
+    
 ':': [
     '     ',
     '  #  ',

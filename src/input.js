@@ -61,12 +61,22 @@ function mouseDown(e){
     // trigger clickable gui
     let gui = global.allGuis[global.gameState]
     let clickedGui = gui.click()
-    if( clickedGui ) return
+    if( clickedGui ){
+        //console.log('clicked fg gui')
+        return
+    }
     if( gui.hasHudInBackground ){
         let hud = global.allGuis[GameStates.playing]
         clickedGui = hud.click()
     }
-    if( clickedGui ) return
+    if( clickedGui ){
+        //console.log('clicked bg hud gui')
+        return
+    }
+    
+    //console.log('click fell through all guis')
+    // close the upgrades menu if it is open 
+    if( global.gameState==GameStates.upgradeMenu ) toggleStats()
     
     // or trigger selected tool
     toolList[global.selectedToolIndex].mouseDown(global.mousePos)
@@ -79,5 +89,5 @@ function mouseUp(e){
     // release tool if it was being held down
     toolList[global.selectedToolIndex].mouseUp(global.mousePos)
     
-    global.allPois.forEach(p => p.isHeld = false )
+    global.mainSim.allPois.forEach(p => p.isHeld = false )
 }

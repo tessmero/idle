@@ -8,7 +8,8 @@ class Button extends GuiElement {
     }
     
     click(){
-        this.action()
+        let result = !this.action()
+        return result
     }
     
     
@@ -27,6 +28,5 @@ class Button extends GuiElement {
         g.strokeStyle = lineCol
         if( fill ) g.clearRect(...rect)
         g.strokeRect(...rect)
-        g.fillStyle = global.lineColor
     }
 }

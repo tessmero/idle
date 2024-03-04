@@ -5,7 +5,7 @@ class Grabber {
         this.grabbed = f
     }
     
-    // i is the index of a particle in global.edgeGroup
+    // i is the index of a particle in global.mainSim.edgeGroup
     canGrabEdgeParticle(i){
         
         // check if we have a EdgeParticleSubgroup instance

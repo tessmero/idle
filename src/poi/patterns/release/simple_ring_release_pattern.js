@@ -16,7 +16,7 @@ class SimpleRingReleasePattern extends ReleasePattern{
         let x = this.x
         let y = this.y
         let r = this.r
-        let s = global.fallSpeed
+        let s = 2e-4//global.fallSpeed
             
         let allp = []
         for( let i = 0 ; i < this.n ; i++ ){

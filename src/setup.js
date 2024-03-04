@@ -45,18 +45,16 @@ function resetGame(){
     
     // init start menu background sim
     global.t = 0
-    global.nParticles = 2000
-    global.particlesCollected = 0
-    global.rainGroup = new ProceduralPGroup()
-    global.physicsGroup = new PhysicsPGroup()
-    global.edgeGroup = new EdgePGroup()
+    global.mainSim = new MainPSim()
+    global.mainSim.particlesCollected = 0
+    global.mainSim.rainGroup.n = 2000
     
     global.activeReleasePatterns = []
     
-    let poi = new Poi(v(0,0))
+    let poi = new Poi(global.mainSim,v(0,0))
     global.startMenuTargetPos = v(.5,.5)
-    global.allPois = [poi]
-    global.grabbers = new Set([poi.grabber])
+    global.mainSim.allPois = [poi]
+    global.mainSim.grabbers = new Set([poi.grabber])
     
     
     resetRand(hard = true)

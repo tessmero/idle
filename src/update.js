@@ -11,11 +11,11 @@ function update(dt) {
     }
     
     // advance start menu idle background animation
-    if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) && (global.gameState==GameStates.startMenu) && (global.allPois.length > 0) ){
+    if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) && (global.gameState==GameStates.startMenu) && (global.mainSim.allPois.length > 0) ){
         
         
         // accel to target
-        let poi = global.allPois[0]
+        let poi = global.mainSim.allPois[0]
         let d = global.startMenuTargetPos.sub(poi.pos)
         let d2 = d.getD2()
         if( d2 > 1e-4 )
@@ -41,21 +41,13 @@ function update(dt) {
     if( global.gameState==GameStates.pauseMenu ) return
     
     global.t += dt
+    global.mainSim.update(dt)
     
     // trigger passive tool behavior
     toolList[global.selectedToolIndex].update(dt)
     
     // upgrades menu transtiino effect
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)
-    
-    // update pois
-    global.allPois = global.allPois.filter( p => {
-        let alive = p.update(dt)
-        if( !alive ){
-            p.cleanup()
-        }
-        return alive
-    })
     
 }
 
@@ -87,4 +79,6 @@ function fitToContainer(){
         global.screenRect = [sc[0].x,sc[0].y,(sc[2].x-sc[0].x),(sc[2].y-sc[0].y)]
         rebuildGuis() //game_states.js
     }
+    
+    global.mainSim.rect = global.screenRect
 }

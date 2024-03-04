@@ -42,18 +42,18 @@ class Hud extends Gui {
             
             // particles on screen
             new StatReadout(topClp,rainIcon,() => 
-                global.nParticles.toString())
-                .withDynamicTooltip(() => `max ${global.nParticles} raindrops on screen`),
+                global.mainSim.rainGroup.n.toString())
+                .withDynamicTooltip(() => `max ${global.mainSim.rainGroup.n} raindrops on screen`),
             
             // catch rate %
             new StatReadout(topCenterP,catchIcon,() => 
-                Math.floor(100*(global.rainGroup.grabbedParticles.size()/global.nParticles)).toString()+'%')
-                .withDynamicTooltip(() => `caught ${global.rainGroup.grabbedParticles.size()} / ${global.nParticles} raindrops`),
+                Math.floor(100*(global.mainSim.rainGroup.grabbedParticles.size()/global.mainSim.rainGroup.n)).toString()+'%')
+                .withDynamicTooltip(() => `caught ${global.mainSim.rainGroup.grabbedParticles.size()} / ${global.mainSim.rainGroup.n} raindrops`),
                 
             // total caught
             new StatReadout(topCrp,collectedIcon,() => 
-                global.particlesCollected.toString())
-                .withDynamicTooltip(() => `${global.particlesCollected} raindrops collected`),
+                global.mainSim.particlesCollected.toString())
+                .withDynamicTooltip(() => `${global.mainSim.particlesCollected} raindrops collected`),
             
             // pause button
             new IconButton(topRight,pauseIcon,pause) //game_state.js

@@ -6,13 +6,12 @@ class IconButton extends Button {
         this.icon = icon
     }
     
-    // implement GuiElement
     draw(g){
         super.draw(g)
         
         // draw pixel art icon
         let layout = this.hovered ? 
             this.icon.getCurrentAnimatedLayout() : this.icon.frames[0] //icon.js
-        drawLayout(g,...rectCenter(...this.rect),layout) //character.js
+        drawLayout(g,...rectCenter(...this.rect),layout,true, 0, this.scale) //character.js
     }
 }

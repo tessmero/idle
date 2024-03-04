@@ -10,24 +10,17 @@ function draw(fps, t) {
     
     // limit radius slider for 20240211 demo
     let lim = .005*5
-    if( global.particleRadius > lim ) global.particleRadius = lim
-    if( global.particleRadius < -lim ) global.particleRadius = -lim
+    if( global.mainSim.particleRadius > lim ) global.mainSim.particleRadius = lim
+    if( global.mainSim.particleRadius < -lim ) global.mainSim.particleRadius = -lim
     
     // draw background
     //ctx.fillStyle = global.backgroundColor
     ctx.clearRect( ...global.screenRect )
     
-    
-    // draw pois
-    resetRand()
-    global.allPois.forEach( p => p.draw(ctx) )
-    
-    // draw particles
+    // draw particles and pois
     resetRand()
     ctx.fillStyle = global.lineColor
-    global.rainGroup.draw(ctx)
-    global.physicsGroup.draw(ctx)
-    global.edgeGroup.draw(ctx)
+    global.mainSim.draw(ctx)
     passed_offscreen_count = 0
         
         
