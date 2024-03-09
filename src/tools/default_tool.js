@@ -33,8 +33,15 @@ class DefaultTool extends Tool{
    
     mouseDown(p){ 
         // either grab the poi or start catching rain
-        this.held = global.mainSim.allPois.find( poi => 
-            poi.pos.sub(p).getD2() < poi.md2 ) 
+        let bodies = [...global.mainSim.allBodies]
+        this.held = bodies.flatMap( poi => {
+            if( poi instanceof CircleBody ){
+                return [poi]
+            } else if ( poi instanceof CompoundBody ){
+                return poi.children
+            }
+        }).find( poi => poi.pos.sub(p).getD2() < poi.md2 )
+        
         if(!this.held){
             this.held = 'catching'
         } else {
@@ -57,7 +64,7 @@ class DefaultTool extends Tool{
    
     drawCursor(g,p,pad){ 
             
-        if( this.held instanceof Poi ){
+        if( this.held instanceof CircleBody ){
             
             //held on poi
             super.drawCursor(g,p,pad)
@@ -94,7 +101,7 @@ class DefaultTool extends Tool{
     update(dt){
         
         // check if holding poi
-        if( this.held instanceof Poi ){
+        if( this.held instanceof CircleBody ){
             
             
             // build pressure
@@ -107,7 +114,7 @@ class DefaultTool extends Tool{
             if( d2 < 1e-4 ) return
             let angle = d.getAngle()
             
-            let acc = vp( angle, global.poiPlayerF/poi.md2 ).mul(dt)
+            let acc = vp( angle, global.poiPlayerF ).mul(dt)
             poi.accel(acc)
             
         }

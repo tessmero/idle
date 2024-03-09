@@ -21,7 +21,7 @@ const global = {
     
     // text
     textPixelSize: .01, //virtual units
-    textLetterSpace: 1, // text pixels
+    textLetterSpace: 2, // text pixels
     
     
     // syncronized gui elements idle animations
@@ -47,7 +47,7 @@ const global = {
     upgradeMenuTabIndex: 0,
     selectedToolIndex: 0,
     t: 0, // total ellapsed time
-    maxPoiCount: 1,
+    maxBodyCount: 10,
    
     
    
@@ -72,11 +72,11 @@ const global = {
     
     // strength of "forces" on poi
     // force=(area/accel) in vunits...ms...
-    poiPlayerF: 4e-8, // player clicking and dragging
+    poiPlayerF: 1e-5, // player clicking and dragging
     poiScreenF: 1e-7, // automatic correction if poi is off-screen
     poiNeighborF: 1e-7, // two overlapping pois push eachother
     
-    poiFriction: 2e-3, //fraction of speed lost per ms
+    poiFriction: 4e-3, //fraction of speed lost per ms
     
     // mouse
     canvasMousePos: v(0,0),     //pixels

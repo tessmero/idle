@@ -55,8 +55,7 @@ function play(){
     global.selectedToolIndex = 0
     global.mainSim.rainGroup.n = 100
     global.mainSim.particlesCollected = 0
-    global.mainSim.allPois.forEach( p => p.cleanup() )
-    global.mainSim.allPois = []
+    global.mainSim.clearBodies()
     global.mainSim.rainGroup.grabbedParticles.clear()
     global.activeReleasePatterns = []
     

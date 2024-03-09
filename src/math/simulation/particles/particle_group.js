@@ -2,9 +2,9 @@
 // particles may be grabbed by Grabber instances
 class ParticleGroup {
     
-    constructor(parent,n){
+    constructor(sim,n){
         // ParticleSim instance
-        this.parent = parent
+        this.sim = sim
         
         // indices of particels that have been grabbed
         this.grabbedParticles = new IntSet(n)
@@ -12,7 +12,7 @@ class ParticleGroup {
     }
     
     draw(g){
-        let r = this.parent.particleRadius
+        let r = this.sim.particleRadius
         let md2 = global.mouseGrabMd2
         let isEdgeGroup = this.isEdgeGroup
         // start iterating over particle positions
@@ -22,14 +22,16 @@ class ParticleGroup {
             if( this.grabbedParticles.has(i) ){
             
                 if( ungrab ){
+                    //console.log(`ungrab ${i}`)
                     this.grabbedParticles.delete(i)
                 }
                 
             }else{
                 
                 // check if newly grabbed
-                let grabbed = (grab || [...this.parent.grabbers].some( gr => {
-                    if( isEdgeGroup && (!gr.canGrabEdgeParticle(i)) ) return false
+                let grabbed = (grab || [...this.sim.grabbers].some( gr => {
+                    //if( isEdgeGroup && (!gr.canGrabEdgeParticle(i)) ) return false
+                    if( isEdgeGroup ) return false
                     if( gr.contains(x,y) ){
                         gr.grabbed(x,y)
                         return true
@@ -37,6 +39,7 @@ class ParticleGroup {
                     return false
                 }))
                 if( grabbed ){
+                    //console.log(`despawn ${i}`)
                     this.grabbedParticles.add(i)
                 } else {
                     

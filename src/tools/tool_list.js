@@ -1,4 +1,5 @@
 const toolList = [
     new DefaultTool(),
-    new BuildTool(),
+    new CircleTool(),
+    new LineTool(),
 ]

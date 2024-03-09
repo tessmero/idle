@@ -10,7 +10,7 @@ class ParticleSim {
         this.edgeGroup = new EdgePGroup(this,n)
         
         this.grabbers = new Set() // Grabber instances
-        this.allPois = [] // Poi instances
+        this.allBodies = new Set() // Body instances
         this.poiMaxArea = 1e-2
         this.poiShrinkRate = 1e-6// vunits^2 area lost per ms
         
@@ -22,17 +22,39 @@ class ParticleSim {
         this.particlesCollected = 0
     }
     
+    addBody(b){
+        if( this.allBodies.length >= global.maxBodyCount ){
+            return
+        }
+        
+        if( this.allBodies.has(b) ){
+            return
+        }
+        
+        this.allBodies.add(b)
+        b.sim = this
+        b.register(this)
+    }
+    
+    removeBody(b){
+        this.allBodies.delete(b)
+        b.unregister(this)
+    }
+    
+    // remove all bodies
+    clearBodies(){
+        [...this.allBodies].forEach(b => this.removeBody(b))
+    }
+    
     update(dt){
         this.t += dt
     
-        // update pois
-        this.allPois = this.allPois.filter( p => {
+        // update bodies
+        let toRemove = [...this.allBodies].filter( p => {
             let alive = p.update(dt)
-            if( !alive ){
-                p.cleanup()
-            }
-            return alive
+            return !alive
         })
+        toRemove.forEach( b => this.removeBody(b) )
     }
     
     draw(g){
@@ -41,6 +63,6 @@ class ParticleSim {
         this.rainGroup.draw(g)
         this.physicsGroup.draw(g)
         this.edgeGroup.draw(g)
-        this.allPois.forEach( p => p.draw(g) )
+        this.allBodies.forEach( p => p.draw(g) )
     }
 }

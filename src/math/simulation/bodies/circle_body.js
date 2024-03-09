@@ -1,53 +1,54 @@
-class Poi {
-    constructor(sim,p){
-        this.parent = sim // ParticleSim instance
-        this.pos = p
+class CircleBody extends Body{
+    constructor(sim,pos,rad){
+        super(sim) 
+        
+        this.pos = pos
         this.vel = v(0,0)
-        this.md2 = global.poiStartArea
-        if( this.md2 > sim.poiMaxArea ) this.md2 = sim.poiMaxArea
-        
-        
-        this.pressure = 0 //0-1 increases when held by player
-        this.pressurePattern = null//instance of PressurePattern
+        this.md2 = rad*rad
+    }
+    
+    // called in particle_sim.js addBody()
+    // this.sim has been set
+    // sim param passed for convenience
+    register(sim){
         
         // prepare particle grabber instance
         this.grabber = new CircleGrabber(v(0,0),
             global.mouseGrabMd2,(x,y) => this.grabbed(x,y))
+        sim.grabbers.add(this.grabber)
             
         // prepare to emit particles
         // PPS = physics particle subgroup instance
         // src/math/particle/group/physics_pgroup.js
-        this.pps = this.parent.physicsGroup.newSubgroup()
+        this.pps = sim.physicsGroup.newSubgroup()
             
         // prepare for particles sliding along edge
         // EPS = edge particle subgroup instance
         // src/math/particle/group/physics_pgroup.js
-        this.eps = this.parent.edgeGroup.newSubgroup(
+        this.eps = sim.edgeGroup.newSubgroup(
             new CircleEdge(v(0,0),global.mouseGrabMd2))
-        this.grabber.eps = this.eps
+        this.grabber.eps = this.eps 
+        
     }
     
-    cleanup(){
-        this.parent.grabbers.delete(this.grabber)
-        this.parent.physicsGroup.deleteSubgroup(this.pps)
-        this.parent.edgeGroup.deleteSubgroup(this.eps)
+    
+    // called in particle_sim.js removeBody()
+    // this.sim has been set
+    // sim param passed for convenience
+    unregister(){
+        this.sim.grabbers.delete(this.grabber)
+        this.sim.physicsGroup.deleteSubgroup(this.pps)
+        this.sim.edgeGroup.deleteSubgroup(this.eps)
     }
     
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
     grabbed(x,y){        
-        this.parent.particlesCollected += 1
-        this.md2 += global.poiGrowthRate 
+            
+        let a = v(x,y).sub(this.pos).getAngle()
         
-        if( this.md2 > this.parent.poiMaxArea ){ 
-            this.md2 = this.parent.poiMaxArea
-            
-            let a = v(x,y).sub(this.pos).getAngle()
-            
-            // stick particle to edge
-            this.eps.spawnParticle(a,0)
-                
-        }
+        // stick particle to edge
+        this.eps.spawnParticle(a,0)
         
     }
     
@@ -63,6 +64,7 @@ class Poi {
         let acc = this.eps.acc.add(v(0,-1e-6*dt))
         let ang = acc.getAngle()
         let mag = global.poiDripChance*dt*acc.getMagnitude()
+        let spawncount = 0
         for( let i = 0 ; i < this.eps.n ; i++ ){
             if( this.eps.isGrabbed(i) ) continue
             let [a,av] = this.eps.get(i)
@@ -73,6 +75,7 @@ class Poi {
                 let pos = this.pos.add(vp(a,r))
                 let vel = this.vel.mul(.5).add(vp(a+pio2,av*r))
                 this.pps.spawnParticle(pos,vel)
+                spawncount += 1
             }
         }
         
@@ -91,51 +94,10 @@ class Poi {
         this.r = Math.sqrt(this.md2) 
         this.grabber.p = this.pos
         this.grabber.r2 = this.md2
-        this.eps.edgeShape.pos = this.pos
-        this.eps.edgeShape.rad = this.r
+        this.eps.edge.pos = this.pos
+        this.eps.edge.rad = this.r
         
-        if( this.isHeld ){
-            
-            // build pressure
-            if( !this.pressurePattern ) this.pressurePattern = randomPressurePattern()
-            this.pressure = Math.min(1, this.pressure+dt*global.poiPressureBuildRate)
-            
-        } else if(this.pressure > 0) {           
-            
-            // release pressure
-            if( !this.isReleasing ){
-                
-                // just started releasing, generate new pattern
-                this.isReleasing = true
-                let n = Math.round( this.pressure * this.md2 * global.poiParticlesReleased )
-                global.activeReleasePatterns.push(randomReleasePattern(n,...this.pos.xy(),this.r))
-            }
-            
-            // ongoing gradual release animation
-            this.pressure = Math.max(0,this.pressure - dt*global.poiPressureReleaseRate)
-            
-            if( this.pressure == 0 ){
-                
-                // finished release animation
-                this.pressurePattern = null
-                this.isReleasing = false
-            }
-
-        }
-        
-        // shrink gradually
-        if( !this.isHeld ) this.md2 -= dt*this.parent.poiShrinkRate
-        return ( this.md2 > 0 )
-    }
-    
-    drawBuildCursor(g){
-        
-        let p = global.mousePos.xy()
-        
-        g.beginPath()
-        g.moveTo(...p)
-        g.arc(...p,this.r,0,twopi)
-        g.fill()
+        return true
     }
     
     draw(g){

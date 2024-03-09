@@ -9,12 +9,8 @@ class GuiPSim extends ParticleSim {
         this.rainGroup.wiggle  *= .3
         
         // add stable poi in center
-        let poi = new Poi(this,v(...rectCenter(...rect)))
-        poi.md2 = .0002
-        this.poiMaxArea  = poi.md2
-        this.poiShrinkRate = 0
-        this.allPois.push(poi)
-        this.grabbers.add(poi.grabber)
+        let poi = new CircleBody(this,v(...rectCenter(...rect)),1e-2)
+        this.addBody(poi)
     }
     
     update(dt){

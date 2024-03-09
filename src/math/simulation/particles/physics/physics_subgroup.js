@@ -3,9 +3,9 @@
 // 
 // should only be instantiated 
 // through global.mainSim.physicsGroup.newSubgroup()
-class PhysicsParticleSubgroup{
-    constructor(parent,subgroupIndex,i,n){
-        this.parent = parent
+class PhysicsPSubgroup{
+    constructor(sim,subgroupIndex,i,n){
+        this.sim = sim
         this.subgroupIndex = subgroupIndex
         this.i = i
         this.n = n
@@ -13,7 +13,7 @@ class PhysicsParticleSubgroup{
         // set all particles as grabbed initially
         let m = this.i+this.n
         for(let j = i ; j < m ; j++ )
-            this.parent.grabbedParticles.add(j)
+            this.sim.grabbedParticles.add(j)
     }
     
     hasIndex(i){
@@ -23,19 +23,20 @@ class PhysicsParticleSubgroup{
     spawnParticle(pos,vel){
         let i = this.i
         let m = i+this.n
-        let nd = this.parent.ndims
+        let nd = this.sim.ndims
         
         // find available particle slot
         for(let j = i ; j < m ; j++ ){
-            if( this.parent.grabbedParticles.has(j) ){
+            if( this.sim.grabbedParticles.has(j) ){
                 
                 // spawn particle
-                this.parent.grabbedParticles.delete(j)
+                this.sim.grabbedParticles.delete(j)
                 let k = j*nd
-                this.parent.state[k+0] = pos.x
-                this.parent.state[k+1] = pos.y
-                this.parent.state[k+2] = vel.x
-                this.parent.state[k+3] = vel.y
+                this.sim.state[k+0] = pos.x
+                this.sim.state[k+1] = pos.y
+                this.sim.state[k+2] = vel.x
+                this.sim.state[k+3] = vel.y
+                
                 return
             }
         }

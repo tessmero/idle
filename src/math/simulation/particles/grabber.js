@@ -8,7 +8,7 @@ class Grabber {
     // i is the index of a particle in global.mainSim.edgeGroup
     canGrabEdgeParticle(i){
         
-        // check if we have a EdgeParticleSubgroup instance
+        // check if we have a EdgePSubgroup instance
         // indicating particles we can't grab
         if(this.eps){
             return !this.eps.hasIndex(i)

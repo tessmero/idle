@@ -30,11 +30,6 @@ class GuiElement {
         // check if mouse is in this element's rectangle
         this.hovered = (this.hoverable && vInRect(global.mousePos,...this.rect))
         
-        //debug
-        if( this.hovered ){
-            console.log(`hovered ${this.constructor.name}.`);
-        }
-        
         if( this.hovered && (this.tooltipFunc || this.tooltip) ){
             
             if( this.tooltipFunc ) this.tooltip = this.tooltipFunc()

@@ -1,4 +1,4 @@
-// a stat readout with buttons to increase and decrease
+// gui element representing a skill 
 class SkillCard extends CompositeGuiElement {
     
     constructor(rect,tree,entry){
@@ -12,7 +12,7 @@ class SkillCard extends CompositeGuiElement {
         
         let sim = entry.skill.getPreviewSim()
         sim.rect = rect
-        sim.allPois[0].pos = v(...rectCenter(...rect))
+        Array.from(sim.allBodies)[0].pos = v(...rectCenter(...rect))
         let gsp = new GuiSimPanel(rect,sim)
         
         let frac = .4

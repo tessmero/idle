@@ -11,15 +11,15 @@ function update(dt) {
     }
     
     // advance start menu idle background animation
-    if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) && (global.gameState==GameStates.startMenu) && (global.mainSim.allPois.length > 0) ){
+    if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) && (global.gameState==GameStates.startMenu) && (global.mainSim.allBodies.size > 0) ){
         
         
         // accel to target
-        let poi = global.mainSim.allPois[0]
+        let poi = Array.from(global.mainSim.allBodies)[0]
         let d = global.startMenuTargetPos.sub(poi.pos)
         let d2 = d.getD2()
         if( d2 > 1e-4 )
-            poi.accel( vp( d.getAngle(), .5*global.poiPlayerF/poi.md2 ).mul(dt) )  
+            poi.accel( vp( d.getAngle(), .5*global.poiPlayerF ).mul(dt) )  
         
         // update target position
         global.startMenuMoveCountdown -= dt

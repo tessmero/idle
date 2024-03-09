@@ -7,6 +7,11 @@ var phi = 1.618033988749894
 function v(){return new Vector(...arguments)}
 function vp(){return Vector.polar(...arguments)}
 
+function clockwise(p1,p2,p3){
+  let val = (p2.y - p1.y) * (p3.x - p2.x) -
+    (p2.x - p1.x) * (p3.y - p2.y);
+  return (val > 0)
+}
 
 function rectCenter(x,y,w,h){
     return [x+w/2,y+h/2]

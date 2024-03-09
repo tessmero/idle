@@ -9,4 +9,8 @@ class CircleEdge extends Edge {
     getPos(a){
         return this.pos.add(vp(a,this.rad))
     }
+    
+    getNorm(a){
+        return a
+    }
 }

@@ -89,5 +89,5 @@ function mouseUp(e){
     // release tool if it was being held down
     toolList[global.selectedToolIndex].mouseUp(global.mousePos)
     
-    global.mainSim.allPois.forEach(p => p.isHeld = false )
+    global.mainSim.allBodies.forEach(p => p.isHeld = false )
 }

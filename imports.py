@@ -15,7 +15,7 @@ for foldername, subfolders, filenames in os.walk(base_folder):
             all_src_paths[filename] = f"{base_folder}/{relative_path}"
 
 
-# get apping of classes to filenames
+# get mapping of classes to filenames
 class_filenames = {}
 for filename in all_src_paths:
     file_path = all_src_paths[filename]

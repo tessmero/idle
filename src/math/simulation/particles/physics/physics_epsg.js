@@ -4,8 +4,8 @@
 class PhysicsPGroup extends ParticleGroup {
     
     
-    constructor(parent,n){
-        super(parent,n)
+    constructor(sim,n){
+        super(sim,n)
         
         // preare to keep track of up to 
         // n particles with 4 props x,y,vx,vy
@@ -38,7 +38,7 @@ class PhysicsPGroup extends ParticleGroup {
         let subgroupIndex = this.freeSubgroupIndices.find(true)
         let n = this.nsub
         let i = subgroupIndex*n
-        let sg = new PhysicsParticleSubgroup(this,subgroupIndex,i,n)
+        let sg = new PhysicsPSubgroup(this,subgroupIndex,i,n)
         this.subgroups.add(sg)
         this.freeSubgroupIndices.delete(subgroupIndex)
         return sg
@@ -52,26 +52,26 @@ class PhysicsPGroup extends ParticleGroup {
     *generateParticles(){
         resetRand()
         let n_particles = this.n
-        let particleRadius = this.parent.particleRadius
+        let particleRadius = this.sim.particleRadius
         let md2 = global.mouseGrabMd2
         let nd = this.ndims
         
         
         let dt = 0
-        if( this.lastDrawTime ) dt = this.parent.t-this.lastDrawTime
-        this.lastDrawTime = this.parent.t
+        if( this.lastDrawTime ) dt = this.sim.t-this.lastDrawTime
+        this.lastDrawTime = this.sim.t
         
         
         // set terminal velocity to match falling rain
-        let mg = global.mainSim.particleG.getMagnitude()
-        let particleFriction = mg / this.parent.fallSpeed
+        let mg = this.sim.particleG.getMagnitude()
+        let particleFriction = mg / this.sim.fallSpeed
         
         // prepare to multiply and offset velocities
         // to apply friction and gravity to all particles
         let vm = (1-particleFriction*dt)
         
         
-        let vb = global.mainSim.particleG.mul(dt)
+        let vb = this.sim.particleG.mul(dt)
         
         
         for( let pps of this.subgroups ){
@@ -99,7 +99,10 @@ class PhysicsPGroup extends ParticleGroup {
                 this.state[i*nd+3] = vy
                 
                 // check if off-screen
-                let grab = !inRect(x,y,...this.parent.rect) 
+                let grab = false
+                if( !inRect(x,y,...this.sim.rect) ){
+                    grab = true 
+                }
                 
                 // yield one particle to be grabbed/drawn
                 let ungrab = false

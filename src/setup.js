@@ -37,8 +37,42 @@ function init() {
     // go to start menu
     quit()
     
-    //
-    requestAnimationFrame(gameLoop);
+    //////////////////////////////////////////
+    // unit tests 20240309
+    if( false ){
+        
+        // start sim unit tests
+        let sim = global.mainSim
+        console.assert( sim.allBodies.size == 1 ) // one body in start menu 
+        
+        // test clearBodies
+        function assertClear(){
+            console.assert( sim.allBodies.size == 0 )
+            console.assert( sim.grabbers.size == 0 )
+            console.assert( sim.edgeGroup.subgroups.size == 0 )
+            console.assert( sim.physicsGroup.subgroups.size == 0 )
+        }
+        sim.clearBodies()
+        assertClear()
+        
+        // test Body implementations
+        let testedCount = 0
+        function check(b){
+            sim.addBody(b)
+            sim.removeBody(b)
+            assertClear()
+            testedCount += 1
+        }
+        check(new CircleBody(sim,v(.5,.5),.1))
+        check(new LineBody(sim,v(.5,.5),v(.3,.3)))
+        console.log(`${testedCount} Body subclasses passed tests`)
+        
+        
+    } else {
+    
+        // start game
+        requestAnimationFrame(gameLoop);
+    }
 }
 
 function resetGame(){
@@ -51,11 +85,10 @@ function resetGame(){
     
     global.activeReleasePatterns = []
     
-    let poi = new Poi(global.mainSim,v(0,0))
+    let poi = new CircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
     global.startMenuTargetPos = v(.5,.5)
-    global.mainSim.allPois = [poi]
-    global.mainSim.grabbers = new Set([poi.grabber])
-    
+    global.mainSim.clearBodies()
+    global.mainSim.addBody(poi)
     
     resetRand(hard = true)
     fitToContainer()   

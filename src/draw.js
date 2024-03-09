@@ -49,13 +49,19 @@ function draw(fps, t) {
         global.tooltipPopup.draw(ctx)
     }
 
-    // draw cursor
+
+    // draw tool cursor
     let p = global.mousePos.xy()
     let tool = toolList[global.selectedToolIndex]
     ctx.fillStyle = global.backgroundColor
     tool.drawCursor(ctx,p,.01)
     ctx.fillStyle = global.lineColor
     tool.drawCursor(ctx,p,0)
+    
+    // draw tool overlay if applicable
+    if( tool.draw ){
+        tool.draw(ctx)
+    }
 
     // debug draw mouse
     if( false ){
