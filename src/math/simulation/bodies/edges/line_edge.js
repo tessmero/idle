@@ -6,6 +6,10 @@ class LineEdge extends Edge {
         this.b = b
     }
     
+    // settings for particles sliding on edge
+    getF(){ return 5e-3 }
+    getG(){ return 3e-6 }
+    
     getPos(r){
         return va(this.a,this.b,r)
     }

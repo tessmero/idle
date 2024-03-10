@@ -30,8 +30,8 @@ class EdgePSubgroup{
         
         // prepare to multiply and offset velocities
         // to apply gravity and accel to all particles
-        let f = 5e-4
-        let g = 2e-6
+        let f = this.edge.getF()
+        let g = this.edge.getG()
         let vm = (1-f*dt)
         let vb = g * dt
         let i = 0
@@ -88,6 +88,13 @@ class EdgePSubgroup{
         let a = this.group.state[i*nd]
         let av = this.group.state[i*nd+1]
         return [a,av]
+    }
+    
+    set(i,a,av){
+        i += this.i
+        let nd = this.group.ndims
+        this.group.state[i*nd] = a
+        this.group.state[i*nd+1] = av
     }
     
     // set particle as grabbed 

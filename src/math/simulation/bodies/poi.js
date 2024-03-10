@@ -2,6 +2,7 @@ class Poi extends CircleBody{
     constructor(sim,p){
         super(sim,p,Math.sqrt(global.poiStartArea))
         if( this.md2 > sim.poiMaxArea ) this.md2 = sim.poiMaxArea
+        this.rad = Math.sqrt(this.md2)
         
         this.pressure = 0 //0-1 increases when held by player
         this.pressurePattern = null//instance of PressurePattern
@@ -68,6 +69,7 @@ class Poi extends CircleBody{
         
         // shrink gradually
         if( !this.isHeld ) this.md2 -= dt*this.sim.poiShrinkRate
+        this.rad = Math.sqrt(this.md2)
         return ( this.md2 > 0 )
     }
     
@@ -92,7 +94,7 @@ class Poi extends CircleBody{
         }
         
         // draw circle
-        let r = this.r
+        let r = this.rad
         let c = p.xy()
         g.beginPath()
         g.moveTo(...c)

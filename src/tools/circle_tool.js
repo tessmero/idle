@@ -22,7 +22,7 @@ class CircleTool extends Tool{
     }
    
     mouseDown(){
-        let poi = new Poi(global.mainSim,global.mousePos)
+        let poi = new CircleBody(global.mainSim,global.mousePos,.1)
         global.mainSim.addBody(poi)
         global.selectedToolIndex = 0
     }

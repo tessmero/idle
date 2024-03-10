@@ -35,6 +35,7 @@ function init() {
     global.ctx = cvs.getContext("2d");
     
     // go to start menu
+    // calls resetGame() defined further down
     quit()
     
     //////////////////////////////////////////
@@ -43,7 +44,7 @@ function init() {
         
         // start sim unit tests
         let sim = global.mainSim
-        console.assert( sim.allBodies.size == 1 ) // one body in start menu 
+        console.assert( sim.allBodies.size == 3 ) // 3 bodies in start menu 
         
         // test clearBodies
         function assertClear(){
@@ -85,10 +86,17 @@ function resetGame(){
     
     global.activeReleasePatterns = []
     
-    let poi = new CircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
     global.startMenuTargetPos = v(.5,.5)
     global.mainSim.clearBodies()
+    
+    let poi = new CircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
     global.mainSim.addBody(poi)
+    
+    let lines = [
+        [v(.65,.55),v(.85,.35)],
+        [v(1-.65,.55),v(1-.85,.35)]
+    ]
+    lines.forEach(l => global.mainSim.addBody(new LineBody(global.mainSim,...l)))
     
     resetRand(hard = true)
     fitToContainer()   

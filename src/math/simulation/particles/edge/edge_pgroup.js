@@ -16,7 +16,7 @@ class EdgePGroup extends ParticleGroup {
         
         // maximum number of particles per subgroup
         // subgroup = (garbage-collectable unit)
-        this.maxSubgroups = 10
+        this.maxSubgroups = 100
         this.nsub = Math.floor(n/this.maxSubgroups)
         this.freeSubgroupIndices = new IntSet(this.maxSubgroups,true)
         

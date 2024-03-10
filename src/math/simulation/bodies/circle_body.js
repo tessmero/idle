@@ -4,7 +4,10 @@ class CircleBody extends Body{
         
         this.pos = pos
         this.vel = v(0,0)
+        this.rad = rad
         this.md2 = rad*rad
+        
+        this.dripChance = global.poiDripChance
     }
     
     // called in particle_sim.js addBody()
@@ -63,19 +66,20 @@ class CircleBody extends Body{
         // randomly emit attached particles
         let acc = this.eps.acc.add(v(0,-1e-6*dt))
         let ang = acc.getAngle()
-        let mag = global.poiDripChance*dt*acc.getMagnitude()
-        let spawncount = 0
+        let mag = this.dripChance*acc.getMagnitude()
+        let r = this.rad
         for( let i = 0 ; i < this.eps.n ; i++ ){
             if( this.eps.isGrabbed(i) ) continue
             let [a,av] = this.eps.get(i)
+            if( this.dripMinAv && (Math.abs(av)<this.dripMinAv) ){
+                mag *= this.slowDripChanceMult
+            }
             let dc = mag*(1-Math.cos(a-ang)) // normal force
             if( (Math.random() < dc) ){
                 this.eps.grab(i)
-                let r = this.r
                 let pos = this.pos.add(vp(a,r))
                 let vel = this.vel.mul(.5).add(vp(a+pio2,av*r))
                 this.pps.spawnParticle(pos,vel)
-                spawncount += 1
             }
         }
         
@@ -91,11 +95,10 @@ class CircleBody extends Body{
         if( this.pos.y > sc[2].y ) this.pos.y = sc[2].y
         
         // update particle grabber instance
-        this.r = Math.sqrt(this.md2) 
         this.grabber.p = this.pos
         this.grabber.r2 = this.md2
         this.eps.edge.pos = this.pos
-        this.eps.edge.rad = this.r
+        this.eps.edge.rad = this.rad
         
         return true
     }
@@ -111,7 +114,7 @@ class CircleBody extends Body{
         }
         
         // draw circle
-        let r = this.r
+        let r = this.rad
         let c = p.xy()
         g.beginPath()
         g.moveTo(...c)

@@ -16,7 +16,7 @@ class ParticleGroup {
         let md2 = global.mouseGrabMd2
         let isEdgeGroup = this.isEdgeGroup
         // start iterating over particle positions
-        for( let [i,x,y,grab,ungrab] of this.generateParticles() ){
+        for( let [i,x,y,grab,ungrab,dx,dy] of this.generateParticles() ){
             
             // check if previously grabbed
             if( this.grabbedParticles.has(i) ){
@@ -33,7 +33,7 @@ class ParticleGroup {
                     //if( isEdgeGroup && (!gr.canGrabEdgeParticle(i)) ) return false
                     if( isEdgeGroup ) return false
                     if( gr.contains(x,y) ){
-                        gr.grabbed(x,y)
+                        gr.grabbed(x,y,dx,dy)
                         return true
                     }
                     return false

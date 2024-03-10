@@ -11,25 +11,29 @@ class LineBody extends CompoundBody {
         let cb = new CircleBody(sim,b,rad)
         this.constraints = [new Spring(ca,cb)]
         this.children = [ca,cb]
+        this.children.forEach(c => {
+            c.dripMinAv = 5e-4
+            c.slowDripChanceMult = .1
+            c.dripChance *= 10 
+        })
     }
     
     // grabbed particle in straight midsection
-    grabbed(x,y,speed=0) {
+    grabbed(x,y,edgeSpeed=0) {
         
-        // stick particle to nearest straight edge
+        // locate edge point
         let a = this.children[0].pos
         let b = this.children[1].pos
         let dx = x-a.x
         let dy = y-a.y
         let d = b.sub(a)
-        let r = (dx*d.x + dy*d.y) / d.getD2()
-        
-        let cw = clockwise(a,b,v(x,y))
+        let r = (dx*d.x + dy*d.y) / d.getD2() // position along edge (float)
+        let cw = clockwise(a,b,v(x,y)) // which side (boolean)
         let eps = cw ? this.eps[1] : this.eps[0]
-        if(cw) speed *= -1
         
-        eps.spawnParticle(r,speed)
-        
+        // stick particle to edge
+        if(cw) edgeSpeed *= -1
+        eps.spawnParticle(r,edgeSpeed)
     }
     
     register(sim){
@@ -95,6 +99,7 @@ class LineBody extends CompoundBody {
         g.moveTo(...this.children[0].pos.xy())
         g.lineTo(...this.children[1].pos.xy())
         g.stroke()
+        g.lineWidth = global.lineWidth
     }
     
     update(dt){
@@ -129,7 +134,7 @@ class LineBody extends CompoundBody {
                     let pos = eps.edge.getPos(a)
                     if( this.grabber.contains(pos.x,pos.y) ){
                         eps.grab(i)
-                        let speed = -va*Math.sqrt(c.md2)
+                        let speed = -va*this.rad
                         this.grabbed(pos.x,pos.y,speed)
                     }
                 }
@@ -146,13 +151,14 @@ class LineBody extends CompoundBody {
                 if( eps.isGrabbed(i) ) continue
                 let [r,dr] = eps.get(i)
                 if( (r<0) || (r>1) ){
-                    if( Math.random() > .9 ){
+                    if( false ){
                         
                         // slide off edge
                         // edge -> physics
                         let pa = eps.edge.getPos(r)
                         let pb = eps.edge.getPos(r+dr)
                         let vel = pb.sub(pa)
+                        vel = vel.mul(.5+.5*Math.random())
                         eps.grab(i)
                         this.pps.spawnParticle(pa,vel)
                         
@@ -164,7 +170,7 @@ class LineBody extends CompoundBody {
                         let pa = eps.edge.getPos(r)
                         let pb = eps.edge.getPos(r+dr)
                         let vel = pb.sub(pa)
-                        let va = vel.getMagnitude() / Math.sqrt(cbody.md2)
+                        let va = vel.getMagnitude() / cbody.rad
                         if( first == (r>1) ) va *= -1
                         eps.grab(i)
                         cbody.eps.spawnParticle(angle + ((first) ? 0 : pi),va)
@@ -173,6 +179,29 @@ class LineBody extends CompoundBody {
                 }
             }
             first = false
+        })
+        
+        //randomly emit particles from straight edges
+        this.eps.forEach(eps => {
+            for( let i = 0 ; i < eps.n ; i++ ){
+                if( eps.isGrabbed(i) ) continue
+                let [r,dr] = eps.get(i)
+                if( (Math.random() < dt*2e-10*global.poiDripChance) ){
+                    
+                    // emit
+                    eps.grab(i)
+                    let pos = eps.edge.getPos(r)
+                    let npos = eps.edge.getPos(r+dr)
+                    let vel = npos.sub(pos)
+                    this.pps.spawnParticle(pos,vel)
+                    
+                } else if(Math.random() < dt*1e-3) {
+                
+                    // halt
+                    eps.set(i,r,0)
+                    
+                }
+            }
         })
         
         
