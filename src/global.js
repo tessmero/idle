@@ -48,7 +48,13 @@ const global = {
     selectedToolIndex: 0,
     t: 0, // total ellapsed time
     maxBodyCount: 10,
+    upgradeTracks: new UpgradeTracks(),
+    skillTree: new SkillTree(),
    
+    // debug
+    colorcodeParticles: false,
+    showEdgeNormals: false,
+    showEdgeAccel: false,
     
    
     // game advancement
@@ -62,7 +68,7 @@ const global = {
     poiPressureBuildRate: 2e-4, // pressure (max 1) increase per ms while held
     poiPressureReleaseRate: 1e-3, 
     poiParticlesReleased: 1e4,// total parts released per unit area at full pressure
-    poiDripChance: 2e3, // * normal force = chance of particle unsticking from poi
+    poiDripChance: 5e2, // * normal force = chance of particle unsticking from poi
     
     // start menu background anim
     startMenuTargetPos: v(.5,.5),

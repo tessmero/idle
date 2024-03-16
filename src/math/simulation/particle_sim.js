@@ -60,9 +60,16 @@ class ParticleSim {
     draw(g){
         resetRand()
         g.fillStyle = global.lineColor
-        this.rainGroup.draw(g)
-        this.physicsGroup.draw(g)
-        this.edgeGroup.draw(g)
         this.allBodies.forEach( p => p.draw(g) )
+        
+        let c = global.colorcodeParticles
+        if( c ) g.fillStyle = 'red'
+        this.rainGroup.draw(g)
+        
+        if( c ) g.fillStyle = 'green'
+        this.physicsGroup.draw(g)
+        
+        if( c ) g.fillStyle = 'blue'
+        this.edgeGroup.draw(g)
     }
 }

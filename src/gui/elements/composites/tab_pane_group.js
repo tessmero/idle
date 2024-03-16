@@ -1,6 +1,7 @@
 class TabPaneGroup extends CompositeGuiElement {
     
-    constructor( tabLabels, rect ){
+    // tabContent is list of rect->element callbacks
+    constructor( rect, tabLabels, tabContent ){
         super(rect)
         this.tabLabels = tabLabels
         this.selectedTabIndex = 0
@@ -39,8 +40,7 @@ class TabPaneGroup extends CompositeGuiElement {
         rect = [...rect]
         rect[1] += tabHeaderHeight
         rect[3] -= tabHeaderHeight
-        this.tabContent = tabLabels.map(l => 
-            new CompositeGuiElement(rect).withOpacity(true))
+        this.tabContent = tabContent.map(cons => cons(rect).withOpacity(true))
         
         this.nTabs = tabLabels.length
         this.selectedTabIndex = 0

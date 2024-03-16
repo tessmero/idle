@@ -62,12 +62,24 @@ class LineBody extends CompoundBody {
         let coords = this.computeStraightEdges()
         this.eps = [ 
             sim.edgeGroup.newSubgroup(
-                new LineEdge(...coords[0])),
+                new LineEdge(...coords[0],true)),
             sim.edgeGroup.newSubgroup(
-                new LineEdge(...coords[1]))
+                new LineEdge(...coords[1],false))
         ]
+        
+        // perpare to compute accel along edge
+        // based on terminals (line_epsg.js)
+        this.eps.forEach( eps => 
+            eps.tipAccelsCallback = () => this.getTipAccels()
+        )
         this.grabber.eps = this.eps
     }
+    
+    // get acceleration at terminals
+    getTipAccels(){
+        return [this.children[0].eps.getAccel(0), this.children[1].eps.getAccel(0)]
+    }
+    
     
     computeStraightEdges(){
         
@@ -100,12 +112,12 @@ class LineBody extends CompoundBody {
         g.lineTo(...this.children[1].pos.xy())
         g.stroke()
         g.lineWidth = global.lineWidth
+        
+        if( global.showEdgeNormals ) this.eps.forEach(eps => eps.edge.drawNormals(g))
+        if( global.showEdgeAccel ) this.eps.forEach(eps => eps.edge.drawAccel(g,eps))
     }
     
     update(dt){
-        
-        // update children (caps)
-        super.update(dt)
         
         // update midsection particle grabber instance
         let a = this.children[0].pos
@@ -182,17 +194,25 @@ class LineBody extends CompoundBody {
         })
         
         //randomly emit particles from straight edges
+        angle = b.sub(a).getAngle()
         this.eps.forEach(eps => {
             for( let i = 0 ; i < eps.n ; i++ ){
                 if( eps.isGrabbed(i) ) continue
                 let [r,dr] = eps.get(i)
-                if( (Math.random() < dt*2e-10*global.poiDripChance) ){
-                    
+                
+                let acc = eps.getAccel(r)
+                let accMag = acc.getMagnitude()
+                let accAngle = acc.getAngle()
+                let normAcc = Math.abs(accMag*Math.cos(angle-accAngle)) // surface accel
+                let dc = 1e1 * global.poiDripChance * (normAcc)
+                if( (Math.random() < dc) ){
+        
                     // emit
                     eps.grab(i)
                     let pos = eps.edge.getPos(r)
                     let npos = eps.edge.getPos(r+dr)
                     let vel = npos.sub(pos)
+                    vel = vel.add(va(this.children[0].vel,this.children[1].vel,r))
                     this.pps.spawnParticle(pos,vel)
                     
                 } else if(Math.random() < dt*1e-3) {
@@ -204,6 +224,9 @@ class LineBody extends CompoundBody {
             }
         })
         
+        
+        // update children (caps)
+        super.update(dt)
         
         return true
     }

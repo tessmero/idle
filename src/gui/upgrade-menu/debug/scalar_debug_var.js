@@ -1,5 +1,5 @@
-// a stat readout with buttons to increase and decrease
-class AdjustableGlobalVar extends CompositeGuiElement {
+// a global variable readout with buttons to increase and decrease
+class ScalarDebugVar extends CompositeGuiElement {
     
     constructor(rect,varname,inc,tooltip){
         super(rect)

@@ -35,16 +35,19 @@ class UpgradeMenu extends Gui {
         let h = sr[3]-2*m
         let r0 = [sc[0].x+m,sc[0].y+m, w,h]
         
+        //let tabLabels = ['upgrades','skills','debug']
         let tabLabels = ['skills','debug']
+        let tabContent = [
+            //rect => new UpgradesTab(rect),
+            rect => new SkillsTab(rect),
+            rect => new DebugTab(rect),
+        ]
         
-        let tabGroup = new TabPaneGroup(tabLabels,[...r0])
+        let tabGroup = new TabPaneGroup([...r0],tabLabels,tabContent)
         if( global.upgradeMenuTabIndex ) 
             tabGroup.selectedTabIndex = global.upgradeMenuTabIndex
         tabGroup.addTabChangeListener( i => 
             global.upgradeMenuTabIndex = i )
-        
-        tabGroup.tabContent[0].children = buildSkillsTabContent([...r0]) // skills_tab.js
-        tabGroup.tabContent[1].children = buildDebugTabContent([...r0]) // debug_tab.js
         
         return [tabGroup]
         

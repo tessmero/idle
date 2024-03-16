@@ -1,8 +1,15 @@
-// costs for using tools
+// progression tree for purchasable skills
+//
+// specify tree in constructor
+//
+// persistant instance global.skillTree
+//   contains state of purchased skills for the current game
+
+
 class SkillTree {
     
     constructor(){
-        this.specs = {
+        this.state = {
             
             "basic_rain": {
                 skill: new BasicRainSkill(),

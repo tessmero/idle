@@ -1,3 +1,4 @@
+// draw the edges between skill cards in the skill tree gui
 class SkillTreeGraph extends GuiElement {
     
     constructor(rect,tree){
@@ -8,7 +9,7 @@ class SkillTreeGraph extends GuiElement {
     
     draw(g){
         g.beginPath()
-        let specs = this.tree.specs
+        let specs = this.tree.state
         for (const [key,entry] of Object.entries(specs)) {
             if( !entry.requires ) continue
             

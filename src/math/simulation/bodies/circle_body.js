@@ -64,17 +64,16 @@ class CircleBody extends Body{
     update(dt){
         
         // randomly emit attached particles
-        let acc = this.eps.acc.add(v(0,-1e-6*dt))
-        let ang = acc.getAngle()
-        let mag = this.dripChance*acc.getMagnitude()
+        let acc = this.eps.getAccel(0)
+        let accAngle = acc.getAngle()
+        let accMag = acc.getMagnitude()
         let r = this.rad
         for( let i = 0 ; i < this.eps.n ; i++ ){
             if( this.eps.isGrabbed(i) ) continue
             let [a,av] = this.eps.get(i)
-            if( this.dripMinAv && (Math.abs(av)<this.dripMinAv) ){
-                mag *= this.slowDripChanceMult
-            }
-            let dc = mag*(1-Math.cos(a-ang)) // normal force
+            let normAcc = Math.abs(accMag*Math.cos(a-accAngle)) // surface accel
+            let centrifugalAcc = Math.abs(av*r) // particle sliding momentum
+            let dc = global.poiDripChance * (normAcc + centrifugalAcc)
             if( (Math.random() < dc) ){
                 this.eps.grab(i)
                 let pos = this.pos.add(vp(a,r))
@@ -120,6 +119,9 @@ class CircleBody extends Body{
         g.moveTo(...c)
         g.arc(...c,r,0,twopi)
         g.fill()
+        
+        if( global.showEdgeNormals ) this.eps.edge.drawNormals(g)
+        if( global.showEdgeAccel ) this.eps.edge.drawAccel(g,this.eps)
         
         
         if( false ){

@@ -1,12 +1,6 @@
+# Idle Rain Catcher
 
-
-- support large number of procedural particles
-    positions computed on draw and not remembered between frames
-    but also support grabbing/eating of individual particles
-- consider only distances squared instead of actual distances (avoid square roots)
-- for circles, radius-squared also used as an analogue for the area of the circle
-    
-    
+Idle game based on procedural/physics particle simulation
     
 
 ## Demo
@@ -17,7 +11,22 @@ https://tessmero.github.io/raincatcher.html
 
 clone this repository to your computer
 
-open `test.html` to test locally, using source files in `src`
+open `test.html` to test locally, loading source files in `src`
 
-run `python build.py` to concatenate all source files into one distributable file: `production.js`
+run `python imports.py` to update links in `test.html` to include all files in `src`
+
+
+## build for production
+
+run `python build.py` to concatenate all source files into one file: `production.js`
+
+open `production.html` to test locally using `production.js`
+
+use `webpack` subdir to minify javascript
+```
+cp production.js webpack/src
+cd webpack
+npm run build
+```
+minified output appears at `webpack/dist/production.js`
 
