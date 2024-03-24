@@ -19,7 +19,11 @@ class ParticleSim {
         this.particleRadius = .005 
         this.particleG = v(0,1e-7) // gravity accel dis/ms/ms
         
+        // state
         this.particlesCollected = 0
+        
+        // circles for mouse to click and drag
+        this.controlPointRadius = .05
     }
     
     addBody(b){
@@ -58,6 +62,13 @@ class ParticleSim {
     }
     
     draw(g){
+        
+        // apply translation if necessary
+        // used for gui simulations
+        if( this.drawOffset ){
+            g.translate(...this.drawOffset)
+        }
+        
         resetRand()
         g.fillStyle = global.lineColor
         this.allBodies.forEach( p => p.draw(g) )
@@ -71,5 +82,14 @@ class ParticleSim {
         
         if( c ) g.fillStyle = 'blue'
         this.edgeGroup.draw(g)
+        
+        if( this.hoveredControlPoint ) {
+            this.hoveredControlPoint.draw(g,'white',true)
+        }
+        
+        g.fillStyle = global.lineColor
+        if( this.drawOffset ){
+            g.translate(-this.drawOffset[0],-this.drawOffset[1])
+        }
     }
 }

@@ -3,14 +3,11 @@
 // displayed using a GuiSimPanel instance
 class GuiPSim extends ParticleSim {
     constructor(rect=[0,0,1,1]){
-        super(1e2,rect)
+        super(1e3,rect)
         this.fallSpeed *= .2
         this.particleRadius *= .3
         this.rainGroup.wiggle  *= .3
-        
-        // add stable poi in center
-        let poi = new CircleBody(this,v(...rectCenter(...rect)),1e-2)
-        this.addBody(poi)
+        this.rainGroup.n  /= 10
     }
     
     update(dt){
@@ -19,5 +16,13 @@ class GuiPSim extends ParticleSim {
     
     draw(g){
         super.draw(g)
+    }
+    
+    // make sure bodies have no control points
+    addBody(b){
+        if( b.children )
+            b.children = b.children.filter(c => !b.controlPoints.includes(c) )
+        b.controlPoints = []
+        super.addBody(b)
     }
 }

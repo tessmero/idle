@@ -39,7 +39,7 @@ function init() {
     quit()
     
     //////////////////////////////////////////
-    // unit tests 20240309
+    // unit tests 20240324
     if( false ){
         
         // start sim unit tests
@@ -65,6 +65,7 @@ function init() {
             testedCount += 1
         }
         check(new CircleBody(sim,v(.5,.5),.1))
+        check(new ControlledCircleBody(sim,v(.5,.5),.1))
         check(new LineBody(sim,v(.5,.5),v(.3,.3)))
         console.log(`${testedCount} Body subclasses passed tests`)
         
@@ -89,7 +90,7 @@ function resetGame(){
     global.startMenuTargetPos = v(.5,.5)
     global.mainSim.clearBodies()
     
-    let poi = new CircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
+    let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
     global.mainSim.addBody(poi)
     
     let lines = [

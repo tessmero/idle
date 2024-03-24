@@ -6,12 +6,34 @@ class TextLabel extends GuiElement {
         this.rect = rect
         this.label = label
         this.scale = 1
-        this.pad = .005
+        this.pad = this.constructor.pad()
+        this.letterPixelPad = this.constructor.letterPixelPad()
         this.center = true
+    }
+        
+        
+    // default vals
+    static pad(){ return .005 }
+    static letterPixelPad(){ return .005 }
+        
+    // set optional style 'tooltip' or 'hud'
+    withStyle(s){
+        this.style = s
+        return this
+    }
+    
+    withCenter(c){
+        this.center = c
+        return this
     }
     
     withScale(s){ 
         this.scale = s
+        return this
+    }
+    
+    withLetterPixelPad(p){
+        this.letterPixelPad = p
         return this
     }
     
@@ -25,13 +47,29 @@ class TextLabel extends GuiElement {
         let rect = this.rect
         let label = this.label
         
-        let p = rectCenter(...rect)
-        if( !this.center ){
-            p[0] = rect[0]
-            p[1] -= global.textPixelSize
+        let p
+        if( this.center ){
+            p = rectCenter(...rect)
+        } else {
+            p = [rect[0] + this.pad, rect[1] + this.pad + this.scale*global.textPixelSize]
         }
-        drawText(g, ...p, label, this.center, this.pad, this.scale, true)
-        drawText(g, ...p, label, this.center, 0, this.scale, false)
+        
+        if( this.style == 'inverted' ){
+            
+            // draw simple white text
+            drawText(g, ...p, label, this.center, 0, this.scale, true)
+            
+        } else if( this.style == 'hud' ){
+            
+            // draw extra readable for hud
+            drawText(g, ...p, label, this.center, this.letterPixelPad, this.scale, true)
+            drawText(g, ...p, label, this.center, 0, this.scale, false)
+            
+        } else {
+            
+            // draw simple black text
+            drawText(g, ...p, label, this.center, 0, this.scale, false)
+        }
     }
     
     // implement GuiElement

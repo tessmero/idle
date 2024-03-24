@@ -3,7 +3,7 @@
 //  - passive skills and upgrades that have been purchased
 //  - temporary effects ongoing in global.mainSim
 //
-// ... then apply bonuses to global.mainSim
+// finally, apply bonuses by adjusting settings in global.mainSim
 
 
 function updateAllBonuses(){

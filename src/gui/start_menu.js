@@ -43,7 +43,7 @@ class StartMenu extends Gui {
         let textPad = .01 // padding around letters' pixels
         
         this.labels = specs.map( s => {
-            return new TextLabel(slots[s[0]],s[1]).withPad(textPad)
+            return new TextLabel(slots[s[0]],s[1]).withLetterPixelPad(textPad).withStyle('hud')
         })
         
         return [

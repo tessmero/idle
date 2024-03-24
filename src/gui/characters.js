@@ -4,13 +4,13 @@ var charHeight = 7
 // draw text centered at point xy
 function drawText(g,x,y,s,center=true,pad=0,scale=1, clear=false){
     let lines = s.split('\n')
-    let dy = scale * global.textPixelSize * (charHeight*1.9)
+    let dy = scale * global.textPixelSize * (charHeight+global.textLineSpace )
     lines.forEach( l => {
         _drawTextLine(g,x,y,l,center,pad,scale,clear)
         y +=dy
     })
 }
-function _drawTextLine(g,x,y,s,center,pad,scale, clear){
+function _drawTextLine(g,x,y,s,center,pad,scale, clear){    
     s = s.toUpperCase()
     let cw = charWidth
     let ch = charHeight
@@ -30,19 +30,23 @@ function _drawTextLine(g,x,y,s,center,pad,scale, clear){
     }
 }
 
-function getTextDims(s,scale=1){
+function getTextDims(s,scale=1){    
     let lines = s.split(/\r?\n/)
     let longest = Math.max(...lines.map(l => l.length))
+    
+    // dimensiosn in terms of number of characters
+    let charDims = [longest,lines.length]
     
     let cw = charWidth
     let ch = charHeight
     let tps = global.textPixelSize 
-    let tls = global.textLetterSpace  
-    let dx = tps * cw + tps * tls
-    let tw = dx*longest - tps*tls
-    let th = tps*ch//*lines.length
+    let dx = tps * (cw+global.textLetterSpace )
+    let dy = tps * (ch+global.textLineSpace )
     
-    return [tw*scale,th*scale]
+    return [
+        charDims[0]*dx*scale - tps*global.textLetterSpace,
+        charDims[1]*dy*scale - tps*global.textLineSpace
+    ]
 }
 
 function drawLayout(g,x,y, layout, center=true, pad=0, scale=1, clear=false){
@@ -237,6 +241,244 @@ var charLayouts = {
     '#   #',
     ' ### '
 ],
+    'a': [
+        '     ',
+        '     ',
+        '  ## ',
+        '    #',
+        ' ####',
+        '#   #',
+        ' ####',
+    ],
+    'b': [
+        '#    ',
+        '#    ',
+        '#    ',
+        '#### ',
+        '#   #',
+        '#   #',
+        '#### ',
+    ],
+    'c': [
+        '     ',
+        '     ',
+        ' ### ',
+        '#   #',
+        '#    ',
+        '#   #',
+        ' ### ',
+    ],
+    'd': [
+        '    #',
+        '    #',
+        ' ####',
+        '#   #',
+        '#   #',
+        '#   #',
+        ' ####',
+    ],
+    'e': [
+        '     ',
+        '     ',
+        ' ### ',
+        '#   #',
+        '#### ',
+        '#    ',
+        ' ##  ',
+    ],
+    'f': [
+        '  ## ',
+        ' #   ',
+        ' #   ',
+        ' ### ',
+        ' #   ',
+        ' #   ',
+        ' #   ',
+    ],
+    'g': [
+        '     ',
+        '     ',
+        ' ####',
+        '#   #',
+        '#   #',
+        ' ####',
+        '    #',
+        ' ### ',
+    ],
+    'h': [
+        '#    ',
+        '#    ',
+        '#    ',
+        '#### ',
+        '#   #',
+        '#   #',
+        '#   #',
+    ],
+    'i': [
+        '     ',
+        '  #  ',
+        '     ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+    ],
+    'j': [
+        '     ',
+        '  #  ',
+        '     ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        ' #   ',
+    ],
+    'k': [
+        ' #   ',
+        ' #  #',
+        ' # # ',
+        ' ##  ',
+        ' # # ',
+        ' #  #',
+        ' #  #',
+    ],
+    'l': [
+        '     ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        '   # ',
+    ],
+    'm': [
+        '     ',
+        '     ',
+        '## # ',
+        '# # #',
+        '# # #',
+        '#   #',
+        '#   #',
+    ],
+    'n': [
+        '     ',
+        '     ',
+        '###  ',
+        '#  # ',
+        '#  # ',
+        '#  # ',
+        '#  # ',
+    ],
+    'o': [
+        '     ',
+        '     ',
+        ' ### ',
+        '#   #',
+        '#   #',
+        '#   #',
+        ' ### ',
+    ],
+    'p': [
+        '     ',
+        '     ',
+        '###  ',
+        '#  # ',
+        '###  ',
+        '#    ',
+        '#    ',
+    ],
+    'q': [
+        '     ',
+        '     ',
+        ' ### ',
+        '#   #',
+        '#   #',
+        '#   #',
+        ' ### ',
+        '   # ',
+    ],
+    'r': [
+        '     ',
+        '     ',
+        '# ## ',
+        '##   ',
+        '#    ',
+        '#    ',
+        '#    ',
+    ],
+    's': [
+        '     ',
+        '     ',
+        ' ####',
+        '#    ',
+        ' ### ',
+        '    #',
+        '#### ',
+    ],
+    't': [
+        '  #  ',
+        '  #  ',
+        ' ### ',
+        '  #  ',
+        '  #  ',
+        '  #  ',
+        '   # ',
+    ],
+    'u': [
+        '     ',
+        '     ',
+        '#   #',
+        '#   #',
+        '#   #',
+        '#   #',
+        ' ####',
+    ],
+    'v': [
+        '     ',
+        '     ',
+        '#   #',
+        '#   #',
+        '#   #',
+        ' # # ',
+        '  #  ',
+    ],
+    'w': [
+        '     ',
+        '     ',
+        '#   #',
+        '#   #',
+        '# # #',
+        '# # #',
+        ' # # ',
+    ],
+    'x': [
+        '     ',
+        '     ',
+        '#   #',
+        ' # # ',
+        '  #  ',
+        ' # # ',
+        '#   #',
+    ],
+    'y': [
+        '     ',
+        '     ',
+        '#   #',
+        '#   #',
+        ' ####',
+        '    #',
+        ' ####',
+    ],
+    'z': [
+        '     ',
+        '     ',
+        '#### ',
+        '  #  ',
+        ' #   ',
+        '#    ',
+        '#### ',
+    ],
 
     
     'A': [

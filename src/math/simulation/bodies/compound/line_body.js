@@ -1,21 +1,37 @@
-
 class LineBody extends CompoundBody {
     
     // sim is a ParticleSim instance
-    constructor(sim,a,b){
+    constructor(sim,a,b,rad=2e-2){
         super(sim)
         
-        let rad = 2e-2
         this.rad = rad
         let ca = new CircleBody(sim,a,rad)
         let cb = new CircleBody(sim,b,rad)
         this.constraints = [new Spring(ca,cb)]
-        this.children = [ca,cb]
-        this.children.forEach(c => {
+        
+        this.endCaps = [ca,cb]
+        this.endCaps.forEach(c => {
             c.dripMinAv = 5e-4
             c.slowDripChanceMult = .1
             c.dripChance *= 10 
         })
+        
+        // init control points for user to click and drag
+        this.movCp = new ControlPoint(sim,this)
+        this.rotCp0 = new RotationControlPoint(sim,ca,cb)
+        this.rotCp1 = new RotationControlPoint(sim,cb,ca)
+        this.controlPoints = [this.movCp,this.rotCp0,this.rotCp1]
+        this.controlPoints.forEach(cp => cp.fscale = .6)
+        
+        
+        this.children = [...this.endCaps,...this.controlPoints]
+    }
+    
+    getPos(){ return va(...this.endCaps.map(c=>c.getPos())) }
+    
+    // translate this whole body without rotating it
+    accel(acc){
+        this.endCaps.forEach(b => b.accel(acc))
     }
     
     // grabbed particle in straight midsection
@@ -89,8 +105,8 @@ class LineBody extends CompoundBody {
         let d = vp(ang+pio2,this.rad)
         
         return [
-            [this.children[0].pos.add(d),this.children[1].pos.add(d)],
-            [this.children[0].pos.sub(d),this.children[1].pos.sub(d)],
+            [a.add(d),b.add(d)],
+            [a.sub(d),b.sub(d)],
         ]
     }
     
@@ -106,6 +122,7 @@ class LineBody extends CompoundBody {
         // draw children (caps)
         super.draw(g)
         
+        g.strokeStyle = global.lineColor
         g.lineWidth = 2*this.rad
         g.beginPath()
         g.moveTo(...this.children[0].pos.xy())
@@ -132,27 +149,32 @@ class LineBody extends CompoundBody {
         this.eps[1].edge.a = coords[1][0]
         this.eps[1].edge.b = coords[1][1]
         
+        // apply centr force to particles on midsection
+        let angle = b.sub(a).getAngle() + pio2
+        if( this.prevAngle ){
+            let spn = Math.abs(cleanAngle(angle-this.prevAngle))/dt
+            this.eps.forEach(eps=>eps.spin(spn))
+        }
+        this.prevAngle = angle
+        
         // let particles slide from circular 
         // end caps to stright edges
-        let angle = b.sub(a).getAngle() + pio2
         let first = true
-        if( true ){
-            this.children.forEach( c => {
-                
-                let eps = c.eps
-                for( let i = 0 ; i < eps.n ; i++ ){
-                    if( eps.isGrabbed(i) ) continue
-                    let [a,va] = eps.get(i)
-                    let pos = eps.edge.getPos(a)
-                    if( this.grabber.contains(pos.x,pos.y) ){
-                        eps.grab(i)
-                        let speed = -va*this.rad
-                        this.grabbed(pos.x,pos.y,speed)
-                    }
+        this.endCaps.forEach( c => {
+            
+            let eps = c.eps
+            for( let i = 0 ; i < eps.n ; i++ ){
+                if( eps.isGrabbed(i) ) continue
+                let [a,va] = eps.get(i)
+                let pos = eps.edge.getPos(a)
+                if( this.grabber.contains(pos.x,pos.y) ){
+                    eps.grab(i)
+                    let speed = -va*this.rad
+                    this.grabbed(pos.x,pos.y,speed)
                 }
-                first = false            
-            } )
-        }
+            }
+            first = false            
+        } )
         
         // let particles slide off 
         // the end of straight edges
@@ -203,7 +225,7 @@ class LineBody extends CompoundBody {
                 let acc = eps.getAccel(r)
                 let accMag = acc.getMagnitude()
                 let accAngle = acc.getAngle()
-                let normAcc = Math.abs(accMag*Math.cos(angle-accAngle)) // surface accel
+                let normAcc = accMag*Math.sin(angle-accAngle) // surface accel
                 let dc = 1e1 * global.poiDripChance * (normAcc)
                 if( (Math.random() < dc) ){
         

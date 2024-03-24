@@ -38,21 +38,29 @@ class LineTool extends Tool{
         } else {
             let d2 = this.startPoint.sub(global.mousePos).getD2()
             if( d2 < 1e-2 ) return
-            
+            this._spawnLine()
+        }
+    }
+    
+    _spawnLine(){
             let poi = new LineBody(global.mainSim,this.startPoint,global.mousePos)
             global.mainSim.addBody(poi)
             this.startPoint = null
             global.selectedToolIndex = 0
-        }
     }
     
     mouseMove(){
-        if( this.startPoint ){
-            
-        }
     }
     
     mouseUp(){
         this.mouseHeld = false
+        
+        // check if dragged a significant distance
+        if( this.startPoint ){
+            let d2 = this.startPoint.sub(global.mousePos).getD2()
+            if( d2 < 1e-2 ) return
+            
+            this._spawnLine()
+        }
     }
 }

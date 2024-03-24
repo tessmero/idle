@@ -1,6 +1,6 @@
 // Edge Particle Subgroup
 //
-// handles any particles suck or sliding along
+// handles any particles stuck to or sliding along
 // one specific edge on-screen
 //
 // a subgroup is a garbage-collectable unit
@@ -20,12 +20,35 @@ class EdgeParticleSubgroup{
         let m = this.i+this.n
         for(let j = i ; j < m ; j++ )
             this.group.grabbedParticles.add(j)
+        
+        
+        // prepare to add up acceleration during body updates
+        // so particles react accordingly in generateParticles()
+        this.acc = v(0,0)
+        this.spn = 0 // angular
     }
     
     // called in EdgePGroup *generateParticles()
     *generateParticles(dt){
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
+    
+    // apply force to particles
+    accel(acc){
+        this.acc = this.acc.add(acc)
+    }
+    
+    // apply centripital force to porticles
+    spin(spn){
+        this.spn += spn
+    }
+    
+    // compute force felt by a particle 
+    // stuck to edge at point a
+    // including gravity
+    getAccel(a){
+        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    } 
     
     count(b){
         let result = 0

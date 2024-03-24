@@ -59,7 +59,7 @@ class EdgePGroup extends ParticleGroup {
     }
     
     // should be called in [Body subclass]::unregister(sim):
-    //      sim.edgeGroup.newSubgroup(edge)
+    //      sim.edgeGroup.deleteSubgroup(edge)
     deleteSubgroup(sg){
         this.freeSubgroupIndices.add(sg.subgroupIndex)
         this.subgroups.delete(sg)

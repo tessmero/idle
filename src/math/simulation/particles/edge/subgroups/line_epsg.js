@@ -13,7 +13,7 @@ class LineEPSG extends EdgeParticleSubgroup{
         let vm = (1-f*dt)
         let i = 0
         
-        // prepare to apply accel and reset accumulated force
+        // prepare to apply accel
         let norm = this.edge.getNorm(0)
             
         let nd = this.group.ndims
@@ -28,9 +28,9 @@ class LineEPSG extends EdgeParticleSubgroup{
                 let av = this.group.state[i*nd+1]
                 let acc = this.getAccel(a)
                 let accAngle = acc.getAngle()
-                let accMag = acc.getMagnitude()
+                let accMag = acc.getMagnitude() * Math.sin(norm-accAngle)// accel particle along edge
                 if( this.edge.direction ) accMag *= -1
-                av += accMag * Math.sin(norm-accAngle)// accel particle along edge
+                av += accMag 
                 av *= vm // friction
                 a += av*dt
                 this.group.state[i*nd+0] = a
@@ -43,12 +43,33 @@ class LineEPSG extends EdgeParticleSubgroup{
                 let [x,y] = pos.xy()
                 yield [i,x,y,grab,ungrab]
         }
+        
+        // reset accumulated centripital force
+        this.spn = 0
     }
     
+    // compute force felt by a particle 
+    // stuck to edge at point a
+    // including gravity
     getAccel(a){
+        
+        // translational force based on tips
+        let tf
         let f = this.tipAccelsCallback // line_body.js register()
-        if(!f) return v(0,0)
-        let [start,stop] = f()
-        return va(start,stop,a)
+        if(f){
+            let [start,stop] = f()
+            tf = va(start,stop,a)
+        } else {
+            tf = v(0,0)
+        }
+        
+        
+        // centripital force
+        let mag = 6e-2*this.spn*(.5-a) // angular vel * radius
+        let angle = this.edge.getAngle()
+        let cf = vp(angle,mag)
+        
+        return tf.add(cf)
+        //return cf
     }
 }

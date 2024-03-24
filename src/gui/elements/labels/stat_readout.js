@@ -5,6 +5,7 @@ class StatReadout extends DynamicTextLabel {
         super(rect,function(){ return '  ' + labelFunc() })
         this.icon = icon
         this.scale = this.constructor.scale()
+        this.center = false
     }
     
     update(){
@@ -18,9 +19,9 @@ class StatReadout extends DynamicTextLabel {
         super.draw(g)
         
         // draw icon
-        let xy = [this.rect[0]+this.pad,this.rect[1]+this.pad]
-        let ch = charHeight
         let tps = global.textPixelSize 
+        let xy = [this.rect[0]+this.pad,this.rect[1]+this.pad+this.scale*tps]
+        let ch = charHeight
         
         let layout = this.icon.getCurrentAnimatedLayout()
         

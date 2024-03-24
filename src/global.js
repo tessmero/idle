@@ -22,6 +22,7 @@ const global = {
     // text
     textPixelSize: .01, //virtual units
     textLetterSpace: 2, // text pixels
+    textLineSpace: 2, // text pixels
     
     
     // syncronized gui elements idle animations
@@ -56,6 +57,9 @@ const global = {
     showEdgeNormals: false,
     showEdgeAccel: false,
     
+    controlPointLineWidth: .003,
+    controlPointVisibleHoverRadius: .2,
+    draggingControlPoint: null, //ControlPoint instance
    
     // game advancement
     particlesCollected: 0,
@@ -83,6 +87,9 @@ const global = {
     poiNeighborF: 1e-7, // two overlapping pois push eachother
     
     poiFriction: 4e-3, //fraction of speed lost per ms
+    
+    //
+    skillCardPreviewSimDims: [.1,.1],
     
     // mouse
     canvasMousePos: v(0,0),     //pixels

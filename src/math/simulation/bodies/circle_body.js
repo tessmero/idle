@@ -1,3 +1,4 @@
+// physics-enabled circle
 class CircleBody extends Body{
     constructor(sim,pos,rad){
         super(sim) 
@@ -9,6 +10,8 @@ class CircleBody extends Body{
         
         this.dripChance = global.poiDripChance
     }
+    
+    getPos(){ return this.pos }
     
     // called in particle_sim.js addBody()
     // this.sim has been set

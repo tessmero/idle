@@ -3,9 +3,6 @@
 class CircleEPSG extends EdgeParticleSubgroup{
     constructor(...p){
         super(...p)
-        
-        // prepare to add up acceleration during updates
-        this.acc = v(0,0)
     }
     
     // called in EdgePGroup *generateParticles()
@@ -54,8 +51,13 @@ class CircleEPSG extends EdgeParticleSubgroup{
         this.acc = this.acc.add(acc)
     }
     
-    // compute the accel felt at position along edge
+    
+    // compute force felt by a particle 
+    // stuck to edge at point a
+    // including gravity
     getAccel(a){
-        return this.acc.add(this.g)
+        
+        // missing centripital force due to body spinning
+        return this.acc.add(this.g) 
     } 
 }

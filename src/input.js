@@ -83,6 +83,7 @@ function mouseDown(e){
     
 }
 function mouseUp(e){
+    global.draggingControlPoint = null
     global.mouseDownDisabled = false
     global.mouseDown = false
     

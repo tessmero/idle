@@ -12,14 +12,21 @@ class LineEdge extends Edge {
     getF(){ return 5e-3 }
     getG(){ return 2e-5 }
     
+    getAngle(){
+        return this.b.sub(this.a).getAngle()
+    }
+    
+    // implement edge
     getPos(r){
         return va(this.a,this.b,r)
     }
     
+    // implement edge
     getNorm(a){
-        return this.b.sub(this.a).getAngle() + (this.direction ? pio2 : -pio2)
+        return this.getAngle() + (this.direction ? pio2 : -pio2)
     }
     
+    // implement edge
     getCircumference(){
         return this.b.sub(this.a).getMagnitude()
     }

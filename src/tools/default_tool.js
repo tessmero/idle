@@ -32,15 +32,9 @@ class DefaultTool extends Tool{
     }
    
     mouseDown(p){ 
-        // either grab the poi or start catching rain
-        let bodies = [...global.mainSim.allBodies]
-        this.held = bodies.flatMap( poi => {
-            if( poi instanceof CircleBody ){
-                return [poi]
-            } else if ( poi instanceof CompoundBody ){
-                return poi.children
-            }
-        }).find( poi => poi.pos.sub(p).getD2() < poi.md2 )
+        // either grab control point or start catching rain
+        this.held = global.mainSim.hoveredControlPoint
+        global.draggingControlPoint = this.held
         
         if(!this.held){
             this.held = 'catching'
@@ -58,22 +52,27 @@ class DefaultTool extends Tool{
     mouseUp(p){ 
         this.held = null 
         
+        global.draggingControlPoint = null
+        
+        // global.draggingControlPoint also set in input.js
+        // to handle edge cases, e.g. gui state changed somehow mid-drag
+        
         //stop grabbing particles
         global.mainSim.grabbers.delete(this.grabber)
     }
    
     drawCursor(g,p,pad){ 
             
-        if( this.held instanceof CircleBody ){
+        if( this.held instanceof ControlPoint ){
             
-            //held on poi
+            // held on control point
+            global.mainSim.hoveredControlPoint = this.held
             super.drawCursor(g,p,pad)
             
             
         } else if( this.held ){
             
             // held on background
-            // catching rain
             let c = global.mousePos
             let r = global.mouseGrabRadius
             
@@ -95,28 +94,30 @@ class DefaultTool extends Tool{
             
             // not held
             super.drawCursor(g,p,pad)
+            
+            // debug control points hover vis radius
+            //let r = global.controlPointVisibleHoverRadius
+            //ControlPoint._draw(g,v(...p),r)
         }
     }
     
     update(dt){
         
-        // check if holding poi
-        if( this.held instanceof CircleBody ){
-            
-            
-            // build pressure
-            let poi = this.held
-            poi.pressure = Math.min(1, poi.pressure+dt*global.poiPressureBuildRate)
-            
-            //apply force
-            let d = global.mousePos.sub(poi.pos)
+        if( this.held instanceof ControlPoint ){
+        
+            let fr = [1e-4,1e-2] // no force d2, full force d2
+        
+            //apply force to held control point
+            let cp = this.held
+            let d = global.mousePos.sub(cp.pos)
             let d2 = d.getD2()
-            if( d2 < 1e-4 ) return
+            if( d2 < fr[0]) return
             let angle = d.getAngle()
-            
-            let acc = vp( angle, global.poiPlayerF ).mul(dt)
-            poi.accel(acc)
-            
+            let f = global.poiPlayerF 
+            if(d2<fr[1])
+                f *= (d2-fr[0])/(fr[1]-fr[0])
+            let acc = vp( angle, f ).mul(dt)
+            cp.accel(acc)
         }
     }
     

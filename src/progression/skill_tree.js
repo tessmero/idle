@@ -10,7 +10,33 @@ class SkillTree {
     
     constructor(){
         this.state = {
+            "basic_circle": {
+                skill: new BasicCircleSkill(),
+                pos: [.35,.7], //position in gui
+                status: "purchased",
+            },
             
+            "bouncy_circle": {
+                skill: new BouncyCircleSkill(),
+                requires: "basic_circle",
+                pos: [.35,.5], 
+                status: "available",
+            },
+            
+            "basic_line": {
+                skill: new BasicLineSkill(),
+                pos: [.65,.7], 
+                status: "purchased",
+            },
+            
+            "flipper_line": {
+                skill: new FlipperLineSkill(),
+                requires: "basic_line",
+                pos: [.65,.5], 
+                status: "available",
+            },
+            
+            /*
             "basic_rain": {
                 skill: new BasicRainSkill(),
                 pos: [.5,.7], //position in gui
@@ -46,6 +72,7 @@ class SkillTree {
                 pos: [.7,.3], 
                 status: "locked",
             }
+            */
         }
     }
     

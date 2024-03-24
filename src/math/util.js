@@ -39,6 +39,34 @@ function randChoice(options){
     return options[Math.floor( Math.random() * options.length )]
 }
 
+// locate intersections between two circles
+function intersectionAngles(x0, y0, r0, x1, y1, r1) {
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const distance = Math.sqrt(dx*dx + dy*dy);
+    
+    // Check for non-intersecting circles
+    if (distance > r0 + r1) {
+        // Circles do not intersect
+        return 'out';
+    }
+    
+    // Check for coinciding circles
+    if (distance < Math.abs(r0 - r1)) {
+        // One circle is entirely within the other
+        return 'in';
+    }
+    
+    // Calculate intersection angles
+    const angle1 = Math.atan2(dy, dx);
+    const angle2 = Math.acos((r0*r0 + distance*distance - r1*r1) / (2 * r0 * distance));
+    
+    const intersectionAngle1 = angle1 + angle2;
+    const intersectionAngle2 = angle1 - angle2;
+    
+    return [intersectionAngle1, intersectionAngle2];
+}
+
 function cleanAngle(a){
     a = nnmod(a,twopi)
     if( a > Math.PI ){

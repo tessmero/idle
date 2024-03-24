@@ -35,9 +35,9 @@ class GuiElement {
             if( this.tooltipFunc ) this.tooltip = this.tooltipFunc()
             
             // build new tooltip gui element
-            let anchorPoint = TooltipPopup.pickMouseAnchorPoint()
-            let rect = TooltipPopup.pickTooltipRect(anchorPoint,this.tooltip)
-            global.tooltipPopup = new TooltipPopup(rect,this.tooltip)
+            let rect = LabelTooltipPopup.pickRect(this.tooltip,this.tooltipScale)
+            rect = padRect( ...rect, TextLabel.pad() )
+            global.tooltipPopup = new LabelTooltipPopup(rect,this.tooltip)
             if( this.tooltipScale ) global.tooltipPopup.scale = this.tooltipScale
         }
     }

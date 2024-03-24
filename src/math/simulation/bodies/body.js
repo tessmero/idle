@@ -4,6 +4,11 @@ class Body {
     // sim is a ParticleSim instance
     constructor(sim){
         this.sim = sim
+        this.controlPoints = []
+    }
+    
+    getPos(){
+        throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
     
     accel(acc){

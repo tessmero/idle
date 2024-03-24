@@ -15,7 +15,7 @@ function update(dt) {
         
         
         // accel to target
-        let poi = Array.from(global.mainSim.allBodies)[0]
+        let poi = Array.from(global.mainSim.allBodies)[0].circle
         let d = global.startMenuTargetPos.sub(poi.pos)
         let d2 = d.getD2()
         if( d2 > 1e-4 )
@@ -36,6 +36,15 @@ function update(dt) {
         global.allGuis[GameStates.playing].update(dt) // hud may set global.tooltipPopup
     }
     global.allGuis[global.gameState].update(dt) // gui in front may set global.tooltipPopup
+    
+    // update control point hovering status
+    if( !global.draggingControlPoint ){
+        let p = global.mousePos
+        let bodies = [...global.mainSim.allBodies]
+        let cps = bodies.flatMap( b => b.controlPoints)
+        global.mainSim.hoveredControlPoint = cps.find( 
+                cp => (cp.pos.sub(p).getD2() < cp.r2) )
+    }
     
     //// stop if game is paused
     if( global.gameState==GameStates.pauseMenu ) return

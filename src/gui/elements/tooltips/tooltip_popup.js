@@ -1,38 +1,36 @@
 // a rectangle of text that appears on top of all other elements
-// considered static/immutable
-class TooltipPopup extends GuiElement {
-    constructor(rect,label){
+class TooltipPopup extends CompositeGuiElement {
+    
+    // get rect using TooltipPopup.pickTooltipRect
+    constructor(rect){
         super(rect)
-        
-        this.scale = this.constructor.scale()
-        this.rect = rect
-        this.label = label
     }
+    
+    static pad(){ return .02 }
     
     // override GuiElement (disable hover behavior)
     update(){
         //do nothing
     }
     
-    // implement GuiElement
     draw(g){
-        let rect = this.rect
-        let label = this.label
-        let center = false
+        let r = this.rect
         
         
-        let p = rectCenter(...rect)
-        if( !center ){
-            p[0] = rect[0]
-            p[1] -= global.textPixelSize
-        }
-        
+        // draw shadow
+        let thick = .01
         g.fillStyle = global.lineColor
-        drawText(g, ...p, label, center, .05, this.scale) //characters.js
-        g.fillStyle = global.backgroundColor
-        drawText(g, ...p, label, center, 0, this.scale)
+        g.fillRect( r[0]-thick,r[1]-thick,thick,r[3] )
+        g.fillRect( r[0]-thick,r[1]-thick,r[2],thick )
         
-        new StatReadout()
+        
+        // draw rectangle
+       Button._draw(g,r)
+        
+        
+        
+        //draw children
+        super.draw(g)
     }
     
     // implement GuiElement
@@ -40,32 +38,37 @@ class TooltipPopup extends GuiElement {
         //do nothing
     }
     
-    static scale(){ return .4 }
-    
-    static pad(){ return .05 }
-    
     // pick anchor point for pickTooltipRect
-    // called in gui_element.js
-    static pickMouseAnchorPoint(){ 
+    // called in label_tooltip_popup.js
+    static pickMouseAnchorPoint(w,h){ 
         let p = global.mousePos
         let sr = global.screenRect
-        let offset = .1
+        let space = .05
+        let cursorSize = .07
+        
+        
+        if( p.y < (sr[1]+sr[3]/2) ){
+            
+            // mouse is in top half of screen
+            p = p.add(v(0,space+cursorSize))
+            
+        } else {
+            
+            // mosue is in bottom half of screen
+            p = p.sub(v(0,h+space))
+            
+        }
         
         if( p.x < (sr[0]+sr[2]/2) )
-            p = p.add(v(offset,0))
-        if( p.y < (sr[1]+sr[3]/2) ){
-            p = p.add(v(0,offset))
-        } else {
-            p = p.add(v(0,-TooltipPopup.pad()))
-        }
+            p = p.add(v(space,0))
         
         return p
     }
     
     // pick position for tooltip 
     // called in gui_element.js
-    static pickTooltipRect( anchorPoint, label ){
-        let [w,h] = getTextDims(label,TooltipPopup.scale()) //character.js
+    static pickTooltipRect( anchorPoint, w,h ){
+        //let [w,h] = getTextDims(label,TooltipPopup.scale()) //character.js
         let sr = global.screenRect
         let ap = anchorPoint
         
@@ -87,8 +90,8 @@ class TooltipPopup extends GuiElement {
         if( yr>ap.y ) yr = ap.y
         if( (yr+h)<ap.y ) yr = ap.y-h
         
-        // return x,y,w,h
-        return [xr,yr,w,h]
-        
+        // return padded x,y,w,h
+        let pad = TooltipPopup.pad()
+        return padRect(xr,yr,w,h,pad)        
     }
 }
