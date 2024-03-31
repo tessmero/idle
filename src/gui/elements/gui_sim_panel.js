@@ -31,6 +31,7 @@ class GuiSimPanel extends GuiElement {
 
             if( tut.wasReset ){
                 this.sim.clearBodies()
+                this.sim.grabbers.clear()
                 tut.wasReset = false
             }
             

@@ -12,8 +12,9 @@ class TutorialPSim extends ParticleSim {
     
     addBody(b){
                 
-        // remove existing body (limit 1 body)
+        // clear simulation (limit 1 body)
         this.clearBodies()
+        this.grabbers.clear()
                 
         // scale down control point radius and force
         b.controlPoints.forEach( c => {
