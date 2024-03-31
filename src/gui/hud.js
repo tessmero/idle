@@ -9,7 +9,7 @@ class Hud extends Gui {
     buildElements(){
         let sc = global.screenCorners
         let sr = global.screenRect
-        let m = .08
+        let m = .1
         
         // layout buttons at top of screen
         let topRow = [sc[0].x,sc[0].y, (sc[2].x-sc[0].x), m]
@@ -21,6 +21,7 @@ class Hud extends Gui {
         
         // layout toolbar at bottom of screen
         let mx = .2
+        let toolList = global.toolList 
         let nbuttons = toolList.length
         let padding = .005
         let buttonWidth = m-padding*2
@@ -33,12 +34,16 @@ class Hud extends Gui {
         }
         
         
+        
         // build top hud
         let result = [
         
             // stats button
             new IconButton(topLeft,statsIcon,toggleStats) //game_state.js
                 .withTooltip('toggle upgrades menu'),
+        
+            // stat readouts constructed with null width and height
+            // dims are computed in dynamic_text_label.js
             
             // particles on screen
             new StatReadout(topClp,rainIcon,() => 
@@ -66,9 +71,34 @@ class Hud extends Gui {
         
         // build toolbar buttons
         for( let i = 0 ; i < toolList.length ; i++ ){
+            
+            let tool = toolList[i]
+            let button = new ToolbarButton(slots[i],tool.icon,i)
+            
+            
+            let tooltip = tool.tooltip // tooltip string
+            
+            // check if tutorial available
+            let tut = tool.getTutorial()
+            if( tut ){
+                
+                // build tooltip with string label and tutorial sim
+                button.withDynamicTooltip(() =>{
+                    let rect = TutorialTooltipPopup.pickRect(tooltip)
+                    return new TutorialTooltipPopup(rect,tooltip,tut)
+                })
+                
+            } else {
+                
+                // set tooltip string 
+                // standard text tooltip (gui_element.js)
+                button.withTooltip(tooltip) 
+            }
+            
+            
+            
             result.push(
-                new ToolbarButton(slots[i],toolList[i].icon,i)
-                    .withTooltip(toolList[i].tooltip)
+                button
             )
         }
         

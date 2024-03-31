@@ -90,6 +90,13 @@ function resetGame(){
     global.startMenuTargetPos = v(.5,.5)
     global.mainSim.clearBodies()
     
+    let s = global.mainSim
+    global.toolList = [
+        new DefaultTool(s),
+        new CircleTool(s),
+        new LineTool(s),
+    ]
+    
     let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
     global.mainSim.addBody(poi)
     

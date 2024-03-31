@@ -10,7 +10,7 @@ class SkillCard extends CompositeGuiElement {
         let r1 = [r0[0]+d+p,r[1]+p,d,d]
         
         
-        let sim = entry.skill.getPreviewSim(rect[2],rect[3])
+        let sim = entry.skill.getThumbnailSim()
         sim.drawOffset = [rect[0]-sim.rect[0],rect[1]-sim.rect[1]]
         sim.rect[2] = rect[2]
         sim.rect[3] = rect[3]

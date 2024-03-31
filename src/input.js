@@ -43,7 +43,7 @@ function mouseMove(e){
     global.idleCountdown = global.idleDelay
     
     // trigger selected tool movement behavior
-    toolList[global.selectedToolIndex].mouseMove(global.mousePos)
+    global.toolList[global.selectedToolIndex].mouseMove(global.mousePos)
 }
 
 function mouseDown(e){
@@ -79,16 +79,16 @@ function mouseDown(e){
     if( global.gameState==GameStates.upgradeMenu ) toggleStats()
     
     // or trigger selected tool
-    toolList[global.selectedToolIndex].mouseDown(global.mousePos)
+    global.toolList[global.selectedToolIndex].mouseDown(global.mousePos)
     
 }
 function mouseUp(e){
-    global.draggingControlPoint = null
+    global.mainSim.draggingControlPoint = null
     global.mouseDownDisabled = false
     global.mouseDown = false
     
     // release tool if it was being held down
-    toolList[global.selectedToolIndex].mouseUp(global.mousePos)
+    global.toolList[global.selectedToolIndex].mouseUp(global.mousePos)
     
     global.mainSim.allBodies.forEach(p => p.isHeld = false )
 }

@@ -3,7 +3,7 @@ class SnowSkill extends Skill {
         super('Wonderland')
     }
     
-    buildPreviewSim(){
+    buildThumbnailSim(){
         let sim = new GuiPSim()
         sim.fallSpeed /= 10
         return sim

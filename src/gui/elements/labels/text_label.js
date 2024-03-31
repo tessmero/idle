@@ -70,6 +70,12 @@ class TextLabel extends GuiElement {
             // draw simple black text
             drawText(g, ...p, label, this.center, 0, this.scale, false)
         }
+        
+        if( global.debugUiRects ){
+            
+            // draw debug rectangle
+            g.strokeRect(...rect)
+        }
     }
     
     // implement GuiElement

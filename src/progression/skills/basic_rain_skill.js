@@ -3,7 +3,7 @@ class BasicRainSkill extends Skill {
         super('Drizzle')
     }
     
-    buildPreviewSim(){
+    buildThumbnailSim(){
         let sim = new GuiPSim()
         return sim
     }

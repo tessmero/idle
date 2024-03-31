@@ -2,8 +2,8 @@
 
 class LineTool extends Tool{
     
-    constructor(){
-        super()
+    constructor(sim){
+        super(sim)
         
         this.icon = lineToolIcon
             

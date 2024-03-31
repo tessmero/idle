@@ -30,15 +30,22 @@ class GuiElement {
         // check if mouse is in this element's rectangle
         this.hovered = (this.hoverable && vInRect(global.mousePos,...this.rect))
         
+        // check if a tooltip should be shown
         if( this.hovered && (this.tooltipFunc || this.tooltip) ){
-            
             if( this.tooltipFunc ) this.tooltip = this.tooltipFunc()
             
-            // build new tooltip gui element
-            let rect = LabelTooltipPopup.pickRect(this.tooltip,this.tooltipScale)
-            rect = padRect( ...rect, TextLabel.pad() )
-            global.tooltipPopup = new LabelTooltipPopup(rect,this.tooltip)
-            if( this.tooltipScale ) global.tooltipPopup.scale = this.tooltipScale
+            if( this.tooltip instanceof TooltipPopup ) {
+                global.tooltipPopup = this.tooltip
+                
+            } else if( (typeof this.tooltip === 'string' || this.tooltip instanceof String) ){
+            
+                // build standard tooltip gui element
+                let rect = LabelTooltipPopup.pickRect(this.tooltip,this.tooltipScale)
+                rect = padRect( ...rect, TextLabel.pad() )
+                global.tooltipPopup = new LabelTooltipPopup(rect,this.tooltip)
+                if( this.tooltipScale ) global.tooltipPopup.scale = this.tooltipScale
+                
+            }
         }
     }
 

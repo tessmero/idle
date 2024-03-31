@@ -3,8 +3,8 @@ class BasicLineSkill extends Skill {
         super('Basic Line')
     }
     
-    buildPreviewSim(w,h){
-        let sim = new GuiPSim()
+    buildThumbnailSim(w,h){
+        let sim = new GuiPSim([w,h])
         
         // add stable poi in center
         let c =  v(w/2,h/2)

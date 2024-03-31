@@ -11,10 +11,10 @@ class ScalarDebugVar extends CompositeGuiElement {
         
         // text label
         let dtl = new DynamicTextLabel(rect,() => 
-            '     ' + Math.floor(get_global(varname)/inc).toString().padEnd(5,' ') + `${varname}`)
+            '     ' + Math.floor(get_global(varname)/inc+.5).toString().padEnd(5,' ') + `${varname}`)
             .withDynamicTooltip(()=>{
                 return [
-                    Math.floor(get_global(varname)/inc).toString() + ` : ${varname} `,
+                    Math.floor(get_global(varname)/inc+.5).toString() + ` : ${varname} `,
                     tooltip,
                     'shift-click for 10x',
                     'ctrl-click for 100x',
@@ -37,6 +37,7 @@ class ScalarDebugVar extends CompositeGuiElement {
                 let val = get_global(varname)
                 val-=m*inc
                 set_global(varname,val)
+                rebuildGuis() //game_states.js
             }),
             new IconButton(r1,increaseIcon,()=>{
                 let m = 1
@@ -44,7 +45,8 @@ class ScalarDebugVar extends CompositeGuiElement {
                 if( global.controlHeld ) m = 100
                 let val = get_global(varname)
                 val+=m*inc
-                set_global(varname,val)
+                set_global(varname,val) 
+                rebuildGuis() //game_states.js
             }),
         ]
         

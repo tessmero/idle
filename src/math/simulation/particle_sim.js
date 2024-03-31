@@ -24,6 +24,9 @@ class ParticleSim {
         
         // circles for mouse to click and drag
         this.controlPointRadius = .05
+        
+        this.hoveredControlPoint = null //ControlPoint instance
+        this.draggingControlPoint = null //ControlPoint instance
     }
     
     addBody(b){
@@ -83,8 +86,10 @@ class ParticleSim {
         if( c ) g.fillStyle = 'blue'
         this.edgeGroup.draw(g)
         
-        if( this.hoveredControlPoint ) {
-            this.hoveredControlPoint.draw(g,'white',true)
+        let cp = this.draggingControlPoint
+        if( !cp ) cp = this.hoveredControlPoint
+        if( cp ) {
+            cp.draw(g,'white',true)
         }
         
         g.fillStyle = global.lineColor

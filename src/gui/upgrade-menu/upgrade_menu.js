@@ -1,21 +1,27 @@
 
+var _upgradeMenuTransitionEffect = null 
+
 class UpgradeMenu extends Gui {
     
     constructor(...p){
         super(...p)
+        
         
         // prepare for tiled transition effect
         let sc = global.screenCorners
         let sr = global.screenRect
         
         this.transitionRect = sr//bigCenterRect
-        this.transitionTileSize = 10*global.textPixelSize
+        this.transitionTileSize = .1
         let tr = this.transitionRect
         let ts = this.transitionTileSize
         let w = Math.ceil(tr[2]/ts)
         let h = Math.ceil(tr[3]/ts)
         let n = w*h
-        this.transitionEffect = new Array(n).fill(false)
+        
+        if( (!_upgradeMenuTransitionEffect) || (_upgradeMenuTransitionEffect.length != n)){
+            _upgradeMenuTransitionEffect = new Array(n).fill(false)
+        }
         
         this.maxTransitionRadius = sc[0].sub(sc[2]).getMagnitude()
         this.transitionSpeed = 6e-3 // radius increase per ms
@@ -36,7 +42,7 @@ class UpgradeMenu extends Gui {
         let r0 = [sc[0].x+m,sc[0].y+m, w,h]
         
         //let tabLabels = ['upgrades','skills','debug']
-        let tabLabels = ['skills','debug']
+        let tabLabels = ['SKILLS','DEBUG']
         let tabContent = [
             //rect => new UpgradesTab(rect),
             rect => new SkillsTab(rect),
@@ -85,7 +91,7 @@ class UpgradeMenu extends Gui {
                     let dx = tc.x - (tr[0]+x*ts)
                     let dy = tc.y - (tr[1]+y*ts)
                     if( (dx*dx+dy*dy) < md2 )
-                        this.transitionEffect[x*h+y] = tval
+                        _upgradeMenuTransitionEffect[x*h+y] = tval
                 }
             }
         }
@@ -104,7 +110,7 @@ class UpgradeMenu extends Gui {
         
         for( let x = 0 ; x < w ; x++ ){
             for( let y = 0 ; y < h ; y++ ){
-                if( this.transitionEffect[x*h+y] ){
+                if( _upgradeMenuTransitionEffect[x*h+y] ){
                     g.fillRect(tr[0]+x*ts,tr[1]+y*ts,ts,ts)
                 }
             }

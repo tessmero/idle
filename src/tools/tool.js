@@ -1,15 +1,22 @@
-// a tool is an aelement of the quick bar
+// a tool is an element in the toolbar
 // it determines the appearnace of the mouse cursor
-// and the click behavior
-
-// tool instances are singletons
+// and some interaction with a particle sim when clicking
 class Tool{
    
-    drawCursor(g,p){ 
+   constructor(sim){
+       this.sim = sim
+   }
+   
+   // return Tutorial instance
+   getTutorial(){ 
+    return null; 
+    }
+   
+    drawCursor(g,p,enableIdleAnim=false){ 
 
         // get static cursor pixel art layout
         // or get animated cursor if idle
-        let layout = (global.idleCountdown <= 0) ? 
+        let layout = (enableIdleAnim && (global.idleCountdown <= 0)) ? 
             this.icon.getCurrentAnimatedLayout() : this.icon.frames[0]
         
         

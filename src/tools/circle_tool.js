@@ -2,8 +2,8 @@
 
 class CircleTool extends Tool{
     
-    constructor(){
-        super()
+    constructor(sim){
+        super(sim)
         
         this.icon = circleToolIcon
             

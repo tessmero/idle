@@ -2,16 +2,32 @@
 //
 // involving a GuiParticleSim
 // + animated recreation of the user's cursor/tool
-
+const _allTutorialSims = {}
 class Tutorial {
-    constructor(sim){
-        this.sim = sim
-        
+    constructor(){        
         let kf = this.buildKeyframes()
         this.keyframes = kf
+        this.t = 0
         
-        // extract position data
-        this.posframes = kf.filter(e => e[1]=='pos')
+        // extract cursor position data
+        this.cursorPosKeyframes = kf.filter(e => e[1]=='pos')
+    }
+    
+    getSim(){
+        let clazz = this.constructor.name
+        if(!( clazz in _allTutorialSims )){
+            _allTutorialSims[clazz] = this.buildSim(...global.tutorialSimDims)
+        }
+        return _allTutorialSims[clazz]
+    }
+    
+    // should only be called in getSim() ^
+    buildSim(w,h){
+        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+        
+        // example
+        let sim = new GuiPSim(w,h)        
+        return sim
     }
     
     buildKeyFrames(){
@@ -20,37 +36,48 @@ class Tutorial {
         // example
         return [
         
-            // be at center screen at t=0
+            // be at center at t=0
             [0,'pos',v(.5,.5)], // time, 'pos', location 
             
-            // emulate click
-            [0,'click'], // time, 'click'
+            // emulate drag
+            [100,'down'], // time, 'down'
+            [200,'up'], // time, 'up'
+        
+            // end up at right side
+            [300,'pos',v(1,.5)],
             
             
         ]
     }
     
-    getCursorPos(t){
+    update(dt){
+        this.t += dt
+    }
+    
+    getCursorPos(){
         
-        let kf = this.posframes
+        let t = this.t
+        let kf = this.cursorPosKeyframes
         
         
-        if( t < kf[i][0] )
+        if( t < kf[0][0] )
             return kf[0][2] // return first position
          
         // iterate over position keyframes
-        for( let i = 0 ; i < (kf.length-1) ; i++ ){
-            let t0 = kf[i][0]
+        for( let i = 1 ; i < kf.length ; i++ ){
+            let t1 = kf[i][0]
             
-            if( t > t0 ){
+            if( t < t1 ){
                 
                 // return interpolated position
-                let t1 - kf[i+1][0]
+                let t0 = kf[i-1][0]
                 let r = ( t-t0 ) / ( t1-t0 )
-                return va( kf[i][2], kf[i+1][2], r )
+                return va( kf[i-1][2], kf[i][2], r )
             }
         }
         
+        
+        this.t = 0
         return kf.at(-1)[2] // return last position
     }
     

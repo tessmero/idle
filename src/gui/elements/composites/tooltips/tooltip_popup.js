@@ -6,8 +6,6 @@ class TooltipPopup extends CompositeGuiElement {
         super(rect)
     }
     
-    static pad(){ return .02 }
-    
     // override GuiElement (disable hover behavior)
     update(){
         //do nothing
@@ -18,11 +16,21 @@ class TooltipPopup extends CompositeGuiElement {
         
         
         // draw shadow
-        let thick = .01
+        let thick = global.tooltipShadowWidth
+        let x = r[0]-thick
+        let y = r[1]-thick
         g.fillStyle = global.lineColor
-        g.fillRect( r[0]-thick,r[1]-thick,thick,r[3] )
-        g.fillRect( r[0]-thick,r[1]-thick,r[2],thick )
+        g.fillRect( x,y,thick,r[3] )
+        g.fillRect( x,y,r[2],thick )
         
+        // draw white shadow of shadow
+        let tt = .002
+        x -= tt
+        y -= tt
+        g.clearRect( x,y,tt,r[3] )
+        g.clearRect(x,y+r[3],r[2],tt)
+        g.clearRect( x,y,r[2],tt )
+        g.clearRect(x+r[2],y,tt,r[3])
         
         // draw rectangle
        Button._draw(g,r)
@@ -44,8 +52,7 @@ class TooltipPopup extends CompositeGuiElement {
         let p = global.mousePos
         let sr = global.screenRect
         let space = .05
-        let cursorSize = .07
-        
+        let cursorSize = .05
         
         if( p.y < (sr[1]+sr[3]/2) ){
             
@@ -54,13 +61,22 @@ class TooltipPopup extends CompositeGuiElement {
             
         } else {
             
-            // mosue is in bottom half of screen
-            p = p.sub(v(0,h+space))
+            // mouse is in bottom half of screen
+            p = p.sub(v(0,space))
             
         }
         
-        if( p.x < (sr[0]+sr[2]/2) )
-            p = p.add(v(space,0))
+        if( p.x < (sr[0]+sr[2]/2) ){
+            
+            // mouse is in left half of screen
+            p = p.add(v(space+cursorSize,0))
+            
+        } else {
+            
+            // mouse is in right half of screen
+            p = p.sub(v(space,0))
+            
+        }
         
         return p
     }
@@ -68,30 +84,23 @@ class TooltipPopup extends CompositeGuiElement {
     // pick position for tooltip 
     // called in gui_element.js
     static pickTooltipRect( anchorPoint, w,h ){
-        //let [w,h] = getTextDims(label,TooltipPopup.scale()) //character.js
         let sr = global.screenRect
         let ap = anchorPoint
         
-        // pick x position
-        // start with center screen
+        // pick x position to just touch anchorPoint
         let midx = sr[0]+sr[2]/2
-        let xr = midx-w/2
+        let xr = (ap.x > midx) ? ap.x-w : ap.x
         
-        // nudge x to include anchor point
-        if( xr>ap.x ) xr = ap.x
-        if( (xr+w)<ap.x ) xr = ap.x-w
-        
-        // pick y position
-        // start with center screen
+        // pick y position to just touch anchorPoint
         let midy = sr[1]+sr[3]/2
-        let yr = midy-h/2
+        let yr = (ap.y > midy) ? ap.y-h : ap.y
         
-        // nudge y to include anchor point
-        if( yr>ap.y ) yr = ap.y
-        if( (yr+h)<ap.y ) yr = ap.y-h
+        // try to keep the whole rect is on screen
+        if( xr < sr[0] ) xr = sr[0]
+        if( yr < sr[1] ) yr = sr[1]
+        if( (xr+w) > (sr[0]+sr[2]) ) xr = (sr[0]+sr[2]-w)
+        if( (yr+h) > (sr[1]+sr[3]) ) yr = (sr[1]+sr[3]-h)
         
-        // return padded x,y,w,h
-        let pad = TooltipPopup.pad()
-        return padRect(xr,yr,w,h,pad)        
+        return [xr,yr,w,h]  
     }
 }

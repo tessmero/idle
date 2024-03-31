@@ -2,8 +2,8 @@
 
 class DefaultTool extends Tool{
     
-    constructor(){
-        super()
+    constructor(sim){
+        super(sim)
         
         this.icon = defaultToolIcon
             
@@ -18,13 +18,17 @@ class DefaultTool extends Tool{
         // prepare grabber instance that will be 
         // added/removed from global.grabbers
         this.grabber = new CircleGrabber(v(0,0),
-            global.mouseGrabMd2,this.grabbed)
+            global.mouseGrabMd2,() => this.grabbed)
+    }
+   
+   getTutorial(){ 
+    return new DefaultToolTutorial(); 
     }
     
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
     grabbed(x,y){
-        global.mainSim.particlesCollected += 1
+        this.sim.particlesCollected += 1
     }
    
     mouseMove(p){
@@ -33,8 +37,8 @@ class DefaultTool extends Tool{
    
     mouseDown(p){ 
         // either grab control point or start catching rain
-        this.held = global.mainSim.hoveredControlPoint
-        global.draggingControlPoint = this.held
+        this.held = this.sim.hoveredControlPoint
+        this.sim.draggingControlPoint = this.held
         
         if(!this.held){
             this.held = 'catching'
@@ -44,21 +48,17 @@ class DefaultTool extends Tool{
         
         // toggle grabbing particles
         if( this.held == 'catching' ){
-            global.mainSim.grabbers.add(this.grabber)
+            this.sim.grabbers.add(this.grabber)
         } else {
-            global.mainSim.grabbers.delete(this.grabber)
+            this.sim.grabbers.delete(this.grabber)
         }
     }
     mouseUp(p){ 
         this.held = null 
-        
-        global.draggingControlPoint = null
-        
-        // global.draggingControlPoint also set in input.js
-        // to handle edge cases, e.g. gui state changed somehow mid-drag
+        this.sim.draggingControlPoint = null
         
         //stop grabbing particles
-        global.mainSim.grabbers.delete(this.grabber)
+        this.sim.grabbers.delete(this.grabber)
     }
    
     drawCursor(g,p,pad){ 
@@ -66,7 +66,7 @@ class DefaultTool extends Tool{
         if( this.held instanceof ControlPoint ){
             
             // held on control point
-            global.mainSim.hoveredControlPoint = this.held
+            this.sim.hoveredControlPoint = this.held
             super.drawCursor(g,p,pad)
             
             

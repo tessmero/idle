@@ -30,7 +30,13 @@ function update(dt) {
         }
     }
     
-    // update gui hovering status and tooltip 
+    
+    // update persistent tooltip if necessary
+    if( global.tooltipPopup ){
+        global.tooltipPopup.update(dt)
+    }
+    
+    // update gui hovering status and set tooltip
     global.tooltipPopup = null
     if( global.allGuis[global.gameState].hasHudInBackground ){
         global.allGuis[GameStates.playing].update(dt) // hud may set global.tooltipPopup
@@ -53,7 +59,7 @@ function update(dt) {
     global.mainSim.update(dt)
     
     // trigger passive tool behavior
-    toolList[global.selectedToolIndex].update(dt)
+    global.toolList[global.selectedToolIndex].update(dt)
     
     // upgrades menu transtiino effect
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)

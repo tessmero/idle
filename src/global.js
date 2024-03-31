@@ -20,27 +20,18 @@ const global = {
     
     
     // text
-    textPixelSize: .01, //virtual units
-    textLetterSpace: 2, // text pixels
+    textPixelSize: .01, //fraction of screen size
+    textLetterSpace: 1, // text pixels
     textLineSpace: 2, // text pixels
+    tooltipPadding: .05, //fraction of screen size
+    tooltipShadowWidth: .01,
     
-    
-    // syncronized gui elements idle animations
+    // synchronized gui elements idle animations
     baseAnimPeriod: 500, //ms
     
     // start animating mouse cursor if idle
     idleCountdown: 2000, //state
     idleDelay: 2000, //ms
-    
-    // particle settings now in particle_sim.js
-    //fallSpeed: 2e-4, // downward movement
-    //particleRadius: .005,
-    //wiggle: .05, //horizontal movement
-    //particleG: v(0,1e-7), // gravity accel dist/ms/ms
-    
-    // physics particle settings
-    // physics_pgroup.js friction computed to match rain
-    //particleFriction: 1e-4, //fraction of speed lost per ms
     
     
     // game state
@@ -51,15 +42,16 @@ const global = {
     maxBodyCount: 10,
     upgradeTracks: new UpgradeTracks(),
     skillTree: new SkillTree(),
+    toolList: [], //list of [Tool,Tutorial] instances
    
     // debug
+    debugUiRects: false,
     colorcodeParticles: false,
     showEdgeNormals: false,
     showEdgeAccel: false,
     
     controlPointLineWidth: .003,
     controlPointVisibleHoverRadius: .2,
-    draggingControlPoint: null, //ControlPoint instance
    
     // game advancement
     particlesCollected: 0,
@@ -83,13 +75,11 @@ const global = {
     // strength of "forces" on poi
     // force=(area/accel) in vunits...ms...
     poiPlayerF: 1e-5, // player clicking and dragging
-    poiScreenF: 1e-7, // automatic correction if poi is off-screen
-    poiNeighborF: 1e-7, // two overlapping pois push eachother
-    
     poiFriction: 4e-3, //fraction of speed lost per ms
     
     //
-    skillCardPreviewSimDims: [.1,.1],
+    skillThumbnailSimDims: [.1,.1],
+    tutorialSimDims: [.2,.2],
     
     // mouse
     canvasMousePos: v(0,0),     //pixels

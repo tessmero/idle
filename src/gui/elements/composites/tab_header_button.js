@@ -1,8 +1,10 @@
 class TabHeaderButton extends TextButton {
     
-    constructor(tabIndex,rect,label,action){
+    // called in TabPaneGroup constructor
+    constructor(parent,tabIndex,rect,label,action){
         super(rect,label,action)
         
+        this.parent = parent
         this.tabIndex = tabIndex
         this.debug = true
     }
@@ -18,7 +20,7 @@ class TabHeaderButton extends TextButton {
         g.strokeStyle = lineCol
         g.clearRect(...rect)
         
-        let selected = (global.upgradeMenuTabIndex == this.tabIndex)
+        let selected = (this.parent.selectedTabIndex == this.tabIndex)
         if( selected ){
             let [x,y,w,h] = rect
             g.beginPath()

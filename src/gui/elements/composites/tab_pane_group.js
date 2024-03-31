@@ -1,7 +1,7 @@
 class TabPaneGroup extends CompositeGuiElement {
     
     // tabContent is list of rect->element callbacks
-    constructor( rect, tabLabels, tabContent ){
+    constructor( rect, tabLabels, tabContents, tabTooltips=null ){
         super(rect)
         this.tabLabels = tabLabels
         this.selectedTabIndex = 0
@@ -25,12 +25,15 @@ class TabPaneGroup extends CompositeGuiElement {
             tabHeaderHeight = rr[3]
             let ii = i
             x += w+p
-            let tb = new TabHeaderButton(ii,rr,label,
-                () => {
-                    this.selectedTabIndex=ii
-                    if( this.tabChangeListeners ) 
-                        this.tabChangeListeners.forEach(l=>l(ii))
-                })
+            let tb = new TabHeaderButton(this,ii,rr,label,
+                    () => {
+                        this.selectedTabIndex=ii
+                        if( this.tabChangeListeners ) 
+                            this.tabChangeListeners.forEach(l=>l(ii))
+                    }
+                )
+            if( tabTooltips ) tb.withTooltip(tabTooltips[i])
+                
             tb.scale = tabLabelScale
             this.children.push(tb)
             i += 1
@@ -40,7 +43,7 @@ class TabPaneGroup extends CompositeGuiElement {
         rect = [...rect]
         rect[1] += tabHeaderHeight
         rect[3] -= tabHeaderHeight
-        this.tabContent = tabContent.map(cons => cons(rect).withOpacity(true))
+        this.tabContent = tabContents.map(cons => cons(rect).withOpacity(true))
         
         this.nTabs = tabLabels.length
         this.selectedTabIndex = 0

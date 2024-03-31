@@ -225,7 +225,8 @@ class LineBody extends CompoundBody {
                 let acc = eps.getAccel(r)
                 let accMag = acc.getMagnitude()
                 let accAngle = acc.getAngle()
-                let normAcc = accMag*Math.sin(angle-accAngle) // surface accel
+                if( eps.edge.direction ) accAngle += pi
+                let normAcc = Math.abs(accMag*Math.sin(angle-accAngle)) // surface accel
                 let dc = 1e1 * global.poiDripChance * (normAcc)
                 if( (Math.random() < dc) ){
         

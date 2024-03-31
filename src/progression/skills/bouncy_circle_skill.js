@@ -3,7 +3,7 @@ class BouncyCircleSkill extends Skill {
         super('Bouncy Circle')
     }
     
-    buildPreviewSim(){
+    buildThumbnailSim(){
         let sim = new GuiPSim()
         return sim
     }

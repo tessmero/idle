@@ -44,6 +44,7 @@ class BooleanDebugVar extends CompositeGuiElement {
         val = !val
         set_global(varname,val)
         this.checkbox.icon = val ? checkedIcon : uncheckedIcon
+        rebuildGuis() //game_states.js
     }
     
     draw(g){

@@ -1,5 +1,5 @@
 // a purchasable skill that appears in the upgrades/skills menu
-const _allSkillCardPreviewSims = {}
+const _allSkillThumbnailSims = {}
 class Skill {
     
     constructor(name){
@@ -7,16 +7,16 @@ class Skill {
     }
 
     // called in gui/upgrade_menu/skill_tab.js
-    getPreviewSim(){
+    getThumbnailSim(){
         let clazz = this.constructor.name
-        if(!( clazz in _allSkillCardPreviewSims )){
-            _allSkillCardPreviewSims[clazz] = this.buildPreviewSim(...global.skillCardPreviewSimDims)
+        if(!( clazz in _allSkillThumbnailSims )){
+            _allSkillThumbnailSims[clazz] = this.buildThumbnailSim(...global.skillThumbnailSimDims)
         }
-        return _allSkillCardPreviewSims[clazz]
+        return _allSkillThumbnailSims[clazz]
     }
 
-    // should only be called in getPreviewSim() ^
-    buildPreviewSim(){
+    // should only be called in getThumbnailSim() ^
+    buildThumbnailSim(w,h){
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
 }

@@ -3,7 +3,7 @@ class FlipperLineSkill extends Skill {
         super('Flipper')
     }
     
-    buildPreviewSim(){
+    buildThumbnailSim(){
         let sim = new GuiPSim()
         return sim
     }

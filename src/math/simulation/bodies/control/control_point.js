@@ -20,7 +20,7 @@ class ControlPoint extends Body {
     draw(g,color=null,forceDraw=false){
         if( !forceDraw ){
             if( !this.visible ) return  
-            if( global.draggingControlPoint ) return
+            if( global.mainSim.draggingControlPoint ) return
             if( global.idleCountdown<=0 ) return
         }
         this.constructor._draw(g,this.pos,this.rad,color,forceDraw)
