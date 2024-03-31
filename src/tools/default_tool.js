@@ -32,6 +32,7 @@ class DefaultTool extends Tool{
     }
    
     mouseMove(p){
+        this.lastPos = this.grabber.p
         this.grabber.p = p
     }
    
@@ -105,11 +106,13 @@ class DefaultTool extends Tool{
         
         if( this.held instanceof ControlPoint ){
         
+            if(!this.lastPos) return
+        
             let fr = [1e-4,1e-2] // no force d2, full force d2
         
             //apply force to held control point
             let cp = this.held
-            let d = global.mousePos.sub(cp.pos)
+            let d = this.lastPos.sub(cp.pos)
             let d2 = d.getD2()
             if( d2 < fr[0]) return
             let angle = d.getAngle()

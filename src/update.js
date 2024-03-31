@@ -44,7 +44,7 @@ function update(dt) {
     global.allGuis[global.gameState].update(dt) // gui in front may set global.tooltipPopup
     
     // update control point hovering status
-    if( !global.draggingControlPoint ){
+    if( !global.mainSim.draggingControlPoint ){
         let p = global.mousePos
         let bodies = [...global.mainSim.allBodies]
         let cps = bodies.flatMap( b => b.controlPoints)

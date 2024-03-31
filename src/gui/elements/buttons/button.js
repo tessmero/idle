@@ -26,6 +26,7 @@ class Button extends GuiElement {
         }
         //g.fillStyle = global.backgroundColor
         g.strokeStyle = lineCol
+        g.lineWidth = global.lineWidth
         if( fill ) g.clearRect(...rect)
         g.strokeRect(...rect)
         g.strokeStyle = global.lineColor

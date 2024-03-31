@@ -25,6 +25,8 @@ class LineBody extends CompoundBody {
         
         
         this.children = [...this.endCaps,...this.controlPoints]
+        
+        this.dripChance = global.poiDripChance
     }
     
     getPos(){ return va(...this.endCaps.map(c=>c.getPos())) }
@@ -227,7 +229,7 @@ class LineBody extends CompoundBody {
                 let accAngle = acc.getAngle()
                 if( eps.edge.direction ) accAngle += pi
                 let normAcc = Math.abs(accMag*Math.sin(angle-accAngle)) // surface accel
-                let dc = 1e1 * global.poiDripChance * (normAcc)
+                let dc = 1e1 * this.dripChance * (normAcc)
                 if( (Math.random() < dc) ){
         
                     // emit

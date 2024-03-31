@@ -10,11 +10,11 @@ class DebugTab extends CompositeGuiElement {
                 "UI","User Interface\ntext, buttons, and menus",[
                 
                     ['debugUiRects','bool','show bounding rectangles\nused for aligning text\nand mouse hovering'],
-                    ['baseAnimPeriod',100,'idle gui animation frame duration'],
+                    ['baseAnimPeriod',100,'idle gui animation\nframe duration'],
                     ['textPixelSize', .001,'font size'],
                     ['textLetterSpace', 1, 'space between letters'],
                     ['textLineSpace', 1, 'space between lines'],
-                    ['tooltipPadding', .001, 'extra space around tooltip content'],
+                    ['tooltipPadding', .001, 'extra space around\ntooltip content'],
                     ['tooltipShadowWidth', .001, 'size of shadow effect\nfor tooltip popups'],
                     ['lineWidth', .001, 'line thickness'],
                 ]

@@ -4,12 +4,12 @@
 // displayed using a GuiSimPanel instance
 class ThumbnailPSim extends ParticleSim {
     constructor(){
-        super(1e3,[0,0,...global.thumbnailSimDims])
+        super(1e4,[0,0,...global.thumbnailSimDims])
         
         this.fallSpeed *= .2
         this.particleRadius *= .6
         this.rainGroup.wiggle  *= .15
-        this.rainGroup.n  *= .05
+        this.rainGroup.n  *= .005
         
         // add stable poi in center
         let p = v(...rectCenter(...this.rect))

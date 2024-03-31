@@ -33,6 +33,15 @@ class GuiSimPanel extends GuiElement {
                 this.sim.clearBodies()
                 tut.wasReset = false
             }
+            
+            // like update.js
+            // update control point hovering status
+            if( !this.sim.draggingControlPoint ){
+                let bodies = [...this.sim.allBodies]
+                let cps = bodies.flatMap( b => b.controlPoints)
+                this.sim.hoveredControlPoint = cps.find( 
+                        cp => (cp.pos.sub(p).getD2() < cp.r2) )
+            }
         }
     }
     
@@ -48,6 +57,7 @@ class GuiSimPanel extends GuiElement {
         y -= .001
         g.clearRect( x-m, y, m, h )
         g.clearRect( x+w, y, m, h )
+        g.strokeStyle = global.lineColor
         g.strokeRect(...this.rect)
         
         
@@ -60,7 +70,6 @@ class GuiSimPanel extends GuiElement {
             let p = tut.getCursorPos().xy()
             let sr = this.sim.rect
             p = [p[0]*sr[2] , p[1]*sr[3]]
-            console.log(p)
             if( tut.lastCursorPos ){
                 let lp = tut.lastCursorPos
                 if( (p[0]!=lp[0]) || (p[1]!=lp[1]) ){
@@ -77,7 +86,9 @@ class GuiSimPanel extends GuiElement {
             
             // draw tool overlay if applicable
             if( tool.draw ){
+                g.translate(...off)
                 tool.draw(g)
+                g.translate(-off[0],-off[1])
             }
         }
     }
