@@ -1,13 +1,20 @@
+const _allTutorialSims = {}
+
 // base class for animation sequences
 //
 // involving a GuiParticleSim
 // + animated recreation of the user's cursor/tool
-const _allTutorialSims = {}
 class Tutorial {
     constructor(){        
         let kf = this.buildKeyframes()
         this.keyframes = kf
         this.t = 0
+        
+        let grabRad = global.mouseGrabRadius * global.tutorialToolScale
+        let t = new DefaultTool(null,grabRad)
+        this.defaultTool = t
+        this.primaryTool = t
+        this.tool = t
         
         // extract cursor position data
         this.cursorPosKeyframes = kf.filter(e => e[1]=='pos')
@@ -26,7 +33,7 @@ class Tutorial {
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
         
         // example
-        let sim = new GuiPSim(w,h)        
+        let sim = new TutorialPSim()        
         return sim
     }
     
@@ -51,7 +58,14 @@ class Tutorial {
     }
     
     update(dt){
+        
+        // advance clock
+        let t0 = this.t
         this.t += dt
+        
+        // return list of events since last update
+        let t1 = this.t
+        return this.keyframes.filter(k => (k[0] > t0) && (k[0] <= t1))
     }
     
     getCursorPos(){
@@ -78,6 +92,7 @@ class Tutorial {
         
         
         this.t = 0
+        this.wasReset = true
         return kf.at(-1)[2] // return last position
     }
     

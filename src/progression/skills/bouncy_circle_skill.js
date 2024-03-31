@@ -4,7 +4,7 @@ class BouncyCircleSkill extends Skill {
     }
     
     buildThumbnailSim(){
-        let sim = new GuiPSim()
+        let sim = new ThumbnailPSim()
         return sim
     }
 }

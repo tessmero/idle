@@ -7,9 +7,9 @@ class DebugTab extends CompositeGuiElement {
         let specs = [
             
             [
-                "UI","debug user interface",[
+                "UI","User Interface\ntext, buttons, and menus",[
                 
-                    ['debugUiRects','bool','show gui bounding rectangles'],
+                    ['debugUiRects','bool','show bounding rectangles\nused for aligning text\nand mouse hovering'],
                     ['baseAnimPeriod',100,'idle gui animation frame duration'],
                     ['textPixelSize', .001,'font size'],
                     ['textLetterSpace', 1, 'space between letters'],
@@ -22,7 +22,7 @@ class DebugTab extends CompositeGuiElement {
             
             [
                 // tab title, tooltip
-                "SIM", "debug particle simulation",[
+                "SIM", "Simulation\nparticles and bodies",[
                 
                     // variable name in global.js,  increment or 'bool',  description
                     ['colorcodeParticles','bool','color particles by category'],
@@ -32,7 +32,7 @@ class DebugTab extends CompositeGuiElement {
                     ['mainSim.fallSpeed',3e-6 , 'terminal velocity'],
                     ['mainSim.particleRadius',.001, 'size of falling rain drops'],
                     ['mainSim.rainGroup.wiggle',.01, 'horizontal movement of drops'],
-                    ['poiFriction',1e-3, 'friction for circles and lines'],
+                    ['bodyFriction',1e-3, 'friction for circles and lines'],
                 ]
             ],
         ]

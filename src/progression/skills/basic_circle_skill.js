@@ -4,7 +4,7 @@ class BasicCircleSkill extends Skill {
     }
     
     buildThumbnailSim(w,h){
-        let sim = new GuiPSim()
+        let sim = new ThumbnailPSim()
         
         // add stable poi in center
         let poi = new CircleBody(sim,v(w/2,h/2),1e-2)

@@ -24,7 +24,7 @@ class TooltipPopup extends CompositeGuiElement {
         g.fillRect( x,y,r[2],thick )
         
         // draw white shadow of shadow
-        let tt = .002
+        let tt = global.lineWidth
         x -= tt
         y -= tt
         g.clearRect( x,y,tt,r[3] )

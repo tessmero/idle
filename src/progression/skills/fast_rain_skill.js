@@ -4,7 +4,7 @@ class FastRainSkill extends Skill {
     }
     
     buildThumbnailSim(){
-        let sim = new GuiPSim()
+        let sim = new ThumbnailPSim()
         sim.fallSpeed *= 4
         return sim
     }

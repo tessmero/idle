@@ -10,7 +10,7 @@ class Skill {
     getThumbnailSim(){
         let clazz = this.constructor.name
         if(!( clazz in _allSkillThumbnailSims )){
-            _allSkillThumbnailSims[clazz] = this.buildThumbnailSim(...global.skillThumbnailSimDims)
+            _allSkillThumbnailSims[clazz] = this.buildThumbnailSim(...global.thumbnailSimDims)
         }
         return _allSkillThumbnailSims[clazz]
     }

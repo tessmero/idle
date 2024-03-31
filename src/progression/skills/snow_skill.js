@@ -4,7 +4,7 @@ class SnowSkill extends Skill {
     }
     
     buildThumbnailSim(){
-        let sim = new GuiPSim()
+        let sim = new ThumbnailPSim()
         sim.fallSpeed /= 10
         return sim
     }

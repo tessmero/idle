@@ -4,8 +4,8 @@ class Snow2Skill extends Skill {
     }
     
     buildThumbnailSim(){
-        let sim = new GuiPSim()
-        sim.rainGroup.wiggle *= 2
+        let sim = new ThumbnailPSim()
+        //sim.rainGroup.wiggle *= 2
         sim.rainGroup.n *= 10
         return sim
     }

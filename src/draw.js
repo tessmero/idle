@@ -53,10 +53,7 @@ function draw(fps, t) {
     // draw tool cursor
     let p = global.mousePos.xy()
     let tool = global.toolList[global.selectedToolIndex]
-    ctx.fillStyle = global.backgroundColor
-    tool.drawCursor(ctx,p,.01)
-    ctx.fillStyle = global.lineColor
-    tool.drawCursor(ctx,p,0)
+    tool.drawCursor(ctx,p)
     
     // draw tool overlay if applicable
     if( tool.draw ){

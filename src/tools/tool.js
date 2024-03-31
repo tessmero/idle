@@ -12,7 +12,7 @@ class Tool{
     return null; 
     }
    
-    drawCursor(g,p,enableIdleAnim=false){ 
+    drawCursor(g,p,scale=1,enableIdleAnim=false){ 
 
         // get static cursor pixel art layout
         // or get animated cursor if idle
@@ -20,8 +20,8 @@ class Tool{
             this.icon.getCurrentAnimatedLayout() : this.icon.frames[0]
         
         
-        drawLayout(g,...p,layout,this.cursorCenter,.005,1,true) 
-        drawLayout(g,...p,layout,this.cursorCenter,0,1,false) 
+        drawLayout(g,...p,layout,this.cursorCenter,.005,scale,true) 
+        drawLayout(g,...p,layout,this.cursorCenter,0,scale,false) 
 
     }
     

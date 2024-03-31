@@ -4,7 +4,7 @@ class BasicLineSkill extends Skill {
     }
     
     buildThumbnailSim(w,h){
-        let sim = new GuiPSim([w,h])
+        let sim = new ThumbnailPSim()
         
         // add stable poi in center
         let c =  v(w/2,h/2)

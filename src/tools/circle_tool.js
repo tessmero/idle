@@ -9,6 +9,11 @@ class CircleTool extends Tool{
             
         this.tooltip = 'build circles'
         this.cursorCenter = true // tool.js
+        this.circleRadius = .1
+    }
+   
+   getTutorial(){ 
+    return new CircleToolTutorial(); 
     }
     
     drawBuildCursor(g){
@@ -21,13 +26,15 @@ class CircleTool extends Tool{
         g.fill()
     }
    
-    mouseDown(){
-        let poi = new ControlledCircleBody(global.mainSim,global.mousePos,.1)
-        global.mainSim.addBody(poi)
-        global.selectedToolIndex = 0
+    mouseDown(p){
+        let poi = new ControlledCircleBody(this.sim,p,this.circleRadius)
+        this.sim.addBody(poi)
+        if( this.sim == global.mainSim ){
+            global.selectedToolIndex = 0
+        }
     }
     
-    mouseMove(){}
+    mouseMove(p){}
     
-    mouseUp(){}
+    mouseUp(p){}
 }

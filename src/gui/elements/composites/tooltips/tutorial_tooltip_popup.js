@@ -10,17 +10,19 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
         
         
         // position simulation below label
-        let lh = .05
-        rect = [rect[0],rect[1]+lh,rect[2],rect[3]-lh]
+        let pad = global.tooltipPadding
+        let sdims = global.tutorialSimDims
+        let x = rect[0] + (rect[2]/2) - (sdims[0]/2)
+        let y = -.02 + rect[1]+rect[3] - pad - sdims[1]
+        let r = [x,y,...sdims]
         
         // ParticleSim instance
         let sim = tut.getSim()
-        sim.drawOffset = [rect[0]-sim.rect[0],rect[1]-sim.rect[1]]
-        sim.drawOffset[0] += (rect[2]-sim.rect[2])/2//center x
+        sim.drawOffset = [r[0]-sim.rect[0],r[1]-sim.rect[1]]
         this.sim = sim
         
         // add gui element to show simulation
-        let gsp = new GuiSimPanel(rect,sim)
+        let gsp = new GuiSimPanel(r,sim)
         gsp.tut = tut
         this.children.push( gsp )
         this.gsp = gsp
@@ -34,7 +36,6 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
     
     static scale(){ return .4 }
     static pickRect(label,scale=null){
-        
        if( !scale ) scale = .4
        let [w,h] = getTextDims(label,scale)   
         
@@ -47,6 +48,7 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
         let pad = global.tooltipPadding
         w += pad*2
         h += pad*2
+       h+= .1
         
        let p = TooltipPopup.pickMouseAnchorPoint(w,h)
        return TooltipPopup.pickTooltipRect(p,w,h)

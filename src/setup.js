@@ -92,7 +92,7 @@ function resetGame(){
     
     let s = global.mainSim
     global.toolList = [
-        new DefaultTool(s),
+        new DefaultTool(s,global.mouseGrabRadius),
         new CircleTool(s),
         new LineTool(s),
     ]

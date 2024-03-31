@@ -9,7 +9,7 @@ const global = {
     // 
     backgroundColor: '#AAA',
     lineColor: 'black',
-    lineWidth: .002,
+    lineWidth: .003,
     
     // relate screen pixels to virtual 2D units
     canvasOffsetX: 0,
@@ -75,17 +75,17 @@ const global = {
     // strength of "forces" on poi
     // force=(area/accel) in vunits...ms...
     poiPlayerF: 1e-5, // player clicking and dragging
-    poiFriction: 4e-3, //fraction of speed lost per ms
+    bodyFriction: 4e-3, //fraction of speed lost per ms
     
     //
-    skillThumbnailSimDims: [.1,.1],
-    tutorialSimDims: [.2,.2],
+    thumbnailSimDims: [.1,.1],
+    tutorialSimDims: [.3,.3],
+    tutorialToolScale: .5,
     
     // mouse
     canvasMousePos: v(0,0),     //pixels
     mousePos: v(0,0),           //virtual units
     mouseGrabRadius: .05,
-    mouseGrabMd2: .05*.05,
     particlesInMouseRange: new Set(),
     
     //debug

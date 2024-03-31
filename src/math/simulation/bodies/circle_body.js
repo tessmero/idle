@@ -19,8 +19,8 @@ class CircleBody extends Body{
     register(sim){
         
         // prepare particle grabber instance
-        this.grabber = new CircleGrabber(v(0,0),
-            global.mouseGrabMd2,(x,y) => this.grabbed(x,y))
+        this.grabber = new CircleGrabber(this.pos,
+            this.md2,(x,y) => this.grabbed(x,y))
         sim.grabbers.add(this.grabber)
             
         // prepare to emit particles
@@ -86,7 +86,7 @@ class CircleBody extends Body{
         }
         
         // advance physics for poi
-        this.vel = this.vel.mul(1.0-dt*global.poiFriction)
+        this.vel = this.vel.mul(1.0-dt*global.bodyFriction)
         this.pos = this.pos.add(this.vel.mul(dt))
         
         // push on-screen

@@ -2,7 +2,7 @@
 
 class DefaultTool extends Tool{
     
-    constructor(sim){
+    constructor(sim,rad){
         super(sim)
         
         this.icon = defaultToolIcon
@@ -18,7 +18,7 @@ class DefaultTool extends Tool{
         // prepare grabber instance that will be 
         // added/removed from global.grabbers
         this.grabber = new CircleGrabber(v(0,0),
-            global.mouseGrabMd2,() => this.grabbed)
+            Math.pow(rad,2),() => this.grabbed)
     }
    
    getTutorial(){ 
@@ -61,20 +61,20 @@ class DefaultTool extends Tool{
         this.sim.grabbers.delete(this.grabber)
     }
    
-    drawCursor(g,p,pad){ 
+    drawCursor(g,p, ...args){ 
             
         if( this.held instanceof ControlPoint ){
             
             // held on control point
             this.sim.hoveredControlPoint = this.held
-            super.drawCursor(g,p,pad)
+            super.drawCursor(g,p, ...args)
             
             
         } else if( this.held ){
             
             // held on background
-            let c = global.mousePos
-            let r = global.mouseGrabRadius
+            let c = v(...p)
+            let r = Math.sqrt(this.grabber.r2)
             
             g.strokeStyle = global.backgroundColor
             g.lineWidth = .005
@@ -93,7 +93,7 @@ class DefaultTool extends Tool{
         } else {
             
             // not held
-            super.drawCursor(g,p,pad)
+            super.drawCursor(g,p, ...args)
             
             // debug control points hover vis radius
             //let r = global.controlPointVisibleHoverRadius

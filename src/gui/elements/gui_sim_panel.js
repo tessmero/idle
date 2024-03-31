@@ -1,6 +1,6 @@
 // container that displays a particle simulation
 // 
-class GuiSimPanel extends Button {
+class GuiSimPanel extends GuiElement {
     constructor(rect,sim){
         super(rect)
         this.sim = sim
@@ -10,36 +10,70 @@ class GuiSimPanel extends Button {
         super.update(dt)
         this.sim.update(dt)
         
-        if( this.tut ) this.tut.update(dt)
+        let tut = this.tut
+        if( tut ){
+            let tool = tut.tool
+            tool.sim = this.sim
+            tool.update(dt)
+            let keyframes = tut.update(dt)
+            let p = tut.getCursorPos().xy()
+            let sr = this.sim.rect
+            p = v(p[0]*sr[2] , p[1]*sr[3])
+            
+            // emulate user input if necessary
+            // (tutorial.js)
+            keyframes.forEach(event => {
+                if( event[1] == 'down' ) tool.mouseDown(p)
+                if( event[1] == 'up' ) tool.mouseUp(p)
+                if( event[1] == 'primaryTool' ) tut.tool = tut.primaryTool
+                if( event[1] == 'defaultTool' ) tut.tool = tut.defaultTool
+            })
+
+            if( tut.wasReset ){
+                this.sim.clearBodies()
+                tut.wasReset = false
+            }
+        }
     }
     
     draw(g){
-        super.draw(g)
         
-        //g.rect(...this.rect)
-        //g.clip()
+        g.clearRect(...this.rect)
         this.sim.draw(g)
-        //g.restore()
         
+        // trim sides
         let [x,y,w,h] = this.rect
-        let p = .01
-        //g.clearRect(x+w,y-p,w,h+2*p)
-        //g.clearRect(x-w,y-p,w,h+2*p)
+        let m = w*.1
+        h += .002
+        y -= .001
+        g.clearRect( x-m, y, m, h )
+        g.clearRect( x+w, y, m, h )
+        g.strokeRect(...this.rect)
         
         
-        // draw cursor like in draw.js
+        
         if( this.tut ){
             
-            let tool = new DefaultTool()
-            
-            let p = this.tut.getCursorPos().xy()
+            // draw cursor like in draw.js
+            let tut = this.tut
+            let tool = tut.tool
+            let p = tut.getCursorPos().xy()
             let sr = this.sim.rect
+            p = [p[0]*sr[2] , p[1]*sr[3]]
+            console.log(p)
+            if( tut.lastCursorPos ){
+                let lp = tut.lastCursorPos
+                if( (p[0]!=lp[0]) || (p[1]!=lp[1]) ){
+                    tool.mouseMove(v(...p))
+                }
+            } else {
+                tut.lastCursorPos = p
+            }
+            
+            // pos in sim -> real screen pos
             let off = this.sim.drawOffset
-            p = [ p[0]*sr[2] + off[0], p[1]*sr[3] + off[1] ]
-            g.fillStyle = global.backgroundColor
-            tool.drawCursor(g,p,.01,false)
-            g.fillStyle = global.lineColor
-            tool.drawCursor(g,p,0,false)
+            p = [p[0]+off[0], p[1]+off[1]]
+            tool.drawCursor(g,p,global.tutorialToolScale,false)
             
             // draw tool overlay if applicable
             if( tool.draw ){

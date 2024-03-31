@@ -43,15 +43,13 @@ class SkillCard extends CompositeGuiElement {
         let statusIcon = new IconButton(rr,icon,()=>{}).withScale(.3).withTooltip(tooltip)
         gsp.tooltip = tooltip
         
+        this.gsp = gsp
+        this.statusIcon = statusIcon
         
         this.children = [
             gsp,
             statusIcon,
         ]
         
-    }
-    draw(g){
-        Button._draw(g,this.rect) // draw button outline
-        super.draw(g) // draw children
     }
 }

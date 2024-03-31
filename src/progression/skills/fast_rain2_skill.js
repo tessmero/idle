@@ -4,7 +4,7 @@ class FastRain2Skill extends Skill {
     }
     
     buildThumbnailSim(){
-        let sim = new GuiPSim()
+        let sim = new ThumbnailPSim()
         sim.fallSpeed *= 8
         sim.rainGroup.n *= 3
         return sim
