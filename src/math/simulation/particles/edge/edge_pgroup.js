@@ -33,17 +33,6 @@ class EdgePGroup extends ParticleGroup {
     // should be called in [Body subclass]::register(sim):
     //      sim.edgeGroup.newSubgroup(edge)
     newSubgroup(edge){
-        let f
-        if(edge instanceof CircleEdge){
-            f = (...p) => new CircleEPSG(...p)
-        }else if(edge instanceof LineEdge){
-            f = (...p) => new LineEPSG(...p)
-        }else{
-            throw new Error(`unrecognized EPSG subclass`);
-        }
-        return this._newSubgroup(edge,f)
-    }
-    _newSubgroup(edge,cons) {
         
         if( this.freeSubgroupIndices.size == 0 ){
             return null
@@ -52,11 +41,12 @@ class EdgePGroup extends ParticleGroup {
         let subgroupIndex = this.freeSubgroupIndices.find(true)
         let n = this.nsub
         let i = subgroupIndex*n
-        let sg = cons(this,subgroupIndex,i,n,edge)
+        let sg = new EdgeParticleSubgroup(this,subgroupIndex,i,n,edge)
         this.subgroups.add(sg)
         this.freeSubgroupIndices.delete(subgroupIndex)
         return sg
     }
+    
     
     // should be called in [Body subclass]::unregister(sim):
     //      sim.edgeGroup.deleteSubgroup(edge)

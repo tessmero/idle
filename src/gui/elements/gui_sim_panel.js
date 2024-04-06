@@ -59,6 +59,7 @@ class GuiSimPanel extends GuiElement {
         g.clearRect( x-m, y, m, h )
         g.clearRect( x+w, y, m, h )
         g.strokeStyle = global.lineColor
+        g.lineWidth = global.lineWidth
         g.strokeRect(...this.rect)
         
         

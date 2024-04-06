@@ -28,6 +28,7 @@ class DebugTab extends CompositeGuiElement {
                     ['colorcodeParticles','bool','color particles by category'],
                     ['showEdgeNormals','bool','show normal vectors along edges'],
                     ['showEdgeAccel', 'bool', 'show force vectors along edges'],
+                    ['debugGrabbers', 'bool', 'show regions where particles\nmay be affected by bodies'],
                     ['mainSim.rainGroup.n',1,'max raindrops on screen'],
                     ['mainSim.fallSpeed',3e-6 , 'terminal velocity'],
                     ['mainSim.particleRadius',.001, 'size of falling rain drops'],

@@ -6,7 +6,7 @@ class ControlPoint extends Body {
     constructor(sim,parent){
         super(sim)
         this.parent = parent
-        this.pos = parent.getPos()
+        this.pos = parent.pos
         this.setRad(this.sim.controlPointRadius)
         this.visible = true
         this.fscale = 1
@@ -65,7 +65,7 @@ class ControlPoint extends Body {
     
     // remain stuck to parent
     update(dt){
-        this.pos = this.parent.getPos()
+        this.pos = this.parent.pos
     }
     
     // no direct interaction with particles

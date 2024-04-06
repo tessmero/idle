@@ -1,57 +1,56 @@
-// base class for edges which map angles to positions
+
+// An edge is a boundary that particles interact with
+//
+// teh shape of the edge is stored in constant set of polar coords
+// where the origin is the center of a rotating body outlined by this edge
+//
+// the edge object is agnostic of the body's state
+// so we don't care about the specific position/orientation/momentum
+// pick an arbitrary default orientation and only consider that
 class Edge {
-    getPos(a){
-        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    
+    computeEdgeShape(){
+        
+        
+        const circ = this.getCircumference()
+        
+        // compute edge shape
+        const n = 1000
+        const ndims = 3 // angle, radius, normal angle
+        const shape = new Float32Array(n*ndims); 
+        for( let i = 0 ; i< n ; i++ ){
+            let [angle,radius,norm] = this.computePoint(circ*i/n)
+            shape[i*ndims+0] = angle
+            shape[i*ndims+1] = radius
+            shape[i*ndims+2] = norm
+        }
+        
+        this.circ = circ
+        this.n = n
+        this.ndims = ndims
+        this.shape = shape
     }
     
-    getNorm(a){
-        throw new Error(`Method not implemented in ${this.constructor.name}.`);
-    }
-    
+    // get length of edge (which may loop)
     getCircumference(){
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
     
+    // compute position+normal [angle,radius,normal angle] 
+    // at given distance along circumerence
+    computePoint(d){
+        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    }
+    
+    // get precomputed [angle,radius,normal angle]
+    // at given distance along circumerence
+    getPoint(d){
+        let i = this.ndims * Math.round(d*this.n/this.circ)
+        let s = this.shape
+        return [s[i],s[i+1],s[i+2]]
+    }
+    
     // settings for particles sliding on edge
-    getF(){ throw new Error(`Method not implemented in ${this.constructor.name}.`); }
-    getG(){ throw new Error(`Method not implemented in ${this.constructor.name}.`); }
-    
-    // debug
-    drawNormals(g){
-        this._drawDebugVectors(g, a => {
-            let r = 1e-2
-            let pos = this.getPos(a)
-            let norm = this.getNorm(a)
-            return[ pos, pos.add(vp(norm,r)) ]
-        })
-    }
-    
-    // debug
-    drawAccel(g,epsg){
-        this._drawDebugVectors(g, a => {
-            let pos = this.getPos(a)
-            let acc = epsg.getAccel(a)
-            return[ pos, pos.add(acc.mul(5e2)) ]
-        })
-    }
-    
-    _drawDebugVectors(g,f){
-        
-        if( !this.terminals )
-            this.terminals = [0,1]
-        let t = this.terminals
-        
-        let density = 100 // ~lines per screen length
-        let n = this.getCircumference()*density
-        g.strokeStyle = 'yellow'
-        g.beginPath()
-        for( let i = 0 ; i < n ; i++ ){
-            let a = avg(t[0],t[1],i/n)
-            let [start,stop] = f(a)
-            g.moveTo(...start.xy())
-            g.lineTo(...stop.xy())
-        }
-        g.stroke()
-        g.strokeStyle = global.lineColor
-    }
+    getF(){ return 4e-5 }
+    getG(){ return 2e-5 }
 }

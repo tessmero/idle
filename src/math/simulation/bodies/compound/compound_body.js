@@ -1,16 +1,20 @@
 // base class for boddies with "children" boddies
 class CompoundBody extends Body {
     
-    constructor(sim){
-        super(sim)
+    constructor(sim,pos){
+        super(sim,pos)
         
         this.constraints = []
         this.children = []
     }
     
     draw(g){
-        //this.constraints.forEach(c => c.draw(g) )
         this.children.forEach(c => c.draw(g) )
+    }
+    
+    drawDebug(g){
+        //this.constraints.forEach(c => c.drawDebug(g) )
+        this.children.forEach(c => c.drawDebug(g) )
     }
     
     update(dt){

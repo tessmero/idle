@@ -19,20 +19,13 @@ class TutorialPSim extends ParticleSim {
         // scale down control point radius and force
         b.controlPoints.forEach( c => {
             
-            if( b instanceof LineBody ){
+            if( b instanceof SausageBody ){
                 c.setRad(c.rad*global.tutorialToolScale)
                 c.fscale *= .8
             } else {
                 c.fscale *= .8
             }
         })
-        
-        // reduce stickiness
-        if( b instanceof LineBody ){
-            let m = 1e6
-            b.dripChance *= m
-            b.endCaps.forEach(e => e.dripChance *= m)
-        }
         
         super.addBody(b)
     }

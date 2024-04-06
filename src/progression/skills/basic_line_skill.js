@@ -12,7 +12,7 @@ class BasicLineSkill extends Skill {
         let a = c.add(d)
         let b = c.sub(d)
         let rad = 2e-3
-        let poi = new LineBody(sim,a,b,rad)
+        let poi = new SausageBody(sim,a,b,rad)
         sim.addBody(poi)
         
         return sim

@@ -18,7 +18,7 @@ class DefaultTool extends Tool{
         // prepare grabber instance that will be 
         // added/removed from global.grabbers
         this.grabber = new CircleGrabber(v(0,0),
-            Math.pow(rad,2),() => this.grabbed)
+            rad,() => this.grabbed)
     }
    
    getTutorial(){ 

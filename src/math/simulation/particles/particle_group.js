@@ -32,8 +32,9 @@ class ParticleGroup {
                 let grabbed = (grab || [...this.sim.grabbers].some( gr => {
                     //if( isEdgeGroup && (!gr.canGrabEdgeParticle(i)) ) return false
                     if( isEdgeGroup ) return false
-                    if( gr.contains(x,y) ){
-                        gr.grabbed(x,y,dx,dy)
+                    let hit = gr.contains(x,y)
+                    if( hit ){
+                        if( gr.grabbed ) gr.grabbed(x,y,dx,dy,hit)
                         return true
                     }
                     return false

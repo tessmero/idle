@@ -75,6 +75,7 @@ class ParticleSim {
         resetRand()
         g.fillStyle = global.lineColor
         this.allBodies.forEach( p => p.draw(g) )
+        this.allBodies.forEach( p => p.drawDebug(g) )
         
         let c = global.colorcodeParticles
         if( c ) g.fillStyle = 'red'
@@ -85,6 +86,10 @@ class ParticleSim {
         
         if( c ) g.fillStyle = 'blue'
         this.edgeGroup.draw(g)
+        
+        if( global.debugGrabbers ){
+            this.grabbers.forEach(gr => gr.drawDebug(g) )
+        }
         
         let cp = this.draggingControlPoint
         if( !cp ) cp = this.hoveredControlPoint

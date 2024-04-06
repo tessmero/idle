@@ -50,7 +50,7 @@ class LineTool extends Tool{
     }
     
     _spawnLine(p){
-            let poi = new LineBody(this.sim,
+            let poi = new SausageBody(this.sim,
                 this.startPoint,p,
                 this.lineRadius)
             this.sim.addBody(poi)

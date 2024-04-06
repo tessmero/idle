@@ -46,7 +46,8 @@ const global = {
    
     // debug
     debugUiRects: false,
-    colorcodeParticles: false,
+    debugGrabbers: false,
+    colorcodeParticles: true,
     showEdgeNormals: false,
     showEdgeAccel: false,
     
@@ -93,9 +94,10 @@ const global = {
     
 }
 
-// access global var by dotpath string 
-// like "mainSim.rainGroup.n"
+// start helpers to access global vars
+// by dotpath string like "mainSim.rainGroup.n"
 // https://codereview.stackexchange.com/a/240907
+
 function isObj(obj){
     return (typeof obj === 'object') &&
         (!Array.isArray(obj)) &&
