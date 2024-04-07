@@ -5,6 +5,11 @@ class Grabber {
         this.grabbed = f
     }
     
+    withEdgeMap(em){
+        this.edgeMap = em
+        return this
+    }
+    
     drawDebug(g){
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }

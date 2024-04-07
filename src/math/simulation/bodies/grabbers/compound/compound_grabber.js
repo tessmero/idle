@@ -12,16 +12,16 @@ class CompoundGrabber extends Grabber {
     // called periodically
     // set child member vars
     // do not add or remove children
-    updateChildren(){
+    update(){
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
     
     // check if point in grab region
     // if so, return nearest edge location
-    contains(x,y){
+    contains(x,y,angle=0){
         for( let i = 0 ; i < this.children.length ; i++ ){
             let c = this.children[i]
-            let hit = c.contains(x,y)
+            let hit = c.contains(x,y,angle)
             if(hit){
                 return hit
             }

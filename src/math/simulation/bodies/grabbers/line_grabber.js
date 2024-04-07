@@ -43,6 +43,6 @@ class LineGrabber extends Grabber {
         let cw = clockwise(this.a,this.b,v(x,y)) // which side (boolean)
         let len = this.a.sub(this.b).getMagnitude()
         r *= len
-        return cw ? this.edgeOffsetA+r : this.edgeOffsetB+r
+        return cw ? this.edgeOffsetA+r : this.edgeOffsetB+(len-r)
     }
 }

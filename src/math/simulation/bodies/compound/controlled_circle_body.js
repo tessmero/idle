@@ -4,7 +4,7 @@ class ControlledCircleBody extends CompoundBody {
     
     // sim is a ParticleSim instance
     constructor(sim,pos,rad){
-        super(sim)
+        super(sim,pos)
         
         this.circle = new CircleBody(sim,pos,rad)
         let cp = new ControlPoint(sim,this.circle)

@@ -6,7 +6,7 @@
 //
 // the edge object is agnostic of the body's state
 // so we don't care about the specific position/orientation/momentum
-// pick an arbitrary default orientation and only consider that
+// here we only consider one arbitrary orientation 
 class Edge {
     
     computeEdgeShape(){
@@ -51,6 +51,6 @@ class Edge {
     }
     
     // settings for particles sliding on edge
-    getF(){ return 4e-5 }
+    getFriction(){ return 4e-3 }
     getG(){ return 2e-5 }
 }

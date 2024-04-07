@@ -34,6 +34,7 @@ class DebugTab extends CompositeGuiElement {
                     ['mainSim.particleRadius',.001, 'size of falling rain drops'],
                     ['mainSim.rainGroup.wiggle',.01, 'horizontal movement of drops'],
                     ['bodyFriction',1e-3, 'friction for circles and lines'],
+                    //['particleStickyForce', 1e-6, 'force holding particles to edges'],
                 ]
             ],
         ]

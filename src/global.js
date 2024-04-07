@@ -60,12 +60,7 @@ const global = {
     activeReleasePatterns: [], //list of ReleasePattern instances
     mainSim: null, //ParticleSim instance (setup.js)
     //
-    poiGrowthRate: 4e-3,// vunits^2 area gained per drop eaten
     poiStartArea: 1e-2, // free area for new poi
-    poiPressureBuildRate: 2e-4, // pressure (max 1) increase per ms while held
-    poiPressureReleaseRate: 1e-3, 
-    poiParticlesReleased: 1e4,// total parts released per unit area at full pressure
-    poiDripChance: 5e2, // * normal force = chance of particle unsticking from poi
     
     // start menu background anim
     startMenuTargetPos: v(.5,.5),
@@ -76,7 +71,8 @@ const global = {
     // strength of "forces" on poi
     // force=(area/accel) in vunits...ms...
     poiPlayerF: 1e-5, // player clicking and dragging
-    bodyFriction: 4e-3, //fraction of speed lost per ms
+    bodyFriction: 4e-3, // body translation friction
+    particleStickyForce: [0,2e-6], // passive particle force into edge
     
     //
     thumbnailSimDims: [.1,.1],

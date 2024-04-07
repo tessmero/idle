@@ -27,6 +27,7 @@ class EdgeParticleSubgroup{
         
         // state
         this.pos = v(0,0)
+        this.vel = v(0,0)
         this.angle = 0
         
         // prepare to add up acceleration during body updates
@@ -40,9 +41,13 @@ class EdgeParticleSubgroup{
         
         // prepare to multiply and offset velocities
         // to apply gravity and accel to all particles
-        let f = this.edge.getF()
+        let f = this.edge.getFriction()
         let vm = (1-f*dt)
         let i = 0
+        
+        // anti-normal stickiness force, only used when 
+        // deciding whether a particle remains stuck to edge
+        let stickyAccMag = global.particleStickyForce.map(v => v*dt)
         
         // prepare to apply accel and reset accumulated force
         let acc = this.getAccel(0)
@@ -65,23 +70,37 @@ class EdgeParticleSubgroup{
                 let [ea,er,norm] = this.edge.getPoint(a)
                 norm += this.angle
                 av += accMag * Math.sin(norm-accAngle)// accel particle along edge
-                if( Math.abs(av)>1e-4 ) av *= vm // friction
+                av *= vm // friction
                 a += av*dt
-                this.group.state[i*nd+0] = nnmod(a,circ)
+                a = nnmod(a,circ)
+                this.group.state[i*nd+0] = a
                 this.group.state[i*nd+1] = av
                 
-                // yield one particle to be grabbed/drawn
+        
                 let grab = false
+                    
+                // normal force felt by particle anchored to edge at this particle's position
+                let normAcc = -accMag * Math.cos(norm-accAngle)
+
+                // additional normal force felt by this particle sliding 
+                let centrifugalAcc = 0
+                
+                // check if this particle has been pulled off edge
+                if( randRange(...stickyAccMag) < (normAcc + centrifugalAcc) ){
+                    
+                    // pass particle to physics group
+                    grab = true
+                    let pos = this.pos.add(vp(this.angle+ea,er))//.add(vp(norm,1e-2))
+                    let vel = this.vel.add(vp(norm+pio2,av))
+                    this.pps.spawnParticle(pos,vel)
+                }
+                
+                // yield one particle to be grabbed/drawn
                 let ungrab = false
                 let pos = this.pos.add(vp(ea+this.angle,er))
                 let [x,y] = pos.xy()
                 yield [i,x,y,grab,ungrab]
         }
-    }
-    
-    // apply force to particles
-    accel(acc){
-        this.acc = this.acc.add(acc)
     }
     
     // apply centripital force to porticles
@@ -139,6 +158,7 @@ class EdgeParticleSubgroup{
     
     
     spawnParticle(a,av){
+
         let i = this.i
         let m = i+this.n
         let nd = this.group.ndims

@@ -12,7 +12,7 @@ class Body {
     }
     
     // called in register()
-    buildEdge(){
+    buildEdge(pps){ 
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
     
@@ -55,6 +55,9 @@ class Body {
         edge.pos = this.pos
         this.edge = edge
         this.eps = sim.edgeGroup.newSubgroup(edge)
+        
+        // prepare to pass particles from edge to physics
+        this.eps.pps = this.pps
     }
     
     // called in particle_sim.js removeBody()
@@ -65,33 +68,15 @@ class Body {
     }
     
     accel(acc){
-        this.vel = this.vel.add(acc)
+        this.vel = this.vel.add(acc) // move this body
+        this.eps.acc = this.eps.acc.add(acc)// pass momentum to particles on edge
     }
     
     update(dt){
         
-        // randomly emit attached particles
-        let acc = this.eps.getAccel(0)
-        let accAngle = acc.getAngle()
-        let accMag = acc.getMagnitude()
-        let r = this.rad
-        for( let i = 0 ; i < this.eps.n ; i++ ){
-            if( this.eps.isGrabbed(i) ) continue
-            let [a,av] = this.eps.get(i)
-            //let normAcc = Math.abs(accMag*Math.cos(a-accAngle)) // surface accel
-            //let centrifugalAcc = Math.abs(av*r) // particle sliding momentum
-            //let dc = global.poiDripChance * (normAcc + centrifugalAcc)
-            if( (Math.random() < .01) ){
-                this.eps.grab(i)
-                let [pang,prad,norm] = this.edge.getPoint(a)
-                let pos = this.pos.add(vp(this.angle+pang,prad))
-                let vel = this.vel.mul(.5).add(vp(a+pio2,av*r))
-                this.pps.spawnParticle(pos,vel)
-            }
-        }
-        
         // advance physics for poi
-        this.vel = this.vel.mul(1.0-dt*global.bodyFriction)
+        let frictionAcc = this.vel.mul(-dt*global.bodyFriction)
+        this.accel( frictionAcc )
         this.pos = this.pos.add(this.vel.mul(dt))
         
         // push on-screen
@@ -102,9 +87,10 @@ class Body {
         if( this.pos.y > sc[2].y ) this.pos.y = sc[2].y
         
         // update grabber and edge particles
-        this.grabber.p = this.pos
-        this.grabber.r2 = this.md2
+        this.grabber.pos = this.pos
         this.eps.pos = this.pos
+        this.eps.vel = this.vel
+        this.eps.accel = this.accel
         this.eps.angle = this.angle
         
         return true

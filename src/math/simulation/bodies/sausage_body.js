@@ -19,8 +19,10 @@ class SausageBody extends Body {
     }
     
     buildGrabber(){
-        return new SausageGrabber(this.a,this.b,this.rad,
+        let grabber = new SausageGrabber(this.a,this.b,this.rad,
             (...p) => this.grabbed(...p))
+        grabber.update()
+        return grabber
     }
     
     draw(g){
