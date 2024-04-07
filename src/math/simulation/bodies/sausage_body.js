@@ -7,7 +7,10 @@ class SausageBody extends Body {
         this.a = a
         this.b = b
         this.rad = rad
-        this.angle = b.sub(a).getAngle()
+        
+        let d = b.sub(a)
+        this.length = d.getMagnitude()
+        this.angle = d.getAngle()
         
         this.dripChance = global.poiDripChance
     }
@@ -23,6 +26,21 @@ class SausageBody extends Body {
             (...p) => this.grabbed(...p))
         grabber.update()
         return grabber
+    }
+    
+    update(dt){
+        super.update(dt)
+        
+        let p = this.pos
+        let a = this.angle
+        let r = this.length/2
+        
+        this.a = p.sub(vp(a,r))
+        this.b = p.add(vp(a,r))
+        
+        this.grabber.a = this.a
+        this.grabber.b = this.b
+        this.grabber.update()
     }
     
     draw(g){

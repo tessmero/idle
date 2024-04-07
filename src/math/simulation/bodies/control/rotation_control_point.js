@@ -4,21 +4,28 @@ class RotationControlPoint extends ControlPoint {
     
     // parent is a body that this will be anchored to
     // aparent will recieve opposite force when dragging
-    constructor(sim,parent,aparent){
+    constructor(sim,parent,angle,radius){
         super(sim,parent)
-        this.aparent = aparent
+        this.angle = angle
+        this.radius = radius
     }
     
     // pass user input "force" to physics-enabled parent body
     accel(acc){
         
         // extract rotation component
-        let a = pio2 + this.parent.pos.sub(this.aparent.pos).getAngle()
-        let mag = acc.getMagnitude() * Math.cos(acc.getAngle()-a)
-        acc = vp(a,mag*this.fscale) 
+        let a = this.angle + this.parent.angle
+        let mag = acc.getMagnitude() * Math.sin(acc.getAngle()-a)
+        let spn = mag*this.fscale
         
-        this.parent.accel(acc)
-        this.aparent.accel(acc.mul(-1))
+        this.parent.spin(spn)
+    }
+    
+    // remain stuck to parent
+    update(dt){
+        let par = this.parent
+        let a = this.angle + par.angle
+        this.pos = par.pos.add(vp(a,this.radius))
     }
     
 }

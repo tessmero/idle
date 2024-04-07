@@ -91,7 +91,9 @@ class EdgeParticleSubgroup{
                     // pass particle to physics group
                     grab = true
                     let pos = this.pos.add(vp(this.angle+ea,er))//.add(vp(norm,1e-2))
-                    let vel = this.vel.add(vp(norm+pio2,av))
+                    let vel = this.vel
+                        .mul(randRange(.2,.5))
+                        .add(vp(norm+pio2,av))
                     this.pps.spawnParticle(pos,vel)
                 }
                 

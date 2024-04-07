@@ -104,7 +104,7 @@ function resetGame(){
         [v(.75,.55),v(.85,.35)],
         [v(1-.65,.55),v(1-.85,.35)]
     ]
-    lines.forEach(l => global.mainSim.addBody(new SausageBody(global.mainSim,...l)))
+    lines.forEach(l => global.mainSim.addBody(new ControlledSausageBody(global.mainSim,...l)))
     
     resetRand(hard = true)
     fitToContainer()   

@@ -8,11 +8,13 @@ class Body {
         
         this.pos = pos
         this.vel = v(0,0)
+        
         this.angle = angle
+        this.avel = 0
     }
     
     // called in register()
-    buildEdge(pps){ 
+    buildEdge(){ 
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
     
@@ -67,9 +69,16 @@ class Body {
         this.sim.edgeGroup.deleteSubgroup(this.eps)
     }
     
+    // apply translational force
     accel(acc){
         this.vel = this.vel.add(acc) // move this body
         this.eps.acc = this.eps.acc.add(acc)// pass momentum to particles on edge
+    }
+    
+    // apply torque
+    spin(spn){
+        this.avel += spn // spin this body
+        this.eps.spn += spn // pass momentum to particles on edge
     }
     
     update(dt){
@@ -78,6 +87,11 @@ class Body {
         let frictionAcc = this.vel.mul(-dt*global.bodyFriction)
         this.accel( frictionAcc )
         this.pos = this.pos.add(this.vel.mul(dt))
+        
+        //
+        let frictionSpn = this.avel * (-dt*1e-3)
+        this.spin(frictionSpn)
+        this.angle += this.avel*dt
         
         // push on-screen
         var sc = global.screenCorners

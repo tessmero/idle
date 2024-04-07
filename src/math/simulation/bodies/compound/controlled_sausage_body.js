@@ -8,16 +8,20 @@ class ControlledSausageBody extends CompoundBody {
         this.b = b
         this.rad = rad
         
+        let sausage = new SausageBody(sim,a,b,rad)
+        this.sausage = sausage
+        
         // init control points for user to click and drag
-        this.movCp = new ControlPoint(sim,this)
-        //this.rotCp0 = new RotationControlPoint(sim,ca,cb)
-        //this.rotCp1 = new RotationControlPoint(sim,cb,ca)
-        this.controlPoints = [this.movCp]//,this.rotCp0,this.rotCp1]
+        this.movCp = new ControlPoint(sim,sausage)
+        let r = a.sub(b).getMagnitude()/2
+        this.rotCp0 = new RotationControlPoint(sim,sausage,0,r)
+        this.rotCp1 = new RotationControlPoint(sim,sausage,pi,r)
+        this.controlPoints = [this.movCp,this.rotCp0,this.rotCp1]
         this.controlPoints.forEach(cp => cp.fscale = .6)
         
         
         //this.constraints = [new Spring(this.rotCp0,this.rotCp1)]
-        this.children = [...this.controlPoints]
+        this.children = [sausage,...this.controlPoints]
         
         this.dripChance = global.poiDripChance
     }
@@ -38,35 +42,5 @@ class ControlledSausageBody extends CompoundBody {
         // stick particle to edge
         if(cw) edgeSpeed *= -1
         this.eps.spawnParticle(r,edgeSpeed)
-    }
-    
-    buildEdge(){
-        let len = this.a.sub(this.b).getMagnitude()
-        let edge = new SausageEdge(len,this.rad)
-        return edge
-    }
-    
-    buildGrabber(){
-        return new LineGrabber(a,b,rad,
-            (x,y) => this.grabbed(x,y))
-    }
-    
-    
-    
-    draw(g){
-        
-        // draw children (caps)
-        super.draw(g)
-        
-        g.strokeStyle = global.lineColor
-        g.lineWidth = 2*this.rad
-        g.beginPath()
-        g.moveTo(...this.a.xy())
-        g.lineTo(...this.b.xy())
-        g.stroke()
-        g.lineWidth = global.lineWidth
-        
-        if( global.showEdgeNormals ) this.edge.drawNormals(g)
-        if( global.showEdgeAccel ) this.eps.forEach(eps => eps.edge.drawAccel(g,eps))
     }
 }
