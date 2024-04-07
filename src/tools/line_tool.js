@@ -14,7 +14,7 @@ class LineTool extends Tool{
         // to build line between two points
         this.mouseHeld = false
         this.startPoint = null
-        this.lineRadius = 8e-2 // radius of caps (half of thickness)
+        this.lineRadius = 2e-2 // radius of caps (half of thickness)
         this.minD2 = 1e-2 // minimum length squared
     }
    

@@ -45,11 +45,12 @@ const global = {
     toolList: [], //list of [Tool,Tutorial] instances
    
     // debug
-    debugUiRects: false,
-    debugGrabbers: false,
+    debugUiRects:       false,
+    debugGrabbers:      false,
     colorcodeParticles: true,
-    showEdgeNormals: false,
-    showEdgeAccel: false,
+    showEdgeNormals:    false,
+    showEdgeVel:        true,
+    showEdgeAccel:      false,
     
     controlPointLineWidth: .003,
     controlPointVisibleHoverRadius: .2,

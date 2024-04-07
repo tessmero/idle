@@ -104,6 +104,7 @@ class Body {
         this.grabber.pos = this.pos
         this.eps.pos = this.pos
         this.eps.vel = this.vel
+        this.eps.avel = this.avel
         this.eps.accel = this.accel
         this.eps.angle = this.angle
         
@@ -114,7 +115,8 @@ class Body {
     
     drawDebug(g){
         if( global.showEdgeNormals ) this.drawNormals(g,this.pos,this.angle)
-        if( global.showEdgeAccel ) this.drawAccel(g,this.pos,this.angle)
+        if( global.showEdgeVel )     this.drawVel(g,this.pos,this.angle)
+        if( global.showEdgeAccel )   this.drawAccel(g,this.pos,this.angle)
     }
 
     drawNormals(g){
@@ -127,6 +129,15 @@ class Body {
         })
     }
     
+    
+    drawVel(g){
+        this._drawDebugVectors(g, a => {
+            let [ang,r,norm] = this.edge.getPoint(a)
+            let p = this.pos.add(vp(this.angle+ang,r))
+            let vel = this.eps.getVel(a)
+            return[ p, p.add(vel.mul(1e2)) ]
+        })
+    }
     
     drawAccel(g){
         this._drawDebugVectors(g, a => {

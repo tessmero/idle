@@ -7,6 +7,25 @@ class DebugTab extends CompositeGuiElement {
         let specs = [
             
             [
+                // tab title, tooltip
+                "SIM", "Simulation\nparticles and bodies",[
+                
+                    // variable name in global.js,  increment or 'bool',  description
+                    ['colorcodeParticles','bool','color particles by category'],
+                    ['showEdgeNormals','bool','show normal vectors along edges'],
+                    ['showEdgeVel', 'bool', 'show velocity vectors along edges'],
+                    ['showEdgeAccel', 'bool', 'show force vectors along edges'],
+                    ['debugGrabbers', 'bool', 'show regions where particles\nmay be affected by bodies'],
+                    ['mainSim.rainGroup.n',1,'max raindrops on screen'],
+                    ['mainSim.fallSpeed',3e-6 , 'terminal velocity'],
+                    ['mainSim.particleRadius',.001, 'size of falling rain drops'],
+                    ['mainSim.rainGroup.wiggle',.01, 'horizontal movement of drops'],
+                    ['bodyFriction',1e-3, 'friction for circles and lines'],
+                    //['particleStickyForce', 1e-6, 'force holding particles to edges'],
+                ]
+            ],
+            
+            [
                 "UI","User Interface\ntext, buttons, and menus",[
                 
                     ['debugUiRects','bool','show bounding rectangles\nused for aligning text\nand mouse hovering'],
@@ -17,24 +36,6 @@ class DebugTab extends CompositeGuiElement {
                     ['tooltipPadding', .001, 'extra space around\ntooltip content'],
                     ['tooltipShadowWidth', .001, 'size of shadow effect\nfor tooltip popups'],
                     ['lineWidth', .001, 'line thickness'],
-                ]
-            ],
-            
-            [
-                // tab title, tooltip
-                "SIM", "Simulation\nparticles and bodies",[
-                
-                    // variable name in global.js,  increment or 'bool',  description
-                    ['colorcodeParticles','bool','color particles by category'],
-                    ['showEdgeNormals','bool','show normal vectors along edges'],
-                    ['showEdgeAccel', 'bool', 'show force vectors along edges'],
-                    ['debugGrabbers', 'bool', 'show regions where particles\nmay be affected by bodies'],
-                    ['mainSim.rainGroup.n',1,'max raindrops on screen'],
-                    ['mainSim.fallSpeed',3e-6 , 'terminal velocity'],
-                    ['mainSim.particleRadius',.001, 'size of falling rain drops'],
-                    ['mainSim.rainGroup.wiggle',.01, 'horizontal movement of drops'],
-                    ['bodyFriction',1e-3, 'friction for circles and lines'],
-                    //['particleStickyForce', 1e-6, 'force holding particles to edges'],
                 ]
             ],
         ]

@@ -29,11 +29,12 @@ class EdgeParticleSubgroup{
         this.pos = v(0,0)
         this.vel = v(0,0)
         this.angle = 0
+        this.avel = 0
         
-        // prepare to add up acceleration during body updates
+        // prepare to add up net translational force during body updates
         // so particles react accordingly in generateParticles()
         this.acc = v(0,0)
-        this.spn = 0 // angular
+        this.spn = 0
     }
     
     // called in EdgePGroup *generateParticles()
@@ -45,15 +46,9 @@ class EdgeParticleSubgroup{
         let vm = (1-f*dt)
         let i = 0
         
-        // anti-normal stickiness force, only used when 
+        // anti-normal stickiness "force" for purposes of 
         // deciding whether a particle remains stuck to edge
-        let stickyAccMag = global.particleStickyForce.map(v => v*dt)
-        
-        // prepare to apply accel and reset accumulated force
-        let acc = this.getAccel(0)
-        let accAngle = acc.getAngle()
-        let accMag = acc.getMagnitude()
-        this.acc = v(0,0)
+        let stickyAccMag = global.particleStickyForce.map(v => v*dt) 
             
         let nd = this.group.ndims
         let m = this.i+this.n
@@ -62,12 +57,17 @@ class EdgeParticleSubgroup{
                 
                 // check if currently grabbed
                 if( this.group.grabbedParticles.has(i) ) continue
+        
+                // update centripital foce due to body spinning
+                this.spn = this.avel*dt
                 
                 // advance physics
                 let a = this.group.state[i*nd+0]
                 let av = this.group.state[i*nd+1]
-                //let norm = this.edge.getNorm(a)
                 let [ea,er,norm] = this.edge.getPoint(a)
+                let acc = this.getAccel(a)
+                let accAngle = acc.getAngle()
+                let accMag = acc.getMagnitude()
                 norm += this.angle
                 av += accMag * Math.sin(norm-accAngle)// accel particle along edge
                 av *= vm // friction
@@ -91,9 +91,7 @@ class EdgeParticleSubgroup{
                     // pass particle to physics group
                     grab = true
                     let pos = this.pos.add(vp(this.angle+ea,er))//.add(vp(norm,1e-2))
-                    let vel = this.vel
-                        .mul(randRange(.2,.5))
-                        .add(vp(norm+pio2,av))
+                    let vel = this.getVel(a)
                     this.pps.spawnParticle(pos,vel)
                 }
                 
@@ -103,20 +101,26 @@ class EdgeParticleSubgroup{
                 let [x,y] = pos.xy()
                 yield [i,x,y,grab,ungrab]
         }
-    }
-    
-    // apply centripital force to porticles
-    spin(spn){
-        this.spn += spn
-    }
-    
-    // compute force felt by a particle 
-    // stuck to edge at point a
-    // including gravity
-    getAccel(a){
         
-        // missing centripital force due to body spinning
-        return this.acc.add(this.g) 
+        // reset net force
+        this.acc = v(0,0)
+    }
+    
+    // compute velocity of a particle 
+    // achored to edge at given distance along cirumference
+    getVel(a){
+        let [ea,er,norm] = this.edge.getPoint(a)
+        return this.vel //translation
+            .add(vp(this.angle+ea+pio2,er*this.avel)) //rotation
+    }
+    
+    // compute net force that would be felt by a particle 
+    // achored to edge at given distance along cirumference
+    getAccel(a){
+        let [ea,er,norm] = this.edge.getPoint(a)
+        return this.acc // translational force
+                .add(this.g) //gravity
+                .add(vp(ea+this.angle,-1e-2*Math.abs(this.spn)*er)) //centripital force
     }  
     
     count(b){
