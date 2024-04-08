@@ -11,9 +11,11 @@ function update(dt) {
     }
     
     // advance start menu idle background animation
-    if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) && (global.gameState==GameStates.startMenu) && (global.mainSim.allBodies.size > 0) ){
+    if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) 
+                    && (global.gameState==GameStates.startMenu) 
+                    && (global.mainSim.allBodies.size > 1) ){
+            
         let bodies =  Array.from(global.mainSim.allBodies)
-        
         
         // move circle
         if( true ){

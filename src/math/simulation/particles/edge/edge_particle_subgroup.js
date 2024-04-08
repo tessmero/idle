@@ -65,7 +65,7 @@ class EdgeParticleSubgroup{
                 let a = this.group.state[i*nd+0]
                 
                 let av = this.group.state[i*nd+1]
-                let [ea,er,norm] = this.edge.getPoint(a)
+                let [ea,er,norm] = this.edge.lookupDist(a)
                 let acc = this.getAccel(a)
                 
                 let accAngle = acc.getAngle()
@@ -108,17 +108,18 @@ class EdgeParticleSubgroup{
         this.acc = v(0,0)
     }
     
+    
     // get x,y position at given 
     // distance along cirumference
     getPos(a){
-        let [ea,er,norm] = this.edge.getPoint(a)
+        let [ea,er,norm] = this.edge.lookupDist(a)
         return this.pos.add(vp(ea+this.angle,er))
     }
     
     // compute velocity of a particle 
     // achored to edge at given distance along cirumference
     getVel(a){
-        let [ea,er,norm] = this.edge.getPoint(a)
+        let [ea,er,norm] = this.edge.lookupDist(a)
         return this.vel //translation
             .add(vp(this.angle+ea+pio2,er*this.avel)) //rotation
     }
@@ -126,7 +127,7 @@ class EdgeParticleSubgroup{
     // compute net force that would be felt by a particle 
     // achored to edge at given distance along cirumference
     getAccel(a){
-        let [ea,er,norm] = this.edge.getPoint(a)
+        let [ea,er,norm] = this.edge.lookupDist(a)
         let acc = this.acc // translational force
                 .add(this.g) //gravity
                 .add(vp(ea+this.angle,-1e-3*Math.abs(this.spn)*er)) //centripital force        

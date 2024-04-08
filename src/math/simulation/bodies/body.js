@@ -39,6 +39,8 @@ class Body {
     // called in particle_sim.js addBody()
     register(sim){
             
+        let edge = this.buildEdge()//new SausageEdge(len,this.rad)
+        this.edge = edge
         
         // prepare particle grabber instance
         this.grabber = this.buildGrabber()//new LineGrabber(a,b,rad,(x,y) => this.grabbed(x,y))
@@ -52,10 +54,8 @@ class Body {
         // prepare for particles sliding along edge
         // EPS = edge particle subgroup instance
         // src/math/particle/group/physics_pgroup.js
-        let edge = this.buildEdge()//new SausageEdge(len,this.rad)
         edge.computeEdgeShape()
         edge.pos = this.pos
-        this.edge = edge
         this.eps = sim.edgeGroup.newSubgroup(edge)
         
         // prepare to pass particles from edge to physics
@@ -112,6 +112,7 @@ class Body {
         
         // update grabber and edge particles
         this.grabber.pos = this.pos
+        this.grabber.angle = this.angle
         this.eps.pos = this.pos
         this.eps.vel = this.vel
         this.eps.avel = this.avel
@@ -124,15 +125,17 @@ class Body {
     
     drawDebug(g){
         if( global.showEdgeNormals ) this.drawNormals(g,this.pos,this.angle)
-        if( global.showEdgeSpokes )  this.drawSpokes(g,this.pos,this.angle)
+        if( global.showEdgeSpokesA )  this.drawDistLutSpokes(g,this.pos,this.angle)
+        if( global.showEdgeSpokesB )  this.drawAngleLutSpokes(g,this.pos,this.angle)
         if( global.showEdgeVel )     this.drawVel(g,this.pos,this.angle)
         if( global.showEdgeAccel )   this.drawAccel(g,this.pos,this.angle)
     }
 
     drawNormals(g){
-        this._drawDebugVectors(g, a => {
-            let len = 1e-2
-            let [ang,r,norm] = this.edge.getPoint(a)
+        if( !this.edge ) return
+        this._drawDebugVectors(g, 0, this.edge.circ, a => {
+            let len = 3e-2
+            let [ang,r,norm] = this.edge.lookupDist(a)
             norm += this.angle
             let p = this.eps.getPos(a)
             return[ p, p.add(vp(norm,len)) ]
@@ -140,16 +143,28 @@ class Body {
     }
     
     
-    drawSpokes(g){
-        this._drawDebugVectors(g, a => {
+    drawDistLutSpokes(g){
+        if( !this.edge ) return
+        this._drawDebugVectors(g, 0, this.edge.circ, a => {
             let p = this.eps.getPos(a)
             return[ this.pos, p ]
         })
     }
     
+    drawAngleLutSpokes(g){
+        if( !this.edge ) return
+        this._drawDebugVectors(g, 0, twopi, a => {
+            let [r,r2,d] = this.edge.lookupAngle(a-this.angle)
+            let p = this.pos.add(vp(a,r))
+            return[ this.pos, p ]
+        })
+    }
+    
+    
     
     drawVel(g){
-        this._drawDebugVectors(g, a => {
+        if( !this.edge ) return
+        this._drawDebugVectors(g, 0, this.edge.circ, a => {
             let p = this.eps.getPos(a)
             let vel = this.eps.getVel(a)
             return[ p, p.add(vel.mul(1e2)) ]
@@ -157,25 +172,25 @@ class Body {
     }
     
     drawAccel(g){
-        this._drawDebugVectors(g, a => {
+        if( !this.edge ) return
+        this._drawDebugVectors(g, 0, this.edge.circ, a => {
             let p = this.eps.getPos(a)
             let acc = this.eps.getAccel(a)
-            return[ p, p.add(acc.mul(5e2)) ]
+            return[ p, p.add(acc.mul(3e3)) ]
         })
     }
     
-    _drawDebugVectors(g,f){
+    _drawDebugVectors(g,t0,t1,f){
         if( !this.edge ) return
         
         let circ = this.edge.circ
-        let t = [0,circ]
         
         let density = 100 // ~lines per screen length
         let n = circ*density
         g.strokeStyle = 'yellow'
         g.beginPath()
         for( let i = 0 ; i < n ; i++ ){
-            let a = avg(t[0],t[1],i/n)
+            let a = avg(t0,t1,i/n)
             let [start,stop] = f(a)
             g.moveTo(...start.xy())
             g.lineTo(...stop.xy())

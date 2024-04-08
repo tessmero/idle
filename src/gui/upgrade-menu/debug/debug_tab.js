@@ -12,11 +12,12 @@ class DebugTab extends CompositeGuiElement {
                 
                     // variable name in global.js,  increment or 'bool',  description
                     ['colorcodeParticles','bool','color particles by category'],
-                    ['showEdgeSpokes', 'bool','show edge shape\naround center of mass'],
+                    ['showEdgeSpokesA', 'bool','show edge shape\naround center of mass'],
+                    ['showEdgeSpokesB', 'bool','show edge shape\naround center of mass'],
                     ['showEdgeNormals','bool','show normal vectors along edges'],
                     ['showEdgeVel', 'bool', 'show velocity vectors along edges'],
                     ['showEdgeAccel', 'bool', 'show force vectors along edges'],
-                    ['debugGrabbers', 'bool', 'show regions where particles\nmay be affected by bodies'],
+                    //['debugGrabbers', 'bool', 'show regions where particles\nmay be affected by bodies'],
                     ['bodyFriction',1e-3, 'friction for circles and lines'],
                 ]
             ],

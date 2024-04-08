@@ -1,5 +1,5 @@
 // 
-class SausageEdge extends Edge {
+class SausageEdge extends PathspecEdge {
     
     constructor(length,rad){
         super()

@@ -39,7 +39,7 @@ function init() {
     quit()
     
     //////////////////////////////////////////
-    // unit tests 20240407
+    // unit tests 20240408
     if( false ){
         
         // start sim unit tests
@@ -68,6 +68,8 @@ function init() {
         check(new ControlledCircleBody(sim,v(.5,.5),.1))
         check(new SausageBody(sim,v(.5,.5),v(.3,.3)))
         check(new ControlledSausageBody(sim,v(.5,.5),v(.3,.3)))
+        check(new StarBody(sim,v(.5,.5),5,.05,.1))
+        check(new ControlledStarBody(sim,v(.5,.5),5,.05,.1))
         console.log(`${testedCount} Body subclasses passed tests`)
         
         
@@ -101,8 +103,11 @@ function resetGame(){
     let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
     global.mainSim.addBody(poi)
     
+    let star = new ControlledStarBody(global.mainSim,v(.75,.45),5,.05,.1)
+    global.mainSim.addBody(star)
+    
     let lines = [
-        [v(.65,.55),v(.85,.35)],
+        //[v(.65,.55),v(.85,.35)],
         [v(1-.65,.55),v(1-.85,.35)]
     ]
     lines.forEach(l => global.mainSim.addBody(new ControlledSausageBody(global.mainSim,...l)))

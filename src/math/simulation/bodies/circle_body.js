@@ -14,8 +14,9 @@ class CircleBody extends Body{
     }
     
     buildGrabber(){
-        return new CircleGrabber(this.pos,
-            this.rad,(...p) => this.grabbed(...p),0)
+        return new CircleGrabber(
+            this.pos,this.rad,
+            (...p) => this.grabbed(...p),0)
     }
     
     draw(g){

@@ -6,7 +6,6 @@ class ControlledSausageBody extends CompoundBody {
         
         this.a = a
         this.b = b
-        this.rad = rad
         
         let sausage = new SausageBody(sim,a,b,rad)
         this.sausage = sausage
@@ -26,23 +25,5 @@ class ControlledSausageBody extends CompoundBody {
         this.children = [sausage,...this.controlPoints]
         
         this.dripChance = global.poiDripChance
-    }
-    
-    // grabbed particle in straight midsection
-    grabbed(x,y,edgeSpeed=0) {
-        
-        // locate edge point
-        let a = this.a
-        let b = this.b
-        let dx = x-a.x
-        let dy = y-a.y
-        let d = b.sub(a)
-        let r = (dx*d.x + dy*d.y) / d.getD2() // position along edge (float)
-        let cw = clockwise(a,b,v(x,y)) // which side (boolean)
-        let eps = cw ? this.eps[1] : this.eps[0]
-        
-        // stick particle to edge
-        if(cw) edgeSpeed *= -1
-        this.eps.spawnParticle(r,edgeSpeed)
     }
 }
