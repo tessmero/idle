@@ -28,7 +28,7 @@ function init() {
     document.addEventListener("keydown", keyDown )
     document.addEventListener("keyup", keyUp )
     
-    // document.querySelector('body').addEventListener('contextmenu', (event) => {
+    document.querySelector('body').addEventListener('contextmenu', (event) => {
       event.preventDefault();
     })
     global.canvas = cvs
