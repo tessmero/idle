@@ -1,6 +1,7 @@
 // 
-// provides functions resetRand() and rand()
-// 
+// provides helpers like resetRand() and rand()
+// to reliably reproduce random sequences 
+//
 // https://stackoverflow.com/a/47593316
 //
 
@@ -55,4 +56,12 @@ function sfc32(a, b, c, d) {
       c = c + t | 0;
       return (t >>> 0) / 4294967296;
     }
+}
+
+function randRange(min,max){
+    return min + rand()*(max-min)
+}
+
+function randChoice(options){
+    return options[Math.floor( Math.random() * options.length )]
 }

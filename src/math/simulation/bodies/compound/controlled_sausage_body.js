@@ -17,7 +17,9 @@ class ControlledSausageBody extends CompoundBody {
         this.rotCp0 = new RotationControlPoint(sim,sausage,0,r)
         this.rotCp1 = new RotationControlPoint(sim,sausage,pi,r)
         this.controlPoints = [this.movCp,this.rotCp0,this.rotCp1]
-        this.controlPoints.forEach(cp => cp.fscale = .6)
+        this.rotCp0.fscale = 6
+        this.rotCp1.fscale = 6
+        
         
         
         //this.constraints = [new Spring(this.rotCp0,this.rotCp1)]

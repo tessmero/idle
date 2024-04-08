@@ -12,15 +12,25 @@ function update(dt) {
     
     // advance start menu idle background animation
     if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) && (global.gameState==GameStates.startMenu) && (global.mainSim.allBodies.size > 0) ){
+        let bodies =  Array.from(global.mainSim.allBodies)
         
         
-        // accel to target
-        let poi = Array.from(global.mainSim.allBodies)[0].circle
-        let d = global.startMenuTargetPos.sub(poi.pos)
-        let d2 = d.getD2()
-        if( d2 > 1e-4 )
-            poi.accel( vp( d.getAngle(), .5*global.poiPlayerF ).mul(dt) )  
-        
+        // move circle
+        if( true ){
+            let poi = bodies[0].circle
+            let d = global.startMenuTargetPos.sub(poi.pos)
+            let d2 = d.getD2()
+            let fr = [1e-4,1e-2] // no force d2, full force d2
+            if( d2 > fr[0]){
+                let angle = d.getAngle()
+                let f = global.poiPlayerF 
+                if(d2<fr[1])
+                    f *= (d2-fr[0])/(fr[1]-fr[0])
+                let acc = vp( angle, f ).mul(dt)
+                poi.accel(acc)
+            }
+        }
+            
         // update target position
         global.startMenuMoveCountdown -= dt
         if( global.startMenuMoveCountdown < 0 ){
@@ -43,14 +53,7 @@ function update(dt) {
     }
     global.allGuis[global.gameState].update(dt) // gui in front may set global.tooltipPopup
     
-    // update control point hovering status
-    if( !global.mainSim.draggingControlPoint ){
-        let p = global.mousePos
-        let bodies = [...global.mainSim.allBodies]
-        let cps = bodies.flatMap( b => b.controlPoints)
-        global.mainSim.hoveredControlPoint = cps.find( 
-                cp => (cp.pos.sub(p).getD2() < cp.r2) )
-    }
+    global.mainSim.updateControlPointHovering(global.mousePos)
     
     //// stop if game is paused
     if( global.gameState==GameStates.pauseMenu ) return

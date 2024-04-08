@@ -31,12 +31,9 @@ function inRect(px,py,x,y,w,h){
     return (px>=x) && (px<=(x+w)) && (py>=y) && (py<=(y+h))
 }
 
-function randRange(min,max){
-    return min + rand()*(max-min)
-}
-
-function randChoice(options){
-    return options[Math.floor( Math.random() * options.length )]
+// doesn't use procedural RNG (see rng.js)
+function safeRandRange(min,max){
+    return min + Math.random()*(max-min)
 }
 
 // locate intersections between two circles

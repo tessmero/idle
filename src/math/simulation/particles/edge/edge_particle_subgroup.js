@@ -63,13 +63,15 @@ class EdgeParticleSubgroup{
                 
                 // advance physics
                 let a = this.group.state[i*nd+0]
+                
                 let av = this.group.state[i*nd+1]
                 let [ea,er,norm] = this.edge.getPoint(a)
                 let acc = this.getAccel(a)
+                
                 let accAngle = acc.getAngle()
                 let accMag = acc.getMagnitude()
                 norm += this.angle
-                av += accMag * Math.sin(norm-accAngle)// accel particle along edge
+                av += 8e-1*accMag * Math.sin(norm-accAngle)// accel particle along edge
                 av *= vm // friction
                 a += av*dt
                 a = nnmod(a,circ)
@@ -86,24 +88,31 @@ class EdgeParticleSubgroup{
                 let centrifugalAcc = 0
                 
                 // check if this particle has been pulled off edge
-                if( randRange(...stickyAccMag) < (normAcc + centrifugalAcc) ){
+                if( safeRandRange(...stickyAccMag) < (normAcc + centrifugalAcc) ){
                     
                     // pass particle to physics group
                     grab = true
-                    let pos = this.pos.add(vp(this.angle+ea,er))//.add(vp(norm,1e-2))
-                    let vel = this.getVel(a)
+                    let pos = this.getPos(a)
+                    let vel = this.getVel(a).add(vp(norm+pio2,av))
                     this.pps.spawnParticle(pos,vel)
                 }
                 
                 // yield one particle to be grabbed/drawn
                 let ungrab = false
-                let pos = this.pos.add(vp(ea+this.angle,er))
+                let pos = this.getPos(a)
                 let [x,y] = pos.xy()
                 yield [i,x,y,grab,ungrab]
         }
         
         // reset net force
         this.acc = v(0,0)
+    }
+    
+    // get x,y position at given 
+    // distance along cirumference
+    getPos(a){
+        let [ea,er,norm] = this.edge.getPoint(a)
+        return this.pos.add(vp(ea+this.angle,er))
     }
     
     // compute velocity of a particle 
@@ -118,9 +127,10 @@ class EdgeParticleSubgroup{
     // achored to edge at given distance along cirumference
     getAccel(a){
         let [ea,er,norm] = this.edge.getPoint(a)
-        return this.acc // translational force
+        let acc = this.acc // translational force
                 .add(this.g) //gravity
-                .add(vp(ea+this.angle,-1e-2*Math.abs(this.spn)*er)) //centripital force
+                .add(vp(ea+this.angle,-1e-3*Math.abs(this.spn)*er)) //centripital force        
+        return acc
     }  
     
     count(b){

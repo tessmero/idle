@@ -28,7 +28,7 @@ function init() {
     document.addEventListener("keydown", keyDown )
     document.addEventListener("keyup", keyUp )
     
-    document.querySelector('body').addEventListener('contextmenu', (event) => {
+    // document.querySelector('body').addEventListener('contextmenu', (event) => {
       event.preventDefault();
     })
     global.canvas = cvs
@@ -39,7 +39,7 @@ function init() {
     quit()
     
     //////////////////////////////////////////
-    // unit tests 20240331
+    // unit tests 20240407
     if( false ){
         
         // start sim unit tests
@@ -67,6 +67,7 @@ function init() {
         check(new CircleBody(sim,v(.5,.5),.1))
         check(new ControlledCircleBody(sim,v(.5,.5),.1))
         check(new SausageBody(sim,v(.5,.5),v(.3,.3)))
+        check(new ControlledSausageBody(sim,v(.5,.5),v(.3,.3)))
         console.log(`${testedCount} Body subclasses passed tests`)
         
         
@@ -101,7 +102,7 @@ function resetGame(){
     global.mainSim.addBody(poi)
     
     let lines = [
-        [v(.75,.55),v(.85,.35)],
+        [v(.65,.55),v(.85,.35)],
         [v(1-.65,.55),v(1-.85,.35)]
     ]
     lines.forEach(l => global.mainSim.addBody(new ControlledSausageBody(global.mainSim,...l)))

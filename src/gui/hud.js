@@ -17,7 +17,9 @@ class Hud extends Gui {
         let topRow = [sc[0].x,sc[0].y, (sc[2].x-sc[0].x), m]
         let topLeft = [sr[0],sr[1],m,m]
         let topRight = [sc[2].x-m-margin,sr[1],m,m]
-        let topClp = [sr[0]+sr[2]*.1,sr[1]+m/4]
+        
+        // stat redouts at dop of screen
+        let topClp = [sr[0]+sr[2]*.1,sr[1]+.01]
         let topCenterP = [sr[0]+sr[2]*.4,topClp[1]]
         let topCrp = [sr[0]+sr[2]*.7,topClp[1]]
         

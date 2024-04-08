@@ -25,9 +25,12 @@ class CircleGrabber extends Grabber {
         
         if( !hit ) return false
         
+        let eo = 0
+        if( this.edgeOffset ) eo = this.edgeOffset
+        
         // return arc length
         let a = Math.atan2(dy,dx)
         if( this.edgeReversed ) a *= -1
-        return this.edgeOffset + nnmod(a,twopi)*this.rad
+        return eo + nnmod(a,twopi)*this.rad
     }
 }

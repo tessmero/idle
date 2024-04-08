@@ -28,8 +28,8 @@ class SausageBody extends Body {
         return grabber
     }
     
-    update(dt){
-        super.update(dt)
+    update(dt, ...args){
+        super.update(dt, ...args)
         
         let p = this.pos
         let a = this.angle

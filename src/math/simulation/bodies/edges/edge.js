@@ -45,12 +45,14 @@ class Edge {
     // get precomputed [angle,radius,normal angle]
     // at given distance along circumerence
     getPoint(d){
-        let i = this.ndims * Math.round(d*this.n/this.circ)
+        let i =  Math.round(d*this.n/this.circ)
+        i = nnmod(i,this.n)
+        i *= this.ndims
         let s = this.shape
         return [s[i],s[i+1],s[i+2]]
     }
     
     // settings for particles sliding on edge
-    getFriction(){ return 4e-3 }
-    getG(){ return 2e-5 }
+    getFriction(){ return 2e-3 }
+    getG(){ return 6e-6 }
 }

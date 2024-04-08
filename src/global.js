@@ -47,9 +47,10 @@ const global = {
     // debug
     debugUiRects:       false,
     debugGrabbers:      false,
-    colorcodeParticles: true,
+    colorcodeParticles: false,
+    showEdgeSpokes:     false,
     showEdgeNormals:    false,
-    showEdgeVel:        true,
+    showEdgeVel:        false,
     showEdgeAccel:      false,
     
     controlPointLineWidth: .003,
@@ -65,15 +66,16 @@ const global = {
     
     // start menu background anim
     startMenuTargetPos: v(.5,.5),
-    startMenuMoveDelay: 4000,
+    startMenuMoveDelay: 1000,
     startMenuMoveCountdown: 0,
     
     
     // strength of "forces" on poi
     // force=(area/accel) in vunits...ms...
-    poiPlayerF: 1e-5, // player clicking and dragging
+    poiPlayerF: 3e-6, // player clicking and dragging
     bodyFriction: 4e-3, // body translation friction
-    particleStickyForce: [0,2e-6], // passive particle force into edge
+    bodyAngleFriction: 1e-3,
+    particleStickyForce: [2e-7,3e-6], // passive particle force into edge
     
     //
     thumbnailSimDims: [.1,.1],

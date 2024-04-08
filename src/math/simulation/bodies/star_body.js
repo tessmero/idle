@@ -1,5 +1,5 @@
-// physics-enabled circle
-class CircleBody extends Body{
+// sinusoidal star/flower
+class StarBoddy extends Body{
     constructor(sim,pos,rad){
         super(sim,pos) 
         
@@ -21,12 +21,14 @@ class CircleBody extends Body{
     draw(g){
         let p = this.pos
         
-        // draw circle
+        // draw star
         let r = this.rad
         let c = p.xy()
         g.beginPath()
         g.moveTo(...c)
-        g.arc(...c,r,0,twopi)
+        for( let a = 0 ; a < twopi ; a += 1e-2 ){
+            g.lineTo( ...this.eps.getPos(a) )
+        }
         g.fill()
         
         

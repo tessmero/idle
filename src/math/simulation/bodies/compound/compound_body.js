@@ -6,6 +6,7 @@ class CompoundBody extends Body {
         
         this.constraints = []
         this.children = []
+        this.controlPoints = []
     }
     
     draw(g){
@@ -18,8 +19,10 @@ class CompoundBody extends Body {
     }
     
     update(dt){
+        let beingControlled = this.controlPoints.find( cp => cp == this.sim.draggingControlPoint )
+        
         this.constraints.forEach(c => c.update(dt) )
-        this.children.forEach(c => c.update(dt) )
+        this.children.forEach(c => c.update(dt,beingControlled) )
         
         return true
     }

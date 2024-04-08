@@ -37,12 +37,7 @@ class GuiSimPanel extends GuiElement {
             
             // like update.js
             // update control point hovering status
-            if( !this.sim.draggingControlPoint ){
-                let bodies = [...this.sim.allBodies]
-                let cps = bodies.flatMap( b => b.controlPoints)
-                this.sim.hoveredControlPoint = cps.find( 
-                        cp => (cp.pos.sub(p).getD2() < cp.r2) )
-            }
+            this.sim.updateControlPointHovering(p)
         }
     }
     

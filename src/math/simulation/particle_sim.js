@@ -63,6 +63,17 @@ class ParticleSim {
         })
         toRemove.forEach( b => this.removeBody(b) )
     }
+
+    updateControlPointHovering(p){
+        
+        // update control point hovering status
+        if( !this.draggingControlPoint ){
+            let bodies = [...this.allBodies]
+            let cps = bodies.flatMap( b => b.controlPoints)
+            this.hoveredControlPoint = cps.find( 
+                    cp => (cp.pos.sub(p).getD2() < cp.r2) )
+        }
+    }
     
     draw(g){
         

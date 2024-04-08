@@ -18,7 +18,7 @@ class DefaultTool extends Tool{
         // prepare grabber instance that will be 
         // added/removed from global.grabbers
         this.grabber = new CircleGrabber(v(0,0),
-            rad,() => this.grabbed)
+            rad,() => this.grabbed())
     }
    
    getTutorial(){ 
@@ -32,12 +32,13 @@ class DefaultTool extends Tool{
     }
    
     mouseMove(p){
-        this.lastPos = this.grabber.p
-        this.grabber.p = p
+        this.lastPos = this.grabber.pos
+        this.grabber.pos = p
     }
    
     mouseDown(p){ 
         // either grab control point or start catching rain
+        this.sim.updateControlPointHovering(p)
         this.held = this.sim.hoveredControlPoint
         this.sim.draggingControlPoint = this.held
         
@@ -108,19 +109,24 @@ class DefaultTool extends Tool{
         
             if(!this.lastPos) return
         
-            let fr = [1e-4,1e-2] // no force d2, full force d2
+            let fr = [1e-4,1e-3] // no force d2, full force d2
         
             //apply force to held control point
             let cp = this.held
             let d = this.lastPos.sub(cp.pos)
             let d2 = d.getD2()
-            if( d2 < fr[0]) return
-            let angle = d.getAngle()
-            let f = global.poiPlayerF 
-            if(d2<fr[1])
-                f *= (d2-fr[0])/(fr[1]-fr[0])
-            let acc = vp( angle, f ).mul(dt)
-            cp.accel(acc)
+            if( d2 < fr[0]){
+                
+                
+            } else {
+                
+                let angle = d.getAngle()
+                let f = global.poiPlayerF 
+                if(d2<fr[1])
+                    f *= (d2-fr[0])/(fr[1]-fr[0])
+                let acc = vp( angle, f ).mul(dt)
+                cp.accel(acc)
+            }
         }
     }
     

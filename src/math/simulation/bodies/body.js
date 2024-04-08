@@ -60,6 +60,7 @@ class Body {
         
         // prepare to pass particles from edge to physics
         this.eps.pps = this.pps
+        this.eps.pos = this.pos
     }
     
     // called in particle_sim.js removeBody()
@@ -81,15 +82,24 @@ class Body {
         this.eps.spn += spn // pass momentum to particles on edge
     }
     
-    update(dt){
+    update(dt,beingControlled=false){
+        
+        let stopForce = global.bodyFriction
+        let angleStopForce = global.bodyAngleFriction
+        if( !beingControlled ){
+            //stopForce *= 1e3
+            //angleStopForce *= 1e3
+        }
         
         // advance physics for poi
-        let frictionAcc = this.vel.mul(-dt*global.bodyFriction)
+        
+        // translation
+        let frictionAcc = this.vel.mul(-dt*stopForce)
         this.accel( frictionAcc )
         this.pos = this.pos.add(this.vel.mul(dt))
         
-        //
-        let frictionSpn = this.avel * (-dt*1e-3)
+        // rotation
+        let frictionSpn = this.avel * (-dt*angleStopForce)
         this.spin(frictionSpn)
         this.angle += this.avel*dt
         
@@ -105,7 +115,6 @@ class Body {
         this.eps.pos = this.pos
         this.eps.vel = this.vel
         this.eps.avel = this.avel
-        this.eps.accel = this.accel
         this.eps.angle = this.angle
         
         return true
@@ -115,6 +124,7 @@ class Body {
     
     drawDebug(g){
         if( global.showEdgeNormals ) this.drawNormals(g,this.pos,this.angle)
+        if( global.showEdgeSpokes )  this.drawSpokes(g,this.pos,this.angle)
         if( global.showEdgeVel )     this.drawVel(g,this.pos,this.angle)
         if( global.showEdgeAccel )   this.drawAccel(g,this.pos,this.angle)
     }
@@ -124,16 +134,23 @@ class Body {
             let len = 1e-2
             let [ang,r,norm] = this.edge.getPoint(a)
             norm += this.angle
-            let p = this.pos.add(vp(this.angle+ang,r))
+            let p = this.eps.getPos(a)
             return[ p, p.add(vp(norm,len)) ]
+        })
+    }
+    
+    
+    drawSpokes(g){
+        this._drawDebugVectors(g, a => {
+            let p = this.eps.getPos(a)
+            return[ this.pos, p ]
         })
     }
     
     
     drawVel(g){
         this._drawDebugVectors(g, a => {
-            let [ang,r,norm] = this.edge.getPoint(a)
-            let p = this.pos.add(vp(this.angle+ang,r))
+            let p = this.eps.getPos(a)
             let vel = this.eps.getVel(a)
             return[ p, p.add(vel.mul(1e2)) ]
         })
@@ -141,8 +158,7 @@ class Body {
     
     drawAccel(g){
         this._drawDebugVectors(g, a => {
-            let [ang,r,norm] = this.edge.getPoint(a)
-            let p = this.pos.add(vp(this.angle+ang,r))
+            let p = this.eps.getPos(a)
             let acc = this.eps.getAccel(a)
             return[ p, p.add(acc.mul(5e2)) ]
         })

@@ -8,19 +8,28 @@ class DebugTab extends CompositeGuiElement {
             
             [
                 // tab title, tooltip
-                "SIM", "Simulation\nparticles and bodies",[
+                "SIM", "Simulation\nbodies and physics particls",[
                 
                     // variable name in global.js,  increment or 'bool',  description
                     ['colorcodeParticles','bool','color particles by category'],
+                    ['showEdgeSpokes', 'bool','show edge shape\naround center of mass'],
                     ['showEdgeNormals','bool','show normal vectors along edges'],
                     ['showEdgeVel', 'bool', 'show velocity vectors along edges'],
                     ['showEdgeAccel', 'bool', 'show force vectors along edges'],
                     ['debugGrabbers', 'bool', 'show regions where particles\nmay be affected by bodies'],
+                    ['bodyFriction',1e-3, 'friction for circles and lines'],
+                ]
+            ],
+            
+            [
+                // tab title, tooltip
+                "RAIN", "Falling Rain\nprocedural particles",[
+                
+                    // variable name in global.js,  increment or 'bool',  description
                     ['mainSim.rainGroup.n',1,'max raindrops on screen'],
                     ['mainSim.fallSpeed',3e-6 , 'terminal velocity'],
                     ['mainSim.particleRadius',.001, 'size of falling rain drops'],
                     ['mainSim.rainGroup.wiggle',.01, 'horizontal movement of drops'],
-                    ['bodyFriction',1e-3, 'friction for circles and lines'],
                     //['particleStickyForce', 1e-6, 'force holding particles to edges'],
                 ]
             ],
