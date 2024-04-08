@@ -16,6 +16,7 @@ class LineTool extends Tool{
         this.startPoint = null
         this.lineRadius = 2e-2 // radius of caps (half of thickness)
         this.minD2 = 1e-2 // minimum length squared
+        this.maxD2 = 1 // max length squared
     }
    
    getTutorial(){ 
@@ -45,6 +46,7 @@ class LineTool extends Tool{
         } else {
             let d2 = this.startPoint.sub(p).getD2()
             if( d2 < this.minD2 ) return
+            if( d2 > this.maxD2 ) return
             this._spawnLine(p)
         }
     }
@@ -70,6 +72,7 @@ class LineTool extends Tool{
         if( this.startPoint ){
             let d2 = this.startPoint.sub(p).getD2()
             if( d2 < this.minD2 ) return
+            if( d2 > this.maxD2 ) return
             
             this._spawnLine(p)
         }

@@ -19,16 +19,13 @@ class PathspecEdge extends Edge {
         
         // pre-compute edge path shape in polar coords
         // (distance along circumference) -> (a,r,norm,r2)
-        const distLutN = 5000
+        const distLutN = 1e6
         const distLutNDims = 4 // angle, radius, normal angle,r2
         const distLut = new Float32Array(distLutN*distLutNDims); 
         for( let i = 0 ; i< distLutN ; i++ ){
             let [angle,radius,norm] = this.computePoint(circ*i/distLutN)
             distLut[i*distLutNDims+0] = angle
-            distLut[i*distLutNDims+1] = radius
-            
-            if( radius < 0 ) throw new  Error('test')
-            
+            distLut[i*distLutNDims+1] = radius            
             distLut[i*distLutNDims+2] = norm
             distLut[i*distLutNDims+3] = radius*radius
         }
@@ -44,7 +41,7 @@ class PathspecEdge extends Edge {
         const angleLut = new Float32Array(angleLutN*angleLutNDims); 
         let j = 0
         let dist = 0
-        let amarg = twopi/angleLutN
+        let amarg = 2.1*twopi/angleLutN
         for( let i = 0 ; i < angleLutN ; i++ ){
             let targetAngle = i*twopi/angleLutN
             while( Math.abs(cleanAngle(distLut[j*distLutNDims+0] - targetAngle)) > amarg ){

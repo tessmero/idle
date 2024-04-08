@@ -14,14 +14,22 @@ class StatUpgrader extends CompositeGuiElement {
         let gutse = global.upgradeTracks.state[key]
         
         // text label
-        let dtl = new DynamicTextLabel(rect,() => 
-            `${key}`)
+        let dtl = new DynamicTextLabel(rect,
+            () => `     ${key}`)
             .withDynamicTooltip(()=>{
+                let lvl = gutse.level
+                let cost = gutse.cost.f(lvl)
+                let curVal = gutse.value.f(lvl)
+                let nextVal = gutse.value.f(lvl+1)
+                let subject = gutse.subject 
+                let budget = global.mainSim.particlesCollected
                 return [
                     key,
-                    `${gutse.level} -> ${gutse.level+1}`,
+                    `level ${lvl}: ${curVal}${subject}`,
+                    `upgrade costs ${cost} raindrops`,
+                    `-> level ${lvl+1}: ${nextVal}${subject}`,
                 ].join('\n')
-            }) // tooltip
+            }) 
         dtl.scale = .4
         dtl.tooltipScale = .4
         dtl.center = false
@@ -33,7 +41,16 @@ class StatUpgrader extends CompositeGuiElement {
             
             // buttons
             new IconButton(r1,increaseIcon,()=>{
+                
+                let budget = global.mainSim.particlesCollected
+                let lvl = gutse.level
+                let cost = gutse.cost.f(lvl)
+                if( cost > budget ){
+                    return
+                }
+                
                 gutse.level += 1
+                updateAllBonuses()
             }),
         ]
         

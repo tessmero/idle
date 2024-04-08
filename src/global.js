@@ -76,7 +76,7 @@ const global = {
     poiPlayerF: 3e-6, // player clicking and dragging
     bodyFriction: 4e-3, // body translation friction
     bodyAngleFriction: 1e-3,
-    particleStickyForce: [2e-7,3e-6], // passive particle force into edge
+    particleStickyForce: [1e-7,2e-6], // passive particle force into edge
     
     //
     thumbnailSimDims: [.1,.1],

@@ -11,7 +11,7 @@ function updateAllBonuses(){
     let upgrades = global.upgradeTracks.state
     let skills = global.skillTree.state
     
-    global.mainSim.rainGroup.nParticles = _computeBonusVal(upgrades['n_particles'])
+    global.mainSim.rainGroup.n = _computeBonusVal(upgrades['nparticles'])
 }
 
 // called in updateAllBonuses

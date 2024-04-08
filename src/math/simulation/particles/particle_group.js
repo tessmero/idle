@@ -39,13 +39,16 @@ class ParticleGroup {
                     }
                     return false
                 }))
+                
+                
+                // draw particle
+                g.fillRect( x-r, y-r, 2*r, 2*r )
+                    
                 if( grabbed ){
                     //console.log(`despawn ${i}`)
                     this.grabbedParticles.add(i)
                 } else {
                     
-                    // draw particle
-                    g.fillRect( x-r, y-r, 2*r, 2*r )
                 }
             }
         }

@@ -46,6 +46,9 @@ class EdgeParticleSubgroup{
         let vm = (1-f*dt)
         let i = 0
         
+        // update centripital foce due to body spinning
+        this.spn = this.avel*dt
+        
         // anti-normal stickiness "force" for purposes of 
         // deciding whether a particle remains stuck to edge
         let stickyAccMag = global.particleStickyForce.map(v => v*dt) 
@@ -56,10 +59,7 @@ class EdgeParticleSubgroup{
         for(let i = this.i ; i < m ; i++ ){
                 
                 // check if currently grabbed
-                if( this.group.grabbedParticles.has(i) ) continue
-        
-                // update centripital foce due to body spinning
-                this.spn = this.avel*dt
+                if( this.group.grabbedParticles.has(i) ) continue      
                 
                 // advance physics
                 let a = this.group.state[i*nd+0]
@@ -71,36 +71,44 @@ class EdgeParticleSubgroup{
                 let accAngle = acc.getAngle()
                 let accMag = acc.getMagnitude()
                 norm += this.angle
-                av += 8e-1*accMag * Math.sin(norm-accAngle)// accel particle along edge
+                av += accMag * Math.sin(norm-accAngle)// accel particle along edge
                 av *= vm // friction
                 a += av*dt
                 a = nnmod(a,circ)
                 this.group.state[i*nd+0] = a
                 this.group.state[i*nd+1] = av
-                
         
                 let grab = false
                     
                 // normal force felt by particle anchored to edge at this particle's position
                 let normAcc = -accMag * Math.cos(norm-accAngle)
 
-                // additional normal force felt by this particle sliding 
-                let centrifugalAcc = 0
+                // additional normal force felt due to sliding along edge
+                let slideCentrifugalAcc = 0 
                 
                 // check if this particle has been pulled off edge
-                if( safeRandRange(...stickyAccMag) < (normAcc + centrifugalAcc) ){
+                if( safeRandRange(...stickyAccMag) < (normAcc + slideCentrifugalAcc) ){
                     
                     // pass particle to physics group
                     grab = true
                     let pos = this.getPos(a)
                     let vel = this.getVel(a).add(vp(norm+pio2,av))
                     this.pps.spawnParticle(pos,vel)
+                    
+                // check if body is waiting to eat particle
+                } else if( this.body && (this.body.eatsQueued > 0) ){
+                    this.body.eatsQueued -= 1
+                    this.body.eatParticleFromEdge()
+                    grab = true
+                    
                 }
                 
                 // yield one particle to be grabbed/drawn
                 let ungrab = false
                 let pos = this.getPos(a)
                 let [x,y] = pos.xy()
+                
+                
                 yield [i,x,y,grab,ungrab]
         }
         

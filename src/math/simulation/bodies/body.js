@@ -11,6 +11,10 @@ class Body {
         
         this.angle = angle
         this.avel = 0
+        
+        // increment to signal physics engine
+        // call this.eatParticleFromEdge() ASAP
+        this.eatsQueued = 0
     }
     
     // called in register()
@@ -48,12 +52,10 @@ class Body {
         
         // prepare to emit particles
         // PPS = physics particle subgroup instance
-        // src/math/particle/group/physics_pgroup.js
         this.pps = sim.physicsGroup.newSubgroup()
             
         // prepare for particles sliding along edge
         // EPS = edge particle subgroup instance
-        // src/math/particle/group/physics_pgroup.js
         edge.computeEdgeShape()
         edge.pos = this.pos
         this.eps = sim.edgeGroup.newSubgroup(edge)
@@ -61,6 +63,10 @@ class Body {
         // prepare to pass particles from edge to physics
         this.eps.pps = this.pps
         this.eps.pos = this.pos
+        
+        // prepare to receive particles from edge
+        // when this.eatsQueued is 1 or more
+        this.eps.body = this.body
     }
     
     // called in particle_sim.js removeBody()
@@ -82,7 +88,16 @@ class Body {
         this.eps.spn += spn // pass momentum to particles on edge
     }
     
+    // called in edge_particle_subgroup.js
+    // when this.eatsQueued > 0
+    eatParticleFromEdge(){
+        this.sim.particlesCollected += 1
+    }
+    
     update(dt,beingControlled=false){
+        
+        //test
+        this.eatsQueued = 1
         
         let stopForce = global.bodyFriction
         let angleStopForce = global.bodyAngleFriction

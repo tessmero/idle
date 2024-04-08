@@ -108,7 +108,7 @@ function resetGame(){
     
     let lines = [
         //[v(.65,.55),v(.85,.35)],
-        [v(1-.65,.55),v(1-.85,.35)]
+        [v(1-.65,.55),v(1-.75,.35)]
     ]
     lines.forEach(l => global.mainSim.addBody(new ControlledSausageBody(global.mainSim,...l)))
     
