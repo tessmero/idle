@@ -170,6 +170,9 @@ class Body {
         if( !this.edge ) return
         this._drawDebugVectors(g, 0, twopi, a => {
             let [r,r2,d] = this.edge.lookupAngle(a-this.angle)
+            if( r == 0 ){
+                    console.log('poop')
+            }
             let p = this.pos.add(vp(a,r))
             return[ this.pos, p ]
         })
@@ -204,6 +207,7 @@ class Body {
         let n = circ*density
         g.strokeStyle = 'yellow'
         g.beginPath()
+        g.lineWidth = .002
         for( let i = 0 ; i < n ; i++ ){
             let a = avg(t0,t1,i/n)
             let [start,stop] = f(a)
@@ -211,6 +215,6 @@ class Body {
             g.lineTo(...stop.xy())
         }
         g.stroke()
-        g.strokeStyle = global.lineColor
+        g.strokeStyle = global.fgColor
     }
 }

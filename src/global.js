@@ -7,8 +7,9 @@ const global = {
     
 
     // 
-    backgroundColor: '#AAA',
-    lineColor: 'black',
+    bgColor: '#AAA',
+    fgColor: 'black',
+    hlColor: 'white',
     lineWidth: .003,
     
     // relate screen pixels to virtual 2D units

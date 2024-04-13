@@ -26,4 +26,6 @@ class ControlledSausageBody extends CompoundBody {
         
         this.dripChance = global.poiDripChance
     }
+    
+    getMainBody(){ return this.sausage }
 }

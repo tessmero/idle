@@ -29,6 +29,10 @@ class ParticleSim {
         this.draggingControlPoint = null //ControlPoint instance
     }
     
+    // callback used in main_psim.js
+    // to trigger context menu
+    bodyClicked(b){}
+    
     addBody(b){
         if( this.allBodies.length >= global.maxBodyCount ){
             return
@@ -51,6 +55,7 @@ class ParticleSim {
     // remove all bodies
     clearBodies(){
         [...this.allBodies].forEach(b => this.removeBody(b))
+        this.selectedBody = null
     }
     
     update(dt){
@@ -75,7 +80,7 @@ class ParticleSim {
         }
     }
     
-    draw(g){
+    draw(g,effects=[]){
         
         // apply translation if necessary
         // used for gui simulations
@@ -84,7 +89,7 @@ class ParticleSim {
         }
         
         resetRand()
-        g.fillStyle = global.lineColor
+        g.fillStyle = global.fgColor
         this.allBodies.forEach( p => p.draw(g) )
         this.allBodies.forEach( p => p.drawDebug(g) )
         
@@ -108,7 +113,9 @@ class ParticleSim {
             cp.draw(g,'white',true)
         }
         
-        g.fillStyle = global.lineColor
+        effects.forEach(e => e.draw(g))
+        
+        g.fillStyle = global.fgColor
         if( this.drawOffset ){
             g.translate(-this.drawOffset[0],-this.drawOffset[1])
         }

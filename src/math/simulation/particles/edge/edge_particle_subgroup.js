@@ -10,7 +10,6 @@
 //   - body outline shape (Edge instance)
 //   - body physics state (position,orientation,momentum)
 class EdgeParticleSubgroup{
-    
     // called in EdgePGroup newSubgroup()
     constructor(group,subgroupIndex,i,n,edge,pos,angle){
         this.group = group

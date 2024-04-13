@@ -5,7 +5,7 @@ class CircleTool extends Tool{
     constructor(sim){
         super(sim)
         
-        this.icon = circleToolIcon
+        this.icon = circleIcon
             
         this.tooltip = 'build circles'
         this.cursorCenter = true // tool.js

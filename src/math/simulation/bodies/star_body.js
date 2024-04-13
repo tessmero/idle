@@ -30,7 +30,7 @@ class StarBody extends Body{
         
         // draw star
         let c = this.pos
-        g.fillStyle = global.lineColor
+        g.fillStyle = global.fgColor
         g.beginPath()
         g.moveTo(...c.xy())
         for( let a = 0 ; a < twopi ; a += 1e-2 ){
@@ -45,9 +45,9 @@ class StarBody extends Body{
         if( false ){
             
             // debug pressure level
-            g.fillStyle = global.backgroundColor
+            g.fillStyle = global.bgColor
             drawText(g,...p,this.pressure.toFixed(2).toString())
-            g.fillStyle = global.lineColor
+            g.fillStyle = global.fgColor
         }
         
     }

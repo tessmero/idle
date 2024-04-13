@@ -9,6 +9,12 @@ class CompoundBody extends Body {
         this.controlPoints = []
     }
     
+    // return main Edge instance
+    // should be "edge" member of a child
+    getMainEdge(){
+        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    }
+    
     draw(g){
         this.children.forEach(c => c.draw(g) )
     }

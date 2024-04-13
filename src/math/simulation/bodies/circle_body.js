@@ -25,20 +25,11 @@ class CircleBody extends Body{
         // draw circle
         let r = this.rad
         let c = p.xy()
+        g.fillStyle = global.fgColor
         g.beginPath()
         g.moveTo(...c)
         g.arc(...c,r,0,twopi)
         g.fill()
-        
-        
-        
-        if( false ){
-            
-            // debug pressure level
-            g.fillStyle = global.backgroundColor
-            drawText(g,...p,this.pressure.toFixed(2).toString())
-            g.fillStyle = global.lineColor
-        }
         
     }
     

@@ -64,6 +64,8 @@ function intersectionAngles(x0, y0, r0, x1, y1, r1) {
     return [intersectionAngle1, intersectionAngle2];
 }
 
+// get angle in range [-pi,pi] 
+// equivalent to given angle
 function cleanAngle(a){
     a = nnmod(a,twopi)
     if( a > Math.PI ){

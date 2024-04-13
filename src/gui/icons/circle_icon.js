@@ -1,4 +1,4 @@
-class CircleToolIcon extends Icon {
+class CircleIcon extends Icon {
     constructor() {
         super([[
             ' www ',
@@ -16,5 +16,5 @@ class CircleToolIcon extends Icon {
     }
 }
 
-const circleToolIcon = new CircleToolIcon();
+const circleIcon = new CircleIcon();
 

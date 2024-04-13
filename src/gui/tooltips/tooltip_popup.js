@@ -19,7 +19,7 @@ class TooltipPopup extends CompositeGuiElement {
         let thick = global.tooltipShadowWidth
         let x = r[0]-thick
         let y = r[1]-thick
-        g.fillStyle = global.lineColor
+        g.fillStyle = global.fgColor
         g.fillRect( x,y,thick,r[3] )
         g.fillRect( x,y,r[2],thick )
         

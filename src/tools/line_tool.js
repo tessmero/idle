@@ -5,7 +5,7 @@ class LineTool extends Tool{
     constructor(sim){
         super(sim)
         
-        this.icon = lineToolIcon
+        this.icon = lineIcon
             
         this.tooltip = 'build lines'
         this.cursorCenter = true // tool.js
@@ -23,6 +23,7 @@ class LineTool extends Tool{
     return new LineToolTutorial(); 
     }
     
+    // draw overlay
     draw(g){
         if( !this.startPoint ) return
         

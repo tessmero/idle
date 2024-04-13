@@ -12,6 +12,11 @@ class Tool{
     return null; 
     }
    
+   // draw overlay
+   draw(g){
+       // do nothing
+   }
+   
     drawCursor(g,p,scale=1,enableIdleAnim=false){ 
 
         // get static cursor pixel art layout

@@ -32,6 +32,7 @@ class DefaultTool extends Tool{
     }
    
     mouseMove(p){
+        this.sim.updateControlPointHovering(p)
         this.lastPos = this.grabber.pos
         this.grabber.pos = p
     }
@@ -42,8 +43,15 @@ class DefaultTool extends Tool{
         this.held = this.sim.hoveredControlPoint
         this.sim.draggingControlPoint = this.held
         
+        // trigger callback
+        // used in main_psim.js to open context menu
+        if( this.held ){
+            this.sim.bodyClicked(this.held)
+        }
+        
         if(!this.held){
             this.held = 'catching'
+            this.sim.selectedBody = null // close context menu
         } else {
             this.held.isHeld = true
         }
@@ -62,7 +70,7 @@ class DefaultTool extends Tool{
         //stop grabbing particles
         this.sim.grabbers.delete(this.grabber)
     }
-   
+    
     drawCursor(g,p, ...args){ 
             
         if( this.held instanceof ControlPoint ){
@@ -78,14 +86,14 @@ class DefaultTool extends Tool{
             let c = v(...p)
             let r = Math.sqrt(this.grabber.r2)
             
-            g.strokeStyle = global.backgroundColor
+            g.strokeStyle = global.bgColor
             g.lineWidth = .005
             g.beginPath()
             g.moveTo(c.x+r,c.y)
             g.arc(c.x,c.y,r,0,twopi)
             g.stroke()
             
-            g.strokeStyle = global.lineColor
+            g.strokeStyle = global.fgColor
             g.lineWidth = .0025
             g.beginPath()
             g.moveTo(c.x+r,c.y)

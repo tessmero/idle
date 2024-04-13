@@ -53,7 +53,7 @@ class GuiSimPanel extends GuiElement {
         y -= .001
         g.clearRect( x-m, y, m, h )
         g.clearRect( x+w, y, m, h )
-        g.strokeStyle = global.lineColor
+        g.strokeStyle = global.fgColor
         g.lineWidth = global.lineWidth
         g.strokeRect(...this.rect)
         
@@ -64,6 +64,7 @@ class GuiSimPanel extends GuiElement {
             // draw cursor like in draw.js
             let tut = this.tut
             let tool = tut.tool
+            tool.sim = this.sim
             let p = tut.getCursorPos().xy()
             let sr = this.sim.rect
             p = [p[0]*sr[2] , p[1]*sr[3]]

@@ -14,12 +14,12 @@ function draw(fps, t) {
     if( global.mainSim.particleRadius < -lim ) global.mainSim.particleRadius = -lim
     
     // draw background
-    //ctx.fillStyle = global.backgroundColor
+    //ctx.fillStyle = global.bgColor
     ctx.clearRect( ...global.screenRect )
     
     // draw particles and pois
     resetRand()
-    ctx.fillStyle = global.lineColor
+    ctx.fillStyle = global.fgColor
     global.mainSim.draw(ctx)
     passed_offscreen_count = 0
         
@@ -39,13 +39,15 @@ function draw(fps, t) {
     // draw upgrade menu gui transition effect
     global.allGuis[GameStates.upgradeMenu].drawTransitionEffect(g) //upgrade_menu.js
     
-    // draw gui
+    // draw current gui
     ctx.lineWidth = global.lineWidth
     global.allGuis[global.gameState].draw(ctx) 
 
+    
+    if( global.contextMenu ){
+        global.contextMenu.draw(ctx)
+    }
     if( global.tooltipPopup ){
-        
-        // draw tooltip
         global.tooltipPopup.draw(ctx)
     }
 

@@ -58,18 +58,35 @@ function mouseDown(e){
     
     global.mouseDown = true
     
-    // trigger clickable gui
+    // fall through clickable elements
+    
+    // context menu 
+    // (GuiElement instance)
+    let cm = global.contextMenu
+    let clicked = false
+    if( cm ){
+        clicked = cm.click()
+        if( clicked ){
+            //console.log('clicked context menu')
+            return
+        }
+    }
+    
+    // current gui 
+    // (Gui instance) (game_states.js)
     let gui = global.allGuis[global.gameState]
-    let clickedGui = gui.click()
-    if( clickedGui ){
+    clicked = gui.click()
+    if( clicked ){
         //console.log('clicked fg gui')
         return
     }
+    
+    // hud gui in background of current gui
     if( gui.hasHudInBackground ){
         let hud = global.allGuis[GameStates.playing]
-        clickedGui = hud.click()
+        clicked = hud.click()
     }
-    if( clickedGui ){
+    if( clicked ){
         //console.log('clicked bg hud gui')
         return
     }
@@ -78,10 +95,11 @@ function mouseDown(e){
     // close the upgrades menu if it is open 
     if( global.gameState==GameStates.upgradeMenu ) toggleStats()
     
-    // or trigger selected tool
+    // may click simulation with selected tool
     global.toolList[global.selectedToolIndex].mouseDown(global.mousePos)
     
 }
+
 function mouseUp(e){
     global.mainSim.draggingControlPoint = null
     global.mouseDownDisabled = false

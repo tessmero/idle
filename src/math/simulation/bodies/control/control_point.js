@@ -27,7 +27,7 @@ class ControlPoint extends Body {
     }
     
     static _draw(g,pos,rad,color=null,forceDraw=false){
-        if( !color ) color=global.lineColor
+        if( !color ) color=global.fgColor
         
         let c = pos.xy()
         

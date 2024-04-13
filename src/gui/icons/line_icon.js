@@ -1,4 +1,4 @@
-class LineToolIcon extends Icon {
+class LineIcon extends Icon {
     constructor() {
         super([[
             '     ',
@@ -16,5 +16,5 @@ class LineToolIcon extends Icon {
     }
 }
 
-const lineToolIcon = new LineToolIcon();
+const lineIcon = new LineIcon();
 

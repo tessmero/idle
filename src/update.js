@@ -1,6 +1,7 @@
 
 
-function update(dt) {    
+function update(dt) {  
+    let sim = global.mainSim  
     
     // check for resized window
     fitToContainer()    
@@ -13,9 +14,9 @@ function update(dt) {
     // advance start menu idle background animation
     if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) 
                     && (global.gameState==GameStates.startMenu) 
-                    && (global.mainSim.allBodies.size > 1) ){
+                    && (sim.allBodies.size > 1) ){
             
-        let bodies =  Array.from(global.mainSim.allBodies)
+        let bodies =  Array.from(sim.allBodies)
         
         // move circle
         if( true ){
@@ -42,31 +43,51 @@ function update(dt) {
         }
     }
     
+    // delete popups, knowing that any persistent 
+    // popups will be reinstated below
+    global.contextMenu = null
+    global.tooltipPopup = null
     
-    // update persistent tooltip if necessary
+    // update context menu 
+    if( sim.selectedBody ){
+       let bod = sim.selectedBody
+       let rect = [...sim.rect]
+       let topMargin = .1
+       let bottomMargin = .1
+       let sideMargin = .1
+       rect[1] += topMargin
+       rect[3] -= (topMargin+bottomMargin)
+       rect[0] += sideMargin
+       rect[2] -= 2*sideMargin
+       let cmr = ContextMenu.pickRects(rect,bod.pos)
+       global.contextMenu = new BodyContextMenu(...cmr,bod)
+    }
+    
+    // update main gui
+    if( global.allGuis[global.gameState].hasHudInBackground ){
+        global.allGuis[GameStates.playing].update(dt)
+    }
+    global.allGuis[global.gameState].update(dt) 
+    
+    
+    // update popups just in case they are persistent
+    if( global.contextMenu ){
+        global.contextMenu.update(dt)
+    }
     if( global.tooltipPopup ){
         global.tooltipPopup.update(dt)
     }
-    
-    // update gui hovering status and set tooltip
-    global.tooltipPopup = null
-    if( global.allGuis[global.gameState].hasHudInBackground ){
-        global.allGuis[GameStates.playing].update(dt) // hud may set global.tooltipPopup
-    }
-    global.allGuis[global.gameState].update(dt) // gui in front may set global.tooltipPopup
-    
-    global.mainSim.updateControlPointHovering(global.mousePos)
     
     //// stop if game is paused
     if( global.gameState==GameStates.pauseMenu ) return
     
     global.t += dt
-    global.mainSim.update(dt)
+    sim.update(dt)
     
     // trigger passive tool behavior
     global.toolList[global.selectedToolIndex].update(dt)
     
-    // upgrades menu transtiino effect
+    // upgrades menu transition effect (upgrade_menu.js)
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)
     
 }

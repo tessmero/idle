@@ -16,5 +16,5 @@ class ControlledCircleBody extends CompoundBody {
         this.controlPoints = [cp]
     }
     
-    getPos(){ return this.circle.getPos() }
+    getMainBody(){ return this.circle }
 }

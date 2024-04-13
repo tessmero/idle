@@ -36,6 +36,7 @@ function showWebsiteOverlays(){
 // toggle the stats / upgrades menu overlay
 function toggleStats(){
     if( global.gameState != GameStates.upgradeMenu ){
+        global.mainSim.selectedBody = null // close context menu
         setState( GameStates.upgradeMenu )
     } else {
         setState( GameStates.playing )

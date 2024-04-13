@@ -55,7 +55,14 @@ class UpgradeMenu extends Gui {
         tabGroup.addTabChangeListener( i => 
             global.upgradeMenuTabIndex = i )
         
-        return [tabGroup]
+        w = .05
+        let topRight = [r0[0]+r0[2]-w-.02,r0[1]+.05,w,w]
+        let closeButton = new IconButton(topRight,xIcon,toggleStats)
+                    .withScale(.5)
+                    .withTooltip('close upgrades menu')
+        tabGroup.children.splice(0,0,closeButton)
+        
+        return [closeButton,tabGroup]
         
     }
     

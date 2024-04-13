@@ -99,11 +99,7 @@ class Hud extends Gui {
                 button.withTooltip(tooltip) 
             }
             
-            
-            
-            result.push(
-                button
-            )
+            result.push(button)
         }
         
         return result

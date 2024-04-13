@@ -20,4 +20,6 @@ class ControlledStarBody extends CompoundBody {
         
         this.dripChance = global.poiDripChance
     }
+    
+    getMainBody(){ return this.star }
 }
