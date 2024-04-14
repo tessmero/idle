@@ -66,7 +66,6 @@ class ContextMenu extends CompositeGuiElement{
                 // poi is obstructed, so slide to target
                 let targetSide = side
                 side = _lastContextMenuSide
-                console.log(side,targetSide)
                 let dt = global.t - _lastContextMenuTime
                 let ds = 1e-2*dt
                 if( _lastContextMenuSide < targetSide ){

@@ -42,7 +42,7 @@ const global = {
     t: 0, // total ellapsed time
     maxBodyCount: 10,
     toolList: [], //list of Tool instances
-    floaters: [], //list of Floater instances
+    floaters: [], //list of Floater instances to draw on top of gui
    
     // debug
     debugUiRects:       false,
@@ -58,8 +58,8 @@ const global = {
     controlPointVisibleHoverRadius: .2,
    
     // game advancement
-    upgradeTracks: new UpgradeTracks(),
-    skillTree: new SkillTree(),
+    upgradeTracks: null,//new UpgradeTracks(),
+    skillTree: null,//new SkillTree(),
     mainSim: null, //ParticleSim instance (setup.js)
     
     //

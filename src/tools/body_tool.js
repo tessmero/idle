@@ -28,7 +28,7 @@ class BodyTool extends Tool{
             let cost = this.getCost()
             this.sim.particlesCollected -= cost
             let fp = p.add(v(...this.sim.drawOffset))
-            global.floaters.push( new Floater(fp,`-${cost}`))
+            Floater.signalChange(this.sim,p,-cost)
         
             // add body
             let poi = this.buildBody(p)

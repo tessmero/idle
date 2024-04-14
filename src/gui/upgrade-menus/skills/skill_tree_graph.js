@@ -8,6 +8,8 @@ class SkillTreeGraph extends GuiElement {
     
     
     draw(g){
+        if(!this.tree) return
+        
         g.beginPath()
         let specs = this.tree.state
         for (const [key,entry] of Object.entries(specs)) {

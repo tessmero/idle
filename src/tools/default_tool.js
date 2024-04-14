@@ -4,6 +4,7 @@ class DefaultTool extends Tool{
     
     constructor(sim,rad){
         super(sim)
+        this.rad = rad
         
         this.icon = defaultToolIcon
             
@@ -37,8 +38,8 @@ class DefaultTool extends Tool{
         sim.particlesCollected += 1
         
         // show message
-        let p = v(x,y).add(v(...sim.drawOffset))
-        global.floaters.push( new Floater(p,'+1'))
+        let p = v(x,y)//.add(v(...sim.drawOffset))
+        Floater.signalChange(sim,p,+1)
     }
    
     mouseMove(p){
@@ -122,6 +123,10 @@ class DefaultTool extends Tool{
     }
     
     update(dt){
+        
+        let r = this.rad
+        this.grabber.rad = r
+        this.grabber.r2 = r
         
         if( this.held instanceof ControlPoint ){
         

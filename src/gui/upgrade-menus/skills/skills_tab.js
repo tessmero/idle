@@ -3,6 +3,7 @@ class SkillsTab extends CompositeGuiElement {
         super(sr)
     
         let tree = global.skillTree
+        if( !tree ) return
         
         let result = [new SkillTreeGraph(sr,tree)]
         let w = .1

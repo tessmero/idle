@@ -40,7 +40,7 @@ function init() {
     quit()
     
     //////////////////////////////////////////
-    // unit tests 20240408
+    // unit tests 20240414
     if( false ){
         
         // start sim unit tests
@@ -52,7 +52,9 @@ function init() {
             console.assert( sim.allBodies.size == 0 )
             console.assert( sim.grabbers.size == 0 )
             console.assert( sim.edgeGroup.subgroups.size == 0 )
-            console.assert( sim.physicsGroup.subgroups.size == 0 )
+            
+            // expect one leftover group
+            console.assert( sim.physicsGroup.subgroups.size == 1 )
         }
         sim.clearBodies()
         assertClear()
@@ -67,6 +69,7 @@ function init() {
         }
         check(new CircleBody(sim,v(.5,.5),.1))
         check(new ControlledCircleBody(sim,v(.5,.5),.1))
+        check(new CollectorCircleBody(sim,v(.5,.5),.1))
         check(new SausageBody(sim,v(.5,.5),v(.3,.3)))
         check(new ControlledSausageBody(sim,v(.5,.5),v(.3,.3)))
         check(new StarBody(sim,v(.5,.5),5,.05,.1))
@@ -86,19 +89,25 @@ function resetGame(){
     // init start menu background sim
     global.t = 0
     global.mainSim.particlesCollected = 0
-    global.mainSim.rainGroup.n = 2000
+    
     
     global.activeReleasePatterns = []
     
     global.startMenuTargetPos = v(.5,.5)
     global.mainSim.clearBodies()
-    
+
     let s = global.mainSim
     global.toolList = [
         new DefaultTool(s,global.mouseGrabRadius),
         new CircleTool(s),
         new LineTool(s),
     ]
+    
+    // reset progression
+    global.upgradeTracks = new UpgradeTracks()
+    global.skillTree = new SkillTree()
+    updateAllBonuses()
+    global.mainSim.rainGroup.n = 2000
     
     let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
     global.mainSim.addBody(poi)

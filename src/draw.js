@@ -21,18 +21,7 @@ function draw(fps, t) {
     resetRand()
     ctx.fillStyle = global.fgColor
     global.mainSim.draw(ctx)
-    passed_offscreen_count = 0
-    
-    // draw floaters
-    global.floaters.forEach( f => f.draw(g) )
         
-        
-    // given the total number of released particles 
-    // that just passed off-screen,
-    // add to ongoing rain
-    //for( let i = 0 ; i < passed_offscreen_count ; i++ )
-    //    global.grabbedParticles.add(global.nParticles+i)
-    //global.nParticles += passed_offscreen_count
     
     // draw hud gui in background
     if( global.allGuis[global.gameState].hasHudInBackground ){
@@ -64,6 +53,9 @@ function draw(fps, t) {
     if( tool.draw ){
         tool.draw(ctx)
     }
+    
+    // draw gui floaters (as apposed to floaters in sims)
+    global.floaters.forEach( f => f.draw(g) )
 
     // debug draw mouse
     if( false ){

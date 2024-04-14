@@ -20,8 +20,9 @@ class BodyContextMenu extends ContextMenu {
                     .withScale(.5)
                     .withTooltip('close menu'),
                     
-            new IconButton(padRect(...s1,-.08),trashIcon,()=>this.deleteBody())
+            new IconButton(padRect(...s1,-.1),trashIcon,()=>this.deleteBody())
                     .withTooltip(`delete ${body.title}\n(no refunds)`)
+                    .withScale(.8)
         ]
     }
     
@@ -41,7 +42,7 @@ class BodyContextMenu extends ContextMenu {
         super.draw(g)
         
         //debug
-        g.strokeRect(...this.square0)
+        //g.strokeRect(...this.square0)
         
         //draw reticle effect around body
         g.fillStyle = global.hlColor
@@ -52,12 +53,12 @@ class BodyContextMenu extends ContextMenu {
         let guiScale = .5 
         let center = bod.pos.sub(v(s/2,s/2))
         let space = 2e-2
-        space += 1e-2*Math.sin(global.t/1e3) // in-out anim
-        let cdo = Math.sin(global.t/1e3) // sanim
+        let animAng = global.t/1e3
+        space += 1e-2*Math.cos(animAng) // in-out anim
+        let cdo = 1e-1*Math.sin(animAng/2) // slide anim
         
         for( let i = 0 ; i < n ; i++ ){
-            let cd = i*edge.circ/n
-            // side to side animtation offset
+            let cd = cdo + i*edge.circ/n
             let [a,r,norm,r2] = bod.edge.lookupDist(cd)
             a += bod.angle
             norm += bod.angle

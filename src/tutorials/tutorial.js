@@ -10,7 +10,7 @@ class Tutorial {
         this.keyframes = kf
         this.t = 0
         
-        let grabRad = global.mouseGrabRadius * global.tutorialToolScale
+        let grabRad = .001
         let t = new DefaultTool(null,grabRad)
         this.defaultTool = t
         this.primaryTool = t

@@ -26,5 +26,12 @@ class Floater{
         drawText(g, ...p, label, center, 0, scale, false)
     }
     
-    
+    static signalChange(sim,pos,amt){
+        if( !amt ) return
+        let label = Math.round(amt).toString()
+        if( amt>0 ) label = ('+'+label)
+        let floaters = global.floaters
+        if( sim ) floaters = sim.floaters
+        floaters.push( new Floater(pos,label))
+    }
 }

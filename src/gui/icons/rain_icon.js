@@ -9,6 +9,7 @@ class RainIcon extends Icon{
             'W   W',
             '  W  ',
             'W   W',
+            '     ',
         ],[
             '     ',
             '  W  ',
@@ -16,6 +17,7 @@ class RainIcon extends Icon{
             '  W  ',
             'W   W',
             '  W  ',
+            '     ',
         ]
     ]) }
 }

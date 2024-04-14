@@ -93,7 +93,7 @@ function update(dt) {
     // upgrades menu transition effect (upgrade_menu.js)
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)
     
-    // floaters
+    // gui floaters 
     global.floaters = global.floaters.filter(f => f.update(dt))
 }
 
