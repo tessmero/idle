@@ -16,7 +16,7 @@ class TextLabel extends GuiElement {
     static pad(){ return .005 }
     static letterPixelPad(){ return .005 }
         
-    // set optional style 'tooltip' or 'hud'
+    // set optional style 'tooltip', 'hud', 'tiny'
     withStyle(s){
         this.style = s
         return this
@@ -63,6 +63,11 @@ class TextLabel extends GuiElement {
             
             // draw extra readable for hud
             drawText(g, ...p, label, this.center, this.letterPixelPad, this.scale, true)
+            drawText(g, ...p, label, this.center, 0, this.scale, false)
+            
+        } else if( this.style == 'tiny' ){
+            
+            // should draw tiny 3x5 pixel font simple black text
             drawText(g, ...p, label, this.center, 0, this.scale, false)
             
         } else {

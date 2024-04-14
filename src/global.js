@@ -41,9 +41,7 @@ const global = {
     selectedToolIndex: 0,
     t: 0, // total ellapsed time
     maxBodyCount: 10,
-    upgradeTracks: new UpgradeTracks(),
-    skillTree: new SkillTree(),
-    toolList: [], //list of [Tool,Tutorial] instances
+    toolList: [], //list of Tool instances
    
     // debug
     debugUiRects:       false,
@@ -59,10 +57,10 @@ const global = {
     controlPointVisibleHoverRadius: .2,
    
     // game advancement
-    particlesCollected: 0,
-    particlesRequiredToStart: -1, //
-    activeReleasePatterns: [], //list of ReleasePattern instances
+    upgradeTracks: new UpgradeTracks(),
+    skillTree: new SkillTree(),
     mainSim: null, //ParticleSim instance (setup.js)
+    
     //
     poiStartArea: 1e-2, // free area for new poi
     

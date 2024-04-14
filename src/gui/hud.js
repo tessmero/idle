@@ -77,7 +77,7 @@ class Hud extends Gui {
         for( let i = 0 ; i < toolList.length ; i++ ){
             
             let tool = toolList[i]
-            let button = new ToolbarButton(slots[i],tool.icon,i)
+            let button = new ToolbarButton(slots[i],tool,i)
             
             
             let tooltip = tool.tooltip // tooltip string
@@ -88,8 +88,8 @@ class Hud extends Gui {
                 
                 // build tooltip with string label and tutorial sim
                 button.withDynamicTooltip(() =>{
-                    let rect = TutorialTooltipPopup.pickRect(tooltip)
-                    return new TutorialTooltipPopup(rect,tooltip,tut)
+                    let rect = ToolbarTooltipPopup.pickRect(tooltip)
+                    return new ToolbarTooltipPopup(rect,tooltip,tut,tool)
                 })
                 
             } else {

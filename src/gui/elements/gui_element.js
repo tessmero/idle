@@ -25,14 +25,29 @@ class GuiElement {
         return this
     }
 
+    
+    // override normal tooltip 
+    // until user stops hovering
+    setTemporaryTooltip(s){
+        this.tempTooltip = s
+        this.tempTooltipEndTime = global.t+1000 // millisecs
+    }
+    
     update(){
         
         // check if mouse is in this element's rectangle
         this.hovered = (this.hoverable && vInRect(global.mousePos,...this.rect))
         
+        // reset temporary tooltip if necessary
+        if( !this.hovered || (global.t>this.tempTooltipEndTime) ) this.tempTooltip = null
+        
         // check if a tooltip should be shown
-        if( this.hovered && (this.tooltipFunc || this.tooltip) ){
-            if( this.tooltipFunc ) this.tooltip = this.tooltipFunc()
+        if( this.hovered && (this.tempTooltip || this.tooltipFunc || this.tooltip) ){
+            if( this.tempTooltip ) { 
+                this.tooltip = this.tempTooltip
+            } else if( this.tooltipFunc ) { 
+                this.tooltip = this.tooltipFunc()
+            }
             
             if( this.tooltip instanceof TooltipPopup ) {
                 global.tooltipPopup = this.tooltip

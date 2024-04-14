@@ -6,11 +6,6 @@ class TooltipPopup extends CompositeGuiElement {
         super(rect)
     }
     
-    // override GuiElement (disable hover behavior)
-    update(){
-        //do nothing
-    }
-    
     draw(g){
         let r = this.rect
         

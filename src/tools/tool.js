@@ -7,6 +7,17 @@ class Tool{
        this.sim = sim
    }
    
+   isUsable(){
+        let cost = this.getCost()
+        let budget = this.sim.particlesCollected
+        return budget >= cost
+   }
+   
+   // return number of raindrops
+   getCost(){
+       return 0
+   }
+   
    // return Tutorial instance
    getTutorial(){ 
     return null; 

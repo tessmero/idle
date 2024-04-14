@@ -10,6 +10,6 @@ class ValueCurve {
     )}
         
     static power(start,scale){ return new ValueCurve(
-        i => start * Math.pow(i,scale)
+        i => start * Math.pow(scale,i)
     ) }
 }

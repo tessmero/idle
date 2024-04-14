@@ -8,6 +8,10 @@ class StarBody extends Body{
         this.maxRad = maxRad
         
         this.dripChance = global.poiDripChance
+        
+        //
+        this.title = 'star'
+        this.icon = starIcon
     }
     
     update(dt,...p){

@@ -23,6 +23,7 @@ class StatReadout extends DynamicTextLabel {
         let xy = [this.rect[0]+this.pad,this.rect[1]+this.pad+this.scale*tps]
         let ch = charHeight
         
+        if( !this.icon ) return
         let layout = this.icon.getCurrentAnimatedLayout()
         
         drawLayout(g,xy[0],xy[1],layout,false,this.pad,this.scale,true) //character.js

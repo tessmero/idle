@@ -13,6 +13,10 @@ class SausageBody extends Body {
         this.angle = d.getAngle()
         
         this.dripChance = global.poiDripChance
+        
+        //
+        this.title = 'line'
+        this.icon = lineIcon
     }
     
     buildEdge(){

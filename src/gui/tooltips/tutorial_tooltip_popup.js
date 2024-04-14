@@ -13,7 +13,7 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
         let pad = global.tooltipPadding
         let sdims = global.tutorialSimDims
         let x = rect[0] + (rect[2]/2) - (sdims[0]/2)
-        let y = -.02 + rect[1]+rect[3] - pad - sdims[1]
+        let y = rect[1] + .1
         let r = [x,y,...sdims]
         
         // ParticleSim instance
@@ -26,11 +26,6 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
         gsp.tut = tut
         this.children.push( gsp )
         this.gsp = gsp
-    }
-    
-    // override tooltip
-    update(dt){
-        this.gsp.update(dt)
     }
     
     

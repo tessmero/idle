@@ -7,6 +7,10 @@ class CircleBody extends Body{
         this.md2 = rad*rad
         
         this.dripChance = global.poiDripChance
+        
+        //
+        this.title = 'circle'
+        this.icon = circleIcon
     }
     
     buildEdge(){

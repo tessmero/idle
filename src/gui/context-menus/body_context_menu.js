@@ -5,17 +5,17 @@ class BodyContextMenu extends ContextMenu {
         super(rect,s0,s1)
         
         this.body = body // Body instance to focus
+        if( !body.expLevel ) body.expLevel = 1
+        if( !body.title ) body.title = 'body'
+        if( !body.icon ) body.icon = circleIcon
         
         let w = .05
         let topRight = [rect[0]+rect[2]-w,rect[1],w,w]
         
         this.children = [
-            new StatReadout(s0,circleIcon,()=>'circle')
-                    .withScale(.5)
-                    .withCenter(false),
-            new StatReadout(s1,collectedIcon,()=>'circle')
-                    .withScale(.5)
-                    .withCenter(false),
+                    
+            new StatReadout(s0,body.icon,()=>body.title,()=>0.5),
+                    
             new IconButton(topRight,xIcon,()=>this.closeBodyContextMenu())
                     .withScale(.5)
                     .withTooltip('close menu'),

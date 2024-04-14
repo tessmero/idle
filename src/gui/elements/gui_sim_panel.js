@@ -4,6 +4,11 @@ class GuiSimPanel extends GuiElement {
     constructor(rect,sim){
         super(rect)
         this.sim = sim
+        
+        // prices shouldn't matter 
+        // for whatever happens in the sim
+        // set currency to big number
+        this.sim.particlesCollected = 1e100
     }
     
     update(dt){

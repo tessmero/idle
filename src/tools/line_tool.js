@@ -19,6 +19,16 @@ class LineTool extends Tool{
         this.maxD2 = 1 // max length squared
     }
    
+   getCost(){
+       
+       // count previously built circles
+       let bods = global.mainSim.allBodies
+       let lines = [...bods].filter(b => b instanceof ControlledSausageBody)
+       let count = lines.length
+       
+       return ValueCurve.power(500,10).f(count)
+   }
+   
    getTutorial(){ 
     return new LineToolTutorial(); 
     }
