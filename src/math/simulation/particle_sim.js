@@ -1,13 +1,18 @@
 class ParticleSim {
     
-    constructor(n,rect){
+    constructor(n,rect,drawOffset=[0,0]){
         this.t = 0
         this.rect = rect
+        this.drawOffset = [0,0]
         
         // particles
         this.rainGroup = new ProceduralPGroup(this,n)
         this.physicsGroup = new PhysicsPGroup(this,n)
         this.edgeGroup = new EdgePGroup(this,n)
+        
+        // prepare extra subgroup for various leftover physics particles
+        // e.g. particles emitted by body, then body was deleted
+        this.leftoverPPS = this.physicsGroup.newSubgroup() 
         
         this.grabbers = new Set() // Grabber instances
         this.allBodies = new Set() // Body instances
@@ -80,13 +85,8 @@ class ParticleSim {
         }
     }
     
-    draw(g,effects=[]){
-        
-        // apply translation if necessary
-        // used for gui simulations
-        if( this.drawOffset ){
-            g.translate(...this.drawOffset)
-        }
+    draw(g){
+        g.translate(...this.drawOffset)
         
         resetRand()
         g.fillStyle = global.fgColor
@@ -113,11 +113,8 @@ class ParticleSim {
             cp.draw(g,'white',true)
         }
         
-        effects.forEach(e => e.draw(g))
-        
         g.fillStyle = global.fgColor
-        if( this.drawOffset ){
-            g.translate(-this.drawOffset[0],-this.drawOffset[1])
-        }
+        
+        g.translate(-this.drawOffset[0],-this.drawOffset[1])
     }
 }

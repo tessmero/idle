@@ -34,7 +34,10 @@ class CompoundBody extends Body {
     }
     
     register(sim){
-        this.children.forEach(c => c.register(sim) )
+        this.children.forEach(c => {
+            c.parent = this
+            c.register(sim) 
+        })
     }
     
     unregister(sim){

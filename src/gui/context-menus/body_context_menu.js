@@ -1,5 +1,5 @@
 // context menu (and reticle effect) 
-// that appears when a body is clicked
+// that appears when a body is clicked 
 class BodyContextMenu extends ContextMenu {
     constructor(rect,s0,s1,body){
         super(rect,s0,s1)
@@ -19,7 +19,17 @@ class BodyContextMenu extends ContextMenu {
             new IconButton(topRight,xIcon,()=>this.closeBodyContextMenu())
                     .withScale(.5)
                     .withTooltip('close menu'),
+                    
+            new IconButton(padRect(...s1,-.08),trashIcon,()=>this.deleteBody())
+                    .withTooltip(`delete ${body.title}\n(no refunds)`)
         ]
+    }
+    
+    deleteBody(){
+        let b = this.body
+        while( b.parent ) b = b.parent// got top parent
+        global.mainSim.removeBody(b)
+        this.closeBodyContextMenu()
     }
     
     closeBodyContextMenu(){
@@ -30,39 +40,31 @@ class BodyContextMenu extends ContextMenu {
     draw(g){
         super.draw(g)
         
+        //debug
+        g.strokeRect(...this.square0)
+        
         //draw reticle effect around body
-        g.fillStyle = 'white'
-        g.strokeStyle = global.fgColor
-        let n = 5
-        let space = .1
+        g.fillStyle = global.hlColor
         let bod = this.body
-        let center = bod.pos
-        let ao = 0//global.t/1e3 // spinning animation angle
-        let ta = .5 // tip shape angle
-        let tl = .03 // tip length
-        let fill = [false,true] 
+        let edge = bod.edge
+        let n = Math.floor(edge.circ*50)
+        let s = 1e-2 // square size
+        let guiScale = .5 
+        let center = bod.pos.sub(v(s/2,s/2))
+        let space = 2e-2
+        space += 1e-2*Math.sin(global.t/1e3) // in-out anim
+        let cdo = Math.sin(global.t/1e3) // sanim
+        
         for( let i = 0 ; i < n ; i++ ){
-            let a = ao + i*twopi/n
-            let r = space + bod.edge.lookupAngle(a-bod.angle)[0]
-            let tip = center.add(vp(a,r))
-            let left = tip.add(vp(a+ta,tl))
-            let right = tip.add(vp(a-ta,tl))
-            fill.forEach( f => this.drawArrow(g,tip,left,right,f) )
+            let cd = i*edge.circ/n
+            // side to side animtation offset
+            let [a,r,norm,r2] = bod.edge.lookupDist(cd)
+            a += bod.angle
+            norm += bod.angle
+            let p = center.add(vp(a,r).add(vp(norm,space)))
+            g.fillRect(...p.xy(),s,s)
         }
         
         g.fillStyle = global.fgColor
-    }
-    
-    drawArrow(g,a,b,c,fill){
-        g.beginPath()
-        g.moveTo(...a.xy())
-        g.lineTo(...b.xy())
-        g.lineTo(...c.xy())
-        g.closePath()
-        if( fill ){
-            g.fill()
-        } else {
-            g.stroke()
-        }
     }
 }

@@ -1,26 +1,32 @@
-// progress bar with optional icon and text
-class ProgressIndicator extends StatReadout {
+// progress bar
+class ProgressIndicator extends GuiElement {
     
-    constructor(rect,icon,labelFunc,valueFunc){
-        super(rect,icon,labelFunc)
+    // valueFunc returns a number 
+    // will be truncated to range [0,1]
+    constructor(rect,valueFunc){
+        super(rect)
         this.valueFunc = valueFunc
         
         this.scale = ProgressIndicator.scale()
-        this.fixedRect = true 
-        this.center = true
+        this.outline = true
+    }
+    
+    withOutline(o){
+        this.outline = o
+        return this
     }
     
     static scale(){ return .5 }
     
     // implement GuiElement
     draw(g){
-        super.draw(g)
         
-        // draw outline
         let r = this.rect
-        g.lineWidth = global.lineWidth
-        g.fillStyle = global.fgColor
-        g.strokeRect(...r)
+        if( this.outline ){
+            g.lineWidth = global.lineWidth
+            g.fillStyle = global.fgColor
+            g.strokeRect(...r)
+        }
         
         //[0,1]
         let progress = this.valueFunc()

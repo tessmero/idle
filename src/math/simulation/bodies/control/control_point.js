@@ -2,11 +2,11 @@
 // to move or rotate another body
 class ControlPoint extends Body {
     
-    // parent is a body that this will be anchored to
-    constructor(sim,parent){
+    // anchoredTo is a body that this will be anchored to
+    constructor(sim,anchoredTo){
         super(sim)
-        this.parent = parent
-        this.pos = parent.pos
+        this.anchoredTo = anchoredTo
+        this.pos = anchoredTo.pos
         this.setRad(this.sim.controlPointRadius)
         this.visible = true
         this.fscale = 1
@@ -60,12 +60,12 @@ class ControlPoint extends Body {
     
     // pass user input "force" to physics-enabled parent body
     accel(acc){
-        this.parent.accel(acc.mul(this.fscale))
+        this.anchoredTo.accel(acc.mul(this.fscale))
     }
     
     // remain stuck to parent
     update(dt){
-        this.pos = this.parent.pos
+        this.pos = this.anchoredTo.pos
     }
     
     // no direct interaction with particles

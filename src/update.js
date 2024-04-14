@@ -49,7 +49,10 @@ function update(dt) {
     global.tooltipPopup = null
     
     // update context menu 
-    if( sim.selectedBody ){
+    if( global.gameState!=GameStates.playing ){
+        sim.selectedBody = null
+        global.contextMenu = null
+    } else if( sim.selectedBody ){
        let bod = sim.selectedBody
        let rect = [...sim.rect]
        let topMargin = .1
@@ -90,6 +93,8 @@ function update(dt) {
     // upgrades menu transition effect (upgrade_menu.js)
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)
     
+    // floaters
+    global.floaters = global.floaters.filter(f => f.update(dt))
 }
 
 var lastCanvasOffsetWidth = -1;

@@ -6,12 +6,18 @@ class DynamicTextLabel extends TextLabel {
         this.labelFunc = labelFunc
     }
     
+    withAutoAdjustRect(a){
+        this.autoAdjustRect = a
+        return this
+    }
+
+    
     draw(g){
         
         // get updated label
         this.label = this.labelFunc()
         
-        if( !this.fixedRect ){
+        if( this.autoAdjustRect ){
             // update bounding rectangle to fit label
             let [w,h] = getTextDims(this.label, this.scale)
             this.rect[2] = w+this.pad*2

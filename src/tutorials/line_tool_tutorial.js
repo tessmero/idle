@@ -5,8 +5,7 @@ class LineToolTutorial extends Tutorial {
         super()
         
         let t = new LineTool()
-        t.circleRadius *= global.tutorialToolScale
-        t.minD2 = 0
+        t.lineLength *= global.tutorialToolScale
         
         this.primaryTool = t
         this.tool = t
@@ -28,25 +27,21 @@ class LineToolTutorial extends Tutorial {
             [0,'pos',startPos],
             [1,'primaryTool'],
             
-            [1*i,'pos',v(.3,.5)],
+            [1*i,'pos',v(.5,.5)],
             [1*i,'down'],
-            [3*i,'pos',v(.7,.5)],
-            [3.5*i,'pos',v(.7,.4)],
-            [4*i,'up'],
-            [4*i,'defaultTool'],
+            [1*i,'up'],
+            [1*i,'defaultTool'],
             [4*i,'pos',v(.7,.4)],
+            [4.5*i,'pos',v(.7,.4)],
             
-            [5*i,'pos',startPos],
-            [5.5*i,'pos',startPos],
+            [5.5*i,'pos',v(.4,.4)],  // on control point
+            [6*i,'pos',v(.4,.4)],
+            [6*i,'down'],
+            [7*i,'pos',v(.4,.8)],
+            [7*i,'up'],
             
-            
-            [6.5*i,'pos',v(.7,.4)],
-            [6.5*i,'down'],
-            [8*i,'pos',v(.6,.8)],
-            [8*i,'up'],
-            
+            [8*i,'pos',startPos],
             [9*i,'pos',startPos],
-            [12*i,'pos',startPos],
             
         ]
     }

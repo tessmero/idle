@@ -6,7 +6,9 @@ class Gui extends CompositeGuiElement{
     }
     
     // build list of GuiElement instances
-    buildElements(){ throw new Error('not implemented') }
+    buildElements(){ 
+        throw new Error(`Method not implemented in ${this.constructor.name}.`)
+    }
     
     // hooks called in game_states.js
     open(){}

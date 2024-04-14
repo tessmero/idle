@@ -15,7 +15,7 @@ class StarBody extends Body{
     }
     
     update(dt,...p){
-        this.spin(1e-6*dt) 
+        this.spin(-1e-6*dt) 
         return super.update(dt,...p)
     }
     

@@ -48,7 +48,11 @@ class StartMenu extends Gui {
         
         return [
             ...this.labels,
-            new TextButton(padRect(...slots[7],.03),'PLAY',play),  //game_state.js
+            new TextButton(padRect(...slots[7],.03),'PLAY',()=>this.playClicked()),  //game_state.js
         ]
+    }
+    
+    playClicked(){
+        play()
     }
 }

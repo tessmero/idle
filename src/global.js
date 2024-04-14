@@ -42,6 +42,7 @@ const global = {
     t: 0, // total ellapsed time
     maxBodyCount: 10,
     toolList: [], //list of Tool instances
+    floaters: [], //list of Floater instances
    
     // debug
     debugUiRects:       false,

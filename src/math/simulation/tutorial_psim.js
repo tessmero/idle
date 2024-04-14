@@ -21,9 +21,9 @@ class TutorialPSim extends ParticleSim {
             
             if( b instanceof ControlledSausageBody ){
                 c.setRad(c.rad*global.tutorialToolScale)
-                c.fscale *= .5
+                //c.fscale *= .5
             } else {
-                c.fscale *= .4
+                c.fscale *= .6
             }
         })
         

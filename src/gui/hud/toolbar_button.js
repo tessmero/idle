@@ -22,16 +22,42 @@ class ToolbarButton extends CompositeGuiElement {
             let h = r[3]/4
             r = [r[0],r[1]+r[3]-h,r[2],h]
             r = padRect(...r, -.004)
-            let pi = new ProgressIndicator(r,null,
-                ()=>'',//tool.getCost(),
+            let pi = new ProgressIndicator(r,
                 ()=>global.mainSim.particlesCollected/tool.getCost())
                 .withScale(.2)
-                .withStyle('tiny')
             this.children.push(pi)
         }
+        
+        
+        // prepare to detect when an 
+        // unusable tool becomes usable
+        this.wasUsable = this.tool.isUsable()
     }
     
     update(){
+        
+        // check if tool just became usable
+        let usable = this.tool.isUsable()
+        if( (!this.wasUsable) && (usable) ){
+            
+            // emmit particles
+            let pps = global.mainSim.leftoverPPS
+            let mis = safeRandRange(1e-5,2e-5)
+            let mas = safeRandRange(1e-4,2e-4)
+            let center = v(...rectCenter(...this.rect))
+            let ap = 1
+            for( let i = 0 ; i < 100 ; i++ ){
+                let v = vp(safeRandRange(-pio2-ap,-pio2+ap),randRange(mis,mas))
+                v.y*=3
+                pps.spawnParticle(center,v)
+            }
+            
+            // show message
+            global.floaters.push( new Floater(center,'available'))
+            
+        }
+        this.wasUsable = usable
+        
         //this.button.hoverable = this.tool.isUsable()
         super.update()
     }

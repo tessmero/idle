@@ -18,7 +18,7 @@ class DefaultTool extends Tool{
         // prepare grabber instance that will be 
         // added/removed from global.grabbers
         this.grabber = new CircleGrabber(v(0,0),
-            rad,() => this.grabbed())
+            rad,(x,y) => this.grabbed(x,y))
     }
    
    getTutorial(){ 
@@ -28,7 +28,17 @@ class DefaultTool extends Tool{
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
     grabbed(x,y){
-        this.sim.particlesCollected += 1
+        DefaultTool._grabbed(this.sim,x,y)
+    }
+    
+    static _grabbed(sim,x,y){
+        
+        // increase currency
+        sim.particlesCollected += 1
+        
+        // show message
+        let p = v(x,y).add(v(...sim.drawOffset))
+        global.floaters.push( new Floater(p,'+1'))
     }
    
     mouseMove(p){

@@ -63,10 +63,11 @@ class Body {
         // prepare to pass particles from edge to physics
         this.eps.pps = this.pps
         this.eps.pos = this.pos
+        this.eps.angle = this.angle
         
         // prepare to receive particles from edge
         // when this.eatsQueued is 1 or more
-        this.eps.body = this.body
+        this.eps.body = this
     }
     
     // called in particle_sim.js removeBody()
@@ -90,14 +91,11 @@ class Body {
     
     // called in edge_particle_subgroup.js
     // when this.eatsQueued > 0
-    eatParticleFromEdge(){
-        this.sim.particlesCollected += 1
+    eatParticleFromEdge(x,y){
+        DefaultTool._grabbed( this.sim,x,y )
     }
     
     update(dt,beingControlled=false){
-        
-        //test
-        this.eatsQueued = 1
         
         let stopForce = global.bodyFriction
         let angleStopForce = global.bodyAngleFriction

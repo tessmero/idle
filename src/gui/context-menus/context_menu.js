@@ -1,6 +1,11 @@
 // base class for context menus
 // - takes up a large fraction of screen
 // - content divided into two square regions
+    
+// state for sliding animation effect
+var _lastContextMenuSide = -1 
+var _lastContextMenuTime = -1 
+    
 class ContextMenu extends CompositeGuiElement{
     
     // get params using ContextMenu.pickRects
@@ -23,10 +28,12 @@ class ContextMenu extends CompositeGuiElement{
     // return [bounding rect, innner square, inner square]
     static pickRects(rect,poi){
         let pad = .05
+        poi = poi.xy()
         
         // pick top/bottom/left/right
         let axis = +( rect[3] > rect[2] ) 
-        let side = +( poi.xy()[axis] < (rect[axis]+rect[axis+2]/2) )
+        let side = +( poi[axis] < (rect[axis]+rect[axis+2]/2) )
+        
         
         // long axis of context menu
         let lax = rect[3-axis]
@@ -36,6 +43,41 @@ class ContextMenu extends CompositeGuiElement{
         
         // short axis of context menu
         let sax = ss + 2*pad
+        
+        // initally spawn context menu off screen 
+        if( true && (_lastContextMenuSide == -1) ){
+            _lastContextMenuSide = 2*(side-.5)
+            _lastContextMenuTime = global.t
+        }
+        
+        // check if previously at diffent location
+        if( (_lastContextMenuSide != side) && (_lastContextMenuSide != -1) ){
+            
+            let d = .1+Math.abs(poi[axis] - (rect[axis]+.5*rect[axis+2]))
+            let maxd = .5*rect[axis+2]-sax
+            if( d < maxd ){
+                
+                // leave context menu in non-ideal spot
+                // since poi is not obstructed
+                side = _lastContextMenuSide
+                
+            } else {
+            
+                // poi is obstructed, so slide to target
+                let targetSide = side
+                side = _lastContextMenuSide
+                console.log(side,targetSide)
+                let dt = global.t - _lastContextMenuTime
+                let ds = 1e-2*dt
+                if( _lastContextMenuSide < targetSide ){
+                    side = Math.min(targetSide,side+ds)
+                }else if( _lastContextMenuSide > targetSide ){
+                    side = Math.max(targetSide,side-ds)
+                }
+            }
+        }
+        _lastContextMenuSide = side
+        _lastContextMenuTime = global.t
         
         if( axis ){
             

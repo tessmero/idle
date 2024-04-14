@@ -36,6 +36,7 @@ function init() {
     
     // go to start menu
     // calls resetGame() defined further down
+    global.mainSim = new MainPSim()
     quit()
     
     //////////////////////////////////////////
@@ -84,7 +85,6 @@ function resetGame(){
     
     // init start menu background sim
     global.t = 0
-    global.mainSim = new MainPSim()
     global.mainSim.particlesCollected = 0
     global.mainSim.rainGroup.n = 2000
     

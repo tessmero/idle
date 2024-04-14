@@ -41,10 +41,10 @@ class UpgradeMenu extends Gui {
         let h = sr[3]-2*m
         let r0 = [sc[0].x+m,sc[0].y+m, w,h]
         
-        //let tabLabels = ['upgrades','skills','debug']
-        let tabLabels = ['SKILLS','DEBUG']
+        let tabLabels = ['upgrades','skills','debug']
+        //let tabLabels = ['SKILLS','DEBUG']
         let tabContent = [
-            //rect => new UpgradesTab(rect),
+            rect => new UpgradesTab(rect),
             rect => new SkillsTab(rect),
             rect => new DebugTab(rect),
         ]

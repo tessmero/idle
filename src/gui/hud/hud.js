@@ -53,19 +53,22 @@ class Hud extends Gui {
             new StatReadout(topClp,rainIcon,() => 
                 global.mainSim.rainGroup.n.toString())
                 .withStyle('hud')
-                .withDynamicTooltip(() => `max ${global.mainSim.rainGroup.n} raindrops on screen`),
+                .withDynamicTooltip(() => `max ${global.mainSim.rainGroup.n} raindrops on screen`)
+                .withAutoAdjustRect(true),
             
             // catch rate %
             new StatReadout(topCenterP,catchIcon,() => 
                 Math.floor(100*(global.mainSim.rainGroup.grabbedParticles.size()/global.mainSim.rainGroup.n)).toString()+'%')
                 .withStyle('hud')
-                .withDynamicTooltip(() => `caught ${global.mainSim.rainGroup.grabbedParticles.size()} / ${global.mainSim.rainGroup.n} raindrops`),
+                .withDynamicTooltip(() => `caught ${global.mainSim.rainGroup.grabbedParticles.size()} / ${global.mainSim.rainGroup.n} raindrops`)
+                .withAutoAdjustRect(true),
                 
             // total caught
             new StatReadout(topCrp,collectedIcon,() => 
                 global.mainSim.particlesCollected.toString())
                 .withStyle('hud')
-                .withDynamicTooltip(() => `${global.mainSim.particlesCollected} raindrops collected`),
+                .withDynamicTooltip(() => `${global.mainSim.particlesCollected} raindrops collected`)
+                .withAutoAdjustRect(true),
             
             // pause button
             new IconButton(topRight,pauseIcon,pause) //game_state.js

@@ -97,9 +97,12 @@ class EdgeParticleSubgroup{
                 // check if body is waiting to eat particle
                 } else if( this.body && (this.body.eatsQueued > 0) ){
                     this.body.eatsQueued -= 1
-                    this.body.eatParticleFromEdge()
+                    let pos = this.getPos(a)
+                    this.body.eatParticleFromEdge(...pos.xy())
                     grab = true
                     
+        
+                    // show message
                 }
                 
                 // yield one particle to be grabbed/drawn

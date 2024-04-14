@@ -55,7 +55,7 @@ function play(){
     // reset progress
     global.selectedToolIndex = 0
     global.mainSim.rainGroup.n = 100
-    global.mainSim.particlesCollected = 40
+    global.mainSim.particlesCollected = 90
     global.mainSim.clearBodies()
     global.mainSim.rainGroup.grabbedParticles.clear()
     global.activeReleasePatterns = []

@@ -13,6 +13,7 @@ class UpgradeTracks {
                 label: 'rain amount',
                 subject: ' raindrops',
                 level: 1,
+                maxLevel: 5,
                 cost: ValueCurve.power(500,2),
                 value: ValueCurve.power(100,2),
             },
@@ -20,6 +21,7 @@ class UpgradeTracks {
                 label: 'rain speed',
                 subject: ' m/s',
                 level: 1,
+                maxLevel: 5,
                 cost: ValueCurve.power(500,2),
                 value: ValueCurve.linear(100,10),
                 value_conversion: v => v*3e-6, // (human readable => internal units)
@@ -28,6 +30,7 @@ class UpgradeTracks {
                 label: 'catch radius',
                 subject: '',
                 level: 1,
+                maxLevel: 5,
                 cost: ValueCurve.power(500,2),
                 value: ValueCurve.linear(100,10),
                 value_conversion: v => v*.001, // (human readable => internal units)

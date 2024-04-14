@@ -8,27 +8,39 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
         
         
         if( tool.getCost() ){
-            // add gui element to show cost
+            
+            // prepare gui elements to show cost
             let r = padRect(...rect,-global.tooltipPadding)
             let h = ToolbarTooltipPopup.piHeight()
             r = [r[0],r[1]+r[3]-h,r[2],h]
-            let pi = new ProgressIndicator(r,collectedIcon,
-                ()=>{
-                    let cost = tool.getCost()
-                    let budget = global.mainSim.particlesCollected
-                    return `${budget}/${cost}`
-                },
-                ()=>Math.min(1,global.mainSim.particlesCollected/tool.getCost()))
-            this.children.push( pi )
+            function bc(f){ // apply f to budget,cost
+                let b = global.mainSim.particlesCollected
+                let c = tool.getCost()
+                return f(b,c)
+            }
+            
+            // text readout
+            this.children.push( new StatReadout(r,collectedIcon,
+                ()=>bc((budget,cost)=> `${budget}/${cost}` ))
+                .withCenter(true))
+            
+            // progress bar overlay
+            this.children.push( new ProgressIndicator(r,
+                ()=>bc((budget,cost)=> budget/cost )))
         }
     }
     
     static piHeight(){ return .05 } // thickness of progress bar
     static pickRect(label,scale=null){
+        
+        // start with TutorialTooltipPopup
         let r = TutorialTooltipPopup.pickRect(label,scale)
+        
+        // add space for progress indicator
         let dh = ToolbarTooltipPopup.piHeight()
         r[3] += dh
         r[1] -= dh
+        
         return r
     }
     

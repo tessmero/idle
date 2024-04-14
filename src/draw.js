@@ -17,11 +17,14 @@ function draw(fps, t) {
     //ctx.fillStyle = global.bgColor
     ctx.clearRect( ...global.screenRect )
     
-    // draw particles and pois
+    // draw particles and bodies
     resetRand()
     ctx.fillStyle = global.fgColor
     global.mainSim.draw(ctx)
     passed_offscreen_count = 0
+    
+    // draw floaters
+    global.floaters.forEach( f => f.draw(g) )
         
         
     // given the total number of released particles 
