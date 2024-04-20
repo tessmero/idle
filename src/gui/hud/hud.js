@@ -1,5 +1,5 @@
 
-class Hud extends Gui {
+class HudGui extends Gui {
     
     constructor(){
         super()

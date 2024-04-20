@@ -1,7 +1,7 @@
 
 var _upgradeMenuTransitionEffect = null 
 
-class UpgradeMenu extends Gui {
+class UpgradeMenuGui extends Gui {
     
     constructor(...p){
         super(...p)
@@ -27,8 +27,11 @@ class UpgradeMenu extends Gui {
         this.transitionSpeed = 6e-3 // radius increase per ms
         this.transitionCenter = v(.5,.5)//state
         this.transitionRadius = 0//state
-        
-        this.hasHudInBackground = true // checked in draw.js
+    }
+    
+    // override Gui
+    getBackgroundGui(){
+        return global.allGuis[GameStates.playing];
     }
     
     // extend Hud

@@ -75,40 +75,7 @@ class PhysicsPGroup extends ParticleGroup {
         
         
         for( let pps of this.subgroups ){
-            for( let di = 0 ; di < pps.n ; di++ ){
-                let i = pps.i + di
-            
-                // check if currently grabbed
-                if( this.grabbedParticles.has(i) ) continue
-                
-                let x = this.state[i*nd+0]
-                let y = this.state[i*nd+1]
-            
-                // advance physics
-                let vx = this.state[i*nd+2]
-                let vy = this.state[i*nd+3]
-                
-                vx = vm*vx + vb.x
-                vy = vm*vy + vb.y
-                x += vx*dt
-                y += vy*dt
-                
-                this.state[i*nd+0] = x
-                this.state[i*nd+1] = y
-                this.state[i*nd+2] = vx
-                this.state[i*nd+3] = vy
-                
-                // check if off-screen
-                let grab = false
-                if( !inRect(x,y,...this.sim.rect) ){
-                    grab = true 
-                }
-                
-                // yield one particle to be grabbed/drawn
-                let ungrab = false
-                yield [i,x,y,grab,ungrab]
-            
-            }
+            yield *pps.generateParticles(dt,vm,vb)
         }
     }
 }

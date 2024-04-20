@@ -1,16 +1,18 @@
 const GameStates = {
     startMenu: 0,
-    playing: 1,
-    upgradeMenu: 2,
-    pauseMenu: 3,
+    startTransition: 1,
+    playing: 2,
+    upgradeMenu: 3,
+    pauseMenu: 4,
 }
 
 function rebuildGuis(){
     global.allGuis = [
-         new StartMenu(),
-         new Hud(),
-         new UpgradeMenu(),
-         new PauseMenu(),
+         new StartMenuGui(),
+         new StartTransitionGui(),
+         new HudGui(),
+         new UpgradeMenuGui(),
+         new PauseMenuGui(),
     ]
     global.allGuis.forEach(k => {
         k.children = k.buildElements()
@@ -43,25 +45,39 @@ function toggleStats(){
     }
     
 }
-
-// go from pause menu back to game
-function resume(){
-    setState( GameStates.playing )
-    hideWebsiteOverlays()
-}
-
-function play(){
+ 
+function resetProgression()
+{
     
-    // reset progress
     global.selectedToolIndex = 0
     global.mainSim.rainGroup.n = 100
     global.mainSim.particlesCollected = 0
     global.mainSim.clearBodies()
     global.mainSim.rainGroup.grabbedParticles.clear()
     global.activeReleasePatterns = []
+    global.upgradeTracks = new UpgradeTracks()
+    global.skillTree = new SkillTree()
     updateAllBonuses()
+}
+
+// called when user clicks play button
+function playClicked(){
+    setState( GameStates.startTransition )
+    hideWebsiteOverlays()
+}
+
+// called when start transition ends
+function play(){
     
+    // reset for good measure
+    // (should have been reset during transition)
+    resetProgression()
     resume()
+}
+
+function resume(){
+    setState( GameStates.playing )
+    hideWebsiteOverlays()
 }
 
 function pause(){

@@ -4,26 +4,26 @@ var charHeight = 7
 
 
 // draw text centered at point xy
-function drawText(g,x,y,s,center=true,pad=0,scale=1, clear=false){
+function drawText(g,x,y,s,center=true,fontSpec){
     let lines = s.split('\n')
-    let dy = scale * global.textPixelSize * (charHeight+global.textLineSpace )
+    let dy = fontSpec.scale * global.textPixelSize * (charHeight+global.textLineSpace )
     lines.forEach( l => {
-        _drawTextLine(g,x,y,l,center,pad,scale,clear)
+        _drawTextLine(g,x,y,l,center,fontSpec)
         y +=dy
     })
 }
-function _drawTextLine(g,x,y,s,center,pad,scale, clear){    
+function _drawTextLine(g,x,y,s,center,fontSpec){    
     //s = s.toUpperCase()
-    let dx = scale * global.textPixelSize * (charWidth+global.textLetterSpace )
+    let dx = fontSpec.scale * global.textPixelSize * (charWidth+global.textLetterSpace )
     
     if( center ){
-        let [tw,th] = getTextDims(s,scale)
+        let [tw,th] = getTextDims(s,fontSpec.scale)
         x -= tw/2
         y -= th/2
     }
     
     for( const c of s ){
-        drawLayout(g,x,y,charLayouts[c],false,pad,scale,clear)        
+        drawLayout(g,x,y,charLayouts[c],false,fontSpec)        
         x += dx
     }
 }
@@ -45,12 +45,13 @@ function getTextDims(s,scale=1){
     return [m*w, m*h]
 }
 
-function drawLayout(g,x,y, layout, center=true, pad=0, scale=1, clear=false){
+function drawLayout(g,x,y, layout, center=true, fontSpec){
     if( !layout ) return
     
-    let tps = global.textPixelSize*scale
-    let tls = global.textLetterSpace*scale
+    let tps = global.textPixelSize*fontSpec.scale
+    let tls = global.textLetterSpace*fontSpec.scale
     let ch = layout.length//charHeight
+    let pad = fontSpec.pad
     
     if( center ){
         x -= tps*layout[0].length/2
@@ -60,8 +61,11 @@ function drawLayout(g,x,y, layout, center=true, pad=0, scale=1, clear=false){
     for( let iy = 0 ; iy < ch ; iy++ ){
         let ix = 0
         for( const b of layout[iy] ){
-            if( b!=' ' ){
-                if( clear ){
+            
+            // skipPixel used in dissolving_font_spec.js
+            if( (!fontSpec.skipPixel()) && (b!=' ') ){
+                
+                if( fontSpec.clear ){
                     g.clearRect(x+tps*ix-pad,y+tps*iy-pad,tps+pad*2,tps+pad*2)
                 }  else {
                     g.fillRect(x+tps*ix-pad,y+tps*iy-pad,tps+pad*2,tps+pad*2)

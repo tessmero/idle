@@ -13,9 +13,11 @@ function draw(fps, t) {
     if( global.mainSim.particleRadius > lim ) global.mainSim.particleRadius = lim
     if( global.mainSim.particleRadius < -lim ) global.mainSim.particleRadius = -lim
     
-    // draw background
-    //ctx.fillStyle = global.bgColor
-    ctx.clearRect( ...global.screenRect )
+    // clear canvas, unless gui requests not to
+    let curGui = global.allGuis[global.gameState]
+    if( !curGui.stopCanvasClear() ){
+        ctx.clearRect( ...global.screenRect )
+    }
     
     // draw particles and bodies
     resetRand()
@@ -23,9 +25,11 @@ function draw(fps, t) {
     global.mainSim.draw(ctx)
         
     
-    // draw hud gui in background
-    if( global.allGuis[global.gameState].hasHudInBackground ){
-        global.allGuis[GameStates.playing].draw(ctx) 
+    // if applicable, draw another gui in background
+    // e.g. hud behind upgrade menu
+    let bgGui = curGui.getBackgroundGui()
+    if( bgGui ){
+        bgGui.draw(ctx) 
     }
     
     // draw upgrade menu gui transition effect

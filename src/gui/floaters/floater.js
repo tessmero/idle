@@ -6,7 +6,15 @@ class Floater{
     constructor( pos, label ){
         this.pos = pos
         this.label = label
-        this.remainingTime = 1000
+        this.duration = 1000
+        this.remainingTime = this.duration
+        
+        let letterPixelPad = .002
+        let scale = .3
+        this.fontSpecs = [
+            new DissolvingFontSpec(letterPixelPad, scale, true),
+            new DissolvingFontSpec(0, scale, false),
+        ]
     }
     
     update(dt){
@@ -17,13 +25,15 @@ class Floater{
     
     draw(g){
         let center = true
-        let letterPixelPad = .002
-        let scale = .3
         let label = this.label
         let p = this.pos.xy()
         
-        drawText(g, ...p, label, center, letterPixelPad, scale, true)
-        drawText(g, ...p, label, center, 0, scale, false)
+        let sld = this.remainingTime / this.duration
+        
+        this.fontSpecs.forEach( fs => {
+            fs.solidity = sld
+            drawText(g, ...p, label, center, fs)
+        })
     }
     
     static signalChange(sim,pos,amt){

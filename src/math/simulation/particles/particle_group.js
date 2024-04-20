@@ -11,10 +11,16 @@ class ParticleGroup {
         this.n = n
     }
     
-    draw(g){
+    // draw all the particles in this group
+    // second param is optional override
+    // drawing individual particles
+    draw( g, pdraw=((g,x,y,r) => g.fillRect( x-r, y-r, 2*r, 2*r )) ){
+        
         let r = this.sim.particleRadius
         let md2 = global.mouseGrabMd2
         let isEdgeGroup = this.isEdgeGroup
+        
+        
         // start iterating over particle positions
         for( let [i,x,y,grab,ungrab,dx,dy] of this.generateParticles() ){
             
@@ -41,8 +47,10 @@ class ParticleGroup {
                 }))
                 
                 
+                
+                
                 // draw particle
-                g.fillRect( x-r, y-r, 2*r, 2*r )
+                pdraw(g,x,y,r)
                     
                 if( grabbed ){
                     //console.log(`despawn ${i}`)

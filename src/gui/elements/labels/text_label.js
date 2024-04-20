@@ -57,23 +57,23 @@ class TextLabel extends GuiElement {
         if( this.style == 'inverted' ){
             
             // draw simple white text
-            drawText(g, ...p, label, this.center, 0, this.scale, true)
+            drawText(g, ...p, label, this.center, new FontSpec(0, this.scale, true))
             
         } else if( this.style == 'hud' ){
             
             // draw extra readable for hud
-            drawText(g, ...p, label, this.center, this.letterPixelPad, this.scale, true)
-            drawText(g, ...p, label, this.center, 0, this.scale, false)
+            drawText(g, ...p, label, this.center, new FontSpec(this.letterPixelPad, this.scale, true))
+            drawText(g, ...p, label, this.center, new FontSpec(0, this.scale, false))
             
         } else if( this.style == 'tiny' ){
             
             // should draw tiny 3x5 pixel font simple black text
-            drawText(g, ...p, label, this.center, 0, this.scale, false)
+            drawText(g, ...p, label, this.center, new FontSpec(0, this.scale, false))
             
         } else {
             
             // draw simple black text
-            drawText(g, ...p, label, this.center, 0, this.scale, false)
+            drawText(g, ...p, label, this.center, new FontSpec(0, this.scale, false))
         }
         
         if( global.debugUiRects ){

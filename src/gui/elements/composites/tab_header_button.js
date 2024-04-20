@@ -33,6 +33,6 @@ class TabHeaderButton extends TextButton {
             g.strokeRect(...rect)
         }
         
-        drawText(g, ...rectCenter(...this.rect), this.label, this.center, 0, this.scale, false)
+        drawText(g, ...rectCenter(...this.rect), this.label, this.center, new FontSpec(0, this.scale, false))
     }
 }

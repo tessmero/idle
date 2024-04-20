@@ -1,5 +1,5 @@
 
-class PauseMenu extends Gui {
+class PauseMenuGui extends Gui {
     
     constructor(...p){
         super(...p)

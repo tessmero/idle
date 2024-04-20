@@ -103,10 +103,7 @@ function resetGame(){
         new LineTool(s),
     ]
     
-    // reset progression
-    global.upgradeTracks = new UpgradeTracks()
-    global.skillTree = new SkillTree()
-    updateAllBonuses()
+    resetProgression()
     global.mainSim.rainGroup.n = 2000
     
     let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))

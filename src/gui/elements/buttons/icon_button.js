@@ -12,7 +12,7 @@ class IconButton extends Button {
         // draw pixel art icon
         let layout = this.isAnimated() ? 
             this.icon.getCurrentAnimatedLayout() : this.icon.frames[0] //icon.js
-        drawLayout(g,...rectCenter(...this.rect),layout,true, 0, this.scale) //character.js
+        drawLayout(g,...rectCenter(...this.rect),layout,true, new FontSpec(0, this.scale)) //character.js
     }
     
     isAnimated(){

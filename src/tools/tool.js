@@ -35,9 +35,8 @@ class Tool{
         let layout = (enableIdleAnim && (global.idleCountdown <= 0)) ? 
             this.icon.getCurrentAnimatedLayout() : this.icon.frames[0]
         
-        
-        drawLayout(g,...p,layout,this.cursorCenter,.005,scale,true) 
-        drawLayout(g,...p,layout,this.cursorCenter,0,scale,false) 
+        drawLayout(g,...p,layout,this.cursorCenter,new FontSpec(.005,scale,true)) 
+        drawLayout(g,...p,layout,this.cursorCenter,new FontSpec(0,scale,false) )
 
     }
     
