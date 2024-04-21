@@ -6,6 +6,18 @@ class Gui extends CompositeGuiElement{
         super(global.screenRect)
     }
     
+    getScreenEdgesForContextMenu(){
+       let rect = [...global.mainSim.rect]
+       let topMargin = .1
+       let bottomMargin = .1
+       let sideMargin = .1
+       rect[1] += topMargin
+       rect[3] -= (topMargin+bottomMargin)
+       rect[0] += sideMargin
+       rect[2] -= 2*sideMargin
+       return rect
+    }
+    
     // build list of GuiElement instances
     buildElements(){ 
         throw new Error(`Method not implemented in ${this.constructor.name}.`)

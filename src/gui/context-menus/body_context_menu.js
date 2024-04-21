@@ -45,7 +45,7 @@ class BodyContextMenu extends ContextMenu {
         //g.strokeRect(...this.square0)
         
         //draw reticle effect around body
-        g.fillStyle = global.hlColor
+        g.fillStyle = global.colorScheme.hl
         let bod = this.body
         let edge = bod.edge
         let n = Math.floor(edge.circ*50)
@@ -66,6 +66,6 @@ class BodyContextMenu extends ContextMenu {
             g.fillRect(...p.xy(),s,s)
         }
         
-        g.fillStyle = global.fgColor
+        g.fillStyle = global.colorScheme.fg
     }
 }

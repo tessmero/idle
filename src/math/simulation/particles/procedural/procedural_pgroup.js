@@ -30,8 +30,8 @@ class ProceduralPGroup extends ParticleGroup {
             let ungrab = ( Math.floor( rawy / sr[3] ) != Math.floor( prawy / sr[3] ) )
             var y = sr[1] + nnmod( rawy, sr[3] ) //+ r*Math.sin(a)
             
-            // yield one particle to possibly be drawn
-            yield [i,x,y,false,ungrab]
+            // yield one particle
+            yield [null,i,x,y,false,ungrab]
         }
         this.lastDrawTime = this.sim.t
     }

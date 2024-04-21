@@ -48,25 +48,71 @@ function toggleStats(){
  
 function resetProgression()
 {
+    let money = 0
+    let s = global.mainSim
+    global.toolList = [
+        new DefaultTool(s,global.mouseGrabRadius),
+        new CircleTool(s),
+        new LineTool(s),
+    ]
     
-    global.selectedToolIndex = 0
+    if( global.sandboxMode ){
+        money = 1e100
+        global.toolList.push(
+            new PiTool(s,global.mouseGrabRadius)
+        )
+    }
+    
+    global.mainSim.setTool(global.toolList[0])
     global.mainSim.rainGroup.n = 100
-    global.mainSim.particlesCollected = 0
-    global.mainSim.clearBodies()
-    global.mainSim.rainGroup.grabbedParticles.clear()
-    global.activeReleasePatterns = []
+    
+    global.mainSim.particlesCollected = money
+    
+    if( !global.sandboxMode ){
+        
+        // remove bodies from start menu sim
+        global.mainSim.clearBodies()
+        global.mainSim.rainGroup.grabbedParticles.clear()
+    }
     global.upgradeTracks = new UpgradeTracks()
     global.skillTree = new SkillTree()
     updateAllBonuses()
 }
 
-// called when user clicks play button
+// user clicked play button on start menu
 function playClicked(){
-    setState( GameStates.startTransition )
+    global.sandboxMode = false
+    
+    // show full start transition
     hideWebsiteOverlays()
+    setState( GameStates.startTransition )
 }
 
-// called when start transition ends
+// user clicked sandbox button on start menu
+function sandboxClicked(){
+    let skipTransition = true
+
+    global.sandboxMode = true
+    hideWebsiteOverlays()
+    
+    if( skipTransition ){
+        
+        // skip transition
+        setColorScheme(ColorScheme.sandbox)//setup.js
+        play()
+        
+    } else {
+        
+        // do short transition
+        setState( GameStates.startTransition )
+    }
+}
+
+// called in start_transition_gui.js
+function startTransitionFinished(){
+    play()
+}
+
 function play(){
     
     // reset for good measure

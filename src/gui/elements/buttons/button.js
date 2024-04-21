@@ -19,16 +19,16 @@ class Button extends GuiElement {
     
     static _draw(g,rect,hovered=false,fill=true)
     {
-        let lineCol = global.fgColor
+        let lineCol = global.colorScheme.fg
         
         if(hovered){
-            lineCol = 'white'
+            lineCol = global.colorScheme.hl
         }
-        //g.fillStyle = global.bgColor
+        //g.fillStyle = global.colorScheme.bg
         g.strokeStyle = lineCol
         g.lineWidth = global.lineWidth
         if( fill ) g.clearRect(...rect)
         g.strokeRect(...rect)
-        g.strokeStyle = global.fgColor
+        g.strokeStyle = global.colorScheme.fg
     }
 }

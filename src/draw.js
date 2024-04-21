@@ -21,7 +21,7 @@ function draw(fps, t) {
     
     // draw particles and bodies
     resetRand()
-    ctx.fillStyle = global.fgColor
+    ctx.fillStyle = global.colorScheme.fg
     global.mainSim.draw(ctx)
         
     
@@ -50,13 +50,9 @@ function draw(fps, t) {
 
     // draw tool cursor
     let p = global.mousePos.xy()
-    let tool = global.toolList[global.selectedToolIndex]
-    tool.drawCursor(ctx,p)
-    
-    // draw tool overlay if applicable
-    if( tool.draw ){
-        tool.draw(ctx)
-    }
+    let tool = global.mainSim.getTool()
+    if( tool )
+        tool.drawCursor(ctx,p)
     
     // draw gui floaters (as apposed to floaters in sims)
     global.floaters.forEach( f => f.draw(g) )
@@ -86,12 +82,4 @@ function draw(fps, t) {
     }
     
     
-
-    // debug 
-    if( false ){
-        ctx.fillStyle = 'black'
-        ctx.font = ".001em Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(`${global.angleX.toFixed(2)},${global.angleY.toFixed(2)},${global.angleZ.toFixed(2)}`, .5,.5);
-    }
 }

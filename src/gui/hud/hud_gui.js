@@ -56,7 +56,15 @@ class HudGui extends Gui {
                 .withDynamicTooltip(() => `max ${global.mainSim.rainGroup.n} raindrops on screen`)
                 .withAutoAdjustRect(true),
             
+            // sandbox banner
+            global.sandboxMode ? 
+            new DynamicTextLabel(topCenterP,()=>'SANDBOX MODE')
+                .withAutoAdjustRect(true)
+                .withScale(.5)
+            : null,
+            
             // catch rate %
+            global.sandboxMode ? null :
             new StatReadout(topCenterP,catchIcon,() => 
                 Math.floor(100*(global.mainSim.rainGroup.grabbedParticles.size()/global.mainSim.rainGroup.n)).toString()+'%')
                 .withStyle('hud')
@@ -64,6 +72,7 @@ class HudGui extends Gui {
                 .withAutoAdjustRect(true),
                 
             // total caught
+            global.sandboxMode ? null :
             new StatReadout(topCrp,collectedIcon,() => 
                 global.mainSim.particlesCollected.toString())
                 .withStyle('hud')
@@ -74,6 +83,11 @@ class HudGui extends Gui {
             new IconButton(topRight,pauseIcon,pause) //game_state.js
                 .withTooltip('pause or quit the game'), 
         ]
+        
+        // remove null placeholders used to 
+        // conveniently toggle things above
+        result = result.filter(Boolean) 
+        
         
         
         // build toolbar buttons

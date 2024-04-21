@@ -14,8 +14,8 @@ class ParticleSim {
         // e.g. particles emitted by body, then body was deleted
         this.leftoverPPS = this.physicsGroup.newSubgroup() 
         
-        this.grabbers = new Set() // Grabber instances
-        this.allBodies = new Set() // Body instances
+        this._grabbers = new Set() // Grabber instances
+        this._bodies = new Set() // Body instances
         this.floaters = [] //list of Floater instances
         this.poiMaxArea = 1e-2
         this.poiShrinkRate = 1e-6// vunits^2 area lost per ms
@@ -35,32 +35,85 @@ class ParticleSim {
         this.draggingControlPoint = null //ControlPoint instance
     }
     
-    // callback used in main_psim.js
-    // to trigger context menu
-    bodyClicked(b){}
+    
+    // trigger context menu if applicable
+    bodyClicked(b){
+        
+        // go to representative body if 
+        // some part of a compound body was selected
+        while( b.parent ){
+            b = b.parent
+        }
+        if( b instanceof CompoundBody ){
+            b = b.getMainBody()
+        }  
+        this.selectedBody = b
+        this.selectedParticle = null
+    }
+    
+    // trigger particle context menu
+    // using particle inspector tool
+    particleClicked(p){
+        this.selectedParticle = p
+        this.selectedBody = null
+    }
+    
+    
+    getTool(){
+        return this._tool
+    }
+    
+    setTool(t){
+        if( t == this._tool ) return
+        
+        if(this._tool){
+            this._tool.unregister(this)
+        }
+        this._tool = t
+    }
+    
+    getGrabbers(){
+        return [...this._grabbers]
+    }
+    
+    clearGrabbers(){
+        this._grabbers.clear()
+    }
+    
+    addGrabber(b){
+        this._grabbers.add(b)
+    }
+    
+    removeGrabber(b){
+        this._grabbers.delete(b)
+    }
+    
+    getBodies(){
+        return [...this._bodies]
+    }
     
     addBody(b){
-        if( this.allBodies.length >= global.maxBodyCount ){
+        if( this._bodies.length >= global.maxBodyCount ){
             return
         }
         
-        if( this.allBodies.has(b) ){
+        if( this._bodies.has(b) ){
             return
         }
         
-        this.allBodies.add(b)
+        this._bodies.add(b)
         b.sim = this
         b.register(this)
     }
     
     removeBody(b){
-        this.allBodies.delete(b)
+        this._bodies.delete(b)
         b.unregister(this)
     }
     
     // remove all bodies
     clearBodies(){
-        [...this.allBodies].forEach(b => this.removeBody(b))
+        [...this._bodies].forEach(b => this.removeBody(b))
         this.selectedBody = null
     }
     
@@ -68,7 +121,7 @@ class ParticleSim {
         this.t += dt
     
         // update bodies
-        let toRemove = [...this.allBodies].filter( p => {
+        let toRemove = [...this._bodies].filter( p => {
             let alive = p.update(dt)
             return !alive
         })
@@ -82,20 +135,20 @@ class ParticleSim {
         
         // update control point hovering status
         if( !this.draggingControlPoint ){
-            let bodies = [...this.allBodies]
-            let cps = bodies.flatMap( b => b.controlPoints)
+            let cps = this.getBodies().flatMap( b => b.controlPoints)
             this.hoveredControlPoint = cps.find( 
                     cp => (cp.pos.sub(p).getD2() < cp.r2) )
         }
     }
     
     draw(g){
+        
         g.translate(...this.drawOffset)
         
         resetRand()
-        g.fillStyle = global.fgColor
-        this.allBodies.forEach( p => p.draw(g) )
-        this.allBodies.forEach( p => p.drawDebug(g) )
+        g.fillStyle = global.colorScheme.fg
+        this._bodies.forEach( p => p.draw(g) )
+        this._bodies.forEach( p => p.drawDebug(g) )
         
         let c = global.colorcodeParticles
         if( c ) g.fillStyle = 'red'
@@ -108,17 +161,24 @@ class ParticleSim {
         this.edgeGroup.draw(g)
         
         if( global.debugGrabbers ){
-            this.grabbers.forEach(gr => gr.drawDebug(g) )
+            this._grabbers.forEach(gr => gr.drawDebug(g) )
         }
         
         let cp = this.draggingControlPoint
         if( !cp ) cp = this.hoveredControlPoint
         if( cp ) {
-            cp.draw(g,'white',true)
+            cp.draw(g,global.colorScheme.hl,true)
         }
         
-        g.fillStyle = global.fgColor
+        g.fillStyle = global.colorScheme.fg
         
+    
+        // draw tool overlay if applicable
+        let tool = this._tool
+        if( tool && tool.draw ){
+            tool.draw(g)
+        }
+    
         // draw floaters
         this.floaters.forEach( f => f.draw(g) )
         

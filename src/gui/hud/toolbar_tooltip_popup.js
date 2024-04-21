@@ -21,7 +21,11 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
             
             // text readout
             this.children.push( new StatReadout(r,collectedIcon,
-                ()=>bc((budget,cost)=> `${budget}/${cost}` ))
+                ()=>bc((budget,cost)=>{
+                    if( budget > cost )
+                        return `${cost}`
+                    return `${budget}/${cost}` 
+                }))
                 .withCenter(true))
             
             // progress bar overlay

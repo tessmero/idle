@@ -50,9 +50,9 @@ class PhysicsPSubgroup{
                 grab = true 
             }
             
-            // yield one particle to be grabbed/drawn
+            // yield one particle
             let ungrab = false
-            yield [i,x,y,grab,ungrab]
+            yield [this,i,x,y,grab,ungrab]
         
         }
     }        

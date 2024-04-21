@@ -8,7 +8,7 @@ class GridFadeOut extends FadeOut {
     // implement FadeOut
     draw(g){
         
-        g.fillStyle = global.fgColor
+        g.fillStyle = global.colorScheme.fg
         
         // draw grid lines
         let sc = global.screenCorners

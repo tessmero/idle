@@ -17,22 +17,28 @@ class DefaultTool extends Tool{
         this.held = null 
         
         // prepare grabber instance that will be 
-        // added/removed from global.grabbers
+        // added/removed from sim
         this.grabber = new CircleGrabber(v(0,0),
-            rad,(x,y) => this.grabbed(x,y))
+            rad,(...p) => this.grabbed(...p))
     }
+    
+    
+   unregister(sim){
+       sim.removeGrabber(this.grabber)
+   }
+    
    
-   getTutorial(){ 
-    return new DefaultToolTutorial(); 
+    getTutorial(){ 
+        return new DefaultToolTutorial(); 
     }
     
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
-    grabbed(x,y){
-        DefaultTool._grabbed(this.sim,x,y)
+    grabbed(...p){
+        DefaultTool._grabbed(this.sim,...p)
     }
     
-    static _grabbed(sim,x,y){
+    static _grabbed(sim,subgroup,i,x,y,dx,dy,hit){
         
         // increase currency
         sim.particlesCollected += 1
@@ -69,9 +75,9 @@ class DefaultTool extends Tool{
         
         // toggle grabbing particles
         if( this.held == 'catching' ){
-            this.sim.grabbers.add(this.grabber)
+            this.sim.addGrabber(this.grabber)
         } else {
-            this.sim.grabbers.delete(this.grabber)
+            this.sim.removeGrabber(this.grabber)
         }
     }
     mouseUp(p){ 
@@ -79,7 +85,7 @@ class DefaultTool extends Tool{
         this.sim.draggingControlPoint = null
         
         //stop grabbing particles
-        this.sim.grabbers.delete(this.grabber)
+        this.sim.removeGrabber(this.grabber)
     }
     
     drawCursor(g,p, ...args){ 
@@ -97,14 +103,14 @@ class DefaultTool extends Tool{
             let c = v(...p)
             let r = Math.sqrt(this.grabber.r2)
             
-            g.strokeStyle = global.bgColor
+            g.strokeStyle = global.colorScheme.bg
             g.lineWidth = .005
             g.beginPath()
             g.moveTo(c.x+r,c.y)
             g.arc(c.x,c.y,r,0,twopi)
             g.stroke()
             
-            g.strokeStyle = global.fgColor
+            g.strokeStyle = global.colorScheme.fg
             g.lineWidth = .0025
             g.beginPath()
             g.moveTo(c.x+r,c.y)

@@ -40,17 +40,17 @@ function init() {
     quit()
     
     //////////////////////////////////////////
-    // unit tests 20240414
+    // unit tests 20240421
     if( false ){
         
         // start sim unit tests
         let sim = global.mainSim
-        console.assert( sim.allBodies.size == 3 ) // 3 bodies in start menu 
+        console.assert( sim._bodies.size == 3 ) // 3 bodies in start menu 
         
         // test clearBodies
         function assertClear(){
-            console.assert( sim.allBodies.size == 0 )
-            console.assert( sim.grabbers.size == 0 )
+            console.assert( sim._bodies.size == 0 )
+            console.assert( sim._grabbers.size == 0 )
             console.assert( sim.edgeGroup.subgroups.size == 0 )
             
             // expect one leftover group
@@ -60,22 +60,51 @@ function init() {
         assertClear()
         
         // test Body implementations
-        let testedCount = 0
-        function check(b){
+        let testedBodies = 0
+        function testBody(b){
             sim.addBody(b)
             sim.removeBody(b)
             assertClear()
-            testedCount += 1
+            testedBodies += 1
         }
-        check(new CircleBody(sim,v(.5,.5),.1))
-        check(new ControlledCircleBody(sim,v(.5,.5),.1))
-        check(new CollectorCircleBody(sim,v(.5,.5),.1))
-        check(new SausageBody(sim,v(.5,.5),v(.3,.3)))
-        check(new ControlledSausageBody(sim,v(.5,.5),v(.3,.3)))
-        check(new StarBody(sim,v(.5,.5),5,.05,.1))
-        check(new ControlledStarBody(sim,v(.5,.5),5,.05,.1))
-        console.log(`${testedCount} Body subclasses passed tests`)
+        testBody(new CircleBody(sim,v(.5,.5),.1))
+        testBody(new ControlledCircleBody(sim,v(.5,.5),.1))
+        testBody(new CollectorCircleBody(sim,v(.5,.5),.1))
+        testBody(new SausageBody(sim,v(.5,.5),v(.3,.3)))
+        testBody(new ControlledSausageBody(sim,v(.5,.5),v(.3,.3)))
+        testBody(new StarBody(sim,v(.5,.5),5,.05,.1))
+        testBody(new ControlledStarBody(sim,v(.5,.5),5,.05,.1))
+        console.log(`${testedBodies} Body subclasses passed tests`)
         
+        // test tool implementations
+        
+        let testedTools = 0
+        function testTool(t){            
+        
+            // emulate input fluke 
+            // (no mouse up event)
+            t.mouseDown(v(.5,.5))
+            t.unregister(sim)
+            
+            // make sure nothing leaked
+            assertClear()
+            
+            testedTools += 1
+        }
+        testTool(new CircleTool(sim))
+        testTool(new DefaultTool(sim,.1))
+        testTool(new LineTool(sim))
+        testTool(new PiTool(sim))
+        console.log(`${testedTools} Tool subclasses passed tests`)
+        
+        
+        // specific test for default tool
+        let t = new DefaultTool(sim,.1)
+        t.mouseDown(v(.5,.5))
+        console.assert( sim._grabbers.size == 1 )
+        t.mouseUp(v(.5,.5))
+        console.assert( sim._grabbers.size == 0 )
+            
         
     } else {
     
@@ -84,7 +113,17 @@ function init() {
     }
 }
 
+
+function setColorScheme(cs){
+    global.colorScheme = cs
+    
+    // set html elem background property
+    // needed for palette-flip effect
+    document.getElementById("gameCanvas").style.backgroundColor = global.colorScheme.bg
+}
+
 function resetGame(){
+    setColorScheme( ColorScheme.default )
     
     // init start menu background sim
     global.t = 0
@@ -96,12 +135,6 @@ function resetGame(){
     global.startMenuTargetPos = v(.5,.5)
     global.mainSim.clearBodies()
 
-    let s = global.mainSim
-    global.toolList = [
-        new DefaultTool(s,global.mouseGrabRadius),
-        new CircleTool(s),
-        new LineTool(s),
-    ]
     
     resetProgression()
     global.mainSim.rainGroup.n = 2000

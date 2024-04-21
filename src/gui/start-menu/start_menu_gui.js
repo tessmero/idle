@@ -27,7 +27,7 @@ class StartMenuGui extends Gui {
         ])
         
         // layout a column of wide buttons in the middle of the screen
-        let dims = getTextDims('IDLE')
+        let dims = getTextDims('IDLERAINNN')
         let pad = .005
         let w = dims[0] + pad*10
         let h = .1
@@ -46,9 +46,17 @@ class StartMenuGui extends Gui {
             return new TextLabel(slots[s[0]],s[1]).withLetterPixelPad(textPad).withStyle('hud')
         })
         
+        // rect to contain start and sandbox buttons
+        let brect = padRect(...slots[7],.01)
+        let buttonPad = .02 // space between buttons
+        let s = brect[3]
+        let playRect = [brect[0],brect[1],brect[2]-s-buttonPad,brect[3]]
+        let sandboxRect = [brect[0]+brect[2]-s,brect[1],s,s]
+        
         return [
             ...this.labels,
-            new TextButton(padRect(...slots[7],.03),'PLAY',playClicked),  //game_state.js
+            new TextButton(playRect,'PLAY',playClicked),  //game_state.js
+            new IconButton(sandboxRect,sandboxIcon,sandboxClicked),  //game_state.js
         ]
     }
 }

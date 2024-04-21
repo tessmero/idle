@@ -111,7 +111,7 @@ class EdgeParticleSubgroup{
                 let [x,y] = pos.xy()
                 
                 
-                yield [i,x,y,grab,ungrab]
+                yield [this,i,x,y,grab,ungrab]
         }
         
         // reset net force

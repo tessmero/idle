@@ -12,11 +12,11 @@ function update(dt) {
     }
     
     // advance start menu idle background animation
+    let bodies =  sim.getBodies()
     if( ((global.t<global.startMenuMoveDelay)||(global.idleCountdown <= 0)) 
                     && (global.gameState==GameStates.startMenu) 
-                    && (sim.allBodies.size > 1) ){
+                    && (bodies.length > 1) ){
             
-        let bodies =  Array.from(sim.allBodies)
         
         // move circle
         if( true ){
@@ -43,6 +43,9 @@ function update(dt) {
         }
     }
     
+    // identify gui state
+    let curGui = global.allGuis[global.gameState]
+    
     // delete popups, knowing that any persistent 
     // popups will be reinstated below
     global.contextMenu = null
@@ -52,25 +55,34 @@ function update(dt) {
     if( global.gameState!=GameStates.playing ){
         sim.selectedBody = null
         global.contextMenu = null
+        
     } else if( sim.selectedBody ){
        let bod = sim.selectedBody
-       let rect = [...sim.rect]
-       let topMargin = .1
-       let bottomMargin = .1
-       let sideMargin = .1
-       rect[1] += topMargin
-       rect[3] -= (topMargin+bottomMargin)
-       rect[0] += sideMargin
-       rect[2] -= 2*sideMargin
+       let rect = curGui.getScreenEdgesForContextMenu()
        let cmr = ContextMenu.pickRects(rect,bod.pos)
        global.contextMenu = new BodyContextMenu(...cmr,bod)
+       
+    } else if( sim.selectedParticle ){
+       let p = sim.selectedParticle
+       let [subgroup,i,x,y,dx,dy,hit] = p
+       let rect = curGui.getScreenEdgesForContextMenu()
+       let cmr = ContextMenu.pickRects(rect,v(x,y))
+       global.contextMenu = new PiContextMenu(...cmr,p)
+        
     }
     
     // update main gui
-    if( global.allGuis[global.gameState].hasHudInBackground ){
-        global.allGuis[GameStates.playing].update(dt)
+    // if applicable, update another gui in background
+    // e.g. hud behind upgrade menu
+    let bgGui = curGui.getBackgroundGui()
+    if( bgGui ){
+        if( global.gameState == GameStates.startTransition ){
+            // skip bg hud updates during start transition
+        } else {
+            bgGui.update(dt) 
+        }
     }
-    global.allGuis[global.gameState].update(dt) 
+    curGui.update(dt) 
     
     
     // update popups just in case they are persistent
@@ -88,7 +100,8 @@ function update(dt) {
     sim.update(dt)
     
     // trigger passive tool behavior
-    global.toolList[global.selectedToolIndex].update(dt)
+    let tool = global.mainSim.getTool()
+    if( tool ) tool.update(dt)
     
     // upgrades menu transition effect (upgrade_menu.js)
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)

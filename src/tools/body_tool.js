@@ -36,7 +36,7 @@ class BodyTool extends Tool{
             
             // 
             if( this.sim == global.mainSim ){
-                global.selectedToolIndex = 0
+                global.mainSim.setTool(global.toolList[0])
             }
         }
     }

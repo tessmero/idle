@@ -7,6 +7,17 @@ class Tool{
        this.sim = sim
    }
    
+    mouseDown(){ throw new Error("not implemented") }
+    
+    update(dt){}
+    
+    mouseMove(){}
+    
+    mouseUp(){}
+   
+   // remove any grabbers submitted to sim
+   unregister(sim){}
+   
    isUsable(){
         let cost = this.getCost()
         let budget = this.sim.particlesCollected
@@ -49,12 +60,4 @@ class Tool{
             
         drawLayout(g,...rectCenter(...rect),layout)
     }
-   
-    mouseDown(){ throw new Error("not implemented") }
-    
-    update(dt){}
-    
-    mouseMove(){}
-    
-    mouseUp(){}
 }

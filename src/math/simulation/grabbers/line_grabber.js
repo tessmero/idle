@@ -21,7 +21,7 @@ class LineGrabber extends Grabber {
         g.stroke()
     }
     
-    contains(x,y){
+    contains(subgroup,i,x,y){
         let dx = x-this.a.x
         let dy = y-this.a.y
         let d = this.b.sub(this.a)

@@ -29,6 +29,8 @@ function updateAllBonuses(){
         
     }
     
+    
+    
     if( global.screenRect )
         rebuildGuis()
 }

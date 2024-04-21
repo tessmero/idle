@@ -58,14 +58,34 @@ class StartTransitionGui extends Gui {
             if( fo ){
                 
                 // fade out complete
-                // initiate middle animation
-                _startTransFadeOut = null
-                _startTransMid = new StartMessage()
-                _startTransFadeIn = null
+                
+                if( global.sandboxMode ){
+                    
+                    // NOTE this entire gui may have been 
+                    // skipped in game_states.js
+                    
+                    // skip middle animation
+                    // start fast fade in
+                    setColorScheme( ColorScheme.sandbox )//setup.js
+                    _startTransFadeOut = null
+                    _startTransMid = null
+                    _startTransFadeIn = FadeIn.random()
+                    _startTransFadeIn.duration /= 2 // increase speed
+                    resetProgression() // game_states.js
+                    
+                    
+                } else {
+                    
+                    // initiate middle animation
+                    _startTransFadeOut = null
+                    _startTransMid = new StartMessage()
+                    _startTransFadeIn = null
+                    
+                }
                 
             } else if(fm) {
                 
-                // midddle animation complete
+                // middle animation complete
                 // initiate fade in animation
                 _startTransFadeOut = null
                 _startTransMid = null
@@ -79,7 +99,8 @@ class StartTransitionGui extends Gui {
                 _startTransFadeOut = null
                 _startTransMid = null
                 _startTransFadeIn = null
-                play() // game_states.js
+                
+                startTransitionFinished() // game_states.js
             }
         }
         

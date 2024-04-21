@@ -63,13 +63,13 @@ class ToolbarButton extends CompositeGuiElement {
     }
                 
     isSelected(){
-        return this.indexInToolbar == global.selectedToolIndex
+        return this.tool == global.mainSim.getTool()
     }
                 
     click(){ 
         if( this.tool.isUsable() ){
     
-            global.selectedToolIndex = this.indexInToolbar
+            global.mainSim.setTool(this.tool)
             
             // close the upgrades menu if it is open 
             if( global.gameState==GameStates.upgradeMenu ) toggleStats()

@@ -44,15 +44,25 @@ class UpgradeMenuGui extends Gui {
         let h = sr[3]-2*m
         let r0 = [sc[0].x+m,sc[0].y+m, w,h]
         
-        //let tabLabels = ['upgrades','skills','stats','debug']
-        let tabLabels = ['UPGRADES','STATS','DEBUG']
-        let tabContent = [
-            rect => new UpgradesTab(rect),
-            //rect => new SkillsTab(rect),
-            rect => new StatsTab(rect),
-            rect => new DebugTab(rect),
-        ]
-        
+        let tabLabels,tabContent
+        if( global.sandboxMode ){
+            tabLabels = ['DEBUG','skills']
+            tabContent = [
+                rect => new DebugTab(rect),
+                rect => new SkillsTab(rect),
+            ]
+            
+        } else {
+            
+            //let tabLabels = ['upgrades','skills','stats','debug']
+            tabLabels = ['UPGRADES','STATS']
+            tabContent = [
+                rect => new UpgradesTab(rect),
+                //rect => new SkillsTab(rect),
+                rect => new StatsTab(rect),
+                //rect => new DebugTab(rect),
+            ]
+        }
         let tabGroup = new TabPaneGroup([...r0],tabLabels,tabContent)
         if( global.upgradeMenuTabIndex ) 
             tabGroup.selectedTabIndex = global.upgradeMenuTabIndex
@@ -117,7 +127,7 @@ class UpgradeMenuGui extends Gui {
         let w = Math.ceil(tr[2]/ts)
         let h = Math.ceil(tr[3]/ts)
         g.globalCompositeOperation = "xor";
-        g.fillStyle = 'black'
+        g.fillStyle = global.colorScheme.fg
         
         for( let x = 0 ; x < w ; x++ ){
             for( let y = 0 ; y < h ; y++ ){

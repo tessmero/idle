@@ -18,7 +18,7 @@ class CircleGrabber extends Grabber {
         g.fill()
     }
     
-    contains(x,y){
+    contains(subgroup,i,x,y){
         let dx = x-this.pos.x
         let dy = y-this.pos.y
         let hit = (dx*dx + dy*dy) < this.r2

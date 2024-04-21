@@ -42,7 +42,7 @@ class StartMessage extends StartAnimStage {
         
         // black background
         let sr = global.screenRect
-        g.fillStyle = global.fgColor
+        g.fillStyle = global.colorScheme.fg
         g.fillRect(...sr)
         
         // draw text

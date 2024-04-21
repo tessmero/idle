@@ -11,12 +11,12 @@ class TabHeaderButton extends TextButton {
     
     draw(g){
         let rect = this.rect
-        let lineCol = global.fgColor
+        let lineCol = global.colorScheme.fg
         
         if(this.hovered){
-            lineCol = 'white'
+            lineCol = global.colorScheme.hl
         }
-        //g.fillStyle = global.bgColor
+        //g.fillStyle = global.colorScheme.bg
         g.strokeStyle = lineCol
         g.clearRect(...rect)
         

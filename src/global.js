@@ -1,4 +1,3 @@
-
 const global = {
     
     // graphics context
@@ -7,9 +6,7 @@ const global = {
     
 
     // 
-    bgColor: '#AAA',
-    fgColor: 'black',
-    hlColor: 'white',
+    colorScheme: ColorScheme.default,
     lineWidth: .003,
     
     // relate screen pixels to virtual 2D units
@@ -38,13 +35,13 @@ const global = {
     // game state
     gameState: GameStates.startMenu,
     upgradeMenuTabIndex: 0,
-    selectedToolIndex: 0,
     t: 0, // total ellapsed time
     maxBodyCount: 10,
     toolList: [], //list of Tool instances
     floaters: [], //list of Floater instances to draw on top of gui
    
     // debug
+    sandboxMode:        false,
     debugUiRects:       false,
     debugGrabbers:      false,
     colorcodeParticles: false,
@@ -54,7 +51,7 @@ const global = {
     showEdgeVel:        false,
     showEdgeAccel:      false,
     
-    controlPointLineWidth: .003,
+    controlPointLineWidth: .005,
     controlPointVisibleHoverRadius: .2,
    
     // game advancement

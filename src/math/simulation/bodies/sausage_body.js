@@ -60,7 +60,7 @@ class SausageBody extends Body {
         let b = this.b.xy()
         
         // draw sraight segmetn
-        g.strokeStyle = global.fgColor
+        g.strokeStyle = global.colorScheme.fg
         g.lineCap = 'round'
         g.lineWidth = 2*this.rad
         g.beginPath()

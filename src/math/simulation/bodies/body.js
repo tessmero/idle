@@ -33,7 +33,7 @@ class Body {
     
     // callback for this.grabber
     // when a particle is grabbed (particle_group.js)
-    grabbed(x,y,dx,dy,hit){   
+    grabbed(subgroup,i,x,y,dx,dy,hit){   
         
         // place particle on edge
         this.eps.spawnParticle(hit,0)
@@ -48,7 +48,7 @@ class Body {
         
         // prepare particle grabber instance
         this.grabber = this.buildGrabber()//new LineGrabber(a,b,rad,(x,y) => this.grabbed(x,y))
-        sim.grabbers.add(this.grabber)
+        sim.addGrabber(this.grabber)
         
         // prepare to emit particles
         // PPS = physics particle subgroup instance
@@ -59,6 +59,11 @@ class Body {
         edge.computeEdgeShape()
         edge.pos = this.pos
         this.eps = sim.edgeGroup.newSubgroup(edge)
+        
+        // indicate to grabber
+        // not to grab from this edge
+        // (parice_groupjs)
+        this.grabber.eps = this.eps
         
         // prepare to pass particles from edge to physics
         this.eps.pps = this.pps
@@ -72,7 +77,7 @@ class Body {
     
     // called in particle_sim.js removeBody()
     unregister(sim){
-        this.sim.grabbers.delete(this.grabber)
+        this.sim.removeGrabber(this.grabber)
         this.sim.physicsGroup.deleteSubgroup(this.pps)
         this.sim.edgeGroup.deleteSubgroup(this.eps)
     }
@@ -92,7 +97,7 @@ class Body {
     // called in edge_particle_subgroup.js
     // when this.eatsQueued > 0
     eatParticleFromEdge(x,y){
-        DefaultTool._grabbed( this.sim,x,y )
+        DefaultTool._grabbed( this.sim, null,null,x,y,null,null,null )
     }
     
     update(dt,beingControlled=false){
@@ -168,9 +173,6 @@ class Body {
         if( !this.edge ) return
         this._drawDebugVectors(g, 0, twopi, a => {
             let [r,r2,d] = this.edge.lookupAngle(a-this.angle)
-            if( r == 0 ){
-                    console.log('poop')
-            }
             let p = this.pos.add(vp(a,r))
             return[ this.pos, p ]
         })
@@ -213,6 +215,6 @@ class Body {
             g.lineTo(...stop.xy())
         }
         g.stroke()
-        g.strokeStyle = global.fgColor
+        g.strokeStyle = global.colorScheme.fg
     }
 }

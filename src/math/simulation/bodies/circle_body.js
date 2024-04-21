@@ -29,7 +29,7 @@ class CircleBody extends Body{
         // draw circle
         let r = this.rad
         let c = p.xy()
-        g.fillStyle = global.fgColor
+        g.fillStyle = global.colorScheme.fg
         g.beginPath()
         g.moveTo(...c)
         g.arc(...c,r,0,twopi)

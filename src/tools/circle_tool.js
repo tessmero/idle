@@ -18,7 +18,7 @@ class CircleTool extends BodyTool{
     getCost(){
 
         // count previously built circles
-        let bods = global.mainSim.allBodies
+        let bods = this.sim.getBodies()
         let circles = [...bods].filter(b => b instanceof CollectorCircleBody)
         let count = circles.length
 

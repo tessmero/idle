@@ -26,7 +26,7 @@ class LineTool extends BodyTool{
     getCost(){
 
         // count previously built lines
-        let bods = global.mainSim.allBodies
+        let bods = this.sim.getBodies()
         let lines = [...bods].filter(b => b instanceof ControlledSausageBody)
         let count = lines.length
 

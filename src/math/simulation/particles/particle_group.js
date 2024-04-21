@@ -22,7 +22,7 @@ class ParticleGroup {
         
         
         // start iterating over particle positions
-        for( let [i,x,y,grab,ungrab,dx,dy] of this.generateParticles() ){
+        for( let [subgroup,i,x,y,grab,ungrab,dx,dy] of this.generateParticles() ){
             
             // check if previously grabbed
             if( this.grabbedParticles.has(i) ){
@@ -35,12 +35,26 @@ class ParticleGroup {
             }else{
                 
                 // check if newly grabbed
-                let grabbed = (grab || [...this.sim.grabbers].some( gr => {
-                    //if( isEdgeGroup && (!gr.canGrabEdgeParticle(i)) ) return false
-                    if( isEdgeGroup ) return false
-                    let hit = gr.contains(x,y)
+                let grabbed = (grab || this.sim.getGrabbers().some( gr => {
+                    
+                    // prevent body grabbing from its own edge
+                    // (body.js)
+                    if( subgroup && (gr.eps == subgroup) ) return false 
+                    
+                    //if( isEdgeGroup ) return false
+                    let hit = gr.contains(subgroup,i,x,y)
                     if( hit ){
-                        if( gr.grabbed ) gr.grabbed(x,y,dx,dy,hit)
+                        if( gr.grabbed ){
+                            
+                            // grab function defined
+                            // mark particle as grabbed unless
+                            // any truthy flag returned
+                            let rval = gr.grabbed(subgroup,i,x,y,dx,dy,hit)
+                            return !rval
+                        }
+                        
+                        // no grab function defined,
+                        // just mark the particel as grabbed
                         return true
                     }
                     return false

@@ -1,6 +1,8 @@
 // base class for temporary visual elements
 // text that floats upwards and then dissolves
 
+var _floaterFontSpecs = null
+
 class Floater{
     
     constructor( pos, label ){
@@ -8,13 +10,15 @@ class Floater{
         this.label = label
         this.duration = 1000
         this.remainingTime = this.duration
-        
-        let letterPixelPad = .002
-        let scale = .3
-        this.fontSpecs = [
-            new DissolvingFontSpec(letterPixelPad, scale, true),
-            new DissolvingFontSpec(0, scale, false),
-        ]
+
+        if( !_floaterFontSpecs ){
+            let letterPixelPad = .002
+            let scale = .3
+            _floaterFontSpecs = [
+                new DissolvingFontSpec(letterPixelPad, scale, true),
+                new DissolvingFontSpec(0, scale, false),
+            ]
+        }
     }
     
     update(dt){
@@ -28,9 +32,13 @@ class Floater{
         let label = this.label
         let p = this.pos.xy()
         
-        let sld = this.remainingTime / this.duration
+        let r = (this.remainingTime / this.duration)
+        let dissolveStart = .5
+        let sld = (r+dissolveStart)
+        if( sld < 1 ) sld *= (1-dissolveStart)
         
-        this.fontSpecs.forEach( fs => {
+        
+        _floaterFontSpecs.forEach( fs => {
             fs.solidity = sld
             drawText(g, ...p, label, center, fs)
         })

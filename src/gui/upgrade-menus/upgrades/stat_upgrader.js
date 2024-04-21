@@ -104,8 +104,8 @@ class StatUpgrader extends CompositeGuiElement {
         let dx = sl+pad
        
         // draw progression display boxes
-        g.strokeStyle = global.fgColor
-        g.fillStyle = global.fgColor
+        g.strokeStyle = global.colorScheme.fg
+        g.fillStyle = global.colorScheme.fg
         g.lineWidth = global.lineWidth
         for( let i = 0 ; i < gutse.maxLevel ; i++ ){
             let box = [x+i*dx,y,sl,sl]

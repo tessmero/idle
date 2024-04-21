@@ -24,7 +24,7 @@ class ProgressIndicator extends GuiElement {
         let r = this.rect
         if( this.outline ){
             g.lineWidth = global.lineWidth
-            g.fillStyle = global.fgColor
+            g.fillStyle = global.colorScheme.fg
             g.strokeRect(...r)
         }
         
@@ -35,7 +35,7 @@ class ProgressIndicator extends GuiElement {
         
         // draw progress
         g.globalCompositeOperation = "xor";
-        g.fillStyle = 'black'
+        g.fillStyle = global.colorScheme.fg
         g.fillRect(r[0],r[1],r[2]*progress,r[3])
         g.globalCompositeOperation = "source-over";
     }

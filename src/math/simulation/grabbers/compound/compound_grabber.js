@@ -18,10 +18,10 @@ class CompoundGrabber extends Grabber {
     
     // check if point in grab region
     // if so, return nearest edge location
-    contains(x,y,angle=0){
+    contains(subgroup,i,x,y,angle=0){
         for( let i = 0 ; i < this.children.length ; i++ ){
             let c = this.children[i]
-            let hit = c.contains(x,y,angle)
+            let hit = c.contains(subgroup,i,x,y,angle)
             if(hit){
                 return hit
             }

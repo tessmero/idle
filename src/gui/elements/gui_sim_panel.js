@@ -19,6 +19,7 @@ class GuiSimPanel extends GuiElement {
         if( tut ){
             let tool = tut.tool
             tool.sim = this.sim
+            this.sim.setTool(tool)
             tool.update(dt)
             let keyframes = tut.update(dt)
             let p = tut.getCursorPos().xy()
@@ -36,7 +37,8 @@ class GuiSimPanel extends GuiElement {
 
             if( tut.wasReset ){
                 this.sim.clearBodies()
-                this.sim.grabbers.clear()
+                this.sim.clearGrabbers()
+                this.sim.setTool(null)
                 tut.wasReset = false
             }
             
@@ -58,7 +60,7 @@ class GuiSimPanel extends GuiElement {
         y -= .001
         g.clearRect( x-m, y, m, h )
         g.clearRect( x+w, y, m, h )
-        g.strokeStyle = global.fgColor
+        g.strokeStyle = global.colorScheme.fg
         g.lineWidth = global.lineWidth
         g.strokeRect(...this.rect)
         
