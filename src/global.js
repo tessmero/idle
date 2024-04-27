@@ -45,7 +45,7 @@ const global = {
     debugUiRects:       false,
     debugGrabbers:      false,
     colorcodeParticles: false,
-    showEdgeSpokesA:    false,
+    showEdgeSpokesA:    true,
     showEdgeSpokesB:    false,
     showEdgeNormals:    false,
     showEdgeVel:        false,
@@ -70,8 +70,8 @@ const global = {
     
     // strength of "forces" on poi
     // force=(area/accel) in vunits...ms...
-    poiPlayerF: 3e-6, // player clicking and dragging
-    bodyFriction: 4e-3, // body translation friction
+    poiPlayerF: 1e-6, // player clicking and dragging
+    bodyFriction: 1e-3, // body translation friction
     bodyAngleFriction: 1e-3,
     particleStickyForce: [1e-7,2e-6], // passive particle force into edge
     

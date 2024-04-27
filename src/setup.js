@@ -139,17 +139,15 @@ function resetGame(){
     resetProgression()
     global.mainSim.rainGroup.n = 2000
     
-    let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
-    global.mainSim.addBody(poi)
+    //let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
+    //global.mainSim.addBody(poi)
     
-    let star = new ControlledStarBody(global.mainSim,v(.75,.45),5,.05,.1)
-    global.mainSim.addBody(star)
+    let cross = new CrossBody(global.mainSim,v(.75,.45),5,.05,.1)
+    global.mainSim.addBody(cross)
     
-    let lines = [
-        //[v(.65,.55),v(.85,.35)],
-        [v(1-.65,.55),v(1-.75,.35)]
-    ]
-    lines.forEach(l => global.mainSim.addBody(new ControlledSausageBody(global.mainSim,...l)))
+    //let star = new StarBody(global.mainSim,v(.35,.45),5,.05,.1)
+    //global.mainSim.addBody(star)
+    
     
     resetRand(hard = true)
     fitToContainer()   

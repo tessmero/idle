@@ -44,36 +44,15 @@ class PathspecEdge extends Edge {
         let dist = 0
         let distStep = circ/10e4
         let startAngle = this.computePoint(0)[0]
-        let lastStepAngle = startAngle
-        let ioff = nnmod( Math.floor(angleLutN*lastStepAngle/twopi), angleLutN )
+        let ioff = nnmod( Math.floor(angleLutN*startAngle/twopi), angleLutN )
         let i = 0
         for( let i = 0 ; i < angleLutN ; i++ ){
             let targetAngle = startAngle + twopi*i/angleLutN
             
-            // advance dist and lastStepAngle
-            let prevad = null
-            while( true ){
-                let testDist = dist + distStep
-                
-                let [angle,radius,norm] = this.computePoint(testDist)
-                if( Math.abs(cleanAngle(angle-lastStepAngle)) >= angleMargin ){
-                    throw new Error('insufficient angle precision')
-                }
-                lastStepAngle = angle
-                dist = testDist
-                
-                let adiff = Math.abs(cleanAngle(lastStepAngle-targetAngle))
-                //console.log(adiff,angleMargin)
-                if( prevad && (adiff > prevad) ){
-                    throw new Error('angle estimate getting worse')
-                }
-                prevad = adiff
-                if( adiff < angleMargin ){
-                    break
-                }
-            }
+            let dli = this._getBestMatch(distLut, distLutNDims, targetAngle )
+            let rad = distLut[dli*distLutNDims + 1]
+            let dist = dli * circ / distLutN
             
-            let [angle,rad,norm] = this.computePoint(dist)
             let j = nnmod(i+ioff,angleLutN)*angleLutNDims
             angleLut[j+0] = rad
             angleLut[j+1] = rad*rad
@@ -82,6 +61,23 @@ class PathspecEdge extends Edge {
         this.angleLutN = angleLutN 
         this.angleLutNDims = angleLutNDims
         this.angleLut = angleLut
+    }
+    
+    // get 
+    _getBestMatch( distLut, ndims, targetAngle ){
+        let n = distLut.length / ndims
+        let bestI = 0
+        let bestDa = 7
+        for( let i = 0 ; i < n ; i++ ){
+            let angle = distLut[i*ndims]
+            let da = Math.abs(cleanAngle(angle-targetAngle))
+            if( da < bestDa ){
+                bestDa = da
+                bestI = i
+            }
+        }
+        
+        return bestI
     }
     
 }

@@ -19,7 +19,7 @@ function update(dt) {
             
         
         // move circle
-        if( true ){
+        if( false ){
             let poi = bodies[0].circle
             let d = global.startMenuTargetPos.sub(poi.pos)
             let d2 = d.getD2()
