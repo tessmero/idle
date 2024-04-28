@@ -55,7 +55,7 @@ function draw(fps, t) {
         tool.drawCursor(ctx,p)
     
     // draw gui floaters (as apposed to floaters in sims)
-    global.floaters.forEach( f => f.draw(g) )
+    global.floaters.draw(g)
 
     // debug draw mouse
     if( false ){

@@ -97,7 +97,7 @@ class BodyContextMenu extends ContextMenu {
                 g.fill()
                 
             }
-            else if( im == 2 ){
+            else {
                 // between segments
                 // do nothing
             }

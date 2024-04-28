@@ -37,10 +37,11 @@ function init() {
     // go to start menu
     // calls resetGame() defined further down
     global.mainSim = new MainPSim()
+    global.floaters = new FloaterGroup(100)
     quit()
     
     //////////////////////////////////////////
-    // unit tests 20240421
+    // unit tests 20240428
     if( false ){
         
         // start sim unit tests
@@ -69,11 +70,15 @@ function init() {
         }
         testBody(new CircleBody(sim,v(.5,.5),.1))
         testBody(new ControlledCircleBody(sim,v(.5,.5),.1))
-        testBody(new CollectorCircleBody(sim,v(.5,.5),.1))
+        testBody(new CircleBuddy(sim,v(.5,.5),.1))
         testBody(new SausageBody(sim,v(.5,.5),v(.3,.3)))
         testBody(new ControlledSausageBody(sim,v(.5,.5),v(.3,.3)))
         testBody(new StarBody(sim,v(.5,.5),5,.05,.1))
         testBody(new ControlledStarBody(sim,v(.5,.5),5,.05,.1))
+        testBody(new CrossBody(sim,v(.5,.5),5,.05,.1))
+        testBody(new ControlledCrossBody(sim,v(.5,.5),5,.05,.1))
+        testBody(new CompassBody(sim,v(.5,.5),5,.05,.1))
+        testBody(new ControlledCompassBody(sim,v(.5,.5),5,.05,.1))
         console.log(`${testedBodies} Body subclasses passed tests`)
         
         // test tool implementations
@@ -94,7 +99,7 @@ function init() {
         testTool(new CircleTool(sim))
         testTool(new DefaultTool(sim,.1))
         testTool(new LineTool(sim))
-        testTool(new PiTool(sim))
+        testTool(new PiTool(sim,.1))
         console.log(`${testedTools} Tool subclasses passed tests`)
         
         

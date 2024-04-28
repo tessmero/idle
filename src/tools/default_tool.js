@@ -45,7 +45,7 @@ class DefaultTool extends Tool{
         
         // show message
         let p = v(x,y)//.add(v(...sim.drawOffset))
-        Floater.signalChange(sim,p,+1)
+        FloaterGroup.signalChange(sim,p,+1)
     }
    
     mouseMove(p){

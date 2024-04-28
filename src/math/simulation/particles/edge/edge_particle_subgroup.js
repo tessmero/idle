@@ -92,9 +92,6 @@ class EdgeParticleSubgroup{
                 // check if just passed a sharp corner
                 let dnorm = Math.abs(cleanAngle(oldNorm-edgeNorm))
                 
-                let debug = [pos,dnorm]
-                if( dnorm > 1.6 ) console.log(debug.map(v => v.toFixed(3)))
-                
                 let passedSharpCorner = dnorm > 1.6
                 
                 // check if this particle has been pulled off edge

@@ -16,7 +16,7 @@ class ParticleSim {
         
         this._grabbers = new Set() // Grabber instances
         this._bodies = new Set() // Body instances
-        this.floaters = [] //list of Floater instances
+        this.floaters = new FloaterGroup(1000) 
         this.poiMaxArea = 1e-2
         this.poiShrinkRate = 1e-6// vunits^2 area lost per ms
         
@@ -130,9 +130,6 @@ class ParticleSim {
             return !alive
         })
         toRemove.forEach( b => this.removeBody(b) )
-    
-        // floaters
-        this.floaters = this.floaters.filter(f => f.update(dt))
     }
 
     updateControlPointHovering(p){
@@ -184,7 +181,7 @@ class ParticleSim {
         }
     
         // draw floaters
-        this.floaters.forEach( f => f.draw(g) )
+        this.floaters.draw(g)
         
         g.translate(-this.drawOffset[0],-this.drawOffset[1])
     }

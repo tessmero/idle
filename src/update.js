@@ -58,8 +58,12 @@ function update(dt) {
         
     } else if( sim.selectedBody ){
        let bod = sim.selectedBody
+       let bodPos = bod.pos
+       if( bod instanceof CompoundBody ){
+           bodPos = bod.getMainBody().pos
+       }
        let rect = curGui.getScreenEdgesForContextMenu()
-       let cmr = ContextMenu.pickRects(rect,bod.pos)
+       let cmr = ContextMenu.pickRects(rect,bodPos)
        
        if( bod instanceof Buddy ){
             global.contextMenu = new BuddyContextMenu(...cmr,bod)
@@ -110,9 +114,6 @@ function update(dt) {
     
     // upgrades menu transition effect (upgrade_menu.js)
     global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt)
-    
-    // gui floaters 
-    global.floaters = global.floaters.filter(f => f.update(dt))
 }
 
 var lastCanvasOffsetWidth = -1;

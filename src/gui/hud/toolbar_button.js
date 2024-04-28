@@ -53,7 +53,7 @@ class ToolbarButton extends CompositeGuiElement {
             }
             
             // show message
-            global.floaters.push( new Floater(center,'available'))
+            global.floaters.spawnFloater(center,'available')
             
         }
         this.wasUsable = usable

@@ -84,7 +84,7 @@ class StatUpgrader extends CompositeGuiElement {
         }
         
         global.mainSim.particlesCollected -= cost
-        Floater.signalChange(null,global.mousePos,-cost)
+        FloaterGroup.signalChange(null,global.mousePos,-cost)
         gutse.level += 1
         updateAllBonuses()
         this.setTemporaryTooltip('upgrade purchased!')

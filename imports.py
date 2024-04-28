@@ -71,7 +71,7 @@ class_files = sorted(class_files, key=get_hierarchy_depth)
 # Concatenate class files and non-class files
 order = class_files + non_class_files
 
-# vector.js, util.js must be first
+# utils must be first
 order = toFirst(order, 'util.js')
 order = toFirst(order, 'vector.js')
 
