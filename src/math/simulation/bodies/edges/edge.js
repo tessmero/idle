@@ -15,6 +15,10 @@ class Edge {
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
     
+    // settings for particles sliding on edge
+    getFriction(){ return 2e-3 }
+    getG(){ return 6e-6 }
+    
     // get precomputed [rad,r2,circ dist] at given angle
     lookupAngle(a){
         let i = Math.round(a*this.angleLutN/twopi)
@@ -34,7 +38,18 @@ class Edge {
         return [s[i],s[i+1],s[i+2],s[i+3]]
     }
     
-    // settings for particles sliding on edge
-    getFriction(){ return 2e-3 }
-    getG(){ return 6e-6 }
+    // helper to draw edge
+    // with given pos,angle offsets onscreen
+    trace(g,pos,angle){
+        g.beginPath()
+        for( let a = 0 ; a < twopi ; a += 1e-2 ){
+            let [r,r2,dist] = this.lookupAngle(a)
+            let p = pos.add(vp(a+angle,r))
+            g.lineTo( ...p.xy() )
+        }
+        g.closePath()
+    }
+    
+    
+    
 }

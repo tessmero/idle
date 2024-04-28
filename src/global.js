@@ -45,7 +45,7 @@ const global = {
     debugUiRects:       false,
     debugGrabbers:      false,
     colorcodeParticles: false,
-    showEdgeSpokesA:    true,
+    showEdgeSpokesA:    false,
     showEdgeSpokesB:    false,
     showEdgeNormals:    false,
     showEdgeVel:        false,

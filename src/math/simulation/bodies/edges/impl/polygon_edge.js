@@ -47,7 +47,7 @@ class PolygonEdge extends PathspecEdge {
         let v1 = v[si+1]
         
         // normal angle of polygon side
-        let norm = v1.sub(v0).getAngle()-pio2
+        let norm = cleanAngle(v1.sub(v0).getAngle()-pio2)
         
         // xy of point in question
         let p = va( v0, v1, sr )

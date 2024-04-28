@@ -1,9 +1,8 @@
-// a group of particles owned by a physics particle group
-// represented by an immutable index
+// a group of particles owned by a PhysicsParticleGroup
+// has fixed address range i to i+n
 //
-// a "subgroup" is a garbage-collectable unit
-// owned by an EdgePGroup
-class PhysicsPSubgroup{
+// "subgroup" meaning one garbage-collectable unit
+class PhysicsParticleSubgroup{
     constructor(group,subgroupIndex,i,n){
         this.group = group
         this.subgroupIndex = subgroupIndex

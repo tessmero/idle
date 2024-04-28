@@ -27,8 +27,15 @@ class Body {
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
     }
     
+    // default draw method
     draw(g){
-        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+        
+        // draw edge shape by brute-force
+        if( !this.edge ) return
+        this.edge.trace(g,this.pos,this.angle)
+        g.fillStyle = global.colorScheme.fg
+        g.fill()
+        
     }
     
     // callback for this.grabber

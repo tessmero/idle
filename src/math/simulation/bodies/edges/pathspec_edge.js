@@ -2,7 +2,7 @@
 // based on a path along the circumference
 class PathspecEdge extends Edge {
     
-    // compute position+normal [angle,radius,normal angle,r2] 
+    // compute polar coord [angle,radius,normal angle,r2] 
     // at given distance along circumerence
     computePoint(d){
         throw new Error(`Method not implemented in ${this.constructor.name}.`);

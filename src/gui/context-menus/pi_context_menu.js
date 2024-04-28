@@ -11,7 +11,7 @@ class PiContextMenu extends ContextMenu {
         if( !subgroup ){
             icon = proceduralParticleIcon
             flavor = 'procedural'
-        } else if( subgroup instanceof PhysicsPSubgroup ){
+        } else if( subgroup instanceof PhysicsParticleSubgroup ){
             icon = physicsParticleIcon
             flavor = 'physics'
         } else {

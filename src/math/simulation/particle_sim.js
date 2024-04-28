@@ -7,8 +7,8 @@ class ParticleSim {
         
         // particles
         this.rainGroup = new ProceduralPGroup(this,n)
-        this.physicsGroup = new PhysicsPGroup(this,n)
-        this.edgeGroup = new EdgePGroup(this,n)
+        this.physicsGroup = new PhysicsParticleGroup(this,n)
+        this.edgeGroup = new EdgeParticleGroup(this,n)
         
         // prepare extra subgroup for various leftover physics particles
         // e.g. particles emitted by body, then body was deleted

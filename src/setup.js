@@ -127,26 +127,30 @@ function resetGame(){
     
     // init start menu background sim
     global.t = 0
-    global.mainSim.particlesCollected = 0
+    let gms = global.mainSim
+    gms.particlesCollected = 0
     
     
     global.activeReleasePatterns = []
     
     global.startMenuTargetPos = v(.5,.5)
-    global.mainSim.clearBodies()
+    gms.clearBodies()
 
     
     resetProgression()
-    global.mainSim.rainGroup.n = 2000
+    gms.rainGroup.n = 2000
     
-    //let poi = new ControlledCircleBody(global.mainSim,v(0,0),Math.sqrt(global.poiStartArea))
-    //global.mainSim.addBody(poi)
+    //let poi = new ControlledCircleBody(gms,v(.5,.3),Math.sqrt(global.poiStartArea))
+    //gms.addBody(poi)
     
-    let cross = new CrossBody(global.mainSim,v(.75,.45),5,.05,.1)
-    global.mainSim.addBody(cross)
+    let cross = new ControlledCrossBody(gms,v(.5,.45),5,.05,.1)
+    gms.addBody(cross)
     
-    //let star = new StarBody(global.mainSim,v(.35,.45),5,.05,.1)
-    //global.mainSim.addBody(star)
+    let comp = new ControlledCompassBody(gms,v(.15,.45),5,.05,.1)
+    gms.addBody(comp)
+    
+    let star = new ControlledStarBody(gms,v(.85,.45),5,.05,.1)
+    gms.addBody(star)
     
     
     resetRand(hard = true)

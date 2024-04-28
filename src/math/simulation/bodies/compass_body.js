@@ -1,10 +1,10 @@
 // static flat surface body
-class CrossBody extends Body{
+class CompassBody extends Body{
     constructor(sim,pos){
         super(sim,pos) 
         
         //
-        this.title = 'cross'
+        this.title = 'compass'
         this.icon = increaseIcon
     }
     
@@ -18,16 +18,13 @@ class CrossBody extends Body{
         
         let a = 1
         let b = 5
-        
-        let aa = 1/2
-        let c = 6
-        let scale = 2e-2
+        let scale = 3e-2
         
         let verts = [
-            [-a,b],[-aa,c],[aa,c],[a,b],[a,a],
-            [b,a],[c,aa],[c,-aa],[b,-a],[a,-a],
-            [a,-b],[aa,-c],[-aa,-c],[-a,-b],[-a,-a],
-            [-b,-a],[-c,-aa],[-c,aa],[-b,a],[-a,a],
+            [0,b],[a,a],
+            [b,0],[a,-a],
+            [0,-b],[-a,-a],
+            [-b,0],[-a,a],
         ]
         
         verts = verts.map( xy => v(...xy).mul(scale) )

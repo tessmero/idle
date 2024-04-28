@@ -1,16 +1,15 @@
-// group of particles stuck to the edges of shapes
+// group of bouncing particles
 //
 // instantiated in particle_sim.js
-class EdgePGroup extends ParticleGroup {
+class PhysicsParticleGroup extends ParticleGroup {
     
     
     constructor(sim,n){
         super(sim,n)
-        this.isEdgeGroup = true // particle_group.js draw()
         
         // preare to keep track of up to 
-        // n particles with 2 props a,av
-        const ndims = 2
+        // n particles with 4 props x,y,vx,vy
+        const ndims = 4
         this.ndims = ndims
         this.state = new Float32Array(n*ndims); 
         
@@ -28,28 +27,23 @@ class EdgePGroup extends ParticleGroup {
     }
     
     // return new subgroup instance
-    // for bodies that emit particles
-    //    
-    // should be called in [Body subclass]::register(sim):
-    //      sim.edgeGroup.newSubgroup(edge)
-    newSubgroup(edge){
+    // should be called in constructors 
+    // for objects that emit particles
+    newSubgroup() {
         
-        if( this.freeSubgroupIndices.size == 0 ){
+        if( this.freeSubgroupIndices.size() == 0 ){
             return null
         }
         
         let subgroupIndex = this.freeSubgroupIndices.find(true)
         let n = this.nsub
         let i = subgroupIndex*n
-        let sg = new EdgeParticleSubgroup(this,subgroupIndex,i,n,edge)
+        let sg = new PhysicsParticleSubgroup(this,subgroupIndex,i,n)
         this.subgroups.add(sg)
         this.freeSubgroupIndices.delete(subgroupIndex)
         return sg
     }
     
-    
-    // should be called in [Body subclass]::unregister(sim):
-    //      sim.edgeGroup.deleteSubgroup(edge)
     deleteSubgroup(sg){
         this.freeSubgroupIndices.add(sg.subgroupIndex)
         this.subgroups.delete(sg)
@@ -57,9 +51,7 @@ class EdgePGroup extends ParticleGroup {
     
     *generateParticles(){
         resetRand()
-        let n_particles = this.sim.n
-        let sr = global.screenRect
-        let anim_angle = this.sim.t*1e-4
+        let n_particles = this.n
         let particleRadius = this.sim.particleRadius
         let md2 = global.mouseGrabMd2
         let nd = this.ndims
@@ -69,8 +61,21 @@ class EdgePGroup extends ParticleGroup {
         if( this.lastDrawTime ) dt = this.sim.t-this.lastDrawTime
         this.lastDrawTime = this.sim.t
         
-        for( let eps of this.subgroups ){
-            yield* eps.generateParticles(dt)
+        
+        // set terminal velocity to match falling rain
+        let mg = this.sim.particleG.getMagnitude()
+        let particleFriction = mg / this.sim.fallSpeed
+        
+        // prepare to multiply and offset velocities
+        // to apply friction and gravity to all particles
+        let vm = (1-particleFriction*dt)
+        
+        
+        let vb = this.sim.particleG.mul(dt)
+        
+        
+        for( let pps of this.subgroups ){
+            yield *pps.generateParticles(dt,vm,vb)
         }
     }
 }
