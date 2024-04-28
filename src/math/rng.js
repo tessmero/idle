@@ -5,7 +5,6 @@
 // https://stackoverflow.com/a/47593316
 //
 
-var seed = null;
 var rand = null;
 
 function randomString(length) {
@@ -20,9 +19,13 @@ function randomString(length) {
     return result;
 }
 
-function resetRand(hard=false){
-    if( hard || (seed==null) ){
-        seed = cyrb128(randomString(10));
+function randomSeed(){
+    return cyrb128(randomString(10))
+}
+
+function resetRand(seed=null){
+    if( seed==null ){
+        seed = randomSeed();
     }
     rand = sfc32(seed[0], seed[1], seed[2], seed[3])
 }

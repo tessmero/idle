@@ -10,6 +10,9 @@ class Floater{
         this.label = label
         this.duration = 1000
         this.remainingTime = this.duration
+        
+        // seed for dissolving effect rng
+        this.rngSeed = randomSeed()
 
         if( !_floaterFontSpecs ){
             let letterPixelPad = .002
@@ -37,7 +40,7 @@ class Floater{
         let sld = (r+dissolveStart)
         if( sld < 1 ) sld *= (1-dissolveStart)
         
-        
+        resetRand(this.rngSeed)
         _floaterFontSpecs.forEach( fs => {
             fs.solidity = sld
             drawText(g, ...p, label, center, fs)

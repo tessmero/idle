@@ -46,6 +46,7 @@ class Tool{
         let layout = (enableIdleAnim && (global.idleCountdown <= 0)) ? 
             this.icon.getCurrentAnimatedLayout() : this.icon.frames[0]
         
+        g.fillStyle = global.colorScheme.fg
         drawLayout(g,...p,layout,this.cursorCenter,new FontSpec(.005,scale,true)) 
         drawLayout(g,...p,layout,this.cursorCenter,new FontSpec(0,scale,false) )
 

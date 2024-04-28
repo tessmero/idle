@@ -5,12 +5,15 @@ class BodyContextMenu extends ContextMenu {
         super(rect,s0,s1)
         
         this.body = body // Body instance to focus
-        if( !body.expLevel ) body.expLevel = 1
         if( !body.title ) body.title = 'body'
         if( !body.icon ) body.icon = circleIcon
         
         let w = .05
         let topRight = [rect[0]+rect[2]-w,rect[1],w,w]
+        
+        let brs = .02
+        let bottomRight = [s1[0]+s1[2]-brs,s1[1]+s1[3]-brs,brs,brs]
+        bottomRight = padRect( ...bottomRight, .03 )
         
         this.children = [
                     
@@ -20,9 +23,9 @@ class BodyContextMenu extends ContextMenu {
                     .withScale(.5)
                     .withTooltip('close menu'),
                     
-            new IconButton(padRect(...s1,-.1),trashIcon,()=>this.deleteBody())
+            new IconButton(bottomRight,trashIcon,()=>this.deleteBody())
                     .withTooltip(`delete ${body.title}\n(no refunds)`)
-                    .withScale(.8)
+                    .withScale(.5)
         ]
     }
     
@@ -48,24 +51,56 @@ class BodyContextMenu extends ContextMenu {
         g.fillStyle = global.colorScheme.hl
         let bod = this.body
         let edge = bod.edge
-        let n = Math.floor(edge.circ*50)
+        let n = Math.floor(edge.circ*500)
         let s = 1e-2 // square size
         let guiScale = .5 
-        let center = bod.pos.sub(v(s/2,s/2))
-        let space = 2e-2
-        let animAng = global.t/1e3
-        space += 1e-2*Math.cos(animAng) // in-out anim
-        let cdo = 1e-1*Math.sin(animAng/2) // slide anim
+        let center = bod.pos
+        let thickness = 1e-2
+        
+        // strip pattern in units of index (up to n)
+        let period = Math.floor( n/20 )
+        let fill = Math.floor(period*.75)
+        
+        let animAng = global.t/1e3 // anim state
+        //space += 1e-2*Math.cos(animAng) // in-out anim
+        let cdo = 6e-2*animAng//1e-1*Math.sin(animAng/2) // slide anim
+        
+        let inners = []
+        let outers = []
         
         for( let i = 0 ; i < n ; i++ ){
             let cd = cdo + i*edge.circ/n
             let [a,r,norm,r2] = bod.edge.lookupDist(cd)
             a += bod.angle
             norm += bod.angle
-            let p = center.add(vp(a,r).add(vp(norm,space)))
-            g.fillRect(...p.xy(),s,s)
+            let outer = center.add(vp(a,r))
+            let inner = outer.sub(vp(norm,thickness))
+            
+            let im = i%period
+            if( im == 0 ){
+                // start segment
+                inners = [inner]
+                outers = [outer]
+            }
+            else if( im < fill ){
+                // mid segment
+                inners.push(inner)
+                outers.push(outer)
+                
+            }
+            else if( im = fill ){
+                // finish segment
+                g.beginPath()
+                inners.reverse()
+                    .concat(outers)
+                    .forEach(p => g.lineTo(...p.xy()))
+                g.fill()
+                
+            }
+            else if( im == 2 ){
+                // between segments
+                // do nothing
+            }
         }
-        
-        g.fillStyle = global.colorScheme.fg
     }
 }

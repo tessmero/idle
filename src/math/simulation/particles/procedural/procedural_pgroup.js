@@ -7,10 +7,11 @@ class ProceduralPGroup extends ParticleGroup {
         super(sim,n)
         this.lastDrawTime = 0
         this.wiggle = .05 //horizontal movement
+        this.rngSeed = randomSeed()
     }
     
     *generateParticles(){
-        resetRand()
+        resetRand(this.rngSeed)
         let n_particles = this.n
         let sr = this.sim.rect
         let anim_angle = this.sim.t*1e-4

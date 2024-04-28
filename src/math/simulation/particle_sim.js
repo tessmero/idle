@@ -44,9 +44,13 @@ class ParticleSim {
         while( b.parent ){
             b = b.parent
         }
-        if( b instanceof CompoundBody ){
+        
+        if( b instanceof Buddy ){
+            // do nothing
+        } else if( b instanceof CompoundBody ){
             b = b.getMainBody()
         }  
+        
         this.selectedBody = b
         this.selectedParticle = null
     }

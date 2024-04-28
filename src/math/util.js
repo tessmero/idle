@@ -17,6 +17,35 @@ function rectCenter(x,y,w,h){
     return [x+w/2,y+h/2]
 }
 
+// return list of rectangles
+function divideRows(x,y,w,h,n){
+    return divideRect(x,y,w,h,true)
+}
+
+// return list of rectangles
+function divideCols(x,y,w,h,n){
+    return divideRect(x,y,w,h,false)
+}
+
+
+// return list of rectangles
+function divideRect(x,y,w,h,n,axis){
+    let [start,len] = axis ? [y,h] : [x,w]
+    let divLen = len/n
+    
+    let result = []
+    for( let i = 0 ; i < n ; i++ ){
+        let divStart = start + i*len/n
+        result.push(
+            axis ? [x,divStart,w,divLen]
+            : [divStart,y,divLen,h]
+        )
+    }
+    
+    return result
+    
+}
+
 function padRect(x,y,w,h,p){
     return [x-p,y-p,w+2*p,h+2*p]
 }

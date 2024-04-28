@@ -1,6 +1,6 @@
-// a circle body with a control point 
-// for the player to click and drag
-class ControlledCircleBody extends CompoundBody {
+// controlled circle body in global.mainSim 
+// eats particles and contributes to player currency
+class CircleBuddy extends Buddy {
     
     // sim is a ParticleSim instance
     constructor(sim,pos,rad){
@@ -17,14 +17,4 @@ class ControlledCircleBody extends CompoundBody {
     }
     
     getMainBody(){ return this.circle }
-    
-    update(dt){
-        
-        // request a particle to be eaten from edge
-        // edge_particle_subgroup.js
-        if( Math.random() < .1 )
-            this.getMainBody().eatsQueued = 1 
-        
-        return super.update(dt)
-    }
 }

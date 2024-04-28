@@ -5,6 +5,9 @@ class StartMessage extends StartAnimStage {
     constructor(){
         super()
         
+        // rng for dissolving effect
+        this.rngSeed = randomSeed()
+        
         // durations of segments
         let sd = [
             500,//0 black screen
@@ -51,6 +54,7 @@ class StartMessage extends StartAnimStage {
             let label = this.text
             let center = true
             this.fontSpec.solidity = sld
+            resetRand(this.rngSeed)
             drawText(g, .5,.5, label, center, this.fontSpec )
         }
     }

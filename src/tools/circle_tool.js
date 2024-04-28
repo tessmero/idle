@@ -11,7 +11,7 @@ class CircleTool extends BodyTool{
     
     // implement BodyTool
     buildBody(p){
-        return new CollectorCircleBody(this.sim,p,this.circleRadius)
+        return new CircleBuddy(this.sim,p,this.circleRadius)
     }
 
     // implement Tool
@@ -19,7 +19,7 @@ class CircleTool extends BodyTool{
 
         // count previously built circles
         let bods = this.sim.getBodies()
-        let circles = [...bods].filter(b => b instanceof CollectorCircleBody)
+        let circles = [...bods].filter(b => b instanceof CircleBuddy)
         let count = circles.length
 
         return ValueCurve.power(100,2.5).f(count)

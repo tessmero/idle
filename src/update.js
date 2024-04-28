@@ -60,7 +60,12 @@ function update(dt) {
        let bod = sim.selectedBody
        let rect = curGui.getScreenEdgesForContextMenu()
        let cmr = ContextMenu.pickRects(rect,bod.pos)
-       global.contextMenu = new BodyContextMenu(...cmr,bod)
+       
+       if( bod instanceof Buddy ){
+            global.contextMenu = new BuddyContextMenu(...cmr,bod)
+       } else {
+            global.contextMenu = new BodyContextMenu(...cmr,bod)
+       }
        
     } else if( sim.selectedParticle ){
        let p = sim.selectedParticle

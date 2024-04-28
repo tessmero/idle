@@ -7,7 +7,7 @@ class LineTool extends BodyTool{
         
         this.icon = lineIcon
             
-        this.tooltip = 'build lines'
+        this.tooltip = 'build line'
         this.cursorCenter = true // tool.js
         
         this.lineRadius = 2e-2 // radius of caps (half of thickness)

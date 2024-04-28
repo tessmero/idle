@@ -104,6 +104,10 @@ class Body {
     // called in edge_particle_subgroup.js
     // when this.eatsQueued > 0
     eatParticleFromEdge(x,y){
+        let par = this.parent
+        if( par && (par instanceof Buddy) ){
+            par.particlesCollected += 1
+        }
         DefaultTool._grabbed( this.sim, null,null,x,y,null,null,null )
     }
     
