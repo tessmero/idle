@@ -23,10 +23,11 @@ class ControlPoint extends Body {
             if( this.sim.draggingControlPoint ) return
             if( global.idleCountdown<=0 ) return
         }
-        this.constructor._draw(g,this.pos,this.rad,color,forceDraw)
+        let hoverEffectAllowed = this.sim==global.mainSim
+        this.constructor._draw(g,this.pos,this.rad,color,forceDraw,hoverEffectAllowed)
     }
     
-    static _draw(g,pos,rad,color=null,forceDraw=false){
+    static _draw(g,pos,rad,color=null,forceDraw=false,hoverEffectAllowed=false){
         if( !color ) color=global.colorScheme.fg
         
         let c = pos.xy()
@@ -39,7 +40,7 @@ class ControlPoint extends Body {
         if( !forceDraw ){
             
             // skip hover effect for gui simulations
-            if( this.sim != global.mainSim ) return 
+            if( !hoverEffectAllowed ) return
             
             let ia = intersectionAngles( //util.js
                 ...pos.xy(),rad,
