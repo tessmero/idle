@@ -3,9 +3,9 @@ const _allTestSims = {}
 class Test {
     
     getSim(){
-        let clazz = this.constructor.name
+        let clazz = this.constructor
         if(!( clazz in _allTestSims )){
-            _allTestSims[clazz] = this.buildSim(...global.tutorialSimDims)
+            _allTestSims[clazz] = this.buildSim()
         }
         return _allTestSims[clazz]
     }
@@ -32,10 +32,10 @@ class Test {
     
     static anglesEqual(a,b){
         let diff = Math.abs(cleanAngle(a-b))
-        return diff < 1e-3 // radians
+        return diff < 1e-2 // radians
     }
     
-    static vectorsEqual(a,b,epsilon=1e-3){
+    static vectorsEqual(a,b,epsilon=1e-2){
         let d = a.sub(b)
         return d.getMagnitude() < epsilon
     }

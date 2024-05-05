@@ -15,12 +15,16 @@ class PiToolTutorialTest extends TutorialTest {
                 return sim.selectedParticle != null
             }],
             [1400, 'particle at bottom', () => {
-                let [subgroup,i,x,y,dx,dy,hit] = sim.selectedParticle
+                let sp = sim.selectedParticle
+                if( !sp ) return false
+                let [subgroup,i,x,y,dx,dy,hit] = sp
                 let relPos = Test.relPos(sim,v(x,y))
                 return relPos.y > .5
             }],
-            [4000, 'particle at top', () => {
-                let [subgroup,i,x,y,dx,dy,hit] = sim.selectedParticle
+            [3200, 'particle at top', () => {
+                let sp = sim.selectedParticle
+                if( !sp ) return false
+                let [subgroup,i,x,y,dx,dy,hit] = sp
                 let relPos = Test.relPos(sim,v(x,y))
                 return relPos.y < .5
             }],

@@ -74,9 +74,9 @@ class HudGui extends Gui {
             // total caught
             global.sandboxMode ? null :
             new StatReadout(topCrp,collectedIcon,() => 
-                global.mainSim.particlesCollected.toString())
+                global.mainSim.particlesCollected.toFixed(0))
                 .withStyle('hud')
-                .withDynamicTooltip(() => `${global.mainSim.particlesCollected} raindrops collected`)
+                .withDynamicTooltip(() => `${global.mainSim.particlesCollected.toFixed(0)} raindrops collected`)
                 .withAutoAdjustRect(true),
             
             // pause button

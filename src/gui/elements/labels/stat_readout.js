@@ -20,9 +20,14 @@ class StatReadout extends DynamicTextLabel {
         let ch = charHeight
         
         if( !this.icon ) return
-        let layout = this.icon.getCurrentAnimatedLayout()
+        let layout = this.isAnimated() ? 
+            this.icon.getCurrentAnimatedLayout() : this.icon.frames[0] //icon.js
         
         drawLayout(g,xy[0],xy[1],layout,false,new FontSpec(this.pad,this.scale,true)) //character.js
         drawLayout(g,xy[0],xy[1],layout,false,new FontSpec(0,this.scale,false)) //character.js
+    }
+    
+    isAnimated(){
+        return true
     }
 }

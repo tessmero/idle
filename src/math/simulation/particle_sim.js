@@ -129,6 +129,13 @@ class ParticleSim {
         s.selectedParticle = null
         s.selectedBody = null
         s.particlesCollected = 0
+        
+        // activate all procedural particles
+        this.rainGroup.grabbedParticles.fill(false)
+        
+        // grab/remove all others
+        this.physicsGroup.grabbedParticles.fill(true)
+        this.edgeGroup.grabbedParticles.fill(true)
         //s.t = 0
     }
         

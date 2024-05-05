@@ -8,7 +8,7 @@ class Skill {
 
     // called in gui/upgrade_menu/skill_tab.js
     getThumbnailSim(){
-        let clazz = this.constructor.name
+        let clazz = this.constructor
         if(!( clazz in _allSkillThumbnailSims )){
             _allSkillThumbnailSims[clazz] = this.buildThumbnailSim(...global.thumbnailSimDims)
         }

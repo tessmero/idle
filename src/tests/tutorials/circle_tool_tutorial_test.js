@@ -18,7 +18,7 @@ class CircleToolTutorialTest extends TutorialTest {
             [1200, 'one body', () => {
                 return sim.getBodies().length == 1
             }],
-            [2400, 'floaters visible', () => {
+            [1600, 'floaters active', () => {
                 return sim.floaters.activeCount > 0
             }],
             [3000, 'particles collected', () => {

@@ -23,8 +23,8 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
             this.children.push( new StatReadout(r,collectedIcon,
                 ()=>bc((budget,cost)=>{
                     if( budget > cost )
-                        return `${cost}`
-                    return `${budget}/${cost}` 
+                        return `${cost.toFixed(0)}`
+                    return `${budget.toFixed(0)}/${cost.toFixed(0)}` 
                 }))
                 .withCenter(true))
             

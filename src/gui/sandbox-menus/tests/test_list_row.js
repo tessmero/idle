@@ -4,18 +4,36 @@ class TestListRow extends CompositeGuiElement {
         this.test = test
         this.testIndex = testIndex
         
-        //rect = padRect(...rect, -.01)
+        let sr = new StatReadout(rect, 
+                    playIcon,() => test.getTitle())
+                    .withScale(.4)
+                    
+        sr.isAnimated = () => {
+            return sr.hovered || this.isActive()
+        }
         
         this.children = [
             new Button(rect,()=>this.clicked()),
-            new StatReadout(rect,playIcon,() => test.getTitle())
-                    .withScale(.4)
+            sr
         ]
+    }
+    
+    draw(g){
+        super.draw(g)
+        
+        if( this.isActive() ){
+            ProgressIndicator._draw(g,this.rect,1)
+        }
+    }
+    
+    isActive(){
+        let c = global.contextMenu
+        return c && (c.testIndex == this.testIndex)
     }
     
     clicked(){
         // position context menu on bottom/right
-        let rects = ContextMenu.pickRects(global.screenRect,v(.1,.1))
+        let rects = TestContextMenu.pickRects()
         global.contextMenu = new TestContextMenu(...rects,this.test,this.testIndex)
     }
 }

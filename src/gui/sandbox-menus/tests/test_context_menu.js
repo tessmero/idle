@@ -3,13 +3,13 @@ var _testLoopSetting = null
 // persistent context menu with gui sim
 // that appears when a row is clicked in tests menu
 class TestContextMenu extends ContextMenu {
-    constructor(rect,s0,s1,test,testIndex){
+    constructor(rect,s0,s1,test,testIndex){ 
         super(rect,s0,s1)
         this.test = test
         this.testIndex = testIndex
         
         //
-        this.loopDelay = 1000
+        this.loopDelay = 2000
         this.loopCountdown = this.loopDelay
         
         
@@ -28,7 +28,7 @@ class TestContextMenu extends ContextMenu {
         
         // divide second content square into rows
         let botRows = divideRows(...s1,10)
-        let textScale = .2
+        let textScale = .25
         
         let duration = test.getDuration()
         this.t = 0
@@ -40,38 +40,41 @@ class TestContextMenu extends ContextMenu {
         let i = 2
         let asserts = test.getTestAssertions(sim)
         let checkTimes = []
-        let checkLabels = []
+        let checkTooltips = []
         let checkReadouts = []
         asserts.forEach( e => {
-            let [time, label, func] = e
+            let [time, lbl, func] = e
             let seconds = (time/1000).toFixed(1)
-            label = `${seconds}s: ${label}`
+            let label = `${seconds}s: ${lbl}`
+            let tooltip = `at ${seconds} seconds:\n${lbl}`
             checkTimes.push(time)
-            checkLabels.push(label)
+            checkTooltips.push(tooltip)
             checkReadouts.push(
                 new StatReadout( botRows[i], uncheckedIcon, 
                     () => label)
                     .withScale(textScale)
+                    .withTooltipScale(textScale)
+                    .withTooltip(tooltip)
             )            
             i += 1
         })
         this.asserts = asserts
         this.checkTimes = checkTimes
-        this.checkLabels = checkLabels
+        this.checkTooltips = checkTooltips
         this.checkReadouts = checkReadouts
         this.nChecks = checkTimes.length
         this.nChecksPassed = 0
         
         
-        let ttDisplay = new TestTimelineDisplay( botRows[1], duration, checkTimes, checkLabels )
+        let ttDisplay = new TestTimelineDisplay( botRows[1], duration, checkTimes, checkTooltips )
         this.ttDisplay = ttDisplay
         
         let finalDisplay = new TextLabel( botRows.at(-1), '' ).withScale(.3)
         this.finalDisplay = finalDisplay
         
-        let topRows = divideRows(...padRect(...s0,0),10)
         
         // play/pause/etc buttons at bottom of first square
+        let topRows = divideRows(...padRect(...s0,0),10)
         let controlRow = divideCols(...topRows.at(-1),10)
         let specs = [
             // icon, tooltip, action
@@ -81,7 +84,7 @@ class TestContextMenu extends ContextMenu {
             [nextIcon, 'next test',       ()=>this.nextClicked()],
             [loopIcon, 'loop (off)',      ()=>this.loopClicked()],
         ]
-        let xOff = .5 * specs.length * controlRow[0][3] // center buttons
+        let xOff = .75 *  specs.length * controlRow[0][2] // center buttons
         i = 0
         let controlButtons = specs.map( entry => {
             let [icon,tooltip,action] = entry
@@ -90,18 +93,23 @@ class TestContextMenu extends ContextMenu {
             let result = new IconButton( r, icon, action )
                     .withScale(.3)
                     .withTooltip(tooltip)
+                    .withTooltipScale(textScale)
             i += 1
             return result
         })
         this.loopButton = controlButtons.at(-1)
         this.updateLoopButton()
         
+        let titleRect = [...topRows[0]]
+        titleRect[1] -= .03
+        let titleLabel = new TextLabel( titleRect, 'Test for\n'+test.getTitle() )
+                .withScale(.3)
+        
         this.children = this.children.concat([
             
             
             // title at top of first square
-            new TextLabel( topRows[0], 'Test for\n'+test.getTitle() )
-                .withScale(textScale), 
+            titleLabel, 
                 
             // GUi Sim Panel in middle of first square
             gsp, 
@@ -158,7 +166,7 @@ class TestContextMenu extends ContextMenu {
     
     playClicked(){
         global.contextMenu = new TestContextMenu(
-            this.rect,this.square0,this.square1,
+            ...TestContextMenu.pickRects(),
             this.test,this.testIndex)
     }
     
@@ -167,7 +175,7 @@ class TestContextMenu extends ContextMenu {
         let prevIndex = nnmod(this.testIndex-1,tl.length)
         let prevTest = testList[prevIndex]
         global.contextMenu = new TestContextMenu(
-            this.rect,this.square0,this.square1,
+            ...TestContextMenu.pickRects(),
             prevTest,prevIndex)
     }
     
@@ -176,7 +184,7 @@ class TestContextMenu extends ContextMenu {
         let nextIndex = nnmod(this.testIndex+1,tl.length)
         let nextTest = testList[nextIndex]
         global.contextMenu = new TestContextMenu(
-            this.rect,this.square0,this.square1,
+            ...TestContextMenu.pickRects(),
             nextTest,nextIndex)
     }
     
@@ -236,5 +244,11 @@ class TestContextMenu extends ContextMenu {
         this.lastTime = t
         
         return hovered
+    }
+    
+    static pickRects(){
+        
+        // force to right/bottom isde of screen
+        return ContextMenu.pickRects(global.screenRect,v(.1,.1))
     }
 }

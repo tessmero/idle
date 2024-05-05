@@ -78,6 +78,16 @@ function drawLayout(g,x,y, layout, center=true, fontSpec){
 
 var charLayouts = {
     
+"'": [
+    '     ',
+    '  w  ',
+    '  w  ',
+    '     ',
+    '     ',
+    '     ',
+    '     ',
+    '     ',
+],
 '=': [
     '     ',
     '     ',

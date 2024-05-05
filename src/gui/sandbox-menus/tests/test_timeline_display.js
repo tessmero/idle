@@ -22,7 +22,7 @@ class TestTimelineDisplay extends CompositeGuiElement {
             boxes.push( new IconButton( r, uncheckedIcon, ()=>{} )
                 .withScale(.2)
                 .withTooltip(label)
-                .withTooltipScale(.3))
+                .withTooltipScale(.25))
         }
         this.checkboxes = boxes
         

@@ -5,4 +5,5 @@ const testList = [
     new PiToolTutorialTest(),
     
     new BasicRainSkillCardTest(),
+    new FailureTest(),
 ]

@@ -30,7 +30,7 @@ class Tutorial {
     }
     
     getSim(){
-        let clazz = this.constructor.name
+        let clazz = this.constructor
         if(!( clazz in _allTutorialSims )){
             _allTutorialSims[clazz] = this.buildSim(...global.tutorialSimDims)
         }

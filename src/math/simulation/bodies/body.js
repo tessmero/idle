@@ -133,11 +133,11 @@ class Body {
         this.angle += this.avel*dt
         
         // push on-screen
-        var sc = global.screenCorners
-        if( this.pos.x < sc[0].x ) this.pos.x = sc[0].x
-        if( this.pos.x > sc[2].x ) this.pos.x = sc[2].x
-        if( this.pos.y < sc[0].y ) this.pos.y = sc[0].y
-        if( this.pos.y > sc[2].y ) this.pos.y = sc[2].y
+        var sr = this.sim.rect
+        if( this.pos.x < sr[0] ) this.pos.x = sr[0]
+        if( this.pos.x > sr[0]+sr[2] ) this.pos.x = sr[0]+sr[2]
+        if( this.pos.y < sr[1] ) this.pos.y = sr[1]
+        if( this.pos.y > sr[1]+sr[3] ) this.pos.y = sr[1]+sr[3]
         
         // update grabber and edge particles
         this.grabber.pos = this.pos

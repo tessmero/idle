@@ -22,8 +22,8 @@ class PiToolTutorial extends Tutorial {
     
     buildKeyframes(){
         let [startPos,clickPos,endPos] = [
-            v(.5,.9), // start
-            v(.5,.7), // click
+            v(.9,.4), // start
+            v(.5,.8), // click
             v(.9,.4), // end
         ]
         
@@ -38,7 +38,7 @@ class PiToolTutorial extends Tutorial {
             [2*i,'up'],
             [2*i,'pos',clickPos],
             [3*i,'pos',endPos],
-            [12*i,'pos',endPos],
+            [9*i,'pos',endPos],
             
         ]
     }

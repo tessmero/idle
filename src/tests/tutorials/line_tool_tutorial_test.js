@@ -16,12 +16,12 @@ class LineToolTutorialTest extends TutorialTest {
             [0, 'no bodies', () => {
                 return sim.getBodies().length == 0
             }],
-            [900, 'one floater', () => {
-                return sim.floaters.activeCount == 1
-            } ],
             [900, 'one body', () => {
                 return sim.getBodies().length == 1
             }],
+            [900, 'one floater', () => {
+                return sim.floaters.activeCount == 1
+            } ],
             [1300, 'angle = -135°',  () => {
                 return Test.anglesEqual( -3*pi/4, b().angle )
             }],
