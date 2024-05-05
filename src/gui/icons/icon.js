@@ -4,8 +4,6 @@
 // icon instances are singletons
 class Icon {
     
-    static subclassNames = []
-    
     // frames is a list of layouts like text characters (gui/characters.js)
     constructor(frames){
         this.frames = frames

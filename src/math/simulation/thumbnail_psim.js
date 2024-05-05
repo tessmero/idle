@@ -11,17 +11,16 @@ class ThumbnailPSim extends ParticleSim {
         this.rainGroup.wiggle  *= .15
         this.rainGroup.n  *= .005
         
+        this.reset()
+    }
+    
+    
+    reset(){
+        super.reset()
+        
         // add stable poi in center
         let p = v(...rectCenter(...this.rect))
         let poi = new CircleBody(this,p,2e-2)
         this.addBody(poi)
-    }
-    
-    // make sure bodies have no control points
-    addBody(b){
-        if( b.children )
-            b.children = b.children.filter(c => !b.controlPoints.includes(c) )
-        b.controlPoints = []
-        super.addBody(b)
     }
 }

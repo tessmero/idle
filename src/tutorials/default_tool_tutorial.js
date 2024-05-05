@@ -6,6 +6,12 @@ class DefaultToolTutorial extends Tutorial {
         return sim
     }
     
+    
+    getTitle(){
+        return 'Default Tool Tutorial'
+    }
+    
+    
     buildKeyframes(){
         
         let startPos = v(.5,.9)

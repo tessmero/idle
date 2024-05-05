@@ -14,6 +14,7 @@ class ContextMenu extends CompositeGuiElement{
         
         this.square0 = square0
         this.square1 = square1
+        this.opaque = true
     }
     
     draw(g){

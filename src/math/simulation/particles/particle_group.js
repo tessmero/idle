@@ -11,6 +11,10 @@ class ParticleGroup {
         this.n = n
     }
     
+    countActiveParticles(){
+        return this.n - this.grabbedParticles.size()
+    }
+    
     // draw all the particles in this group
     // second param is optional override
     // drawing individual particles

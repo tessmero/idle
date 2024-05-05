@@ -46,8 +46,9 @@ class UpgradeMenuGui extends Gui {
         
         let tabLabels,tabContent
         if( global.sandboxMode ){
-            tabLabels = ['DEBUG','skills']
+            tabLabels = ['tests','DEBUG','skills']
             tabContent = [
+                rect => new TestsTab(rect),
                 rect => new DebugTab(rect),
                 rect => new SkillsTab(rect),
             ]
@@ -86,6 +87,9 @@ class UpgradeMenuGui extends Gui {
     }
     
     close(){
+        // close context menu
+        global.contextMenu = null
+        
         // restart transition animation
         this.transitionRadius = 0
     }

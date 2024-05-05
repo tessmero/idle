@@ -121,6 +121,17 @@ class ParticleSim {
         this.selectedBody = null
     }
     
+    reset(){
+        let s = this
+        s.clearBodies()
+        s.clearGrabbers()
+        s.setTool(null)
+        s.selectedParticle = null
+        s.selectedBody = null
+        s.particlesCollected = 0
+        //s.t = 0
+    }
+        
     update(dt){
         this.t += dt
     

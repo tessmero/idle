@@ -20,7 +20,7 @@ class ControlPoint extends Body {
     draw(g,color=null,forceDraw=false){
         if( !forceDraw ){
             if( !this.visible ) return  
-            if( global.mainSim.draggingControlPoint ) return
+            if( this.sim.draggingControlPoint ) return
             if( global.idleCountdown<=0 ) return
         }
         this.constructor._draw(g,this.pos,this.rad,color,forceDraw)
@@ -37,6 +37,10 @@ class ControlPoint extends Body {
         
         // only draw in certain range of mouse
         if( !forceDraw ){
+            
+            // skip hover effect for gui simulations
+            if( this.sim != global.mainSim ) return 
+            
             let ia = intersectionAngles( //util.js
                 ...pos.xy(),rad,
                 ...global.mousePos.xy(),

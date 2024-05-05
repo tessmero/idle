@@ -17,8 +17,9 @@ class LabelTooltipPopup extends TooltipPopup {
     }
     
     static scale(){ return .4 }
+    
     static pickRect(label,scale=null){
-       if( !scale ) scale = .4
+       if( !scale ) scale = LabelTooltipPopup.scale()
        let [w,h] = getTextDims(label,scale)   
        w += 2*global.tooltipPadding
        h += 2*global.tooltipPadding

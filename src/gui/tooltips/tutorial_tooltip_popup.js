@@ -18,7 +18,6 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
         
         // ParticleSim instance
         let sim = tut.getSim()
-        sim.drawOffset = [r[0]-sim.rect[0],r[1]-sim.rect[1]]
         this.sim = sim
         
         // add gui element to show simulation

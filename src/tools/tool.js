@@ -19,6 +19,10 @@ class Tool{
    unregister(sim){}
    
    isUsable(){
+       
+       
+       if( this.sim != global.mainSim ) return true
+       
         let cost = this.getCost()
         let budget = this.sim.particlesCollected
         return budget >= cost

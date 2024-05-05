@@ -12,9 +12,11 @@ class CompositeGuiElement extends GuiElement {
         return this
     }
     
-    update(dt){
-        super.update(dt)
-        this.children.forEach(e=>e.update(dt))
+    update(dt, disableHover=false){
+        let hovered = super.update(dt, disableHover)
+        let result = this.opaque && this.hovered
+        this.children.forEach(e=> result = result | e.update(dt, disableHover))
+        return result
     }
     draw(g){
         if( this.opaque ) Button._draw(g,this.rect)

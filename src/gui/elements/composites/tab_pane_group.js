@@ -56,9 +56,9 @@ class TabPaneGroup extends CompositeGuiElement {
         this.tabChangeListeners.push(l)
     }
     
-    update(dt){
-        super.update(dt)
-        this.tabContent[this.selectedTabIndex].update(dt)
+    update(dt,disableHover){
+        super.update(dt,disableHover)
+        this.tabContent[this.selectedTabIndex].update(dt,disableHover)
     }
     
     draw(g){

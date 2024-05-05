@@ -10,27 +10,35 @@ class PiToolTutorial extends Tutorial {
         this.tool = t
     }
     
+    
+    getTitle(){
+        return 'Inspector Tutorial'
+    }
+    
     buildSim(w,h){
         let sim = new TutorialPSim()        
         return sim
     }
     
     buildKeyframes(){
+        let [startPos,clickPos,endPos] = [
+            v(.5,.9), // start
+            v(.5,.7), // click
+            v(.9,.4), // end
+        ]
         
-        let startPos = v(.5,.9)
-        let clickPos = v(.5,.7)
-        let endPos = v(.9,.4)
-        let i = 400
+        let i = 400 // duration scale in ms
         
         return [
         
+            // time, ...action/position
             [0*i,'pos',startPos],
             [1.5*i,'pos',clickPos],
             [1.5*i,'down'],
             [2*i,'up'],
             [2*i,'pos',clickPos],
             [3*i,'pos',endPos],
-            [10*i,'pos',endPos],
+            [12*i,'pos',endPos],
             
         ]
     }

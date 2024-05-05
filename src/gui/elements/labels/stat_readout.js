@@ -8,10 +8,6 @@ class StatReadout extends DynamicTextLabel {
         this.center = false
     }
     
-    update(){
-        super.update()
-    }
-    
     static scale(){ return .5 }
     
     // implement GuiElement

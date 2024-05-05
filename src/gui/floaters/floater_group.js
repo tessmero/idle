@@ -65,6 +65,7 @@ class FloaterGroup {
         this.lastT = t
             
         //
+        let activeCount = 0
         let center = true
         let st = this.state
         let seed = [...this.rngSeed] 
@@ -78,6 +79,7 @@ class FloaterGroup {
             let j = i*this.ndims
             let remainingTime = st[j+2]
             if( remainingTime <= 0 ) continue
+            activeCount += 1
             let label = this.labels[i]
             let x = st[j+0]
             let y = st[j+1]
@@ -97,6 +99,8 @@ class FloaterGroup {
                 drawText(g, x,y, label, center, fs)
             })
         }
+        
+        this.activeCount = activeCount
     }
     
     static signalChange(sim,pos,amt){

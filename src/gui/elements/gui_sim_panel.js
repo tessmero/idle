@@ -4,19 +4,39 @@ class GuiSimPanel extends GuiElement {
     constructor(rect,sim){
         super(rect)
         this.sim = sim
-        
-        // prices shouldn't matter 
-        // for whatever happens in the sim
-        // set currency to big number
-        this.sim.particlesCollected = 1e100
+        let r = this.rect
+        sim.drawOffset = [r[0]-sim.rect[0],r[1]-sim.rect[1]]
+        this.paused = false
+        this.loop = true
+    }
+    
+    reset(){
+        this.sim.reset()
+        let tut = this.tut
+        if( tut ){
+            tut.t = 0
+            tut.finished = false
+        }
     }
     
     update(dt){
         super.update(dt)
+        
+        if( this.paused ) return
+            
         this.sim.update(dt)
         
         let tut = this.tut
         if( tut ){
+
+            if( tut.finished ){
+                if( this.loop ){
+                    this.reset()
+                } else {
+                    return
+                }
+            }
+            
             let tool = tut.tool
             tool.sim = this.sim
             this.sim.setTool(tool)
@@ -34,13 +54,6 @@ class GuiSimPanel extends GuiElement {
                 if( event[1] == 'primaryTool' ) tut.tool = tut.primaryTool
                 if( event[1] == 'defaultTool' ) tut.tool = tut.defaultTool
             })
-
-            if( tut.wasReset ){
-                this.sim.clearBodies()
-                this.sim.clearGrabbers()
-                this.sim.setTool(null)
-                tut.wasReset = false
-            }
             
             // like update.js
             // update control point hovering status
@@ -51,6 +64,7 @@ class GuiSimPanel extends GuiElement {
     draw(g){
         
         g.clearRect(...this.rect)
+        
         this.sim.draw(g)
         
         // trim sides

@@ -6,9 +6,9 @@ const _allTutorialSims = {}
 // + animated recreation of the user's cursor/tool
 class Tutorial {
     constructor(){        
+        this.reset()
         let kf = this.buildKeyframes()
         this.keyframes = kf
-        this.t = 0
         
         let grabRad = .001
         let t = new DefaultTool(null,grabRad)
@@ -18,6 +18,15 @@ class Tutorial {
         
         // extract cursor position data
         this.cursorPosKeyframes = kf.filter(e => e[1]=='pos')
+    }
+    
+    getDuration(){
+        return this.cursorPosKeyframes.at(-1)[0]
+    }
+    
+    reset(){
+        this.t = 0
+        this.finished = false
     }
     
     getSim(){
@@ -36,6 +45,15 @@ class Tutorial {
         let sim = new TutorialPSim()        
         return sim
     }
+    
+    getTitle(){
+        throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    }
+    
+    getTestAssertions(sim){
+        return []
+    }
+    
     
     buildKeyFrames(){
         throw new Error(`Method not implemented in ${this.constructor.name}.`);
@@ -91,9 +109,7 @@ class Tutorial {
         }
         
         
-        this.t = 0
-        this.wasReset = true
+        this.finished = true
         return kf.at(-1)[2] // return last position
     }
-    
 }

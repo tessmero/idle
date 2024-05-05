@@ -11,10 +11,16 @@ class LineToolTutorial extends Tutorial {
         this.tool = t
     }
     
+    getTitle(){
+        return 'Line Tutorial'
+    }
+    
+    
     buildSim(w,h){
         let sim = new TutorialPSim()        
         return sim
     }
+    
     
     buildKeyframes(){
         

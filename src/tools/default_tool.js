@@ -23,6 +23,11 @@ class DefaultTool extends Tool{
     }
     
     
+    
+    getTitle(){
+        return 'Default Tool Tutorial'
+    }
+    
    unregister(sim){
        sim.removeGrabber(this.grabber)
    }

@@ -22,12 +22,12 @@ function rectCenter(x,y,w,h){
 
 // return list of rectangles
 function divideRows(x,y,w,h,n){
-    return divideRect(x,y,w,h,true)
+    return divideRect(x,y,w,h,n,true)
 }
 
 // return list of rectangles
 function divideCols(x,y,w,h,n){
-    return divideRect(x,y,w,h,false)
+    return divideRect(x,y,w,h,n,false)
 }
 
 

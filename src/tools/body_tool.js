@@ -26,7 +26,8 @@ class BodyTool extends Tool{
             
             // pay
             let cost = this.getCost()
-            this.sim.particlesCollected -= cost
+            if( this.sim == global.mainSim ) 
+                this.sim.particlesCollected -= cost
             let fp = p.add(v(...this.sim.drawOffset))
             FloaterGroup.signalChange(this.sim,p,-cost)
         

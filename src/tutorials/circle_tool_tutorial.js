@@ -11,6 +11,10 @@ class CircleToolTutorial extends Tutorial {
         this.tool = t
     }
     
+    getTitle(){
+        return 'Circle Tutorial'
+    }
+    
     buildSim(w,h){
         let sim = new TutorialPSim()        
         return sim

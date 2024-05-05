@@ -48,13 +48,14 @@ function update(dt) {
     
     // delete popups, knowing that any persistent 
     // popups will be reinstated below
-    global.contextMenu = null
+    if(!( global.contextMenu instanceof TestContextMenu )){
+        global.contextMenu = null
+    }
     global.tooltipPopup = null
     
     // update context menu 
     if( global.gameState!=GameStates.playing ){
         sim.selectedBody = null
-        global.contextMenu = null
         
     } else if( sim.selectedBody ){
        let bod = sim.selectedBody
@@ -80,7 +81,15 @@ function update(dt) {
         
     }
     
+    // update popups just in case they are persistent
+    let disableHover = false
+    if( global.contextMenu ){
+        disableHover = global.contextMenu.update(dt,disableHover)
+    }
+    
     // update main gui
+    disableHover = disableHover | curGui.update(dt,disableHover) 
+    
     // if applicable, update another gui in background
     // e.g. hud behind upgrade menu
     let bgGui = curGui.getBackgroundGui()
@@ -88,16 +97,12 @@ function update(dt) {
         if( global.gameState == GameStates.startTransition ){
             // skip bg hud updates during start transition
         } else {
-            bgGui.update(dt) 
+            disableHover = disableHover | bgGui.update(dt,disableHover) 
         }
     }
-    curGui.update(dt) 
     
     
     // update popups just in case they are persistent
-    if( global.contextMenu ){
-        global.contextMenu.update(dt)
-    }
     if( global.tooltipPopup ){
         global.tooltipPopup.update(dt)
     }

@@ -79,6 +79,8 @@ class TextLabel extends GuiElement {
         if( global.debugUiRects ){
             
             // draw debug rectangle
+            g.strokeStyle = global.colorScheme.fg
+            g.lineWidth = global.lineWidth
             g.strokeRect(...rect)
         }
     }

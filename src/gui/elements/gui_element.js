@@ -14,6 +14,11 @@ class GuiElement {
         return this
     }
     
+    withTooltipScale(s){
+        this.tooltipScale = s
+        return this
+    }
+    
     // set text to appear on hover
     withTooltip(s){
         this.tooltip = s
@@ -33,7 +38,11 @@ class GuiElement {
         this.tempTooltipEndTime = global.t+1000 // millisecs
     }
     
-    update(){
+    update(dt, disableHover=false){
+        if( disableHover ){
+            this.hovered = false
+            return false
+        }
         
         // check if mouse is in this element's rectangle
         this.hovered = (this.hoverable && vInRect(global.mousePos,...this.rect))
@@ -57,11 +66,12 @@ class GuiElement {
                 // build standard tooltip gui element
                 let rect = LabelTooltipPopup.pickRect(this.tooltip,this.tooltipScale)
                 rect = padRect( ...rect, TextLabel.pad() )
-                global.tooltipPopup = new LabelTooltipPopup(rect,this.tooltip)
-                if( this.tooltipScale ) global.tooltipPopup.scale = this.tooltipScale
+                global.tooltipPopup = new LabelTooltipPopup(rect,this.tooltip,this.tooltipScale)
                 
             }
         }
+        
+        return this.hovered
     }
 
     draw(g){
