@@ -34,7 +34,7 @@ class ToolbarButton extends CompositeGuiElement {
         this.wasUsable = this.tool.isUsable()
     }
     
-    update(){
+    update(dt,disableHover){
         
         // check if tool just became usable
         let usable = this.tool.isUsable()
@@ -59,7 +59,7 @@ class ToolbarButton extends CompositeGuiElement {
         this.wasUsable = usable
         
         //this.button.hoverable = this.tool.isUsable()
-        super.update()
+        return super.update(dt,disableHover)
     }
                 
     isSelected(){

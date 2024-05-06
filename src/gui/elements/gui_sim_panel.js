@@ -19,8 +19,8 @@ class GuiSimPanel extends GuiElement {
         }
     }
     
-    update(dt){
-        super.update(dt)
+    update(dt,disableHover){
+        let hovered = super.update(dt,disableHover)
         
         if( this.paused ) return
             
@@ -59,6 +59,8 @@ class GuiSimPanel extends GuiElement {
             // update control point hovering status
             this.sim.updateControlPointHovering(p)
         }
+        
+        return hovered
     }
     
     draw(g){
