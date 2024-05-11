@@ -1,10 +1,10 @@
 class BasicRainSkill extends Skill {
-    constructor(){
-        super('Drizzle')
-    }
-    
-    buildThumbnailSim(){
-        let sim = new ThumbnailPSim()
-        return sim
-    }
+  constructor() {
+    super('Drizzle');
+  }
+
+  buildThumbnailSim() {
+    const sim = new ThumbnailPSim();
+    return sim;
+  }
 }

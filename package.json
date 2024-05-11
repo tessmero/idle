@@ -1,0 +1,22 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "production.js",
+  "author": "",
+  "type": "module",
+  "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/eslint-parser": "^7.24.5",
+    "eslint": "^9.2.0",
+    "uglify-js": "^3.17.4",
+    "python-shell": "^5.0.0"
+  },
+  "scripts": {
+    "link": "node build/link.js", 
+    "concat": "node build/concat.js",
+    "uglify": "uglifyjs dist/production.js --mangle toplevel -o dist/production.min.js",
+    "build:test": "npm run link",
+    "build:prod": "npm run link && npm run concat && npm run uglify"
+  }
+}

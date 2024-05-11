@@ -1,73 +1,71 @@
 class TabPaneGroup extends CompositeGuiElement {
-    
-    // tabContent is list of rect->element callbacks
-    constructor( rect, tabLabels, tabContents, tabTooltips=null ){
-        super(rect)
-        this.tabLabels = tabLabels
-        this.selectedTabIndex = 0
-        
-        let m = .1*rect[2]
-        let x = rect[0]
-        let y = rect[1]
-        let pad = .02
-        y += pad
-        
-        // tab labels at top
-        let i = 0
-        let p = .05
-        x += p
-        let tabLabelScale = .5
-        let tabHeaderHeight = 0
-        tabLabels.map(label => {
-            let [w,h] = getTextDims(label,tabLabelScale)
-            let rr = padRect(x,y,w,h,pad)
-            rr[1] += .01
-            tabHeaderHeight = rr[3]
-            let ii = i
-            x += w+p
-            let tb = new TabHeaderButton(this,ii,rr,label,
-                    () => {
-                        this.selectedTabIndex=ii
-                        if( this.tabChangeListeners ) 
-                            this.tabChangeListeners.forEach(l=>l(ii))
-                    }
-                )
-            if( tabTooltips ) tb.withTooltip(tabTooltips[i])
-                
-            tb.scale = tabLabelScale
-            this.children.push(tb)
-            i += 1
-        })
-                
-        // content for each tab
-        rect = [...rect]
-        rect[1] += tabHeaderHeight
-        rect[3] -= tabHeaderHeight
-        this.tabContent = tabContents.map(cons => cons(rect).withOpacity(true))
-        
-        this.nTabs = tabLabels.length
-        this.selectedTabIndex = 0
-    }
-    
-    addTabChangeListener(l){
-        if( !this.tabChangeListeners ){
-            this.tabChangeListeners = []
+
+  // tabContent is list of rect->element callbacks
+  constructor(rect, tabLabels, tabContents, tabTooltips = null) {
+    super(rect);
+    this.tabLabels = tabLabels;
+    this.selectedTabIndex = 0;
+
+    let x = rect[0];
+    let y = rect[1];
+    const pad = 0.02;
+    y = y + pad;
+
+    // tab labels at top
+    let i = 0;
+    const p = 0.05;
+    x = x + p;
+    const tabLabelScale = 0.5;
+    let tabHeaderHeight = 0;
+    tabLabels.map((label) => {
+      const [w, h] = getTextDims(label, tabLabelScale);
+      const rr = padRect(x, y, w, h, pad);
+      rr[1] = rr[1] + 0.01;
+      tabHeaderHeight = rr[3];
+      const ii = i;
+      x = x + (w + p);
+      const tb = new TabHeaderButton(this, ii, rr, label,
+        () => {
+          this.selectedTabIndex = ii;
+          if (this.tabChangeListeners) { this.tabChangeListeners.forEach((l) => l(ii)); }
         }
-        this.tabChangeListeners.push(l)
+      );
+      if (tabTooltips) { tb.withTooltip(tabTooltips[i]); }
+
+      tb.scale = tabLabelScale;
+      this.children.push(tb);
+      i = i + 1;
+    });
+
+    // content for each tab
+    const r = [...rect];
+    r[1] = r[1] + tabHeaderHeight;
+    r[3] = r[3] - tabHeaderHeight;
+    this.tabContent = tabContents.map((cons) => cons(r).withOpacity(true));
+
+    this.nTabs = tabLabels.length;
+    this.selectedTabIndex = 0;
+  }
+
+  addTabChangeListener(l) {
+    if (!this.tabChangeListeners) {
+      this.tabChangeListeners = [];
     }
-    
-    update(dt,disableHover){
-        super.update(dt,disableHover)
-        this.tabContent[this.selectedTabIndex].update(dt,disableHover)
-    }
-    
-    draw(g){
-        this.tabContent[this.selectedTabIndex].draw(g) // draw tab content
-        super.draw(g) // draw tab labels
-    }
-    
-    click(){
-        return super.click() || // click tab label
-            this.tabContent[this.selectedTabIndex].click() // click tab content
-    }
+    this.tabChangeListeners.push(l);
+  }
+
+  update(dt, disableHover) {
+    super.update(dt, disableHover);
+    this.tabContent[this.selectedTabIndex].update(dt, disableHover);
+  }
+
+  draw(g) {
+    this.tabContent[this.selectedTabIndex].draw(g); // draw tab content
+    super.draw(g); // draw tab labels
+  }
+
+  click() {
+    return super.click() || // click tab label
+            this.tabContent[this.selectedTabIndex].click(); // click tab content
+  }
 }

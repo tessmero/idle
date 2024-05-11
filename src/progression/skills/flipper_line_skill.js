@@ -1,10 +1,10 @@
 class FlipperLineSkill extends Skill {
-    constructor(){
-        super('Flipper')
-    }
-    
-    buildThumbnailSim(){
-        let sim = new ThumbnailPSim()
-        return sim
-    }
+  constructor() {
+    super('Flipper');
+  }
+
+  buildThumbnailSim() {
+    const sim = new ThumbnailPSim();
+    return sim;
+  }
 }

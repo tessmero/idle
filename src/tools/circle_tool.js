@@ -1,36 +1,35 @@
 
+class CircleTool extends BodyTool {
 
-class CircleTool extends BodyTool{
-    
-    constructor(sim){
-        super(sim,'circle',circleIcon)
-        
-        this.cursorCenter = true // tool.js
-        this.circleRadius = .1
-    }
-    
-    // implement BodyTool
-    buildBody(p){
-        return new CircleBuddy(this.sim,p,this.circleRadius)
-    }
+  constructor(sim) {
+    super(sim, 'circle', circleIcon);
 
-    // implement Tool
-    getCost(){
+    this.cursorCenter = true; // tool.js
+    this.circleRadius = 0.1;
+  }
 
-        // count previously built circles
-        let bods = this.sim.getBodies()
-        let circles = [...bods].filter(b => b instanceof CircleBuddy)
-        let count = circles.length
+  // implement BodyTool
+  buildBody(p) {
+    return new CircleBuddy(this.sim, p, this.circleRadius);
+  }
 
-        return ValueCurve.power(100,2.5).f(count)
-    }
+  // implement Tool
+  getCost() {
 
-    // implement Tool
-    getTutorial(){ 
-        return new CircleToolTutorial(); 
-    }
-    
-    mouseMove(p){}
-    
-    mouseUp(p){}
+    // count previously built circles
+    const bods = this.sim.getBodies();
+    const circles = [...bods].filter((b) => b instanceof CircleBuddy);
+    const count = circles.length;
+
+    return ValueCurve.power(100, 2.5).f(count);
+  }
+
+  // implement Tool
+  getTutorial() {
+    return new CircleToolTutorial();
+  }
+
+  mouseMove(_p) {}
+
+  mouseUp(_p) {}
 }

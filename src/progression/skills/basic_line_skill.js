@@ -1,20 +1,20 @@
 class BasicLineSkill extends Skill {
-    constructor(){
-        super('Basic Line')
-    }
-    
-    buildThumbnailSim(w,h){
-        let sim = new ThumbnailPSim()
-        
-        // add stable poi in center
-        let c =  v(w/2,h/2)
-        let d = v(.1*w,.1*h)
-        let a = c.add(d)
-        let b = c.sub(d)
-        let rad = 2e-3
-        let poi = new SausageBody(sim,a,b,rad)
-        sim.addBody(poi)
-        
-        return sim
-    }
+  constructor() {
+    super('Basic Line');
+  }
+
+  buildThumbnailSim(w, h) {
+    const sim = new ThumbnailPSim();
+
+    // add stable poi in center
+    const c = v(w / 2, h / 2);
+    const d = v(0.1 * w, 0.1 * h);
+    const a = c.add(d);
+    const b = c.sub(d);
+    const rad = 2e-3;
+    const poi = new SausageBody(sim, a, b, rad);
+    sim.addBody(poi);
+
+    return sim;
+  }
 }

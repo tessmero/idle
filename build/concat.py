@@ -28,5 +28,5 @@ with open('test.html','r') as fhtml:
                     
 # write minified source to file
 print( f'writing non-minified source' )
-with open('production.js','w') as fout:
+with open('dist/production.js','w') as fout:
     fout.write(all_source)

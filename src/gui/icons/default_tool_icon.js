@@ -1,19 +1,19 @@
 class DefaultToolIcon extends Icon {
-    constructor() {
-        super([[
-            '#### ',
-            '###  ',
-            '#### ',
-            '# ###',
-            '   ##'
-        ],[
-            '     ',
-            ' ####',
-            ' ### ',
-            ' ####',
-            ' # ##',
-        ]]);
-    }
+  constructor() {
+    super([[
+      '#### ',
+      '###  ',
+      '#### ',
+      '# ###',
+      '   ##',
+    ], [
+      '     ',
+      ' ####',
+      ' ### ',
+      ' ####',
+      ' # ##',
+    ]]);
+  }
 }
 
 const defaultToolIcon = new DefaultToolIcon();

@@ -1,58 +1,55 @@
 // a global variable readout with buttons to increase and decrease
 class ScalarDebugVar extends CompositeGuiElement {
-    
-    constructor(rect,varname,inc,tooltip){
-        super(rect)
-        let r = this.rect
-        let d = .05
-        let p = (r[3]-d)/2
-        let r0 = [r[0]+p,r[1]+p,d,d]
-        let r1 = [r0[0]+d+p,r[1]+p,d,d]
-        
-        // text label
-        let dtl = new DynamicTextLabel(rect,() => 
-            '     ' + Math.floor(get_global(varname)/inc+.5).toString().padEnd(5,' ') + `${varname}`)
-            .withDynamicTooltip(()=>{
-                return [
-                    Math.floor(get_global(varname)/inc+.5).toString() + ` : ${varname} `,
-                    tooltip,
-                    'shift-click for 10x',
-                    'ctrl-click for 100x',
-                ].join('\n')
-            }) // tooltip
-        dtl.scale = .4
-        dtl.tooltipScale = .4
-        dtl.center = false
-        dtl.fixedRect = true
-        
-        
-        this.children = [
-            dtl,
-            
-            // buttons
-            new IconButton(r0,decreaseIcon,()=>{
-                let m = 1
-                if( global.shiftHeld ) m = 10
-                if( global.controlHeld ) m = 100
-                let val = get_global(varname)
-                val-=m*inc
-                set_global(varname,val)
-                rebuildGuis() //game_states.js
-            }),
-            new IconButton(r1,increaseIcon,()=>{
-                let m = 1
-                if( global.shiftHeld ) m = 10
-                if( global.controlHeld ) m = 100
-                let val = get_global(varname)
-                val+=m*inc
-                set_global(varname,val) 
-                rebuildGuis() //game_states.js
-            }),
-        ]
-        
-    }
-    draw(g){
-        Button._draw(g,this.rect)
-        super.draw(g)
-    }
+
+  constructor(rect, varname, inc, tooltip) {
+    super(rect);
+    const r = this.rect;
+    const d = 0.05;
+    const p = (r[3] - d) / 2;
+    const r0 = [r[0] + p, r[1] + p, d, d];
+    const r1 = [r0[0] + d + p, r[1] + p, d, d];
+
+    // text label
+    const dtl = new DynamicTextLabel(rect, () =>
+      `     ${ Math.floor(getGlobal(varname) / inc + 0.5).toString().padEnd(5, ' ') }${varname}`)
+      .withDynamicTooltip(() => [
+        `${Math.floor(getGlobal(varname) / inc + 0.5).toString() } : ${varname} `,
+        tooltip,
+        'shift-click for 10x',
+        'ctrl-click for 100x',
+      ].join('\n')); // tooltip
+    dtl.scale = 0.4;
+    dtl.tooltipScale = 0.4;
+    dtl.center = false;
+    dtl.fixedRect = true;
+
+    this.children = [
+      dtl,
+
+      // buttons
+      new IconButton(r0, decreaseIcon, () => {
+        let m = 1;
+        if (global.shiftHeld) { m = 10; }
+        if (global.controlHeld) { m = 100; }
+        let val = getGlobal(varname);
+        val = val - m * inc;
+        setGlobal(varname, val);
+        rebuildGuis(); // game_states.js
+      }),
+      new IconButton(r1, increaseIcon, () => {
+        let m = 1;
+        if (global.shiftHeld) { m = 10; }
+        if (global.controlHeld) { m = 100; }
+        let val = getGlobal(varname);
+        val = val + m * inc;
+        setGlobal(varname, val);
+        rebuildGuis(); // game_states.js
+      }),
+    ];
+
+  }
+  draw(g) {
+    Button._draw(g, this.rect);
+    super.draw(g);
+  }
 }

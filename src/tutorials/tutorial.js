@@ -1,115 +1,91 @@
-const _allTutorialSims = {}
+const _allTutorialSims = {};
 
 // base class for animation sequences
 //
 // involving a GuiParticleSim
 // + animated recreation of the user's cursor/tool
 class Tutorial {
-    constructor(){        
-        this.reset()
-        let kf = this.buildKeyframes()
-        this.keyframes = kf
-        
-        let grabRad = .001
-        let t = new DefaultTool(null,grabRad)
-        this.defaultTool = t
-        this.primaryTool = t
-        this.tool = t
-        
-        // extract cursor position data
-        this.cursorPosKeyframes = kf.filter(e => e[1]=='pos')
+  constructor() {
+    this.reset();
+    const kf = this.buildKeyframes();
+    this.keyframes = kf;
+
+    const grabRad = 0.001;
+    const t = new DefaultTool(null, grabRad);
+    this.defaultTool = t;
+    this.primaryTool = t;
+    this.tool = t;
+
+    // extract cursor position data
+    this.cursorPosKeyframes = kf.filter((e) => e[1] === 'pos');
+  }
+
+  getDuration() {
+    return this.cursorPosKeyframes.at(-1)[0];
+  }
+
+  reset() {
+    this.t = 0;
+    this.finished = false;
+  }
+
+  getSim() {
+    const clazz = this.constructor;
+    if (!(clazz in _allTutorialSims)) {
+      _allTutorialSims[clazz] = this.buildSim();
     }
-    
-    getDuration(){
-        return this.cursorPosKeyframes.at(-1)[0]
+    return _allTutorialSims[clazz];
+  }
+
+  // should only be called in getSim() ^
+  buildSim() {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  getTitle() {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  getTestAssertions(_sim) {
+    return [];
+  }
+
+  buildKeyFrames() {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  update(dt) {
+
+    // advance clock
+    const t0 = this.t;
+    this.t = this.t + dt;
+
+    // return list of events since last update
+    const t1 = this.t;
+    return this.keyframes.filter((k) => (k[0] > t0) && (k[0] <= t1));
+  }
+
+  getCursorPos() {
+
+    const t = this.t;
+    const kf = this.cursorPosKeyframes;
+
+    if (t < kf[0][0]) { return kf[0][2]; } // return first position
+
+    // iterate over position keyframes
+    for (let i = 1; i < kf.length; i++) {
+      const t1 = kf[i][0];
+
+      if (t < t1) {
+
+        // return interpolated position
+        const t0 = kf[i - 1][0];
+        const r = (t - t0) / (t1 - t0);
+        return va(kf[i - 1][2], kf[i][2], r);
+      }
     }
-    
-    reset(){
-        this.t = 0
-        this.finished = false
-    }
-    
-    getSim(){
-        let clazz = this.constructor
-        if(!( clazz in _allTutorialSims )){
-            _allTutorialSims[clazz] = this.buildSim(...global.tutorialSimDims)
-        }
-        return _allTutorialSims[clazz]
-    }
-    
-    // should only be called in getSim() ^
-    buildSim(w,h){
-        throw new Error(`Method not implemented in ${this.constructor.name}.`);
-        
-        // example
-        let sim = new TutorialPSim()        
-        return sim
-    }
-    
-    getTitle(){
-        throw new Error(`Method not implemented in ${this.constructor.name}.`);
-    }
-    
-    getTestAssertions(sim){
-        return []
-    }
-    
-    
-    buildKeyFrames(){
-        throw new Error(`Method not implemented in ${this.constructor.name}.`);
-        
-        // example
-        return [
-        
-            // be at center at t=0
-            [0,'pos',v(.5,.5)], // time, 'pos', location 
-            
-            // emulate drag
-            [100,'down'], // time, 'down'
-            [200,'up'], // time, 'up'
-        
-            // end up at right side
-            [300,'pos',v(1,.5)],
-            
-            
-        ]
-    }
-    
-    update(dt){
-        
-        // advance clock
-        let t0 = this.t
-        this.t += dt
-        
-        // return list of events since last update
-        let t1 = this.t
-        return this.keyframes.filter(k => (k[0] > t0) && (k[0] <= t1))
-    }
-    
-    getCursorPos(){
-        
-        let t = this.t
-        let kf = this.cursorPosKeyframes
-        
-        
-        if( t < kf[0][0] )
-            return kf[0][2] // return first position
-         
-        // iterate over position keyframes
-        for( let i = 1 ; i < kf.length ; i++ ){
-            let t1 = kf[i][0]
-            
-            if( t < t1 ){
-                
-                // return interpolated position
-                let t0 = kf[i-1][0]
-                let r = ( t-t0 ) / ( t1-t0 )
-                return va( kf[i-1][2], kf[i][2], r )
-            }
-        }
-        
-        
-        this.finished = true
-        return kf.at(-1)[2] // return last position
-    }
+
+    this.finished = true;
+    return kf.at(-1)[2]; // return last position
+  }
 }

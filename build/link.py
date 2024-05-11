@@ -12,7 +12,8 @@ for foldername, subfolders, filenames in os.walk(base_folder):
     for filename in filenames:
         if filename.endswith('.js'):
             relative_path = os.path.relpath(os.path.join(foldername, filename), base_folder).replace("\\","/")
-            all_src_paths[filename] = f"{base_folder}/{relative_path}"
+            if( '__tests__' not in relative_path ):
+                all_src_paths[filename] = f"{base_folder}/{relative_path}"
 
 
 # get mapping of classes to filenames
