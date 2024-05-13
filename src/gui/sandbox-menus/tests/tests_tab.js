@@ -41,7 +41,7 @@ class TestsTab extends CompositeGuiElement {
     super.draw(g);
 
     // highlight "run all tests" button if active (this.rab)
-    const c = global.contextMenu;
+    const c = this.getScreen().contextMenu;
     if ((_testLoopSetting === 'all') && (c instanceof TestContextMenu)) {
       ProgressIndicator._draw(g, this.rab.rect, 1.0);
     }
