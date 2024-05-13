@@ -1,10 +1,6 @@
 
 class StartMenuGui extends Gui {
 
-  constructor() {
-    super();
-  }
-
   // implement gui
   buildElements() {
     const sr = global.screenRect;

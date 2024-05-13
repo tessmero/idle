@@ -7,6 +7,12 @@ class CompositeGuiElement extends GuiElement {
     this.opaque = false;
   }
 
+  // set root GameScreen instance
+  setScreen(s) {
+    super.setScreen(s);
+    this.children.forEach((c) => c.setScreen(s));
+  }
+
   withOpacity(o) {
     this.opaque = o;
     return this;

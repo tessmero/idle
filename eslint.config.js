@@ -44,6 +44,7 @@ export default [
       'valid-typeof': 1, // Ensure that the results of typeof are compared against a valid string (recommended)
 
       /* Best Practices */
+      'max-lines-per-function': ["warn", 100],
       'accessor-pairs': 0, // Enforces getter/setter pairs in objects
       'block-scoped-var': 1, // treat var statements as if they were block scoped
       'complexity': 0, // specify the maximum cyclomatic complexity allowed in a program

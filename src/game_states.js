@@ -7,16 +7,20 @@ const GameStates = {
 };
 
 function rebuildGuis() {
+  const sr = global.screenRect;
   global.allGuis = [
-    new StartMenuGui(),
-    new StartTransitionGui(),
-    new HudGui(),
-    new UpgradeMenuGui(),
-    new PauseMenuGui(),
+    new StartMenuGui(sr),
+    new StartTransitionGui(sr, true),
+    new HudGui(sr),
+    new UpgradeMenuGui(sr),
+    new PauseMenuGui(sr),
   ];
   global.allGuis.forEach((k) => {
     k.children = k.buildElements();
+    k.setScreen(global.mainScreen);
   });
+  const gui = global.allGuis[global.gameState];
+  global.mainScreen.setGui(gui);
 }
 
 function hideWebsiteOverlays() {
@@ -36,9 +40,15 @@ function showWebsiteOverlays() {
 }
 
 function setState(s) {
-  if (global.allGuis) { global.allGuis[global.gameState].close(); }
+  if (global.allGuis) {
+    global.allGuis[global.gameState].close();
+  }
   global.gameState = s;
-  if (global.allGuis) { global.allGuis[global.gameState].open(); }
+  if (global.allGuis) {
+    const gui = global.allGuis[global.gameState];
+    gui.open();
+    global.mainScreen.setGui(gui);
+  }
 
   global.shiftHeld = false;
   global.controlHeld = false;

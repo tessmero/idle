@@ -47,6 +47,11 @@ class TabPaneGroup extends CompositeGuiElement {
     this.selectedTabIndex = 0;
   }
 
+  setScreen(s) {
+    super.setScreen(s);
+    this.tabContent.forEach((tb) => tb.setScreen(s));
+  }
+
   addTabChangeListener(l) {
     if (!this.tabChangeListeners) {
       this.tabChangeListeners = [];

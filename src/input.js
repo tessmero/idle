@@ -60,45 +60,7 @@ function mouseDown(e) {
   global.mouseDown = true;
 
   // fall through clickable elements
-
-  // context menu
-  // (GuiElement instance)
-  const cm = global.contextMenu;
-  let clicked = false;
-  if (cm) {
-    clicked = cm.click();
-    if (clicked) {
-      // console.log('clicked context menu')
-      return;
-    }
-  }
-
-  // current gui
-  // (Gui instance) (game_states.js)
-  const gui = global.allGuis[global.gameState];
-  clicked = gui.click();
-  if (clicked) {
-    // console.log('clicked fg gui')
-    return;
-  }
-
-  // hud gui in background of current gui
-  if (gui.hasHudInBackground) {
-    const hud = global.allGuis[GameStates.playing];
-    clicked = hud.click();
-  }
-  if (clicked) {
-    // console.log('clicked bg hud gui')
-    return;
-  }
-
-  // console.log('click fell through all guis')
-  // close the upgrades menu if it is open
-  if (global.gameState === GameStates.upgradeMenu) { toggleStats(); }
-
-  // may click simulation with selected tool
-  const tool = global.mainSim.getTool();
-  if (tool) { tool.mouseDown(global.mousePos); }
+  global.mainScreen.mouseDown(e);
 
 }
 

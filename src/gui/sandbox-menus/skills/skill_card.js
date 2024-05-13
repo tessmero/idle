@@ -5,7 +5,7 @@ class SkillCard extends CompositeGuiElement {
     super(rect);
     const r = this.rect;
     const sim = entry.skill.getThumbnailSim();
-    const gsp = new GuiSimPanel(rect, sim);
+    const gsp = new GuiScreenPanel(rect, new GameScreen(rect, sim));
 
     const frac = 0.4;
     const [x, y, w, h] = r;

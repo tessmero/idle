@@ -1,7 +1,7 @@
 // extra small particle simulation that appears in the gui
 // control points will be removed from bodies
 //
-// displayed using a GuiSimPanel instance
+// displayed using a GuiScreenPanel instance
 class ThumbnailPSim extends ParticleSim {
   constructor() {
     super(1e4, [0, 0, ...global.thumbnailSimDims]);

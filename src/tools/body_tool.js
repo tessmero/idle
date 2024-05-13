@@ -30,7 +30,7 @@ class BodyTool extends Tool {
       if (s === global.mainSim) {
         s.particlesCollected = s.particlesCollected - cost;
       }
-      FloaterGroup.signalChange(this.sim, p, -cost);
+      this.sim.floaters.signalChange(p, -cost);
 
       // add body
       const poi = this.buildBody(p);

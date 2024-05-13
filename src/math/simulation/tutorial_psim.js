@@ -1,6 +1,6 @@
 // small particle simulation that appears in the gui
 //
-// displayed using a GuiSimPanel instance
+// displayed using a GuiScreenPanel instance
 class TutorialPSim extends ParticleSim {
   constructor() {
     super(1e4, [0, 0, ...global.tutorialSimDims]);
@@ -26,7 +26,7 @@ class TutorialPSim extends ParticleSim {
         // c.fscale *= .5
       }
       else {
-        c.fscale = c.fscale * 0.6;
+        c.fscale = c.fscale * 0.3;
       }
     });
 

@@ -13,17 +13,22 @@ class TestContextMenu extends ContextMenu {
     this.loopCountdown = this.loopDelay;
 
     // center simulation in first content square
-    const sim = test.getSim();
-    const tut = test.getTutorial();
+    const screen = test.getScreen();
+    const sim = screen.sim;
+    const tut = screen.tut;
     this.sim = sim;
     const sdims = [sim.rect[2], sim.rect[3]];
     const c = rectCenter(...s0);
     const gspRect = [c[0] - sdims[0] / 2, c[1] - sdims[1] / 2, ...sdims];
-    const gsp = new GuiSimPanel(gspRect, sim);
-    gsp.loop = false;
+    screen.setRect(gspRect);
+    const gsp = new GuiScreenPanel(gspRect, screen);
+    screen.loop = false; // disable loop flag set in gsp constructor
     gsp.tut = tut;
     gsp.reset();
     this.gsp = gsp;
+
+    const gui = screen.getGui();
+    if (gui && gui.reset) { gui.reset(); }
 
     // divide second content square into rows
     const botRows = divideRows(...s1, 10);
@@ -163,27 +168,33 @@ class TestContextMenu extends ContextMenu {
   }
 
   playClicked() {
-    global.contextMenu = new TestContextMenu(
-      ...TestContextMenu.pickRects(),
+    const screen = this.getScreen();
+    screen.contextMenu = new TestContextMenu(
+      ...TestContextMenu.pickRects(screen.rect),
       this.test, this.testIndex);
+    screen.contextMenu.setScreen(screen);
   }
 
   prevClicked() {
     const tl = iitestList;
     const prevIndex = nnmod(this.testIndex - 1, tl.length);
     const prevTest = tl[prevIndex];
-    global.contextMenu = new TestContextMenu(
-      ...TestContextMenu.pickRects(),
+    const screen = this.getScreen();
+    screen.contextMenu = new TestContextMenu(
+      ...TestContextMenu.pickRects(screen.rect),
       prevTest, prevIndex);
+    screen.contextMenu.setScreen(screen);
   }
 
   nextClicked() {
     const tl = iitestList;
     const nextIndex = nnmod(this.testIndex + 1, tl.length);
     const nextTest = tl[nextIndex];
-    global.contextMenu = new TestContextMenu(
-      ...TestContextMenu.pickRects(),
+    const screen = this.getScreen();
+    screen.contextMenu = new TestContextMenu(
+      ...TestContextMenu.pickRects(screen.rect),
       nextTest, nextIndex);
+    screen.contextMenu.setScreen(screen);
   }
 
   update(dt, disableHover) {
@@ -242,9 +253,9 @@ class TestContextMenu extends ContextMenu {
     return hovered;
   }
 
-  static pickRects() {
+  static pickRects(sr) {
 
     // force to right/bottom isde of screen
-    return ContextMenu.pickRects(global.screenRect, v(0.1, 0.1));
+    return ContextMenu.pickRects(sr, v(sr[0], sr[1]));
   }
 }

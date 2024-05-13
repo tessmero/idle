@@ -25,13 +25,15 @@ class TestListRow extends CompositeGuiElement {
   }
 
   isActive() {
-    const c = global.contextMenu;
+    const c = this.getScreen().contextMenu;
     return c && (c.testIndex === this.testIndex);
   }
 
   clicked() {
     // position context menu on bottom/right
-    const rects = TestContextMenu.pickRects();
-    global.contextMenu = new TestContextMenu(...rects, this.test, this.testIndex);
+    const screen = this.getScreen();
+    const rects = TestContextMenu.pickRects(screen.rect);
+    screen.contextMenu = new TestContextMenu(...rects, this.test, this.testIndex);
+    screen.contextMenu.setScreen(screen);
   }
 }

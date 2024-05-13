@@ -1,16 +1,33 @@
 // transition from start menu to game
+
+// state for transition on global.mainScreen
 let _startTransFadeOut = null;
 let _startTransMid = null;
 let _startTransFadeIn = null;
+
 class StartTransitionGui extends Gui {
 
-  constructor() {
-    super();
+  constructor(rect, isMain) {
+    super(rect);
+
+    this.isMain = isMain;
+
+    if (isMain) {
+      this._startTransFadeOut = _startTransFadeOut;
+      this._startTransMid = _startTransMid;
+      this._startTransFadeIn = _startTransFadeIn;
+    }
 
     // initiate fade out animation if necessary
-    if (!(_startTransFadeOut || _startTransMid || _startTransFadeIn)) {
-      _startTransFadeOut = FadeOut.random();
+    if (!(this._startTransFadeOut || this._startTransMid || this._startTransFadeIn)) {
+      this._startTransFadeOut = FadeOut.random();
     }
+  }
+
+  reset() {
+    this._startTransFadeOut = FadeOut.random();
+    this._startTransMid = null;
+    this._startTransFadeIn = null;
   }
 
   // implement Gui
@@ -20,7 +37,7 @@ class StartTransitionGui extends Gui {
 
   // overide Gui
   stopCanvasClear() {
-    const fo = _startTransFadeOut;
+    const fo = this._startTransFadeOut;
     return fo ? fo.stopCanvasClear() : false;
   }
 
@@ -28,26 +45,32 @@ class StartTransitionGui extends Gui {
   // show start menu then hud
   getBackgroundGui() {
 
-    const bgState = _startTransFadeOut ?
-      GameStates.startMenu : GameStates.playing;
+    if (this.isMain) {
+      const bgState = this._startTransFadeOut ?
+        GameStates.startMenu : GameStates.playing;
 
-    return global.allGuis[bgState];
+      return global.allGuis[bgState];
+    }
+
+    return null;
   }
 
   // override
   draw(g) {
-    const fs = [_startTransFadeOut, _startTransMid, _startTransFadeIn];
-    fs.forEach((f) => { if (f) { f.draw(g); } });
+    const fs = [this._startTransFadeOut, this._startTransMid, this._startTransFadeIn];
+    fs.forEach((f) => { if (f) { f.draw(g, this.rect); } });
   }
 
   // override
   update(dt) {
 
     // identify current animation stage
-    const fo = _startTransFadeOut;
-    const fm = _startTransMid;
-    const fi = _startTransFadeIn;
+    const fo = this._startTransFadeOut;
+    const fm = this._startTransMid;
+    const fi = this._startTransFadeIn;
     const f = fo ? fo : (fm ? fm : fi);
+
+    if (!f) { return; }
 
     // advance current animation stage
     f.t = f.t + dt;
@@ -58,7 +81,7 @@ class StartTransitionGui extends Gui {
 
         // fade out complete
 
-        if (global.sandboxMode) {
+        if (this.isMain && global.sandboxMode) {
 
           // NOTE this entire gui may have been
           // skipped in game_states.js
@@ -66,19 +89,19 @@ class StartTransitionGui extends Gui {
           // skip middle animation
           // start fast fade in
           setColorScheme(ColorScheme.sandbox);// setup.js
-          _startTransFadeOut = null;
-          _startTransMid = null;
-          _startTransFadeIn = FadeIn.random();
-          _startTransFadeIn.duration = _startTransFadeIn.duration / 2; // increase speed
-          resetProgression(); // game_states.js
+          this._startTransFadeOut = null;
+          this._startTransMid = null;
+          this._startTransFadeIn = FadeIn.random();
+          this._startTransFadeIn.duration = this._startTransFadeIn.duration / 2; // increase speed
+          if (this.isMain) { resetProgression(); } // game_states.js
 
         }
         else {
 
           // initiate middle animation
-          _startTransFadeOut = null;
-          _startTransMid = new StartMessage();
-          _startTransFadeIn = null;
+          this._startTransFadeOut = null;
+          this._startTransMid = new StartMessage();
+          this._startTransFadeIn = null;
 
         }
 
@@ -87,21 +110,29 @@ class StartTransitionGui extends Gui {
 
         // middle animation complete
         // initiate fade in animation
-        _startTransFadeOut = null;
-        _startTransMid = null;
-        _startTransFadeIn = FadeIn.random();
-        resetProgression(); // game_states.js
+        this._startTransFadeOut = null;
+        this._startTransMid = null;
+        this._startTransFadeIn = FadeIn.random();
+        if (this.isMain) { resetProgression(); } // game_states.js
 
       }
       else {
 
         // fade in animation complete
         // finish transition
-        _startTransFadeOut = null;
-        _startTransMid = null;
-        _startTransFadeIn = null;
+        this._startTransFadeOut = null;
+        this._startTransMid = null;
+        this._startTransFadeIn = null;
 
-        startTransitionFinished(); // game_states.js
+        if (this.isMain) { startTransitionFinished(); } // game_states.js
+      }
+
+      if (this.isMain) {
+
+        // assign members to globals defined at top of this file
+        _startTransFadeOut = this._startTransFadeOut;
+        _startTransMid = this._startTransMid;
+        _startTransFadeIn = this._startTransFadeIn;
       }
     }
 

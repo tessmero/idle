@@ -1,10 +1,6 @@
 
 class HudGui extends Gui {
 
-  constructor() {
-    super();
-  }
-
   // implement gui
   buildElements() {
     const sc = global.screenCorners;

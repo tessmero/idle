@@ -102,12 +102,10 @@ class FloaterGroup {
     this.activeCount = activeCount;
   }
 
-  static signalChange(sim, pos, amt) {
+  signalChange(pos, amt) {
     if (!amt) { return; }
     let label = Math.round(amt).toString();
     if (amt > 0) { label = (`+${label}`); }
-    let floaters = global.floaters;
-    if (sim) { floaters = sim.floaters; }
-    floaters.spawnFloater(pos, label);
+    this.spawnFloater(pos, label);
   }
 }

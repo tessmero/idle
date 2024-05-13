@@ -12,7 +12,7 @@ class StartAnimStage {
     return false;
   }
 
-  draw(_g) {
+  draw(_g, _rect) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 }

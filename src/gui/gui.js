@@ -2,8 +2,8 @@
 // e.g. the start menu
 class Gui extends CompositeGuiElement {
 
-  constructor() {
-    super(global.screenRect);
+  constructor(rect) {
+    super(rect);
   }
 
   getScreenEdgesForContextMenu() {

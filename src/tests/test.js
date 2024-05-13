@@ -1,17 +1,17 @@
-const _allTestSims = {};
+const _allTestScreens = {};
 
 // integration test for a simulation
 class Test {
 
-  getSim() {
+  getScreen() {
     const clazz = this.constructor;
-    if (!(clazz in _allTestSims)) {
-      _allTestSims[clazz] = this.buildSim();
+    if (!(clazz in _allTestScreens)) {
+      _allTestScreens[clazz] = this.buildScreen();
     }
-    return _allTestSims[clazz];
+    return _allTestScreens[clazz];
   }
 
-  buildSim() {
+  buildScreen() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
@@ -20,15 +20,15 @@ class Test {
   }
 
   getDuration() {
-    return 100 + this.getTestAssertions().at(-1)[0]; // time of last assertion
+    const ta = this.getTestAssertions();
+    if (ta.length === 0) {
+      return 5000;
+    }
+    return 100 + ta.at(-1)[0]; // time of last assertion
   }
 
   getTestAssertions(_sim) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
-  }
-
-  getTutorial() {
-    return null;
   }
 
   static anglesEqual(a, b) {

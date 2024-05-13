@@ -19,9 +19,9 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
     this.sim = sim;
 
     // add gui element to show simulation
-    const gsp = new GuiSimPanel(r, sim);
+    const gsp = new GuiScreenPanel(r, new GameScreen(r, sim, null, tut));
     gsp.tut = tut;
-    this.children.push(gsp);
+    this.children.unshift(gsp);
     this.gsp = gsp;
   }
 

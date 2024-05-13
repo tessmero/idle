@@ -1,8 +1,9 @@
 class ParticleSim {
 
   constructor(n, rect) {
-    this.t = 0;
     this.rect = rect;
+    this.t = 0;
+    this.paused = false;
     this.drawOffset = [0, 0];
 
     // particles

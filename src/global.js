@@ -35,7 +35,6 @@ const global = {
   t: 0, // total ellapsed time
   maxBodyCount: 10,
   toolList: [], // list of Tool instances
-  floaters: null, // FloaterGroup instance to draw on top of gui
 
   // debug
   sandboxMode: false,

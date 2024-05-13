@@ -37,8 +37,9 @@ class BodyContextMenu extends ContextMenu {
   }
 
   closeBodyContextMenu() {
-    global.contextMenu = null;
-    global.mainSim.selectedBody = null;
+    const screen = this.getScreen();
+    screen.contextMenu = null;
+    screen.sim.selectedBody = null;
   }
 
   draw(g) {

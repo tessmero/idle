@@ -11,7 +11,7 @@ class NoclearFadeOut extends FadeOut {
   }
 
   // implement FadeOut
-  draw(_g) {
+  draw(_g, _rect) {
     // do nothing
   }
 }

@@ -33,16 +33,12 @@ class StartMessage extends StartAnimStage {
       'you are the raincatcher',
     ]);
 
-    const scale = 0.6;
-    this.fontSpec = new DissolvingFontSpec(0, scale, true);
-
   }
 
-  // override
-  draw(g) {
+  draw(g, rect) {
 
     // black background
-    const sr = global.screenRect;
+    const sr = rect;
     g.fillStyle = global.colorScheme.fg;
     g.fillRect(...sr);
 
@@ -51,9 +47,11 @@ class StartMessage extends StartAnimStage {
     if (sld > 0) {
       const label = this.text;
       const center = true;
-      this.fontSpec.solidity = sld;
       resetRand(this.rngSeed);
-      drawText(g, 0.5, 0.5, label, center, this.fontSpec);
+      const scale = 0.3 * rect[2];
+      const fontSpec = new DissolvingFontSpec(0, scale, true);
+      fontSpec.solidity = sld;
+      drawText(g, ...rectCenter(...rect), label, center, fontSpec);
     }
   }
 

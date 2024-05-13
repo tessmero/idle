@@ -33,7 +33,7 @@ class LineToolTutorial extends Tutorial {
       [i, 'down'],
       [i, 'up'],
       [i, 'defaultTool'],
-      [i, 'pos', v(0.7, 0.4)],
+      [3 * i, 'pos', v(0.7, 0.4)],
       [4.5 * i, 'pos', v(0.7, 0.4)],
 
       [5.5 * i, 'pos', v(0.4, 0.4)], // on control point

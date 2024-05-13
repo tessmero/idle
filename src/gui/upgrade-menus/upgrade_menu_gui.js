@@ -90,7 +90,7 @@ class UpgradeMenuGui extends Gui {
 
   close() {
     // close context menu
-    global.contextMenu = null;
+    global.mainScreen.contextMenu = null;
 
     // restart transition animation
     this.transitionRadius = 0;

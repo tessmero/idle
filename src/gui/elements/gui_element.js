@@ -9,6 +9,16 @@ class GuiElement {
     this.scale = 1;
   }
 
+  // set root GameScreen instance
+  setScreen(s) {
+    this._screen = s;
+  }
+
+  // get root GameScreen instance
+  getScreen() {
+    return this._screen;
+  }
+
   withScale(s) {
     this.scale = s;
     return this;
@@ -59,7 +69,9 @@ class GuiElement {
       }
 
       if (this.tooltip instanceof TooltipPopup) {
-        global.tooltipPopup = this.tooltip;
+        if (this._screen) {
+          this._screen.tooltipPopup = this.tooltip;
+        }
 
       }
       else if ((typeof this.tooltip === 'string' || this.tooltip instanceof String)) {
@@ -67,8 +79,9 @@ class GuiElement {
         // build standard tooltip gui element
         let rect = LabelTooltipPopup.pickRect(this.tooltip, this.tooltipScale);
         rect = padRect(...rect, TextLabel.pad());
-        global.tooltipPopup = new LabelTooltipPopup(rect, this.tooltip, this.tooltipScale);
-
+        if (this._screen) {
+          this._screen.tooltipPopup = new LabelTooltipPopup(rect, this.tooltip, this.tooltipScale);
+        }
       }
     }
 

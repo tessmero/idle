@@ -5,12 +5,11 @@ class TutorialTest extends Test {
     this.tut = tut;
   }
 
-  buildSim() {
-    return this.tut.buildSim();
-  }
-
-  getTutorial() {
-    return this.tut;
+  buildScreen() {
+    const sim = this.tut.buildSim();
+    const gui = null;
+    const tut = this.tut;
+    return new GameScreen(sim.rect, sim, gui, tut);
   }
 
   getTitle() {

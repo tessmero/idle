@@ -6,16 +6,15 @@ class GridFadeIn extends FadeIn {
   }
 
   // implement FadeIn
-  draw(g) {
+  draw(g, rect) {
 
     g.fillStyle = global.colorScheme.fg;
 
     // draw grid lines
-    const sc = global.screenCorners;
-    const sr = global.screenRect;
-    const d = 0.1;
-    const [x0, y0] = sc[0].xy();
-    const [x1, y1] = sc[2].xy();
+    const sr = rect;
+    const d = 0.09 * sr[3];
+    const [x0, y0] = v(sr[0], sr[1]).xy();
+    const [x1, y1] = v(sr[0] + sr[2], sr[1] + sr[3]).xy();
     let maxoff = 0.5;
     const lw = ((this.duration - this.t) / (this.duration * (1 - maxoff))) * d;
     maxoff = maxoff * d;

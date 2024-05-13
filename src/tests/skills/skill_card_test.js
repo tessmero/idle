@@ -9,7 +9,10 @@ class SkillCardTest extends Test {
     return Math.max(5000, this.getTestAssertions().at(-1)[0]);
   }
 
-  buildSim() {
-    return this.skill.buildThumbnailSim();
+  buildScreen() {
+    const sim = this.skill.buildThumbnailSim();
+    const gui = null;
+    const tut = null;
+    return new GameScreen(sim.rect, sim, gui, tut);
   }
 }

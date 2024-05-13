@@ -31,14 +31,19 @@ function fitToContainer() {
     const sc = [v(xr, yr), v(1 - xr, yr), v(1 - xr, 1 - yr), v(xr, 1 - yr)];
     global.screenCorners = sc;
     global.screenRect = [sc[0].x, sc[0].y, (sc[2].x - sc[0].x), (sc[2].y - sc[0].y)];
+    global.mainScreen.setRect(global.screenRect);
 
     rebuildGuis(); // game_states.js
   }
 
-  global.mainSim.rect = global.screenRect;
+  //
+  const ms = global.mainScreen;
+  ms.rect = global.screenRect;
+  ms.sim.rect = global.screenRect;
 }
 
 function update(dt) {
+  global.t = global.t + dt;
   const sim = global.mainSim;
 
   // check for resized window
@@ -64,83 +69,7 @@ function update(dt) {
     }
   }
 
-  // identify gui state
-  const curGui = global.allGuis[global.gameState];
+  // update main sim and gui
+  global.mainScreen.update(dt);
 
-  // delete popups, knowing that any persistent
-  // popups will be reinstated below
-  if (!(global.contextMenu instanceof TestContextMenu)) {
-    global.contextMenu = null;
-  }
-  global.tooltipPopup = null;
-
-  // update context menu
-  if (global.gameState !== GameStates.playing) {
-    sim.selectedBody = null;
-
-  }
-  else if (sim.selectedBody) {
-    const bod = sim.selectedBody;
-    let bodPos = bod.pos;
-    if (bod instanceof CompoundBody) {
-      bodPos = bod.getMainBody().pos;
-    }
-    const rect = curGui.getScreenEdgesForContextMenu();
-    const cmr = ContextMenu.pickRects(rect, bodPos);
-
-    if (bod instanceof Buddy) {
-      global.contextMenu = new BuddyContextMenu(...cmr, bod);
-    }
-    else {
-      global.contextMenu = new BodyContextMenu(...cmr, bod);
-    }
-
-  }
-  else if (sim.selectedParticle) {
-    const p = sim.selectedParticle;
-    const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
-    const rect = curGui.getScreenEdgesForContextMenu();
-    const cmr = ContextMenu.pickRects(rect, v(x, y));
-    global.contextMenu = new PiContextMenu(...cmr, p);
-
-  }
-
-  // update popups just in case they are persistent
-  let disableHover = false;
-  if (global.contextMenu) {
-    disableHover = global.contextMenu.update(dt, disableHover);
-  }
-
-  // update main gui
-  disableHover = curGui.update(dt, disableHover) || disableHover;
-
-  // if applicable, update another gui in background
-  // e.g. hud behind upgrade menu
-  const bgGui = curGui.getBackgroundGui();
-  if (bgGui) {
-    if (global.gameState === GameStates.startTransition) {
-      // skip bg hud updates during start transition
-    }
-    else {
-      bgGui.update(dt, disableHover);
-    }
-  }
-
-  // update popups just in case they are persistent
-  if (global.tooltipPopup) {
-    global.tooltipPopup.update(dt);
-  }
-
-  // // stop if game is paused
-  if (global.gameState === GameStates.pauseMenu) { return; }
-
-  global.t = global.t + dt;
-  sim.update(dt);
-
-  // trigger passive tool behavior
-  const tool = global.mainSim.getTool();
-  if (tool) { tool.update(dt); }
-
-  // upgrades menu transition effect (upgrade_menu.js)
-  global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt);
 }

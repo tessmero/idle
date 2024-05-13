@@ -70,10 +70,9 @@ function init() {
   global.canvas = cvs;
   global.ctx = cvs.getContext('2d');
 
-  // go to start menu
-  // calls resetGame() defined further down
-  global.mainSim = new MainPSim();
-  global.floaters = new FloaterGroup(100);
+  const sim = new MainPSim();
+  global.mainScreen = new GameScreen(global.screenRect, sim);
+  global.mainSim = sim;
   quit();
 
   // ////////////////////////////////////////
