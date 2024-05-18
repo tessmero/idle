@@ -257,6 +257,12 @@ class GameScreen {
         bgGui.draw(g);
       }
 
+      // draw upgrade menu gui transition effect
+      // global.allGuis[GameStates.upgradeMenu].drawTransitionEffect(g); // upgrade_menu.js
+      if (this === global.mainScreen) {
+        global.allGuis[GameStates.upgradeMenu].drawTransitionEffect(g); // upgrade_menu.js
+      }
+
       // draw current gui
       g.lineWidth = global.lineWidth;
       gui.draw(g);

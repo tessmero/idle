@@ -70,5 +70,6 @@ function update(dt) {
 
   // update main sim and gui
   global.mainScreen.update(dt);
+  global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt); // upgrade_menu.js
 
 }

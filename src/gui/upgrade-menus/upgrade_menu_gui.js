@@ -33,17 +33,6 @@ class UpgradeMenuGui extends Gui {
     return global.allGuis[GameStates.playing];
   }
 
-  update(dt) {
-    this.updateTransitionEffect(dt);
-    super.update(dt);
-  }
-
-  // draw transition effect behind gui
-  draw(g) {
-    this.drawTransitionEffect(g);
-    super.draw(g);
-  }
-
   // extend Hud
   buildElements() {
 
@@ -115,7 +104,7 @@ class UpgradeMenuGui extends Gui {
       this.transitionRadius = this.transitionRadius + dt * this.transitionSpeed;
 
       // check if the upgrade menu is open
-      const tval = (global.allGuis && (global.allGuis[global.gameState] === this));
+      const tval = (global.gameState === GameStates.upgradeMenu);
 
       // set transition effect within radius
       const md2 = Math.pow(this.transitionRadius, 2);

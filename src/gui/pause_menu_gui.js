@@ -7,6 +7,11 @@ class PauseMenuGui extends Gui {
     this.hasHudInBackground = true; // checked in draw.js
   }
 
+  // override Gui
+  getBackgroundGui() {
+    return global.allGuis[GameStates.playing];
+  }
+
   // implement Gui
   buildElements() {
     const sr = global.screenRect;
