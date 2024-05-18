@@ -33,6 +33,17 @@ class UpgradeMenuGui extends Gui {
     return global.allGuis[GameStates.playing];
   }
 
+  update(dt) {
+    this.updateTransitionEffect(dt);
+    super.update(dt);
+  }
+
+  // draw transition effect behind gui
+  draw(g) {
+    this.drawTransitionEffect(g);
+    super.draw(g);
+  }
+
   // extend Hud
   buildElements() {
 

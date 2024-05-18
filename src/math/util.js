@@ -18,6 +18,10 @@ function rectCenter(x, y, w, h) {
   return [x + w / 2, y + h / 2];
 }
 
+function rectCorners(x, y, w, h) {
+  return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
+}
+
 // return list of rectangles
 function divideRect(x, y, w, h, n, axis) {
   const [start, len] = axis ? [y, h] : [x, w];

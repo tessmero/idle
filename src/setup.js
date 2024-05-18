@@ -71,7 +71,7 @@ function init() {
   global.ctx = cvs.getContext('2d');
 
   const sim = new MainPSim();
-  global.mainScreen = new GameScreen(global.screenRect, sim);
+  global.mainScreen = new GameScreen([0, 0, 1, 1], sim);
   global.mainSim = sim;
   quit();
 

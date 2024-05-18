@@ -4,7 +4,6 @@ class ParticleSim {
     this.rect = rect;
     this.t = 0;
     this.paused = false;
-    this.drawOffset = [0, 0];
 
     // particles
     this.rainGroup = new ProceduralPGroup(this, n);
@@ -162,9 +161,8 @@ class ParticleSim {
     }
   }
 
+  // called in game_screen.js
   draw(g) {
-
-    g.translate(...this.drawOffset);
 
     resetRand();
     g.fillStyle = global.colorScheme.fg;
@@ -201,7 +199,5 @@ class ParticleSim {
 
     // draw floaters
     this.floaters.draw(g);
-
-    g.translate(-this.drawOffset[0], -this.drawOffset[1]);
   }
 }

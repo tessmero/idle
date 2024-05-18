@@ -5,8 +5,7 @@ class GuiScreenPanel extends GuiElement {
     this.screen = screen;
     const r = this.rect;
 
-    const sim = screen.sim;
-    if (sim) { sim.drawOffset = [r[0] - sim.rect[0], r[1] - sim.rect[1]]; }
+    screen.drawOffset = [r[0], r[1]];
 
     this.screen.loop = true;
   }

@@ -6,6 +6,11 @@ class Gui extends CompositeGuiElement {
     super(rect);
   }
 
+  // debug
+  draw(g) {
+    super.draw(g);
+  }
+
   getScreenEdgesForContextMenu() {
     const rect = [...global.mainSim.rect];
     const topMargin = 0.1;

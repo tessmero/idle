@@ -1,4 +1,4 @@
-const _allTutorialSims = {};
+const _allTutorialScreens = {};
 
 // base class for animation sequences
 //
@@ -29,15 +29,17 @@ class Tutorial {
     this.finished = false;
   }
 
-  getSim() {
+  getScreen() {
     const clazz = this.constructor;
-    if (!(clazz in _allTutorialSims)) {
-      _allTutorialSims[clazz] = this.buildSim();
+    if (!(clazz in _allTutorialScreens)) {
+      const sim = this.buildSim();
+      const screen = new GameScreen(sim.rect, sim, null, this);
+      _allTutorialScreens[clazz] = screen;
     }
-    return _allTutorialSims[clazz];
+    return _allTutorialScreens[clazz];
   }
 
-  // should only be called in getSim() ^
+  // should only be called in getScreen() ^
   buildSim() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }

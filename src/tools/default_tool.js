@@ -46,7 +46,7 @@ class DefaultTool extends Tool {
     sim.particlesCollected = sim.particlesCollected + 1;
 
     // show message
-    const p = v(x, y);// .add(v(...sim.drawOffset))
+    const p = v(x, y);
     sim.floaters.signalChange(p, +1);
   }
 

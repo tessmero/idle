@@ -14,12 +14,9 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
     const y = rect[1] + 0.1;
     const r = [x, y, ...sdims];
 
-    // ParticleSim instance
-    const sim = tut.getSim();
-    this.sim = sim;
-
-    // add gui element to show simulation
-    const gsp = new GuiScreenPanel(r, new GameScreen(r, sim, null, tut));
+    // simluation in gui
+    const gs = tut.getScreen();
+    const gsp = new GuiScreenPanel(r, gs);
     gsp.tut = tut;
     this.children.unshift(gsp);
     this.gsp = gsp;

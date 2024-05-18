@@ -10,7 +10,11 @@ function draw() {
   if (global.mainSim.particleRadius < -lim) { global.mainSim.particleRadius = -lim; }
 
   // draw main sim and gui
-  global.mainScreen.draw(g);
+  const sr = global.screenRect;
+  const screen = global.mainScreen;
+  screen._rect = sr;
+  screen.sim.rect = sr;
+  screen.draw(g);
 
   // debug draw mouse
   const debugMouse = false;

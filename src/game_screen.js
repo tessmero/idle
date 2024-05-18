@@ -12,6 +12,7 @@ class GameScreen {
     this.sim = sim;
     this._gui = gui;
     this.tut = tut;
+    this.drawOffset = [0, 0];
 
     // modal gui elements
     this.contextMenu = null;
@@ -31,8 +32,9 @@ class GameScreen {
   }
 
   setRect(r) {
-    this._rect = [...r];
-    this.sim.rect = r;
+    // this._rect = [...r];
+    this.drawOffset = [r[0] - this._rect[0], r[1] - this._rect[1]];
+
     if (this._gui) { this._gui.rect = r; }
   }
 
@@ -84,6 +86,8 @@ class GameScreen {
 
   }
 
+  rebuildGui() { return null; }
+
   reset() {
     this.sim.reset();
     const tut = this.tut;
@@ -91,6 +95,7 @@ class GameScreen {
       tut.t = 0;
       tut.finished = false;
     }
+    this.setGui(this.rebuildGui());
   }
 
   update(dt) {
@@ -100,40 +105,44 @@ class GameScreen {
     const gui = this.getGui();
     const tut = this.tut;
 
-    sim.update(dt);
+    // stop if game is paused
+    if (global.gameState !== GameStates.pauseMenu) {
 
-    if (tut) {
+      sim.update(dt);
 
-      if (tut.finished) {
-        if (this.loop) {
-          this.reset();
+      if (tut) {
+
+        if (tut.finished) {
+          if (this.loop) {
+            this.reset();
+          }
+          else {
+            return;
+          }
         }
-        else {
-          return;
-        }
+
+        const tool = tut.tool;
+        tool.sim = sim;
+        sim.setTool(tool);
+        tool.update(dt);
+        const keyframes = tut.update(dt);
+        let p = tut.getCursorPos().xy();
+        const sr = sim.rect;
+        p = v(sr[0] + p[0] * sr[2], sr[1] + p[1] * sr[3]);
+
+        // emulate user input if necessary
+        // (tutorial.js)
+        keyframes.forEach((event) => {
+          if (event[1] === 'down') { tool.mouseDown(p); }
+          if (event[1] === 'up') { tool.mouseUp(p); }
+          if (event[1] === 'primaryTool') { tut.tool = tut.primaryTool; }
+          if (event[1] === 'defaultTool') { tut.tool = tut.defaultTool; }
+        });
+
+        // like update.js
+        // update control point hovering status
+        sim.updateControlPointHovering(p);
       }
-
-      const tool = tut.tool;
-      tool.sim = sim;
-      sim.setTool(tool);
-      tool.update(dt);
-      const keyframes = tut.update(dt);
-      let p = tut.getCursorPos().xy();
-      const sr = sim.rect;
-      p = v(sr[0] + p[0] * sr[2], sr[1] + p[1] * sr[3]);
-
-      // emulate user input if necessary
-      // (tutorial.js)
-      keyframes.forEach((event) => {
-        if (event[1] === 'down') { tool.mouseDown(p); }
-        if (event[1] === 'up') { tool.mouseUp(p); }
-        if (event[1] === 'primaryTool') { tut.tool = tut.primaryTool; }
-        if (event[1] === 'defaultTool') { tut.tool = tut.defaultTool; }
-      });
-
-      // like update.js
-      // update control point hovering status
-      sim.updateControlPointHovering(p);
     }
 
     // delete popups, knowing that any persistent
@@ -197,27 +206,36 @@ class GameScreen {
       }
     }
 
+    // trigger passive tool behavior
+    const tool = sim.getTool();
+    if (tool) { tool.update(dt); }
+
     // update popups just in case they are persistent
     if (this.tooltipPopup) {
       this.tooltipPopup.update(dt);
     }
 
-    // stop if game is paused
-    // if (global.gameState === GameStates.pauseMenu) { return; }
-    // sim.update(dt);
-
-    // trigger passive tool behavior
-    const tool = sim.getTool();
-    if (tool) { tool.update(dt); }
-
-    // upgrades menu transition effect (upgrade_menu.js)
-    global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt);
-
   }
 
-  draw(g) {
+  draw(gfx) {
+
+    // wrap graphics context if necessary
+    // used for screen transition test
+    let g = gfx;
+    const gWrap = this.graphicsWrapper;
+    if (gWrap) {
+      g = gWrap.wrap(g);
+    }
+
     const rect = this._rect;
     if (!rect) { return; }
+
+    g.translate(...this.drawOffset);
+    this.idraw(g, rect);
+    g.translate(-this.drawOffset[0], -this.drawOffset[1]);
+  }
+
+  idraw(g, rect) {
 
     // clear canvas, unless gui requests not to
     const gui = this.getGui();
@@ -237,11 +255,6 @@ class GameScreen {
       const bgGui = gui.getBackgroundGui();
       if (bgGui) {
         bgGui.draw(g);
-      }
-
-      // draw upgrade menu gui transition effect
-      if (this === global.mainScreen) {
-        global.allGuis[GameStates.upgradeMenu].drawTransitionEffect(g); // upgrade_menu.js
       }
 
       // draw current gui
@@ -269,8 +282,6 @@ class GameScreen {
 
     // draw automated cursor
     else if (this.tut) {
-
-      // draw cursor like in draw.js
       const tut = this.tut;
       const tool = tut.tool;
       tool.sim = this.sim;
@@ -288,17 +299,16 @@ class GameScreen {
       }
 
       // pos in sim -> real screen pos
-      const off = this.sim.drawOffset;
-      p = [p[0] + off[0], p[1] + off[1]];
       tool.drawCursor(g, p, global.tutorialToolScale, false);
 
       // draw tool overlay if applicable
       if (tool.draw) {
-        g.translate(...off);
         tool.draw(g);
-        g.translate(-off[0], -off[1]);
       }
     }
+
+    if (g.drawDebug) { g.drawDebug(); }
+
   }
 }
 

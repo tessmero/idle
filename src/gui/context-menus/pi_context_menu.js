@@ -6,7 +6,7 @@ class PiContextMenu extends ContextMenu {
     this.pData = pData;
 
     // idenfity particle type
-    const [subgroup, _i, _x, _y, _dx, _dy, _hit] = pData;
+    const [subgroup, i, _x, _y, _dx, _dy, _hit] = pData;
     let flavor; let icon;
     if (!subgroup) {
       icon = proceduralParticleIcon;
@@ -45,7 +45,7 @@ class PiContextMenu extends ContextMenu {
 
     // data passed from grab event
     // in need of cleanup
-    const [_subgroup, _i, x, y, _dx, _dy, _hit] = this.pData;
+    const [_subgroup, i, x, y, _dx, _dy, _hit] = this.pData;
 
     // lookup group needs cleanup
     const s = global.mainSim;
