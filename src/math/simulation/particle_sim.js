@@ -1,7 +1,8 @@
 class ParticleSim {
 
-  constructor(n, rect) {
+  constructor(n, rect, title = 'Unnamed Particle Sim') {
     this.rect = rect;
+    this.title = title;
     this.t = 0;
     this.paused = false;
 
@@ -141,6 +142,11 @@ class ParticleSim {
   }
 
   update(dt) {
+    global.performanceStats.flagSim(this, 'updated');
+    if (dt > 0) {
+      global.performanceStats.flagSim(this, 'time passing');
+    }
+
     this.t = this.t + dt;
 
     // update bodies
@@ -164,6 +170,13 @@ class ParticleSim {
   // called in game_screen.js
   draw(g) {
 
+    // start counting for performance stats
+    const counter = {
+      grabCheckCount: 0,
+      grabCount: 0,
+      pdrawCount: 0,
+    };
+
     resetRand();
     g.fillStyle = global.colorScheme.fg;
     this._bodies.forEach((p) => p.draw(g));
@@ -171,13 +184,13 @@ class ParticleSim {
 
     const c = global.colorcodeParticles;
     if (c) { g.fillStyle = 'red'; }
-    this.rainGroup.draw(g);
+    this.rainGroup.draw(g, counter);
 
     if (c) { g.fillStyle = 'green'; }
-    this.physicsGroup.draw(g);
+    this.physicsGroup.draw(g, counter);
 
     if (c) { g.fillStyle = 'blue'; }
-    this.edgeGroup.draw(g);
+    this.edgeGroup.draw(g, counter);
 
     if (global.debugGrabbers) {
       this._grabbers.forEach((gr) => gr.drawDebug(g));
@@ -199,5 +212,11 @@ class ParticleSim {
 
     // draw floaters
     this.floaters.draw(g);
+
+    // log performance stats
+    global.performanceStats.flagSim(this, 'drawn');
+    Object.keys(counter).forEach((key) => {
+      global.performanceStats.flagSim(this, key, counter[key]);
+    });
   }
 }

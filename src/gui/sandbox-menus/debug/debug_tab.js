@@ -69,7 +69,7 @@ class DebugTab extends CompositeGuiElement {
     ));
     const rect = padRect(...sr, -0.05);
     const tabGroup = new TabPaneGroup(rect, tabLabels, tabContent, tabTooltips);
-    if (global.debugMenuTabIndex) { tabGroup.selectedTabIndex = global.debugMenuTabIndex; }
+    if (global.debugMenuTabIndex) { tabGroup.setSelectedTabIndex(global.debugMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.debugMenuTabIndex = i;
     });

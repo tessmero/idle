@@ -6,7 +6,9 @@ class Test {
   getScreen() {
     const clazz = this.constructor;
     if (!(clazz in _allTestScreens)) {
-      _allTestScreens[clazz] = this.buildScreen();
+      const screen = this.buildScreen();
+      screen.sim.title = `(TEST INSTANCE) ${ screen.sim.title}`;
+      _allTestScreens[clazz] = screen;
     }
     return _allTestScreens[clazz];
   }

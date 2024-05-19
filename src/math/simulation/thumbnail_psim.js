@@ -4,7 +4,7 @@
 // displayed using a GuiScreenPanel instance
 class ThumbnailPSim extends ParticleSim {
   constructor() {
-    super(1e4, [0, 0, ...global.thumbnailSimDims]);
+    super(1e4, [0, 0, ...global.thumbnailSimDims], 'Extra Small Thumbnail Simulation');
 
     this.fallSpeed = this.fallSpeed * 0.2;
     this.particleRadius = this.particleRadius * 0.6;

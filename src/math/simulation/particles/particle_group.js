@@ -15,10 +15,9 @@ class ParticleGroup {
     return this.n - this.grabbedParticles.size();
   }
 
+  // called in particle_sim.js
   // draw all the particles in this group
-  // second param is optional override
-  // drawing individual particles
-  draw(g, pdraw = ((gg, x, y, r) => gg.fillRect(x - r, y - r, 2 * r, 2 * r))) {
+  draw(g, counter, pdraw = ((gg, x, y, r) => gg.fillRect(x - r, y - r, 2 * r, 2 * r))) {
 
     const r = this.sim.particleRadius;
 
@@ -43,29 +42,34 @@ class ParticleGroup {
           // (body.js)
           if (subgroup && (gr.eps === subgroup)) { return false; }
 
-          // if( isEdgeGroup ) return false
+          counter.grabCheckCount = counter.grabCheckCount + 1;
           const hit = gr.contains(subgroup, i, x, y);
           if (hit) {
+
+            // check if grab callback defined
             if (gr.grabbed) {
 
-              // grab function defined
+              // run grab callback and
               // mark particle as grabbed unless
-              // any truthy flag returned
+              // a truthy flag returned
               const rval = gr.grabbed(subgroup, i, x, y, dx, dy, hit);
               return !rval;
             }
 
             // no grab function defined,
-            // just mark the particel as grabbed
+            // mark particle as grabbed
             return true;
           }
           return false;
         }));
 
         // draw particle
+        counter.pdrawCount = counter.pdrawCount + 1;
         pdraw(g, x, y, r);
 
         if (grabbed) {
+          counter.grabCount = counter.grabCount + 1;
+
           // console.log(`despawn ${i}`)
           this.grabbedParticles.add(i);
         }

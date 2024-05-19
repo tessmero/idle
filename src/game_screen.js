@@ -258,7 +258,6 @@ class GameScreen {
       }
 
       // draw upgrade menu gui transition effect
-      // global.allGuis[GameStates.upgradeMenu].drawTransitionEffect(g); // upgrade_menu.js
       if (this === global.mainScreen) {
         global.allGuis[GameStates.upgradeMenu].drawTransitionEffect(g); // upgrade_menu.js
       }

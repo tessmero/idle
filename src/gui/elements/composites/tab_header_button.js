@@ -21,7 +21,7 @@ class TabHeaderButton extends TextButton {
     g.strokeStyle = lineCol;
     g.clearRect(...rect);
 
-    const selected = (this.parent.selectedTabIndex === this.tabIndex);
+    const selected = (this.parent.getSelectedTabIndex() === this.tabIndex);
     if (selected) {
       const [x, y, w, h] = rect;
       g.beginPath();

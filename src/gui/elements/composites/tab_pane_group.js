@@ -4,7 +4,7 @@ class TabPaneGroup extends CompositeGuiElement {
   constructor(rect, tabLabels, tabContents, tabTooltips = null) {
     super(rect);
     this.tabLabels = tabLabels;
-    this.selectedTabIndex = 0;
+    this._selectedTabIndex = 0;
 
     let x = rect[0];
     let y = rect[1];
@@ -26,7 +26,7 @@ class TabPaneGroup extends CompositeGuiElement {
       x = x + (w + p);
       const tb = new TabHeaderButton(this, ii, rr, label,
         () => {
-          this.selectedTabIndex = ii;
+          this._selectedTabIndex = ii;
           if (this.tabChangeListeners) { this.tabChangeListeners.forEach((l) => l(ii)); }
         }
       );
@@ -44,7 +44,15 @@ class TabPaneGroup extends CompositeGuiElement {
     this.tabContent = tabContents.map((cons) => cons(r).withOpacity(true));
 
     this.nTabs = tabLabels.length;
-    this.selectedTabIndex = 0;
+    this._selectedTabIndex = 0;
+  }
+
+  setSelectedTabIndex(i) {
+    this._selectedTabIndex = nnmod(i, this.nTabs);
+  }
+
+  getSelectedTabIndex() {
+    return this._selectedTabIndex;
   }
 
   setScreen(s) {
@@ -61,16 +69,16 @@ class TabPaneGroup extends CompositeGuiElement {
 
   update(dt, disableHover) {
     super.update(dt, disableHover);
-    this.tabContent[this.selectedTabIndex].update(dt, disableHover);
+    this.tabContent[this._selectedTabIndex].update(dt, disableHover);
   }
 
   draw(g) {
-    this.tabContent[this.selectedTabIndex].draw(g); // draw tab content
+    this.tabContent[this._selectedTabIndex].draw(g); // draw tab content
     super.draw(g); // draw tab labels
   }
 
   click() {
     return super.click() || // click tab label
-            this.tabContent[this.selectedTabIndex].click(); // click tab content
+            this.tabContent[this._selectedTabIndex].click(); // click tab content
   }
 }

@@ -42,6 +42,13 @@ function fitToContainer() {
 }
 
 function update(dt) {
+
+  // save Last Update Performance Stats
+  global.lupStats = global.performanceStats;
+
+  // start logging performance for this coming update
+  global.performanceStats = new PerformanceStats();
+
   global.t = global.t + dt;
   const sim = global.mainSim;
 

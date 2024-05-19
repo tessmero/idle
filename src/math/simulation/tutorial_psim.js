@@ -3,7 +3,7 @@
 // displayed using a GuiScreenPanel instance
 class TutorialPSim extends ParticleSim {
   constructor() {
-    super(1e4, [0, 0, ...global.tutorialSimDims]);
+    super(1e4, [0, 0, ...global.tutorialSimDims], 'Small Tutorial Simulation');
     this.fallSpeed = this.fallSpeed * 0.2;
 
     const rg = this.rainGroup;

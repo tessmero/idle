@@ -1,5 +1,5 @@
 // a purchasable skill that appears in the upgrades/skills menu
-const _allSkillThumbnailSims = {};
+const _allSkillThumbnailScreens = {};
 class Skill {
 
   constructor(name) {
@@ -7,15 +7,22 @@ class Skill {
   }
 
   // called in gui/upgrade_menu/skill_tab.js
-  getThumbnailSim() {
+  getThumbnailScreen() {
     const clazz = this.constructor;
-    if (!(clazz in _allSkillThumbnailSims)) {
-      _allSkillThumbnailSims[clazz] = this.buildThumbnailSim(...global.thumbnailSimDims);
+    if (!(clazz in _allSkillThumbnailScreens)) {
+      _allSkillThumbnailScreens[clazz] = this.buildThumnailScreen();
     }
-    return _allSkillThumbnailSims[clazz];
+    return _allSkillThumbnailScreens[clazz];
   }
 
-  // should only be called in getThumbnailSim() ^
+  buildThumnailScreen() {
+    const sim = this.buildThumbnailSim();
+    const gui = null;
+    const tut = null;
+    return new GameScreen(sim.rect, sim, gui, tut);
+  }
+
+  // should only be called in buildThumbnailScreen()
   buildThumbnailSim() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
