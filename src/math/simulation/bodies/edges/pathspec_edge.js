@@ -1,18 +1,31 @@
 // base class for edges that are specified
 // based on a path along the circumference
+/**
+ *
+ */
 class PathspecEdge extends Edge {
 
   // compute polar coord [angle,radius,normal angle,r2]
   // at given distance along circumerence
+  /**
+   *
+   * @param _d
+   */
   computePoint(_d) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   // get length of edge (which may loop)
+  /**
+   *
+   */
   getCircumference() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
+  /**
+   *
+   */
   computeEdgeShape() {
     const circ = this.getCircumference();
     this.circ = circ;
@@ -21,7 +34,7 @@ class PathspecEdge extends Edge {
     // (distance along circumference) -> (angle,radius,norm,r2)
     const distLutN = 1000;
     const distLutNDims = 4; // angle, radius, normal angle,r2
-    const distLut = new Float32Array(distLutN * distLutNDims);
+    const distLut = new FloatArray(distLutN * distLutNDims).get();
     for (let i = 0; i < distLutN; i++) {
       const [angle, radius, norm] = this.computePoint(circ * i / distLutN);
       distLut[i * distLutNDims + 0] = angle;
@@ -37,7 +50,7 @@ class PathspecEdge extends Edge {
     // angle -> (radius,r2,distance along circ)
     const angleLutN = 1000;
     const angleLutNDims = 3; // radius,r2, dist along circ
-    const angleLut = new Float32Array(angleLutN * angleLutNDims);
+    const angleLut = new FloatArray(angleLutN * angleLutNDims).get();
     const startAngle = this.computePoint(0)[0];
     const ioff = nnmod(Math.floor(angleLutN * startAngle / twopi), angleLutN);
     for (let i = 0; i < angleLutN; i++) {
@@ -58,6 +71,12 @@ class PathspecEdge extends Edge {
   }
 
   // get
+  /**
+   *
+   * @param distLut
+   * @param ndims
+   * @param targetAngle
+   */
   _getBestMatch(distLut, ndims, targetAngle) {
     const n = distLut.length / ndims;
     let bestI = 0;

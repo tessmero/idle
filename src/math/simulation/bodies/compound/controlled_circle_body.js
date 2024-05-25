@@ -1,8 +1,17 @@
 // a circle body with a control point
 // for the player to click and drag
+/**
+ *
+ */
 class ControlledCircleBody extends CompoundBody {
 
   // sim is a ParticleSim instance
+  /**
+   *
+   * @param sim
+   * @param pos
+   * @param rad
+   */
   constructor(sim, pos, rad) {
     super(sim, pos);
 
@@ -16,8 +25,15 @@ class ControlledCircleBody extends CompoundBody {
     this.controlPoints = [cp];
   }
 
+  /**
+   *
+   */
   getMainBody() { return this.circle; }
 
+  /**
+   *
+   * @param dt
+   */
   update(dt) {
 
     // request a particle to be eaten from edge

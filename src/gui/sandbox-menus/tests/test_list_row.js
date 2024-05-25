@@ -1,11 +1,20 @@
+/**
+ *
+ */
 class TestListRow extends CompositeGuiElement {
+  /**
+   *
+   * @param rect
+   * @param test
+   * @param testIndex
+   */
   constructor(rect, test, testIndex) {
     super(rect);
     this.test = test;
     this.testIndex = testIndex;
 
     const sr = new StatReadout(rect,
-      playIcon, () => test.getTitle())
+      playIcon, () => test.titleKey)
       .withScale(0.4);
 
     sr.isAnimated = () => sr.hovered || this.isActive();
@@ -16,6 +25,10 @@ class TestListRow extends CompositeGuiElement {
     ];
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 
@@ -24,14 +37,20 @@ class TestListRow extends CompositeGuiElement {
     }
   }
 
+  /**
+   *
+   */
   isActive() {
-    const c = this.getScreen().contextMenu;
+    const c = this.screen.contextMenu;
     return c && (c.testIndex === this.testIndex);
   }
 
+  /**
+   *
+   */
   clicked() {
     // position context menu on bottom/right
-    const screen = this.getScreen();
+    const screen = this.screen;
     const rects = TestContextMenu.pickRects(screen.rect);
     screen.contextMenu = new TestContextMenu(...rects, this.test, this.testIndex);
     screen.contextMenu.setScreen(screen);

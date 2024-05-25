@@ -1,25 +1,25 @@
 
-class LineToolTutorial extends Tutorial {
+/**
+ *
+ */
+class LineToolTutorial extends Macro {
 
+  /**
+   *
+   */
   constructor() {
-    super();
+    super('Line Tutorial');
 
     const t = new LineTool();
-    t.lineLength = t.lineLength * global.tutorialToolScale;
+    t.lineLength = t.lineLength * global.tutorialScaleFactor;
 
     this.primaryTool = t;
     this.tool = t;
   }
 
-  getTitle() {
-    return 'Line Tutorial';
-  }
-
-  buildSim() {
-    const sim = new TutorialPSim();
-    return sim;
-  }
-
+  /**
+   *
+   */
   buildKeyframes() {
 
     const startPos = v(0.5, 0.9);

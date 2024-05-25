@@ -1,4 +1,11 @@
+/**
+ *
+ */
 class UpgradesTab extends CompositeGuiElement {
+  /**
+   *
+   * @param sr
+   */
   constructor(sr) {
     super(sr);
 
@@ -9,6 +16,7 @@ class UpgradesTab extends CompositeGuiElement {
     const h = 0.05;
     let r0 = [sr[0] + m, sr[1] + m * 2, w, h];
 
+    if (!global.upgradeTracks) { return; }
     const specs = global.upgradeTracks.state;
     this.children = Object.keys(specs).map((key) => {
       const agvRect = r0;

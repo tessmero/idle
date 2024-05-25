@@ -1,10 +1,21 @@
-class PiToolTutorialTest extends TutorialTest {
+/**
+ *
+ */
+class PiToolTutorialTest extends Test {
 
+  /**
+   *
+   */
   constructor() {
-    super(new PiToolTutorial());
+    super('Inspector Test', new PiToolTutorial());
   }
 
-  getTestAssertions(sim) {
+  /**
+   *
+   * @param screen
+   */
+  getTestAssertions(screen) {
+    const sim = screen.sim;
     return [
       // time, label, func
       [0, 'no particle selected', () => sim.selectedParticle === null],

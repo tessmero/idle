@@ -1,8 +1,19 @@
+/**
+ *
+ */
 class BasicCircleSkill extends Skill {
+  /**
+   *
+   */
   constructor() {
     super('Basic Circle');
   }
 
+  /**
+   *
+   * @param w
+   * @param h
+   */
   buildThumbnailSim(w, h) {
     const sim = new ThumbnailPSim();
 

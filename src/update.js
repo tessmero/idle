@@ -1,14 +1,19 @@
 let lastCanvasOffsetWidth = -1;
 let lastCanvasOffsetHeight = -1;
+
+/**
+ *
+ */
 function fitToContainer() {
   const cvs = global.canvas;
+  const screen = global.mainScreen;
 
   let ow = cvs.offsetWidth;
   let oh = cvs.offsetHeight;
   if (ow === 0) { ow = 200; }
   if (oh === 0) { oh = 200; }
 
-  if ((ow !== lastCanvasOffsetWidth) || (oh !== lastCanvasOffsetHeight)) {
+  if ((!global.screenCorners) || (ow !== lastCanvasOffsetWidth) || (oh !== lastCanvasOffsetHeight)) {
 
     lastCanvasOffsetWidth = ow;
     lastCanvasOffsetHeight = oh;
@@ -30,53 +35,34 @@ function fitToContainer() {
 
     const sc = [v(xr, yr), v(1 - xr, yr), v(1 - xr, 1 - yr), v(xr, 1 - yr)];
     global.screenCorners = sc;
-    global.screenRect = [sc[0].x, sc[0].y, (sc[2].x - sc[0].x), (sc[2].y - sc[0].y)];
-
-    rebuildGuis(); // game_states.js
+    const sr = [sc[0].x, sc[0].y, (sc[2].x - sc[0].x), (sc[2].y - sc[0].y)];
+    screen._rect = sr;
+    screen.stateManager.rebuildGuis(screen, false);
   }
 
-  //
-  const ms = global.mainScreen;
-  ms.rect = global.screenRect;
-  ms.sim.rect = global.screenRect;
+  // hack to update main sim size
+  // noramlly sims don't change size
+  screen.sim._rect = screen.rect;
 }
 
+/**
+ *
+ * @param dt
+ */
 function update(dt) {
 
   // save Last Update Performance Stats
-  global.lupStats = global.performanceStats;
+  global.lupStats = global.livePerformanceStats;
 
   // start logging performance for this coming update
-  global.performanceStats = new PerformanceStats();
+  global.livePerformanceStats = new LivePerformanceStats();
 
   global.t = global.t + dt;
-  const sim = global.mainSim;
 
   // check for resized window
   fitToContainer();
 
-  // advance countdown for user to be considered idle
-  if (global.idleCountdown > 0) {
-    global.idleCountdown = global.idleCountdown - dt;
-  }
-
-  // advance start menu idle background animation
-  const bodies = sim.getBodies();
-  if (((global.t < global.startMenuMoveDelay) || (global.idleCountdown <= 0)) &&
-                    (global.gameState === GameStates.startMenu) &&
-                    (bodies.length > 1)) {
-
-    // update target position
-    global.startMenuMoveCountdown = global.startMenuMoveCountdown - dt;
-    if (global.startMenuMoveCountdown < 0) {
-      global.startMenuMoveCountdown = global.startMenuMoveDelay;
-      const r = 0.3;
-      global.startMenuTargetPos = v(0.5 - r + 2 * r * Math.random(), 0.5 - r + 2 * r * Math.random());
-    }
-  }
-
   // update main sim and gui
   global.mainScreen.update(dt);
-  global.allGuis[GameStates.upgradeMenu].updateTransitionEffect(dt); // upgrade_menu.js
 
 }

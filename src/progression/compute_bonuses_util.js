@@ -2,6 +2,10 @@
 // called in updateAllBonuses
 // compute value and
 // apply conversion if applicable (human readable -> internal units)
+/**
+ *
+ * @param e
+ */
 function _computeBonusVal(e) {
   const readableVal = e.value.f(e.level - 1);
   let realVal = readableVal;
@@ -9,6 +13,11 @@ function _computeBonusVal(e) {
   return [readableVal, realVal];
 }
 
+/**
+ *
+ * @param key
+ * @param f
+ */
 function _updateBonus(key, f) {
 
   // compute bonus
@@ -30,6 +39,9 @@ function _updateBonus(key, f) {
 //  - temporary effects ongoing in global.mainSim
 //
 // finally, apply bonuses by adjusting settings in global.mainSim
+/**
+ *
+ */
 function updateAllBonuses() {
 
   if (global.upgradeTracks) {
@@ -51,6 +63,4 @@ function updateAllBonuses() {
     global.bonusSummary = specs.map((entry) => _updateBonus(...entry));
 
   }
-
-  if (global.screenRect) { rebuildGuis(); }
 }

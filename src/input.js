@@ -1,49 +1,40 @@
-function keyDown(event) {
-  if (event.key === 'Escape') {
-    pause();
-  }
-  if (event.which === 16) {
-    global.shiftHeld = true;
-  }
-  if (event.which === 17) {
-    global.controlHeld = true;
-  }
-}
-function keyUp(event) {
-  if (event.which === 16) {
-    global.shiftHeld = false;
-  }
-  if (event.which === 17) {
-    global.controlHeld = false;
-  }
-}
+/**
+ * @file base input handlers
+ *
+ * browser event listeners are bound in setup.js
+ *
+ * here we recieve real user inputs
+ * and pass them to global.mainScreen (game_screen.js)
+ */
 
-function updateMousePos(event) {
+/**
+ * compute mouse position in game units
+ * @param {object} event The input event object.
+ * @returns {Vector} The in-game position of the mouse.
+ */
+function computeGameMousePos(event) {
 
   const rect = global.canvas.getBoundingClientRect();
   const scaleX = global.canvas.width / rect.width;
   const scaleY = global.canvas.height / rect.height;
 
-  global.canvasMousePos = new Vector(
+  const canvasMousePos = new Vector(
     (event.clientX - rect.left) * scaleX,
     (event.clientY - rect.top) * scaleY
 
   );
-  global.mousePos = new Vector(
-    (global.canvasMousePos.x - global.canvasOffsetX) / global.canvasScale,
-    (global.canvasMousePos.y - global.canvasOffsetY) / global.canvasScale
+  const mousePos = new Vector(
+    (canvasMousePos.x - global.canvasOffsetX) / global.canvasScale,
+    (canvasMousePos.y - global.canvasOffsetY) / global.canvasScale
   );
+  return mousePos;
 }
 
 function mouseMove(e) {
-  updateMousePos(e);
+  const vPos = computeGameMousePos(e);
 
-  // animate cursor if idle
-  global.idleCountdown = global.idleDelay;
+  global.mainScreen.mouseMove(vPos);
 
-  // trigger selected tool movement behavior
-  const tool = global.mainSim.getTool();
-  if (tool) { tool.mouseMove(global.mousePos); }
 }
 
 function mouseDown(e) {
@@ -64,14 +55,31 @@ function mouseDown(e) {
 
 }
 
-function mouseUp(_e) {
+function mouseUp(e) {
   global.mainSim.draggingControlPoint = null;
   global.mouseDownDisabled = false;
   global.mouseDown = false;
 
-  // global.mainSim.getBodies().forEach(p => p.isHeld = false )
+  global.mainScreen.mouseUp(e);
+}
 
-  // release tool if it was being held down
-  const tool = global.mainSim.getTool();
-  if (tool) { tool.mouseUp(global.mousePos); }
+function keyDown(event) {
+  if (event.key === 'Escape') {
+    pause();
+  }
+  if (event.which === 16) {
+    global.shiftHeld = true;
+  }
+  if (event.which === 17) {
+    global.controlHeld = true;
+  }
+}
+
+function keyUp(event) {
+  if (event.which === 16) {
+    global.shiftHeld = false;
+  }
+  if (event.which === 17) {
+    global.controlHeld = false;
+  }
 }

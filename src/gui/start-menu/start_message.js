@@ -1,7 +1,13 @@
 // message appears in the middle of the
 // (start menu -> playing) transition sequence
+/**
+ *
+ */
 class StartMessage extends StartAnimStage {
 
+  /**
+   *
+   */
   constructor() {
     super();
 
@@ -35,6 +41,11 @@ class StartMessage extends StartAnimStage {
 
   }
 
+  /**
+   *
+   * @param g
+   * @param rect
+   */
   draw(g, rect) {
 
     // black background
@@ -55,6 +66,9 @@ class StartMessage extends StartAnimStage {
     }
   }
 
+  /**
+   *
+   */
   pickTextSolidity() {
 
     // identify which animation segment we are in

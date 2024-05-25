@@ -1,11 +1,22 @@
 // a rectangle of text that appears on top of all other elements
+/**
+ *
+ */
 class TooltipPopup extends CompositeGuiElement {
 
   // get rect using TooltipPopup.pickTooltipRect
+  /**
+   *
+   * @param rect
+   */
   constructor(rect) {
     super(rect);
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     const r = this.rect;
 
@@ -34,15 +45,23 @@ class TooltipPopup extends CompositeGuiElement {
   }
 
   // implement GuiElement
+  /**
+   *
+   */
   click() {
     // do nothing
   }
 
   // pick anchor point for pickTooltipRect
   // called in label_tooltip_popup.js
-  static pickMouseAnchorPoint() {
-    let p = global.mousePos;
-    const sr = global.screenRect;
+  /**
+   *
+   * @param screen
+   */
+  static pickMouseAnchorPoint(screen) {
+    const sr = screen.rect;
+    let p = screen.mousePos;
+    if (!p) { p = v(0.5, 0.5); }
     const space = 0.05;
     const cursorSize = 0.05;
 
@@ -77,8 +96,14 @@ class TooltipPopup extends CompositeGuiElement {
 
   // pick position for tooltip
   // called in gui_element.js
+  /**
+   *
+   * @param anchorPoint
+   * @param w
+   * @param h
+   */
   static pickTooltipRect(anchorPoint, w, h) {
-    const sr = global.screenRect;
+    const sr = global.mainScreen.rect;
     const ap = anchorPoint;
 
     // pick x position to just touch anchorPoint

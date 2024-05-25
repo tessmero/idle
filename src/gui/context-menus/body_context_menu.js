@@ -1,6 +1,16 @@
 // context menu (and reticle effect)
 // that appears when a body is clicked
+/**
+ *
+ */
 class BodyContextMenu extends ContextMenu {
+  /**
+   *
+   * @param rect
+   * @param s0
+   * @param s1
+   * @param body
+   */
   constructor(rect, s0, s1, body) {
     super(rect, s0, s1);
 
@@ -29,6 +39,9 @@ class BodyContextMenu extends ContextMenu {
     ];
   }
 
+  /**
+   *
+   */
   deleteBody() {
     let b = this.body;
     while (b.parent) { b = b.parent; }// got top parent
@@ -36,12 +49,19 @@ class BodyContextMenu extends ContextMenu {
     this.closeBodyContextMenu();
   }
 
+  /**
+   *
+   */
   closeBodyContextMenu() {
-    const screen = this.getScreen();
+    const screen = this.screen;
     screen.contextMenu = null;
     screen.sim.selectedBody = null;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 

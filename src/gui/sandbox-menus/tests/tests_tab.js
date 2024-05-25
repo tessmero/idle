@@ -1,4 +1,11 @@
+/**
+ *
+ */
 class TestsTab extends CompositeGuiElement {
+  /**
+   *
+   * @param sr
+   */
   constructor(sr) {
     super(sr);
 
@@ -37,21 +44,33 @@ class TestsTab extends CompositeGuiElement {
     ];
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 
     // highlight "run all tests" button if active (this.rab)
-    const c = this.getScreen().contextMenu;
+    const c = this.screen.contextMenu;
     if ((_testLoopSetting === 'all') && (c instanceof TestContextMenu)) {
       ProgressIndicator._draw(g, this.rab.rect, 1.0);
     }
   }
 
+  /**
+   *
+   */
   playAllClicked() {
     _testLoopSetting = 'all';
     this.tlrs[0].clicked();
   }
 
+  /**
+   *
+   * @param rect
+   * @param n
+   */
   buildRows(rect, n) {
     const sr = rect;
     const m = 0.03;

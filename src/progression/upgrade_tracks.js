@@ -5,8 +5,14 @@
 // persistant instance global.upgradeTracks
 //   contains state of purchased upgrades for the current game
 
+/**
+ *
+ */
 class UpgradeTracks {
 
+  /**
+   *
+   */
   constructor() {
     this.state = {
       'nparticles': {

@@ -1,11 +1,22 @@
 // black grid gradually covers start menu
+/**
+ *
+ */
 class GridFadeOut extends FadeOut {
+  /**
+   *
+   */
   constructor() {
     super();
     this.duration = 1000;
   }
 
   // implement FadeOut
+  /**
+   *
+   * @param g
+   * @param rect
+   */
   draw(g, rect) {
 
     g.fillStyle = global.colorScheme.fg;

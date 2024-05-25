@@ -1,6 +1,11 @@
 const charWidth = 5;
 const charHeight = 7;
 
+/**
+ *
+ * @param s
+ * @param scale
+ */
 function getTextDims(s, scale = 1) {
   const lines = s.split(/\r?\n/);
   const longest = Math.max(...lines.map((l) => l.length));
@@ -17,6 +22,15 @@ function getTextDims(s, scale = 1) {
   return [m * w, m * h];
 }
 
+/**
+ *
+ * @param g
+ * @param xpos
+ * @param ypos
+ * @param layout
+ * @param center
+ * @param fontSpec
+ */
 function drawLayout(g, xpos, ypos, layout, center = true, fontSpec) {
   if (!layout) { return; }
 
@@ -51,6 +65,15 @@ function drawLayout(g, xpos, ypos, layout, center = true, fontSpec) {
   }
 }
 
+/**
+ *
+ * @param g
+ * @param xpos
+ * @param ypos
+ * @param s
+ * @param center
+ * @param fontSpec
+ */
 function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
   // s = s.toUpperCase()
   const dx = fontSpec.scale * global.textPixelSize * (charWidth + global.textLetterSpace);
@@ -71,6 +94,15 @@ function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
 }
 
 // draw text centered at point xy
+/**
+ *
+ * @param g
+ * @param x
+ * @param y
+ * @param s
+ * @param center
+ * @param fontSpec
+ */
 function drawText(g, x, y, s, center = true, fontSpec) {
   const lines = s.split('\n');
   const dy = fontSpec.scale * global.textPixelSize * (charHeight + global.textLineSpace);

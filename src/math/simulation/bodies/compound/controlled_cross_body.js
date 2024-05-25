@@ -1,6 +1,14 @@
+/**
+ *
+ */
 class ControlledCrossBody extends CompoundBody {
 
   // sim is a ParticleSim instance
+  /**
+   *
+   * @param sim
+   * @param pos
+   */
   constructor(sim, pos) {
     super(sim, pos);
 
@@ -18,5 +26,8 @@ class ControlledCrossBody extends CompoundBody {
     this.dripChance = global.poiDripChance;
   }
 
+  /**
+   *
+   */
   getMainBody() { return this.cross; }
 }

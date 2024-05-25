@@ -1,8 +1,19 @@
+/**
+ *
+ */
 class BasicLineSkill extends Skill {
+  /**
+   *
+   */
   constructor() {
     super('Basic Line');
   }
 
+  /**
+   *
+   * @param w
+   * @param h
+   */
   buildThumbnailSim(w, h) {
     const sim = new ThumbnailPSim();
 

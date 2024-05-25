@@ -1,8 +1,19 @@
 // a tooltip with some text and a simulation
 // also shows tool cost with progress indicator
+/**
+ *
+ */
 class ToolbarTooltipPopup extends TutorialTooltipPopup {
 
   // get rect using ToolbarTooltipPopup.pickRect
+  /**
+   *
+   * @param rect
+   * @param label
+   * @param tut
+   * @param tool
+   * @param scale
+   */
   constructor(rect, label, tut, tool, scale = null) {
     super(rect, label, tut, scale);
 
@@ -12,6 +23,11 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
       let r = padRect(...rect, -global.tooltipPadding);
       const h = ToolbarTooltipPopup.piHeight();
       r = [r[0], r[1] + r[3] - h, r[2], h];
+
+      /**
+       *
+       * @param f
+       */
       function bc(f) { // apply f to budget,cost
         const b = global.mainSim.particlesCollected;
         const c = tool.getCost();
@@ -32,11 +48,20 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
     }
   }
 
+  /**
+   *
+   */
   static piHeight() { return 0.05; } // thickness of progress bar
-  static pickRect(label, scale = null) {
+  /**
+   *
+   * @param screen
+   * @param label
+   * @param scale
+   */
+  static pickRect(screen, label, scale = null) {
 
     // start with TutorialTooltipPopup
-    const r = TutorialTooltipPopup.pickRect(label, scale);
+    const r = TutorialTooltipPopup.pickRect(screen, label, scale);
 
     // add space for progress indicator
     const dh = ToolbarTooltipPopup.piHeight();

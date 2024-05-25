@@ -1,11 +1,21 @@
 // base class for edges that are specified
 // based on an angle->radius function
+/**
+ *
+ */
 class RadspecEdge extends Edge {
 
+  /**
+   *
+   * @param _angle
+   */
   computeRadius(_angle) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
+  /**
+   *
+   */
   computeEdgeShape() {
 
     // pre-compute angle->(radius,r2,distance)
@@ -13,7 +23,7 @@ class RadspecEdge extends Edge {
     // angle instead of distance along circumference)
     const angleLutN = 1000;
     const angleLutNDims = 3; // radius,r2
-    const angleLut = new Float32Array(angleLutN * angleLutNDims);
+    const angleLut = new FloatArray(angleLutN * angleLutNDims).get();
     let circ = 0;
     const angleStep = twopi / angleLutN;
     for (let i = 0; i < angleLutN; i++) {
@@ -34,7 +44,7 @@ class RadspecEdge extends Edge {
     // (distance along circumference) -> (a,r,norm,r2)
     const distLutN = 1000;
     const distLutNDims = 4; // angle, radius, normal angle,r2
-    const distLut = new Float32Array(distLutN * distLutNDims);
+    const distLut = new FloatArray(distLutN * distLutNDims).get();
     for (let i = 0; i < distLutN; i++) {
       const [angle, radius, norm] = this.computePoint(circ * i / distLutN);
       distLut[i * distLutNDims + 0] = angle;
@@ -50,6 +60,10 @@ class RadspecEdge extends Edge {
   // called when pre-computing edge shape
   // compute position+normal [angle,radius,normal angle]
   // at given distance along circumerence
+  /**
+   *
+   * @param targetD
+   */
   computePoint(targetD) {
 
     let bestI = 0;

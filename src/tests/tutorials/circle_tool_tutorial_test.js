@@ -1,11 +1,25 @@
-class CircleToolTutorialTest extends TutorialTest {
+/**
+ *
+ */
+class CircleToolTutorialTest extends Test {
 
+  /**
+   *
+   */
   constructor() {
-    super(new CircleToolTutorial());
+    super('Circle Test', new CircleToolTutorial());
   }
 
-  getTestAssertions(sim) {
+  /**
+   *
+   * @param screen
+   */
+  getTestAssertions(screen) {
+    const sim = screen.sim;
 
+    /**
+     *
+     */
     function b() {
       return sim.getBodies()[0].getMainBody();
     }

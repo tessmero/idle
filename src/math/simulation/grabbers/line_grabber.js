@@ -1,5 +1,17 @@
 
+/**
+ *
+ */
 class LineGrabber extends Grabber {
+  /**
+   *
+   * @param a
+   * @param b
+   * @param rad
+   * @param f
+   * @param edgeOffsetA
+   * @param edgeOffsetB
+   */
   constructor(a, b, rad, f, edgeOffsetA, edgeOffsetB) {
     super(f);
     this.a = a;
@@ -11,6 +23,10 @@ class LineGrabber extends Grabber {
     this.edgeOffsetB = edgeOffsetB;
   }
 
+  /**
+   *
+   * @param g
+   */
   drawDebug(g) {
     g.strokeStyle = 'yellow';
     g.lineWidth = this.rad * 2;
@@ -20,6 +36,13 @@ class LineGrabber extends Grabber {
     g.stroke();
   }
 
+  /**
+   *
+   * @param subgroup
+   * @param i
+   * @param x
+   * @param y
+   */
   contains(subgroup, i, x, y) {
     let dx = x - this.a.x;
     let dy = y - this.a.y;

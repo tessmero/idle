@@ -1,9 +1,12 @@
-// small particle simulation that appears in the gui
-//
-// displayed using a GuiScreenPanel instance
+/**
+ * small particle simulation that appears in the gui
+ */
 class TutorialPSim extends ParticleSim {
+  /**
+   *
+   */
   constructor() {
-    super(1e4, [0, 0, ...global.tutorialSimDims], 'Small Tutorial Simulation');
+    super(1e4, [0, 0, ...global.tutorialSimDims]);
     this.fallSpeed = this.fallSpeed * 0.2;
 
     const rg = this.rainGroup;
@@ -11,6 +14,10 @@ class TutorialPSim extends ParticleSim {
     rg.n = rg.n / 100;
   }
 
+  /**
+   *
+   * @param b
+   */
   addBody(b) {
 
     // clear simulation (limit 1 body)
@@ -21,7 +28,7 @@ class TutorialPSim extends ParticleSim {
     b.controlPoints.forEach((c) => {
 
       if (b instanceof ControlledSausageBody) {
-        c.setRad(c.rad * global.tutorialToolScale);
+        c.setRad(c.rad * global.tutorialScaleFactor);
 
         // c.fscale *= .5
       }

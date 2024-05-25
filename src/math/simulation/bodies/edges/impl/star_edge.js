@@ -1,5 +1,14 @@
+/**
+ *
+ */
 class StarEdge extends RadspecEdge {
 
+  /**
+   *
+   * @param n
+   * @param minRad
+   * @param maxRad
+   */
   constructor(n, minRad, maxRad) {
     super();
     this.n = n;
@@ -7,6 +16,10 @@ class StarEdge extends RadspecEdge {
     this.maxRad = maxRad;
   }
 
+  /**
+   *
+   * @param angle
+   */
   computeRadius(angle) {
     const mi = this.minRad;
     const ma = this.maxRad;

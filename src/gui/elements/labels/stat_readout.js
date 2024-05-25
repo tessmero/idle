@@ -1,16 +1,32 @@
 // a pixel art icon followed by a line of dynamic text
+/**
+ *
+ */
 class StatReadout extends DynamicTextLabel {
 
+  /**
+   *
+   * @param rect
+   * @param icon
+   * @param labelFunc
+   */
   constructor(rect, icon, labelFunc) {
     super(rect, () => `  ${ labelFunc()}`);
     this.icon = icon;
-    this.scale = this.constructor.scale();
+    this.setScale(this.constructor.scale());
     this.center = false;
   }
 
+  /**
+   *
+   */
   static scale() { return 0.5; }
 
   // implement GuiElement
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 
@@ -26,6 +42,9 @@ class StatReadout extends DynamicTextLabel {
     drawLayout(g, xy[0], xy[1], layout, false, new FontSpec(0, this.scale, false)); // character.js
   }
 
+  /**
+   *
+   */
   isAnimated() {
     return true;
   }

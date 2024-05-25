@@ -1,7 +1,16 @@
 // physics-enabled object that interacts with particles
+/**
+ *
+ */
 class Body {
 
   // sim is a ParticleSim instance
+  /**
+   *
+   * @param sim
+   * @param pos
+   * @param angle
+   */
   constructor(sim, pos, angle = 0) {
     this.sim = sim;
     this.controlPoints = [];
@@ -18,16 +27,26 @@ class Body {
   }
 
   // called in register()
+  /**
+   *
+   */
   buildEdge() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   // called in register()
+  /**
+   *
+   */
   buildGrabber() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   // default draw method
+  /**
+   *
+   * @param g
+   */
   draw(g) {
 
     // draw edge shape by brute-force
@@ -40,6 +59,16 @@ class Body {
 
   // callback for this.grabber
   // when a particle is grabbed (particle_group.js)
+  /**
+   *
+   * @param subgroup
+   * @param i
+   * @param x
+   * @param y
+   * @param dx
+   * @param dy
+   * @param hit
+   */
   grabbed(subgroup, i, x, y, dx, dy, hit) {
 
     // place particle on edge
@@ -48,6 +77,10 @@ class Body {
   }
 
   // called in particle_sim.js addBody()
+  /**
+   *
+   * @param sim
+   */
   register(sim) {
 
     const edge = this.buildEdge();// new SausageEdge(len,this.rad)
@@ -83,6 +116,10 @@ class Body {
   }
 
   // called in particle_sim.js removeBody()
+  /**
+   *
+   * @param sim
+   */
   unregister(sim) {
     sim.removeGrabber(this.grabber);
     sim.physicsGroup.deleteSubgroup(this.pps);
@@ -90,12 +127,20 @@ class Body {
   }
 
   // apply translational force
+  /**
+   *
+   * @param acc
+   */
   accel(acc) {
     this.vel = this.vel.add(acc); // move this body
     this.eps.acc = this.eps.acc.add(acc);// pass momentum to particles on edge
   }
 
   // apply torque
+  /**
+   *
+   * @param spn
+   */
   spin(spn) {
     this.avel = this.avel + spn; // spin this body
     this.eps.spn = this.eps.spn + spn; // pass momentum to particles on edge
@@ -103,6 +148,11 @@ class Body {
 
   // called in edge_particle_subgroup.js
   // when this.eatsQueued > 0
+  /**
+   *
+   * @param x
+   * @param y
+   */
   eatParticleFromEdge(x, y) {
     const par = this.parent;
     if (par && (par instanceof Buddy)) {
@@ -111,6 +161,11 @@ class Body {
     DefaultTool._grabbed(this.sim, null, null, x, y, null, null, null);
   }
 
+  /**
+   *
+   * @param dt
+   * @param beingControlled
+   */
   update(dt, beingControlled = false) {
 
     const stopForce = global.bodyFriction;
@@ -152,6 +207,10 @@ class Body {
 
   // debug
 
+  /**
+   *
+   * @param g
+   */
   drawDebug(g) {
     if (global.showEdgeNormals) { this.drawNormals(g, this.pos, this.angle); }
     if (global.showEdgeSpokesA) { this.drawDistLutSpokes(g, this.pos, this.angle); }
@@ -160,6 +219,10 @@ class Body {
     if (global.showEdgeAccel) { this.drawAccel(g, this.pos, this.angle); }
   }
 
+  /**
+   *
+   * @param g
+   */
   drawNormals(g) {
     if (!this.edge) { return; }
     this._drawDebugVectors(g, 0, this.edge.circ, (a) => {
@@ -170,6 +233,10 @@ class Body {
     });
   }
 
+  /**
+   *
+   * @param g
+   */
   drawDistLutSpokes(g) {
     if (!this.edge) { return; }
     this._drawDebugVectors(g, 0, this.edge.circ, (a) => {
@@ -178,6 +245,10 @@ class Body {
     });
   }
 
+  /**
+   *
+   * @param g
+   */
   drawAngleLutSpokes(g) {
     if (!this.edge) { return; }
     this._drawDebugVectors(g, 0, twopi, (a) => {
@@ -187,6 +258,10 @@ class Body {
     });
   }
 
+  /**
+   *
+   * @param g
+   */
   drawVel(g) {
     if (!this.edge) { return; }
     this._drawDebugVectors(g, 0, this.edge.circ, (a) => {
@@ -196,6 +271,10 @@ class Body {
     });
   }
 
+  /**
+   *
+   * @param g
+   */
   drawAccel(g) {
     if (!this.edge) { return; }
     this._drawDebugVectors(g, 0, this.edge.circ, (a) => {
@@ -205,6 +284,13 @@ class Body {
     });
   }
 
+  /**
+   *
+   * @param g
+   * @param t0
+   * @param t1
+   * @param f
+   */
   _drawDebugVectors(g, t0, t1, f) {
     if (!this.edge) { return; }
 

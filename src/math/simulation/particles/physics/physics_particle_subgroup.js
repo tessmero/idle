@@ -2,7 +2,17 @@
 // has fixed address range i to i+n
 //
 // "subgroup" meaning one garbage-collectable unit
+/**
+ *
+ */
 class PhysicsParticleSubgroup {
+  /**
+   *
+   * @param group
+   * @param subgroupIndex
+   * @param i
+   * @param n
+   */
   constructor(group, subgroupIndex, i, n) {
     this.group = group;
     this.subgroupIndex = subgroupIndex;
@@ -15,6 +25,12 @@ class PhysicsParticleSubgroup {
   }
 
   // called in PyhsicsPGroup *generateParticles()
+  /**
+   *
+   * @param dt
+   * @param vm
+   * @param vb
+   */
   * generateParticles(dt, vm, vb) {
     const grp = this.group;
     const nd = grp.ndims;
@@ -56,10 +72,19 @@ class PhysicsParticleSubgroup {
     }
   }
 
+  /**
+   *
+   * @param i
+   */
   hasIndex(i) {
     return (i >= this.i) && (i < this.i + this.n);
   }
 
+  /**
+   *
+   * @param pos
+   * @param vel
+   */
   spawnParticle(pos, vel) {
     const i = this.i;
     const m = i + this.n;

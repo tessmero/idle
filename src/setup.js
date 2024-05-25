@@ -4,6 +4,10 @@ let secondsPassed;
 let oldTimeStamp;
 let fps;
 
+/**
+ *
+ * @param timeStamp
+ */
 function gameLoop(timeStamp) {
 
   let msPassed = 0;
@@ -20,8 +24,13 @@ function gameLoop(timeStamp) {
   requestAnimationFrame(gameLoop);
 }
 
-// Initialize the game
+/**
+ * Initialize the game
+ */
 function init() {
+
+  // start keeping track of stats
+  global.logPerformanceStats = new LogPerformanceStats();
 
   const cvs = document.getElementById('gameCanvas');
 
@@ -71,9 +80,11 @@ function init() {
   global.ctx = cvs.getContext('2d');
 
   const sim = new MainPSim();
-  global.mainScreen = new GameScreen([0, 0, 1, 1], sim);
+  const gsm = new GameStateManager();
+  const screen = new GameScreen('main game', [0, 0, 1, 1], sim, gsm);
   global.mainSim = sim;
-  quit();
+  global.mainScreen = screen;
+  screen.stateManager.quit();
 
   // ////////////////////////////////////////
   // unit tests 20240505
@@ -88,6 +99,10 @@ function init() {
   }
 }
 
+/**
+ *
+ * @param cs
+ */
 function setColorScheme(cs) {
   global.colorScheme = cs;
 
@@ -99,6 +114,9 @@ function setColorScheme(cs) {
   if (gc && gc.style) { gc.style.backgroundColor = global.colorScheme.bg; }
 }
 
+/**
+ *
+ */
 function resetGame() {
   setColorScheme(ColorScheme.default);
 

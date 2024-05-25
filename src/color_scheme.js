@@ -1,6 +1,15 @@
+/**
+ *
+ */
 class ColorScheme {
 
   // foreground, background, highlight
+  /**
+   *
+   * @param fg
+   * @param bg
+   * @param hl
+   */
   constructor(fg, bg, hl) {
     this.fg = fg;
     this.bg = bg;

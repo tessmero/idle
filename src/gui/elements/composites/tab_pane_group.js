@@ -1,6 +1,16 @@
+/**
+ *
+ */
 class TabPaneGroup extends CompositeGuiElement {
 
   // tabContent is list of rect->element callbacks
+  /**
+   *
+   * @param rect
+   * @param tabLabels
+   * @param tabContents
+   * @param tabTooltips
+   */
   constructor(rect, tabLabels, tabContents, tabTooltips = null) {
     super(rect);
     this.tabLabels = tabLabels;
@@ -32,7 +42,7 @@ class TabPaneGroup extends CompositeGuiElement {
       );
       if (tabTooltips) { tb.withTooltip(tabTooltips[i]); }
 
-      tb.scale = tabLabelScale;
+      tb.setScale(tabLabelScale);
       this.children.push(tb);
       i = i + 1;
     });
@@ -47,19 +57,34 @@ class TabPaneGroup extends CompositeGuiElement {
     this._selectedTabIndex = 0;
   }
 
+  /**
+   *
+   * @param i
+   */
   setSelectedTabIndex(i) {
     this._selectedTabIndex = nnmod(i, this.nTabs);
   }
 
+  /**
+   *
+   */
   getSelectedTabIndex() {
     return this._selectedTabIndex;
   }
 
+  /**
+   *
+   * @param s
+   */
   setScreen(s) {
     super.setScreen(s);
     this.tabContent.forEach((tb) => tb.setScreen(s));
   }
 
+  /**
+   *
+   * @param l
+   */
   addTabChangeListener(l) {
     if (!this.tabChangeListeners) {
       this.tabChangeListeners = [];
@@ -67,16 +92,28 @@ class TabPaneGroup extends CompositeGuiElement {
     this.tabChangeListeners.push(l);
   }
 
+  /**
+   *
+   * @param dt
+   * @param disableHover
+   */
   update(dt, disableHover) {
     super.update(dt, disableHover);
     this.tabContent[this._selectedTabIndex].update(dt, disableHover);
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     this.tabContent[this._selectedTabIndex].draw(g); // draw tab content
     super.draw(g); // draw tab labels
   }
 
+  /**
+   *
+   */
   click() {
     return super.click() || // click tab label
             this.tabContent[this._selectedTabIndex].click(); // click tab content

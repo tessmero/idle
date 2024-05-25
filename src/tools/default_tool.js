@@ -1,7 +1,15 @@
 // default tool, collect raindrops, pressure/move pois
 
+/**
+ *
+ */
 class DefaultTool extends Tool {
 
+  /**
+   *
+   * @param sim
+   * @param rad
+   */
   constructor(sim, rad) {
     super(sim);
     this.rad = rad;
@@ -22,24 +30,49 @@ class DefaultTool extends Tool {
       rad, (...p) => this.grabbed(...p));
   }
 
+  /**
+   *
+   */
   getTitle() {
-    return 'Default Tool Tutorial';
+    return 'Default Tool Macro';
   }
 
+  /**
+   *
+   * @param sim
+   */
   unregister(sim) {
     sim.removeGrabber(this.grabber);
   }
 
+  /**
+   *
+   */
   getTutorial() {
     return new DefaultToolTutorial();
   }
 
   // callback for this.grabber
   // when a particle is grabbed (particle_group.js)
+  /**
+   *
+   * @param {...any} p
+   */
   grabbed(...p) {
     DefaultTool._grabbed(this.sim, ...p);
   }
 
+  /**
+   *
+   * @param sim
+   * @param _subgroup
+   * @param _i
+   * @param x
+   * @param y
+   * @param _dx
+   * @param _dy
+   * @param _hit
+   */
   static _grabbed(sim, _subgroup, _i, x, y, _dx, _dy, _hit) {
 
     // increase currency
@@ -50,12 +83,20 @@ class DefaultTool extends Tool {
     sim.floaters.signalChange(p, +1);
   }
 
+  /**
+   *
+   * @param p
+   */
   mouseMove(p) {
     this.sim.updateControlPointHovering(p);
     this.lastPos = this.grabber.pos;
     this.grabber.pos = p;
   }
 
+  /**
+   *
+   * @param p
+   */
   mouseDown(p) {
     // either grab control point or start catching rain
     this.sim.updateControlPointHovering(p);
@@ -74,6 +115,7 @@ class DefaultTool extends Tool {
     else {
       this.held = 'catching';
       this.sim.selectedBody = null; // close context menu
+      this.sim.selectedParticle = null;
     }
 
     // toggle grabbing particles
@@ -84,6 +126,11 @@ class DefaultTool extends Tool {
       this.sim.removeGrabber(this.grabber);
     }
   }
+
+  /**
+   *
+   * @param _p
+   */
   mouseUp(_p) {
     this.held = null;
     this.sim.draggingControlPoint = null;
@@ -92,6 +139,12 @@ class DefaultTool extends Tool {
     this.sim.removeGrabber(this.grabber);
   }
 
+  /**
+   *
+   * @param g
+   * @param p
+   * @param {...any} args
+   */
   drawCursor(g, p, ...args) {
 
     if (this.held instanceof ControlPoint) {
@@ -133,6 +186,10 @@ class DefaultTool extends Tool {
     }
   }
 
+  /**
+   *
+   * @param dt
+   */
   update(dt) {
 
     const r = this.rad;

@@ -1,9 +1,46 @@
 const _allTestScreens = {};
 
-// integration test for a simulation
+/**
+ * integration test for a simulation
+ */
 class Test {
 
-  getScreen() {
+  /**
+   * @param {string} titleKey readable and unique title.
+   * @param {Macro} [macro] optional cursor animation sequence.
+   */
+  constructor(titleKey, macro = null) {
+    this.titleKey = titleKey;
+    this.macro = macro;
+  }
+
+  /**
+   * @returns {GameStateManager} new mock instance with no GUIs.
+   */
+  getGameStateManager() {
+    return GameStateManager.blankGsm();
+  }
+
+  /**
+   * build default sim (small tutorial particle sim).
+   * @returns {ParticleSim} sim instance to run this test.
+   */
+  buildSim() {
+    return new TutorialPSim();
+  }
+
+  /**
+   * Screen cannot be reassigned.
+   */
+  set screen(_s) {
+    throw new Error('not allowed');
+  }
+
+  /**
+   * Get GameScreen instance to run this test.
+   * $returns {GameScreen}
+   */
+  get screen() {
     const clazz = this.constructor;
     if (!(clazz in _allTestScreens)) {
       const screen = this.buildScreen();
@@ -13,38 +50,65 @@ class Test {
     return _allTestScreens[clazz];
   }
 
+  /**
+   * Allocate new GameScreen, at most once per test subclass.
+   */
   buildScreen() {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    const sim = this.buildSim();
+    const gsm = this.getGameStateManager();
+    const macro = this.macro;
+    const titleKey = this.titleKey;
+    const screen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
+    return screen;
   }
 
-  getTitle() {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
-  }
-
-  getDuration() {
-    const ta = this.getTestAssertions();
+  /**
+   *
+   * @param screen
+   */
+  getDuration(screen) {
+    const ta = this.getTestAssertions(screen);
     if (ta.length === 0) {
       return 5000;
     }
     return 100 + ta.at(-1)[0]; // time of last assertion
   }
 
-  getTestAssertions(_sim) {
+  /**
+   *
+   * @param _screen
+   */
+  getTestAssertions(_screen) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
+  /**
+   *
+   * @param a
+   * @param b
+   */
   static anglesEqual(a, b) {
     const diff = Math.abs(cleanAngle(a - b));
     return diff < 1e-2; // radians
   }
 
+  /**
+   *
+   * @param a
+   * @param b
+   * @param epsilon
+   */
   static vectorsEqual(a, b, epsilon = 1e-2) {
     const d = a.sub(b);
     return d.getMagnitude() < epsilon;
   }
 
-  // get relative position
-  // return value  v(.5,.5) means center of sim
+  /**
+   * get relative position
+   * return value  v(.5,.5) means center of sim
+   * @param sim
+   * @param actualPos
+   */
   static relPos(sim, actualPos) {
     const r = sim.rect;
     return v(

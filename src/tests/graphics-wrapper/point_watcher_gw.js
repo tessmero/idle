@@ -1,6 +1,13 @@
 // keep track of the color of certain points in graphics context
+/**
+ *
+ */
 class PointWatcherGW extends GraphicsWrapper {
 
+  /**
+   *
+   * @param rect
+   */
   constructor(rect) {
     super();
 
@@ -8,6 +15,9 @@ class PointWatcherGW extends GraphicsWrapper {
   }
 
   // draw points for debugging
+  /**
+   *
+   */
   drawDebug() {
     const g = this.g;
     g.fillStyle = global.colorScheme.hl;
@@ -25,6 +35,10 @@ class PointWatcherGW extends GraphicsWrapper {
   }
 
   // arrange points in grid covering given rect
+  /**
+   *
+   * @param rect
+   */
   resetPoints(rect) {
 
     // arrange points in NxN grid
@@ -43,6 +57,9 @@ class PointWatcherGW extends GraphicsWrapper {
 
   // get fraction of watch points
   // with foreground color
+  /**
+   *
+   */
   getFgRate() {
     const s = this.watchStates;
     const total = s.length;
@@ -51,6 +68,11 @@ class PointWatcherGW extends GraphicsWrapper {
   }
 
   // replace some watchStates with given value
+  /**
+   *
+   * @param value
+   * @param {...any} rect
+   */
   setStatesInRect(value, ...rect) {
     const wp = this.watchPositions;
     const n = wp.length;
@@ -61,10 +83,18 @@ class PointWatcherGW extends GraphicsWrapper {
     }
   }
 
+  /**
+   *
+   * @param {...any} rect
+   */
   rectFilled(...rect) {
     this.setStatesInRect(true, ...rect);
   }
 
+  /**
+   *
+   * @param {...any} rect
+   */
   rectCleared(...rect) {
     this.setStatesInRect(false, ...rect);
   }

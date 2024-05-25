@@ -1,5 +1,15 @@
+/**
+ *
+ */
 class SausageGrabber extends CompoundGrabber {
 
+  /**
+   *
+   * @param a
+   * @param b
+   * @param rad
+   * @param f
+   */
   constructor(a, b, rad, f) {
     super(f);
 
@@ -20,6 +30,9 @@ class SausageGrabber extends CompoundGrabber {
   // called periodically. set member vars
   // for objects in this.children
   // do not add or remove children
+  /**
+   *
+   */
   update() {
     const a = this.a;
     const b = this.b;

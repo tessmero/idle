@@ -1,6 +1,15 @@
 // a global variable readout with on/off toggle
+/**
+ *
+ */
 class BooleanDebugVar extends CompositeGuiElement {
 
+  /**
+   *
+   * @param rect
+   * @param varname
+   * @param tooltip
+   */
   constructor(rect, varname, tooltip) {
     super(rect);
     this.varname = varname;
@@ -17,7 +26,7 @@ class BooleanDebugVar extends CompositeGuiElement {
         tooltip,
       ].join('\n'));
 
-    dtl.scale = 0.4;
+    dtl.setScale(0.4);
     dtl.tooltipScale = 0.4;
     dtl.center = false;
     dtl.fixedRect = true;
@@ -34,15 +43,22 @@ class BooleanDebugVar extends CompositeGuiElement {
   }
 
   // called when clicked
+  /**
+   *
+   */
   toggle() {
     const varname = this.varname;
     let val = getGlobal(varname);
     val = !val;
     setGlobal(varname, val);
     this.checkbox.icon = val ? checkedIcon : uncheckedIcon;
-    rebuildGuis(); // game_states.js
+    global.mainScreen.stateManager.rebuildGuis(global.mainScreen);
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     Button._draw(g, this.rect);
     super.draw(g);

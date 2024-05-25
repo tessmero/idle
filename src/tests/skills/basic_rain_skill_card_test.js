@@ -1,14 +1,21 @@
+/**
+ *
+ */
 class BasicRainSkillCardTest extends SkillCardTest {
 
+  /**
+   *
+   */
   constructor() {
-    super(new BasicRainSkill());
+    super('Basic Rain Skill Card Test', new BasicRainSkill());
   }
 
-  getTitle() {
-    return 'Basic Rain Skill Card';
-  }
-
-  getTestAssertions(sim) {
+  /**
+   *
+   * @param screen
+   */
+  getTestAssertions(screen) {
+    const sim = screen.sim;
     return [
       // time, label, func
       [1000, 'one body', () => sim.getBodies().length === 1],

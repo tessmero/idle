@@ -1,0 +1,1767 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"cons",
+				"constructor"
+			],
+			[
+				"PiTo",
+				"PiToolTutorial"
+			],
+			[
+				"PiT",
+				"PiToolTutorial"
+			],
+			[
+				"stop",
+				"stopCanvasClear"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "eslint.config.js",
+			"settings":
+			{
+				"buffer_size": 21015,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					21,
+					1,
+					"left_delete",
+					null,
+					"AQAAAMpPAAAAAAAAyk8AAAAAAAABAAAAMQ",
+					"AQAAAAAAAAABAAAAy08AAAAAAADLTwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					23,
+					1,
+					"insert",
+					{
+						"characters": "0"
+					},
+					"AQAAAMpPAAAAAAAAy08AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAyk8AAAAAAADKTwAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "src/game_screen.js",
+			"settings":
+			{
+				"buffer_size": 10552,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					12,
+					1,
+					"left_delete",
+					null,
+					"AQAAAHYgAAAAAAAAdiAAAAAAAAARAAAACiAgICogQHBhcmFtIHJlY3Q",
+					"AQAAAAAAAAABAAAAhyAAAAAAAAB2IAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "src/game_state_manager.js",
+			"settings":
+			{
+				"buffer_size": 4018,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					12,
+					1,
+					"left_delete",
+					null,
+					"AQAAABQPAAAAAAAAFA8AAAAAAAAeAAAACiAgICAgIGNvbnN0IHNyID0gc2NyZWVuLnJlY3Q7",
+					"AQAAAAAAAAABAAAAMg8AAAAAAAAUDwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					16,
+					1,
+					"reindent",
+					null,
+					"AQAAAOYNAAAAAAAA6g0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA5g0AAAAAAADmDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					18,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AwAAAOoNAAAAAAAA6w0AAAAAAAAAAAAA6w0AAAAAAADvDQAAAAAAAAAAAADmDQAAAAAAAOYNAAAAAAAABAAAACAgICA",
+					"AQAAAAAAAAABAAAA6g0AAAAAAADqDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					20,
+					1,
+					"insert",
+					{
+						"characters": "t"
+					},
+					"AQAAAOsNAAAAAAAA7A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA6w0AAAAAAADrDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					22,
+					1,
+					"insert",
+					{
+						"characters": "h"
+					},
+					"AQAAAOwNAAAAAAAA7Q0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7A0AAAAAAADsDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					24,
+					1,
+					"insert",
+					{
+						"characters": "i"
+					},
+					"AQAAAO0NAAAAAAAA7g0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7Q0AAAAAAADtDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					26,
+					1,
+					"insert",
+					{
+						"characters": "s"
+					},
+					"AQAAAO4NAAAAAAAA7w0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7g0AAAAAAADuDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					28,
+					1,
+					"insert",
+					{
+						"characters": "."
+					},
+					"AQAAAO8NAAAAAAAA8A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7w0AAAAAAADvDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					30,
+					1,
+					"left_delete",
+					null,
+					"AQAAAO8NAAAAAAAA7w0AAAAAAAABAAAALg",
+					"AQAAAAAAAAABAAAA8A0AAAAAAADwDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					32,
+					1,
+					"left_delete",
+					null,
+					"AQAAAO4NAAAAAAAA7g0AAAAAAAABAAAAcw",
+					"AQAAAAAAAAABAAAA7w0AAAAAAADvDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					34,
+					1,
+					"left_delete",
+					null,
+					"AQAAAO0NAAAAAAAA7Q0AAAAAAAABAAAAaQ",
+					"AQAAAAAAAAABAAAA7g0AAAAAAADuDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					36,
+					1,
+					"left_delete",
+					null,
+					"AQAAAOwNAAAAAAAA7A0AAAAAAAABAAAAaA",
+					"AQAAAAAAAAABAAAA7Q0AAAAAAADtDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					38,
+					1,
+					"left_delete",
+					null,
+					"AQAAAOsNAAAAAAAA6w0AAAAAAAABAAAAdA",
+					"AQAAAAAAAAABAAAA7A0AAAAAAADsDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					40,
+					1,
+					"insert",
+					{
+						"characters": "g"
+					},
+					"AQAAAOsNAAAAAAAA7A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA6w0AAAAAAADrDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					42,
+					1,
+					"insert",
+					{
+						"characters": "l"
+					},
+					"AQAAAOwNAAAAAAAA7Q0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7A0AAAAAAADsDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					44,
+					1,
+					"insert",
+					{
+						"characters": "o"
+					},
+					"AQAAAO0NAAAAAAAA7g0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7Q0AAAAAAADtDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					46,
+					1,
+					"insert",
+					{
+						"characters": "b"
+					},
+					"AQAAAO4NAAAAAAAA7w0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7g0AAAAAAADuDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					48,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAAO8NAAAAAAAA8A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7w0AAAAAAADvDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					50,
+					1,
+					"insert",
+					{
+						"characters": "l"
+					},
+					"AQAAAPANAAAAAAAA8Q0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA8A0AAAAAAADwDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					52,
+					1,
+					"insert",
+					{
+						"characters": "."
+					},
+					"AQAAAPENAAAAAAAA8g0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA8Q0AAAAAAADxDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					54,
+					1,
+					"insert",
+					{
+						"characters": "s"
+					},
+					"AQAAAPINAAAAAAAA8w0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA8g0AAAAAAADyDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					56,
+					1,
+					"insert",
+					{
+						"characters": "n"
+					},
+					"AQAAAPMNAAAAAAAA9A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA8w0AAAAAAADzDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					58,
+					1,
+					"insert",
+					{
+						"characters": "d"
+					},
+					"AQAAAPQNAAAAAAAA9Q0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA9A0AAAAAAAD0DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					60,
+					1,
+					"left_delete",
+					null,
+					"AQAAAPQNAAAAAAAA9A0AAAAAAAABAAAAZA",
+					"AQAAAAAAAAABAAAA9Q0AAAAAAAD1DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					62,
+					1,
+					"left_delete",
+					null,
+					"AQAAAPMNAAAAAAAA8w0AAAAAAAABAAAAbg",
+					"AQAAAAAAAAABAAAA9A0AAAAAAAD0DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					64,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAAPMNAAAAAAAA9A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA8w0AAAAAAADzDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					66,
+					1,
+					"insert",
+					{
+						"characters": "n"
+					},
+					"AQAAAPQNAAAAAAAA9Q0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA9A0AAAAAAAD0DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					68,
+					1,
+					"insert",
+					{
+						"characters": "d"
+					},
+					"AQAAAPUNAAAAAAAA9g0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA9Q0AAAAAAAD1DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					70,
+					1,
+					"insert",
+					{
+						"characters": "b"
+					},
+					"AQAAAPYNAAAAAAAA9w0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA9g0AAAAAAAD2DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					72,
+					1,
+					"insert",
+					{
+						"characters": "o"
+					},
+					"AQAAAPcNAAAAAAAA+A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA9w0AAAAAAAD3DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					74,
+					1,
+					"insert",
+					{
+						"characters": "x"
+					},
+					"AQAAAPgNAAAAAAAA+Q0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA+A0AAAAAAAD4DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					76,
+					1,
+					"insert",
+					{
+						"characters": "M"
+					},
+					"AQAAAPkNAAAAAAAA+g0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA+Q0AAAAAAAD5DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					78,
+					1,
+					"insert",
+					{
+						"characters": "o"
+					},
+					"AQAAAPoNAAAAAAAA+w0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA+g0AAAAAAAD6DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					80,
+					1,
+					"insert",
+					{
+						"characters": "d"
+					},
+					"AQAAAPsNAAAAAAAA/A0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA+w0AAAAAAAD7DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					82,
+					1,
+					"insert",
+					{
+						"characters": "e"
+					},
+					"AQAAAPwNAAAAAAAA/Q0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA/A0AAAAAAAD8DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					84,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAAP0NAAAAAAAA/g0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA/Q0AAAAAAAD9DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					86,
+					1,
+					"insert",
+					{
+						"characters": "="
+					},
+					"AQAAAP4NAAAAAAAA/w0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA/g0AAAAAAAD+DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					88,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAAP8NAAAAAAAAAA4AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA/w0AAAAAAAD/DQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					90,
+					1,
+					"insert",
+					{
+						"characters": "f"
+					},
+					"AQAAAAAOAAAAAAAAAQ4AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAA4AAAAAAAAADgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					92,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAAAEOAAAAAAAAAg4AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAQ4AAAAAAAABDgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					94,
+					1,
+					"insert",
+					{
+						"characters": "l"
+					},
+					"AQAAAAIOAAAAAAAAAw4AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAg4AAAAAAAACDgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					96,
+					1,
+					"insert",
+					{
+						"characters": "s"
+					},
+					"AQAAAAMOAAAAAAAABA4AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAw4AAAAAAAADDgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					98,
+					1,
+					"insert",
+					{
+						"characters": "e"
+					},
+					"AQAAAAQOAAAAAAAABQ4AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAABA4AAAAAAAAEDgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					100,
+					1,
+					"insert",
+					{
+						"characters": ";"
+					},
+					"AQAAAAUOAAAAAAAABg4AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAABQ4AAAAAAAAFDgAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "src/gui/gui.js",
+			"settings":
+			{
+				"buffer_size": 1482,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/gui/start-menu/start_transition_gui.js",
+			"settings":
+			{
+				"buffer_size": 2694,
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					6,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AwAAADcEAAAAAAAAOAQAAAAAAAAAAAAAOAQAAAAAAAA6BAAAAAAAAAAAAAA6BAAAAAAAADwEAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAANwQAAAAAAAA3BAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					8,
+					1,
+					"insert",
+					{
+						"characters": "s"
+					},
+					"AQAAADwEAAAAAAAAPQQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAPAQAAAAAAAA8BAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"insert",
+					{
+						"characters": "u"
+					},
+					"AQAAAD0EAAAAAAAAPgQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAPQQAAAAAAAA9BAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					12,
+					1,
+					"insert",
+					{
+						"characters": "p"
+					},
+					"AQAAAD4EAAAAAAAAPwQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAPgQAAAAAAAA+BAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					14,
+					1,
+					"insert",
+					{
+						"characters": "e"
+					},
+					"AQAAAD8EAAAAAAAAQAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAPwQAAAAAAAA/BAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					16,
+					1,
+					"insert",
+					{
+						"characters": "r"
+					},
+					"AQAAAEAEAAAAAAAAQQQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAQAQAAAAAAABABAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					18,
+					1,
+					"insert",
+					{
+						"characters": "."
+					},
+					"AQAAAEEEAAAAAAAAQgQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAQQQAAAAAAABBBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					20,
+					1,
+					"insert",
+					{
+						"characters": "d"
+					},
+					"AQAAAEIEAAAAAAAAQwQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAQgQAAAAAAABCBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					22,
+					1,
+					"insert",
+					{
+						"characters": "r"
+					},
+					"AQAAAEMEAAAAAAAARAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAQwQAAAAAAABDBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					24,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAAEQEAAAAAAAARQQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAARAQAAAAAAABEBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					26,
+					1,
+					"insert",
+					{
+						"characters": "w"
+					},
+					"AQAAAEUEAAAAAAAARgQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAARQQAAAAAAABFBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					28,
+					1,
+					"insert_snippet",
+					{
+						"contents": "($0)"
+					},
+					"AQAAAEYEAAAAAAAASAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAARgQAAAAAAABGBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					30,
+					1,
+					"insert",
+					{
+						"characters": "g"
+					},
+					"AQAAAEcEAAAAAAAASAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAARwQAAAAAAABHBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					38,
+					1,
+					"paste",
+					null,
+					"AQAAAB8FAAAAAAAAMQUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAHwUAAAAAAAAfBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					44,
+					1,
+					"insert",
+					{
+						"characters": "i"
+					},
+					"AgAAACoFAAAAAAAAKwUAAAAAAAAAAAAAKwUAAAAAAAArBQAAAAAAAAQAAABkcmF3",
+					"AQAAAAAAAAABAAAAKgUAAAAAAAAuBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					46,
+					1,
+					"left_delete",
+					null,
+					"AQAAACoFAAAAAAAAKgUAAAAAAAABAAAAaQ",
+					"AQAAAAAAAAABAAAAKwUAAAAAAAArBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					48,
+					1,
+					"insert",
+					{
+						"characters": "u"
+					},
+					"AQAAACoFAAAAAAAAKwUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAKgUAAAAAAAAqBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					50,
+					1,
+					"insert",
+					{
+						"characters": "p"
+					},
+					"AQAAACsFAAAAAAAALAUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAKwUAAAAAAAArBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					52,
+					1,
+					"insert",
+					{
+						"characters": "d"
+					},
+					"AQAAACwFAAAAAAAALQUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALAUAAAAAAAAsBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					54,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAAC0FAAAAAAAALgUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALQUAAAAAAAAtBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					56,
+					1,
+					"insert",
+					{
+						"characters": "t"
+					},
+					"AQAAAC4FAAAAAAAALwUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALgUAAAAAAAAuBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					58,
+					1,
+					"insert",
+					{
+						"characters": "e"
+					},
+					"AQAAAC8FAAAAAAAAMAUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALwUAAAAAAAAvBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					61,
+					1,
+					"left_delete",
+					null,
+					"AQAAADEFAAAAAAAAMQUAAAAAAAABAAAAZw",
+					"AQAAAAAAAAABAAAAMgUAAAAAAAAyBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					63,
+					1,
+					"insert",
+					{
+						"characters": "d"
+					},
+					"AQAAADEFAAAAAAAAMgUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAMQUAAAAAAAAxBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					65,
+					1,
+					"insert",
+					{
+						"characters": "t"
+					},
+					"AQAAADIFAAAAAAAAMwUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAMgUAAAAAAAAyBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					69,
+					1,
+					"left_delete",
+					null,
+					"AQAAAOIEAAAAAAAA4gQAAAAAAAAOAAAACiAgLy8gb3ZlcnJpZGU",
+					"AQAAAAAAAAABAAAA8AQAAAAAAADiBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					71,
+					1,
+					"revert",
+					null,
+					"AgAAAAAAAAAAAAAAAAAAAAAAAACECgAALyoqCiAqIHRyYW5zaXRpb24gZnJvbSBzdGFydCBtZW51IHRvIGdhbWUKICovCmNsYXNzIFN0YXJ0VHJhbnNpdGlvbkd1aSBleHRlbmRzIEd1aSB7CgogIC8qKgogICAqCiAgICogQHBhcmFtIHJlY3QKICAgKiBAcGFyYW0gaXNNYWluCiAgICovCiAgY29uc3RydWN0b3IocmVjdCwgaXNNYWluKSB7CiAgICBzdXBlcignU3RhcnQgVHJhbnNpdGlvbiBHdWknLCByZWN0KTsKCiAgICB0aGlzLmlzTWFpbiA9IGlzTWFpbjsKCiAgICAvLyBpbml0aWF0ZSBmYWRlIG91dCBhbmltYXRpb24gaWYgbmVjZXNzYXJ5CiAgICBpZiAoISh0aGlzLl9zdGFydFRyYW5zRmFkZU91dCB8fCB0aGlzLl9zdGFydFRyYW5zTWlkIHx8IHRoaXMuX3N0YXJ0VHJhbnNGYWRlSW4pKSB7CiAgICAgIHRoaXMuX3N0YXJ0VHJhbnNGYWRlT3V0ID0gRmFkZU91dC5yYW5kb20oKTsKICAgIH0KICB9CgogIC8vIGltcGxlbWVudCBHdWkKICAvKioKICAgKgogICAqIEBwYXJhbSBfc2NyZWVuCiAgICovCiAgYnVpbGRFbGVtZW50cyhfc2NyZWVuKSB7CiAgICByZXR1cm4gW107IC8vIG5vIGd1aSBlbGVtZW50cwogIH0KCiAgLyoqCiAgICogcGFzcyBmbGFnIHRvIGRpc2FibGUgY2xlYXJpbmcgKGdhbWVfc2NyZWVuLmpzKQogICAqIHJlcXVpcmVkIGZvciBzb21lIGZhZGUtdG8tYmxhY2sgc2VnbWVudHMKICAgKi8KICBzdG9wU2NyZWVuQ2xlYXIoKSB7CiAgICBjb25zdCBmbyA9IHRoaXMuX3N0YXJ0VHJhbnNGYWRlT3V0OwogICAgcmV0dXJuIGZvID8gZm8uc3RvcFNjcmVlbkNsZWFyKCkgOiBmYWxzZTsKICB9CgogIC8qKgogICAqIHNob3cgdGhlIHN0YXJ0IG1lbnUgdGhlbiBodWQsCiAgICogYmVoaW5kIHRoZSB0cmFuc2l0aW9uIGVmZmVjdAogICAqLwogIGdldEJhY2tncm91bmRHdWkoKSB7CiAgICBjb25zdCBiZ1N0YXRlID0gdGhpcy5fc3RhcnRUcmFuc0ZhZGVPdXQgPwogICAgICBHYW1lU3RhdGVzLnN0YXJ0TWVudSA6IEdhbWVTdGF0ZXMucGxheWluZzsKICAgIHJldHVybiB0aGlzLnNjcmVlbi5zdGF0ZU1hbmFnZXIuYWxsR3Vpc1tiZ1N0YXRlXTsKICB9CgogIC8qKgogICAqCiAgICogQHBhcmFtIGcKICAgKi8KICBkcmF3KGcpIHsKICAgIHN1cGVyLmRyYXcoZykKICAgIGNvbnN0IGZzID0gW3RoaXMuX3N0YXJ0VHJhbnNGYWRlT3V0LCB0aGlzLl9zdGFydFRyYW5zTWlkLCB0aGlzLl9zdGFydFRyYW5zRmFkZUluXTsKICAgIGZzLmZvckVhY2goKGYpID0+IHsgaWYgKGYpIHsgZi5kcmF3KGcsIHRoaXMucmVjdCk7IH0gfSk7CiAgfQoKICAvKioKICAgKgogICAqIEBwYXJhbSBkdAogICAqLwogIHVwZGF0ZShkdCkgewogICAgc3VwZXIudXBkYXRlKGR0KQoKICAgIC8vIGlkZW50aWZ5IGN1cnJlbnQgYW5pbWF0aW9uIHN0YWdlCiAgICBjb25zdCBmbyA9IHRoaXMuX3N0YXJ0VHJhbnNGYWRlT3V0OwogICAgY29uc3QgZm0gPSB0aGlzLl9zdGFydFRyYW5zTWlkOwogICAgY29uc3QgZmkgPSB0aGlzLl9zdGFydFRyYW5zRmFkZUluOwogICAgY29uc3QgZiA9IGZvID8gZm8gOiAoZm0gPyBmbSA6IGZpKTsKCiAgICBpZiAoIWYpIHsKICAgICAgcmV0dXJuOwogICAgfQoKICAgIC8vIGRlYnVnCiAgICBpZiAoZm8pIHsKICAgICAgY29uc29sZS5sb2coJ0EnLCBmLnQsIGYuZHVyYXRpb24pOwogICAgfQogICAgZWxzZSBpZiAoZm0pIHsKICAgICAgY29uc29sZS5sb2coJ0InLCBmLnQsIGYuZHVyYXRpb24pOwogICAgfQogICAgZWxzZSB7CiAgICAgIGNvbnNvbGUubG9nKCdDJywgZi50LCBmLmR1cmF0aW9uKTsKICAgIH0KCiAgICAvLyBhZHZhbmNlIGN1cnJlbnQgYW5pbWF0aW9uIHN0YWdlCiAgICBmLnQgPSBmLnQgKyBkdDsKCiAgICAvLyBjaGVjayBpZiBjdXJyZW50IHN0YWdlIGVuZGVkCiAgICBpZiAoZi50ID4gZi5kdXJhdGlvbikgewogICAgICBpZiAoZm8pIHsKCiAgICAgICAgLy8gZmFkZSBvdXQgY29tcGxldGUKICAgICAgICAvLyBpbml0aWF0ZSBtaWRkbGUgYW5pbWF0aW9uCiAgICAgICAgdGhpcy5fc3RhcnRUcmFuc0ZhZGVPdXQgPSBudWxsOwogICAgICAgIHRoaXMuX3N0YXJ0VHJhbnNNaWQgPSBuZXcgU3RhcnRNZXNzYWdlKCk7CiAgICAgICAgdGhpcy5fc3RhcnRUcmFuc0ZhZGVJbiA9IG51bGw7CgogICAgICB9CiAgICAgIGVsc2UgaWYgKGZtKSB7CgogICAgICAgIC8vIG1pZGRsZSBhbmltYXRpb24gY29tcGxldGUKICAgICAgICAvLyBpbml0aWF0ZSBmYWRlIGluIGFuaW1hdGlvbgogICAgICAgIHRoaXMuX3N0YXJ0VHJhbnNGYWRlT3V0ID0gbnVsbDsKICAgICAgICB0aGlzLl9zdGFydFRyYW5zTWlkID0gbnVsbDsKICAgICAgICB0aGlzLl9zdGFydFRyYW5zRmFkZUluID0gRmFkZUluLnJhbmRvbSgpOwogICAgICAgIGlmICh0aGlzLmlzTWFpbikgeyByZXNldFByb2dyZXNzaW9uKCk7IH0gLy8gZ2xvYmFsLmpzCgogICAgICB9CiAgICAgIGVsc2UgewoKICAgICAgICAvLyBmYWRlIGluIGFuaW1hdGlvbiBjb21wbGV0ZQogICAgICAgIC8vIGZpbmlzaCB0cmFuc2l0aW9uCiAgICAgICAgdGhpcy5fc3RhcnRUcmFuc0ZhZGVPdXQgPSBudWxsOwogICAgICAgIHRoaXMuX3N0YXJ0VHJhbnNNaWQgPSBudWxsOwogICAgICAgIHRoaXMuX3N0YXJ0VHJhbnNGYWRlSW4gPSBudWxsOwoKICAgICAgICB0aGlzLnNjcmVlbi5zdGF0ZU1hbmFnZXIuc3RhcnRUcmFuc2l0aW9uRmluaXNoZWQoKTsgLy8gZ2FtZV9zdGF0ZV9tYW5hZ2VyLmpzCiAgICAgIH0KICAgIH0KCiAgfQp9CgAAAAAAAAAAhgoAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA4gQAAAAAAADiBAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "/C/Users/Oliver/Documents/github/tessmero.github.io/build.py",
+			"settings":
+			{
+				"buffer_size": 5362,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					4,
+					1,
+					"left_delete",
+					null,
+					"AQAAAKEAAAAAAAAAoQAAAAAAAAABAAAAOQ",
+					"AQAAAAAAAAABAAAAogAAAAAAAACiAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					6,
+					1,
+					"left_delete",
+					null,
+					"AQAAAKAAAAAAAAAAoAAAAAAAAAABAAAAMQ",
+					"AQAAAAAAAAABAAAAoQAAAAAAAAChAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					8,
+					1,
+					"insert",
+					{
+						"characters": "2"
+					},
+					"AQAAAKAAAAAAAAAAoQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAoAAAAAAAAACgAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"insert",
+					{
+						"characters": "5"
+					},
+					"AQAAAKEAAAAAAAAAogAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAoQAAAAAAAAChAAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "/C/Users/Oliver/Documents/github/tessmero.github.io/pages/raincatcher.php",
+			"settings":
+			{
+				"buffer_size": 987,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					6,
+					1,
+					"left_delete",
+					null,
+					"AQAAAE0AAAAAAAAATQAAAAAAAAABAAAAYg",
+					"AQAAAAAAAAABAAAATgAAAAAAAABOAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					8,
+					1,
+					"left_delete",
+					null,
+					"AQAAAEwAAAAAAAAATAAAAAAAAAABAAAAOQ",
+					"AQAAAAAAAAABAAAATQAAAAAAAABNAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"left_delete",
+					null,
+					"AQAAAEsAAAAAAAAASwAAAAAAAAABAAAAMQ",
+					"AQAAAAAAAAABAAAATAAAAAAAAABMAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					12,
+					1,
+					"insert",
+					{
+						"characters": "2"
+					},
+					"AQAAAEsAAAAAAAAATAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAASwAAAAAAAABLAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					14,
+					1,
+					"insert",
+					{
+						"characters": "5"
+					},
+					"AQAAAEwAAAAAAAAATQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAATAAAAAAAAABMAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					16,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAAE0AAAAAAAAATgAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAATQAAAAAAAABNAAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "src/gui/hud/hud_gui.js",
+			"settings":
+			{
+				"buffer_size": 4625,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					8,
+					1,
+					"insert",
+					{
+						"characters": "t"
+					},
+					"AgAAAIMNAAAAAAAAhA0AAAAAAAAAAAAAhA0AAAAAAACEDQAAAAAAAAQAAAByZWN0",
+					"AQAAAAAAAAABAAAAgw0AAAAAAACHDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"insert",
+					{
+						"characters": "t"
+					},
+					"AQAAAIQNAAAAAAAAhQ0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAhA0AAAAAAACEDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					12,
+					1,
+					"insert",
+					{
+						"characters": "p"
+					},
+					"AQAAAIUNAAAAAAAAhg0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAhQ0AAAAAAACFDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					14,
+					1,
+					"insert",
+					{
+						"characters": "r"
+					},
+					"AQAAAIYNAAAAAAAAhw0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAhg0AAAAAAACGDQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					25,
+					1,
+					"paste",
+					null,
+					"AgAAAC8OAAAAAAAAMw4AAAAAAAAAAAAAMw4AAAAAAAAzDgAAAAAAAAQAAAByZWN0",
+					"AQAAAAAAAAABAAAALw4AAAAAAAAzDgAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"remoe",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"lsp",
+				"LSP: Troubleshoot Server"
+			],
+			[
+				"isntall",
+				"Package Control: Install Package"
+			],
+			[
+				"lsp trou",
+				"LSP: Troubleshoot Server"
+			],
+			[
+				"markdown",
+				"MarkdownLivePreview: Open Preview"
+			],
+			[
+				"np",
+				"npm: Type Arbitrary Command"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"npm up",
+				"npm: Update Local Packages"
+			],
+			[
+				"npm install",
+				"npm: Install Package"
+			],
+			[
+				"npm list",
+				"npm: List Installed Packages"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"command",
+				"npm: Type Arbitrary Command"
+			],
+			[
+				"npm",
+				"npm: Type Arbitrary Command"
+			],
+			[
+				"eslint",
+				"Build With: ESLint"
+			],
+			[
+				"npm:install",
+				"npm: Install Package"
+			],
+			[
+				"npm: install",
+				"npm: Install Package"
+			],
+			[
+				"remove p",
+				"Package Control: Remove Package"
+			],
+			[
+				"esli",
+				"ESLint"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 136.800003052,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Oliver/Documents/github/idle",
+		"/C/Users/Oliver/Documents/github/idle/src",
+		"/C/Users/Oliver/Documents/github/idle/src/gui",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/hud",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu"
+	],
+	"file_history":
+	[
+		"/C/Users/Oliver/Documents/github/idle/src/live_performance_stats.js",
+		"/C/Users/Oliver/Documents/github/idle/src/input.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/upgrade-menus/upgrade_menu_gui.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/util.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/particles/particle_group.js",
+		"/C/Users/Oliver/Documents/github/idle/eslint.config.js",
+		"/C/Users/Oliver/Documents/github/idle/src/update.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/guis/gui_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/tests/test_context_menu.js",
+		"/C/Users/Oliver/Documents/github/idle/src/game_state_manager.js",
+		"/C/Users/Oliver/Documents/github/idle/src/game_screen.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/guis/transition_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/pause_menu_gui.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/fade-out/fade_out.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/gui_screen_panel.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/guis/gui_test_macro.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/start_transition_gui.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/gui.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/upgrade_tracks.js",
+		"/C/Users/Oliver/Documents/github/idle/src/color_scheme.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/buttons/button.js",
+		"/C/Users/Oliver/Documents/github/idle/src/draw.js",
+		"/C/Users/Oliver/Documents/github/idle/src/global.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/start_anim_stage.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/start_menu_gui.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/compute_bonuses_util.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/fade-in/fade_in.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/fade-in/grid_fade_in.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/gui_element.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/upgrade-menus/upgrades/stat_upgrader.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/tests/tests_tab.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/tests/test_list_row.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/composites/composite_gui_element.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/fade-out/noclear_fade_out.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/fade-out/grid_fade_out.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/context-menus/body_context_menu.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/hud/hud_gui.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/tooltips/tutorial_tooltip_popup.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/start-menu/start_message.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/tooltips/tooltip_popup.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/composites/tab_pane_group.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/skill.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/buttons/icon_button.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/buttons/text_button.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/labels/text_label.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/debug/scalar_debug_var.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/debug/boolean_debug_var.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/text/font_spec.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/tooltips/label_tooltip_popup.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/labels/stat_readout.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/bodies/compass_body.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/tutorial_psim.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/progress_indicator.js",
+		"/C/Users/Oliver/Documents/github/idle/src/setup.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/performance/performance_tab.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/float_array.js",
+		"/C/Users/Oliver/Documents/github/idle/src/log_performance_stats.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/floaters/floater_group.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/bodies/edges/pathspec_edge.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/bodies/edges/radspec_edge.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/particles/edge/edge_particle_group.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/particles/physics/physics_particle_group.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/skills/basic_rain_skill_card_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/tutorials/pi_tool_tutorial_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/tutorials/line_tool_tutorial_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/tutorials/circle_tool_tutorial_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/tutorials/default_tool_tutorial_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/skills/skill_card_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tutorials/line_tool_tutorial.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tutorials/macro.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/hud/toolbar_tooltip_popup.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tools/default_tool.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/particle_sim.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/skills/skill_tree_graph.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/upgrade-menus/upgrades/upgrades_tab.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tools/pi_tool.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/graphics-wrapper/graphics_wrapper.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tutorials/circle_tool_tutorial.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tools/tool.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/bodies/control/control_point.js",
+		"/C/Users/Oliver/Documents/github/idle/src/game_states.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/grabbers/edge_grabber.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/grabbers/inverse_grabber.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/grabbers/grabber.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/thumbnail_psim.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/simulation/main_psim.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/int_set.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/vector.js",
+		"/C/Users/Oliver/Documents/github/idle/src/math/rng.js",
+		"/C/Users/Oliver/Documents/github/idle/idle.sublime-project",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/test_list.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tutorials/default_tool_tutorial.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tools/line_tool.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tutorials/pi_tool_tutorial.js",
+		"/C/Users/Oliver/Documents/github/idle/src/performance_stats.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/tutorials/macro_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/guis/menu_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/icons/circle_icon.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/icons/catch_icon.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/icons/catch_radius_icon.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/icons/collected_icon.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/icons/default_tool_icon.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/icons/prev_icon.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/icons/checked_icon.js",
+		"/C/Users/Oliver/Documents/github/idle/package.json",
+		"/C/Users/Oliver/Documents/github/idle/src/tutorials/tutorial.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tools/circle_tool.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tools/body_tool.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/guis/gui_tutorial.js",
+		"/C/Users/Oliver/Documents/github/idle/source.js",
+		"/C/Users/Oliver/Documents/audio-book-bay.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/guis/menu_tutorial.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/graphics-wrapper/point_watcher_gw.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/tutorials/tutorial_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/__test__.js",
+		"/C/Users/Oliver/Documents/github/idle/src/tests/transitions/transition_test.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/skills/skill_card.js",
+		"/C/Users/Oliver/Documents/github/tessmero.github.io/pages/raincatcher.php",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/elements/composites/tab_header_button.js",
+		"/C/Users/Oliver/Documents/github/idle/src/gui/sandbox-menus/debug/debug_tab.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/fast_rain2_skill.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/bouncy_circle_skill.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/basic_rain_skill.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/basic_line_skill.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/basic_circle_skill.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/fast_rain_skill.js",
+		"/C/Users/Oliver/Documents/github/idle/src/progression/skills/flipper_line_skill.js"
+	],
+	"find":
+	{
+		"height": 40.8
+	},
+	"find_in_files":
+	{
+		"height": 117.6,
+		"where_history":
+		[
+			"C:\\Users\\Oliver\\Documents\\github\\idle\\src",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"require-yield",
+			"sim",
+			"param-type",
+			".gsm",
+			".gsm =",
+			"rebuildGuis",
+			"setColorScheme",
+			"global.colorScheme = ",
+			"global.colorScheme",
+			"rebuildGuis",
+			"sandboxMode",
+			"playClicked",
+			"sandbox",
+			"snadbox",
+			"isMain",
+			"resetProgression",
+			"StartTransitionGui",
+			"startTransitionFinished",
+			"Finished",
+			"reset()",
+			"testscreen",
+			"drawMeBeforeSim",
+			"thisscreen",
+			".screen = ",
+			".getScreen()",
+			"stopCanvasClear",
+			"//",
+			"require-jsdoc",
+			"setter",
+			".getGui()",
+			"buildElements",
+			"getRect()",
+			"screen.getRect()",
+			"screen.getRect",
+			"getRect",
+			"buildElements",
+			"setScreen",
+			"new GameScreen",
+			"new GameSCreen",
+			"global.mainScreen",
+			"updateTransitionEffect",
+			"pgradeMenuTransitionEffect",
+			"setScreen()",
+			"rebuildGuis",
+			".getScale()",
+			"this.scale",
+			".scale = ",
+			"scale = ",
+			"this.constructor.scale",
+			"this.scale = 1",
+			"this.scale",
+			"scale",
+			"upgradeMenu",
+			"global.mainSim",
+			"buildElements",
+			"rebuildGuis",
+			"Tutorial Screen",
+			"new GameScreen",
+			"Float32Array",
+			"Float323Array",
+			"no-restricted-syntax",
+			"Float32Array",
+			"Float32",
+			"getDuration",
+			"getTestAssertions",
+			"_buildScreen",
+			"test.getTitle()",
+			"TestListRow",
+			"//",
+			"\n  // get relative position\n  // return value  v(.5,.5) means center of sim",
+			"ToolbarTooltipPopup",
+			"TutorialTooltipPopup",
+			"new GameScreen",
+			"submitNewScreen",
+			"//",
+			"new GameScreen",
+			"buildThumbnailSim",
+			"ThumbnailPSim",
+			"paused",
+			"selectedTool",
+			"selectedBody = null",
+			"selectedBody null",
+			"PiContextMenu",
+			"setScreen",
+			"setGui",
+			"buildElements",
+			"paused",
+			"this.gsm",
+			"rebuildGuis",
+			"global",
+			"buildElements",
+			".gsm = ",
+			"rebuildGui",
+			"extends Gui {",
+			"extends Gui",
+			"drawTransition",
+			"Transition",
+			"drawUpgrade",
+			"background",
+			"sandboxClicked",
+			"this.gsm",
+			"playClicked",
+			"buildElements",
+			"transi",
+			"rebuildGuis",
+			"upgradeTracks",
+			" build list of GuiElement instances",
+			"toggle",
+			"clicked",
+			"getGui",
+			"resetProgression",
+			"allGuis",
+			"allG",
+			"tutorialScaleFactor",
+			"scale",
+			"idleCountdown",
+			"new TutorialTooltip",
+			"new GameScreen",
+			"simFlags",
+			"global.performanceStats",
+			"MacroTooltipPopup",
+			"getScreen()",
+			"new GameScreen",
+			"GameScreen",
+			"flagSim",
+			"screen",
+			"tut",
+			"setScreen"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"this.screen",
+			"screen",
+			"stopScreenClear",
+			" *",
+			".gui",
+			"screen.rect",
+			"scale",
+			"sim",
+			"screen",
+			"buildScreen",
+			" *",
+			"\n  // get relative position\n  // return value  v(.5,.5) means center of sim",
+			" *",
+			"screenFlags",
+			"global.livePerformanceStats",
+			"TutorialTooltipPopup",
+			"macro",
+			"Test",
+			"tutorialScaleFactor",
+			"Tutorial",
+			"Macro",
+			"tutorialGuiScale",
+			"_selectedTabIndex",
+			"buildThumbnailSim",
+			"buildThumbnailScreen",
+			"Screens",
+			"this._start",
+			"_allTestScreens",
+			"GuiScreenPanel",
+			"ggui",
+			"g",
+			"getGlobal",
+			"setGlobal",
+			" !== ",
+			" === ",
+			"npm run",
+			"Test",
+			"(global.allGameStates",
+			"extends IITest",
+			"SkillCardIITest",
+			"TutorialIITest"
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "eslint.config.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 21015,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								20427,
+								20427
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 5602.4,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/game_screen.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8310,
+								8310
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 6468.8,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/game_state_manager.js",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4018,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3590,
+								3590
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2168.8,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/gui/gui.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1311.2,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/gui/start-menu/start_transition_gui.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2694,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1250,
+								1250
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 798.4,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/Users/Oliver/Documents/github/tessmero.github.io/build.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5362,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								162,
+								162
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/Users/Oliver/Documents/github/tessmero.github.io/pages/raincatcher.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 987,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								78,
+								78
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/gui/hud/hud_gui.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4625,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3678,
+								3678
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1882.4,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 42.4
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.LSP Log Panel":
+	{
+		"height": 132.0
+	},
+	"output.diagnostics":
+	{
+		"height": 482.0
+	},
+	"output.exec":
+	{
+		"height": 164.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"output.mdpopups-dummy":
+	{
+		"height": 0.0
+	},
+	"output.textarea":
+	{
+		"height": 126.400001526
+	},
+	"pinned_build_system": "",
+	"project": "idle.sublime-project",
+	"replace":
+	{
+		"height": 52.8
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 296.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

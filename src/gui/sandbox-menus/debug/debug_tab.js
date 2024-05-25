@@ -1,6 +1,13 @@
 let _defaultGlobalVals = null;
 
+/**
+ *
+ */
 class DebugTab extends CompositeGuiElement {
+  /**
+   *
+   * @param sr
+   */
   constructor(sr) {
     super(sr);
 
@@ -77,10 +84,13 @@ class DebugTab extends CompositeGuiElement {
     this.children = [tabGroup];
   }
 
+  /**
+   *
+   * @param rect
+   * @param tabSpecs
+   */
   buildTabContent(rect, tabSpecs) {
 
-    // let sc = global.screenCorners
-    // let sr = global.screenRect
     const sr = rect;
     const m = 0.03;
     const w = sr[2] - 2 * m;

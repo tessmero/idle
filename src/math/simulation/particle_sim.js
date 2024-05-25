@@ -1,8 +1,17 @@
+/**
+ *
+ */
 class ParticleSim {
 
-  constructor(n, rect, title = 'Unnamed Particle Sim') {
+  /**
+   *
+   * @param n
+   * @param rect
+   * @param title
+   */
+  constructor(n, rect, title = null) {
     this.rect = rect;
-    this.title = title;
+    if (title) { throw new Error('title'); }
     this.t = 0;
     this.paused = false;
 
@@ -37,6 +46,10 @@ class ParticleSim {
   }
 
   // trigger context menu if applicable
+  /**
+   *
+   * @param body
+   */
   bodyClicked(body) {
 
     // go to representative body if
@@ -59,15 +72,26 @@ class ParticleSim {
 
   // trigger particle context menu
   // using particle inspector tool
+  /**
+   *
+   * @param p
+   */
   particleClicked(p) {
     this.selectedParticle = p;
     this.selectedBody = null;
   }
 
+  /**
+   *
+   */
   getTool() {
     return this._tool;
   }
 
+  /**
+   *
+   * @param t
+   */
   setTool(t) {
     if (t === this._tool) { return; }
 
@@ -77,26 +101,47 @@ class ParticleSim {
     this._tool = t;
   }
 
+  /**
+   *
+   */
   getGrabbers() {
     return [...this._grabbers];
   }
 
+  /**
+   *
+   */
   clearGrabbers() {
     this._grabbers.clear();
   }
 
+  /**
+   *
+   * @param b
+   */
   addGrabber(b) {
     this._grabbers.add(b);
   }
 
+  /**
+   *
+   * @param b
+   */
   removeGrabber(b) {
     this._grabbers.delete(b);
   }
 
+  /**
+   *
+   */
   getBodies() {
     return [...this._bodies];
   }
 
+  /**
+   *
+   * @param b
+   */
   addBody(b) {
     if (this._bodies.length >= global.maxBodyCount) {
       return;
@@ -111,17 +156,27 @@ class ParticleSim {
     b.register(this);
   }
 
+  /**
+   *
+   * @param b
+   */
   removeBody(b) {
     this._bodies.delete(b);
     b.unregister(this);
   }
 
   // remove all bodies
+  /**
+   *
+   */
   clearBodies() {
     [...this._bodies].forEach((b) => this.removeBody(b));
     this.selectedBody = null;
   }
 
+  /**
+   *
+   */
   reset() {
     const s = this;
     s.clearBodies();
@@ -141,10 +196,14 @@ class ParticleSim {
     // s.t = 0
   }
 
+  /**
+   *
+   * @param dt
+   */
   update(dt) {
-    global.performanceStats.flagSim(this, 'updated');
+    global.livePerformanceStats.flagSim(this, 'updated');
     if (dt > 0) {
-      global.performanceStats.flagSim(this, 'time passing');
+      global.livePerformanceStats.flagSim(this, 'time passing');
     }
 
     this.t = this.t + dt;
@@ -157,6 +216,10 @@ class ParticleSim {
     toRemove.forEach((b) => this.removeBody(b));
   }
 
+  /**
+   *
+   * @param p
+   */
   updateControlPointHovering(p) {
 
     // update control point hovering status
@@ -168,6 +231,10 @@ class ParticleSim {
   }
 
   // called in game_screen.js
+  /**
+   *
+   * @param g
+   */
   draw(g) {
 
     // start counting for performance stats
@@ -214,9 +281,9 @@ class ParticleSim {
     this.floaters.draw(g);
 
     // log performance stats
-    global.performanceStats.flagSim(this, 'drawn');
+    global.livePerformanceStats.flagSim(this, 'drawn');
     Object.keys(counter).forEach((key) => {
-      global.performanceStats.flagSim(this, key, counter[key]);
+      global.livePerformanceStats.flagSim(this, key, counter[key]);
     });
   }
 }

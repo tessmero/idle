@@ -25,10 +25,6 @@ const global = {
   // synchronized gui elements idle animations
   baseAnimPeriod: 500, // ms
 
-  // start animating mouse cursor if idle
-  idleCountdown: 2000, // state
-  idleDelay: 2000, // ms
-
   // game state
   gameState: GameStates.startMenu,
   upgradeMenuTabIndex: 0,
@@ -58,11 +54,6 @@ const global = {
   //
   poiStartArea: 1e-2, // free area for new poi
 
-  // start menu background anim
-  startMenuTargetPos: v(0.5, 0.5),
-  startMenuMoveDelay: 1000,
-  startMenuMoveCountdown: 0,
-
   // strength of "forces" on poi
   // force=(area/accel) in vunits...ms...
   poiPlayerF: 1e-6, // player clicking and dragging
@@ -73,11 +64,10 @@ const global = {
   //
   thumbnailSimDims: [0.1, 0.1],
   tutorialSimDims: [0.3, 0.3],
-  tutorialToolScale: 0.5,
+  tutorialScaleFactor: 0.5,
 
   // mouse
   canvasMousePos: v(0, 0), // pixels
-  mousePos: v(0, 0), // virtual units
   mouseGrabRadius: 0.05,
   particlesInMouseRange: new Set(),
 
@@ -86,16 +76,57 @@ const global = {
 
 };
 
+function resetProgression() {
+  let money = 0;
+  const s = global.mainSim;
+  global.toolList = [
+    new DefaultTool(s, global.mouseGrabRadius),
+    new CircleTool(s),
+    new LineTool(s),
+  ];
+
+  if (global.sandboxMode) {
+    money = 1e100;
+    global.toolList.push(
+      new PiTool(s, global.mouseGrabRadius)
+    );
+  }
+
+  global.mainSim.setTool(global.toolList[0]);
+  global.mainSim.rainGroup.n = 100;
+
+  global.mainSim.particlesCollected = money;
+
+  if (!global.sandboxMode) {
+
+    // remove bodies from start menu sim
+    global.mainSim.clearBodies();
+    global.mainSim.rainGroup.grabbedParticles.clear();
+  }
+  global.upgradeTracks = new UpgradeTracks();
+  global.skillTree = new SkillTree();
+  updateAllBonuses();
+}
+
 // start helpers to access global vars
 // by dotpath string like "mainSim.rainGroup.n"
 // https://codereview.stackexchange.com/a/240907
 
+/**
+ *
+ * @param obj
+ */
 function isObj(obj) {
   return (typeof obj === 'object') &&
         (!Array.isArray(obj)) &&
         (obj !== null);
 }
 
+/**
+ *
+ * @param propertyStr
+ * @param value
+ */
 function setGlobal(propertyStr, value) {
   const properties = propertyStr.split('.');
   const lastProperty = properties.pop();
@@ -108,6 +139,10 @@ function setGlobal(propertyStr, value) {
 
 }
 
+/**
+ *
+ * @param propertyStr
+ */
 function getGlobal(propertyStr) {
   const properties = propertyStr.split('.');
   const lastProperty = properties.pop();

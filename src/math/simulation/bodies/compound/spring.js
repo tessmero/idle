@@ -1,5 +1,13 @@
 // physics constraint connecting two circle bodies
+/**
+ *
+ */
 class Spring {
+  /**
+   *
+   * @param a
+   * @param b
+   */
   constructor(a, b) {
     this.a = a;
     this.b = b;
@@ -11,6 +19,10 @@ class Spring {
     this.dampingConstant = 1;
   }
 
+  /**
+   *
+   * @param dt
+   */
   update(dt) {
 
     // Calculate the vector between the two balls
@@ -49,6 +61,10 @@ class Spring {
     this.b.accel(force.mul(-1), dt);
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     g.moveTo(...this.a.pos.xy());
     g.lineTo(...this.b.pos.xy());

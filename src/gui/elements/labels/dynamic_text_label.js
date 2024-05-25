@@ -1,16 +1,32 @@
 // a line of text that may change
+/**
+ *
+ */
 class DynamicTextLabel extends TextLabel {
 
+  /**
+   *
+   * @param rect
+   * @param labelFunc
+   */
   constructor(rect, labelFunc) {
     super(rect, '');
     this.labelFunc = labelFunc;
   }
 
+  /**
+   *
+   * @param a
+   */
   withAutoAdjustRect(a) {
     this.autoAdjustRect = a;
     return this;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
 
     // get updated label

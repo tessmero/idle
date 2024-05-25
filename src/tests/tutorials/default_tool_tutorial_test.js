@@ -1,10 +1,21 @@
-class DefaultToolTutorialTest extends TutorialTest {
+/**
+ *
+ */
+class DefaultToolTutorialTest extends Test {
 
+  /**
+   *
+   */
   constructor() {
-    super(new DefaultToolTutorial());
+    super('Default Tool Test', new DefaultToolTutorial());
   }
 
-  getTestAssertions(sim) {
+  /**
+   *
+   * @param screen
+   */
+  getTestAssertions(screen) {
+    const sim = screen.sim;
     return [
       // time, label, func
       [0, 'no particles collected', () => sim.particlesCollected === 0],

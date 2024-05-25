@@ -1,10 +1,30 @@
 
+/**
+ *
+ */
 class HudGui extends Gui {
 
+  /**
+   *
+   * @param {...any} p
+   */
+  constructor(...p) {
+    super('hud gui', ...p);
+  }
+
   // implement gui
-  buildElements() {
-    const sc = global.screenCorners;
-    let sr = global.screenRect;
+  /**
+   *
+   * @param screen
+   */
+  buildElements(screen) {
+    const rect = screen.rect;
+    const sim = screen.sim;
+    this.setScreen(screen);
+    this.sim = sim;
+
+    const sc = rectCorners(...rect);
+    let sr = rect;
     const margin = 0.02;
     sr = padRect(...sr, -margin);
     const m = 0.1;
@@ -35,7 +55,9 @@ class HudGui extends Gui {
     let result = [
 
       // stats button
-      new IconButton(topLeft, statsIcon, toggleStats) // game_state.js
+      new IconButton(topLeft, statsIcon, () => {
+        this.gsm.toggleStats(); // game_State_manager.js
+      })
         .withTooltip('toggle upgrades menu'),
 
       // stat readouts constructed with null width and height
@@ -43,9 +65,9 @@ class HudGui extends Gui {
 
       // particles on screen
       new StatReadout(topClp, rainIcon, () =>
-        global.mainSim.rainGroup.n.toString())
+        sim.rainGroup.n.toString())
         .withStyle('hud')
-        .withDynamicTooltip(() => `max ${global.mainSim.rainGroup.n} raindrops on screen`)
+        .withDynamicTooltip(() => `max ${sim.rainGroup.n} raindrops on screen`)
         .withAutoAdjustRect(true),
 
       // sandbox banner
@@ -65,13 +87,13 @@ class HudGui extends Gui {
       // total caught
       global.sandboxMode ? null :
         new StatReadout(topCrp, collectedIcon, () =>
-          global.mainSim.particlesCollected.toFixed(0))
+          sim.particlesCollected.toFixed(0))
           .withStyle('hud')
-          .withDynamicTooltip(() => `${global.mainSim.particlesCollected.toFixed(0)} raindrops collected`)
+          .withDynamicTooltip(() => `${sim.particlesCollected.toFixed(0)} raindrops collected`)
           .withAutoAdjustRect(true),
 
       // pause button
-      new IconButton(topRight, pauseIcon, pause) // game_state.js
+      new IconButton(topRight, pauseIcon, () => this.gsm.pause()) // game_state.js
         .withTooltip('pause or quit the game'),
     ];
 
@@ -93,8 +115,9 @@ class HudGui extends Gui {
 
         // build tooltip with string label and tutorial sim
         button.withDynamicTooltip(() => {
-          const rect = ToolbarTooltipPopup.pickRect(tooltip);
-          return new ToolbarTooltipPopup(rect, tooltip, tut, tool);
+          const ttpr = ToolbarTooltipPopup.pickRect(global.mainScreen, tooltip);
+          const innerScreen = ToolbarTooltipPopup.getScreen(tut);
+          return new ToolbarTooltipPopup(ttpr, tooltip, innerScreen, tool);
         });
 
       }
@@ -112,17 +135,38 @@ class HudGui extends Gui {
   }
 
   // get catch percentage string e.g. '50%'
+  /**
+   *
+   */
   getPct() {
-    const amt = global.mainSim.rainGroup.grabbedParticles.size();
-    const total = global.mainSim.rainGroup.n;
+    const sim = this.sim;
+    const amt = sim.rainGroup.grabbedParticles.size();
+    const total = sim.rainGroup.n;
     const pct = 100 * amt / total;
     return `${pct.toFixed(0)}%`;
   }
 
   // get catch percentage explaination string
+  /**
+   *
+   */
   getPctTooltip() {
-    const amt = global.mainSim.rainGroup.grabbedParticles.size();
-    const total = global.mainSim.rainGroup.n;
+    const sim = this.sim;
+    const amt = sim.rainGroup.grabbedParticles.size();
+    const total = sim.rainGroup.n;
     return `caught ${amt} / ${total} raindrops`;
+  }
+
+  /**
+   *
+   */
+  close() {
+    const screen = this.screen;
+    const sim = this.sim;
+
+    sim.selectedBody = null;
+    sim.selectedParticle = null;
+    screen.contextMenu = null;
+    sim.setTool(global.toolList[0]);
   }
 }

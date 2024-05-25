@@ -5,24 +5,65 @@ const pio2 = Math.PI / 2;
 const twopi = 2 * Math.PI;
 const sqrt2 = Math.sqrt(2);
 const phi = 1.618033988749894;
+
+/**
+ * shorthand to construct Vector
+ */
 function v() { return new Vector(...arguments); }
+
+/**
+ * shorthand for Vector.polar
+ */
 function vp() { return Vector.polar(...arguments); }
 
+/**
+ *
+ * @param {Vector} p1 g
+ * @param {Vector} p2 g
+ * @param {Vector} p3 g
+ * @returns {Vector} g
+ */
 function clockwise(p1, p2, p3) {
   const val = (p2.y - p1.y) * (p3.x - p2.x) -
     (p2.x - p1.x) * (p3.y - p2.y);
   return (val > 0);
 }
 
+/**
+ * Calculates the center point of a rectangle.
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @returns {number[]} The [x, y] coordinates of the center point.
+ */
 function rectCenter(x, y, w, h) {
   return [x + w / 2, y + h / 2];
 }
 
+/**
+ * Calculates the corners of a rectangle.
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @returns {number[][]} An array of [x, y] coordinates for each corner.
+ */
 function rectCorners(x, y, w, h) {
-  return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
+  const result = [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
+  return result.map((xy) => v(...xy));
 }
 
-// return list of rectangles
+/**
+ * Divide a rectangle into smaller rectangles along a specified axis.
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @param {number} n - The number of divisions.
+ * @param {boolean} axis - The axis to divide along (true for horizontal, false for vertical).
+ * @returns {number[][]} An array of rectangles represented by [x, y, w, h].
+ */
 function divideRect(x, y, w, h, n, axis) {
   const [start, len] = axis ? [y, h] : [x, w];
   const divLen = len / n;
@@ -39,20 +80,54 @@ function divideRect(x, y, w, h, n, axis) {
   return result;
 }
 
-// return list of rectangles
+/**
+ * Divide a rectangle into rows.
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @param {number} n - The number of rows.
+ * @returns {number[][]} An array of rectangles represented by [x, y, w, h].
+ */
 function divideRows(x, y, w, h, n) {
   return divideRect(x, y, w, h, n, true);
 }
 
-// return list of rectangles
+/**
+ * Divide a rectangle into columns.
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @param {number} n - The number of columns.
+ * @returns {number[][]} An array of rectangles represented by [x, y, w, h].
+ */
 function divideCols(x, y, w, h, n) {
   return divideRect(x, y, w, h, n, false);
 }
 
+/**
+ * get padded rectangle.
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @param {number} p - The padding amount.
+ * @returns {number[]} The new rectangle coordinates and dimensions [x, y, w, h].
+ */
 function padRect(x, y, w, h, p) {
   return [x - p, y - p, w + 2 * p, h + 2 * p];
 }
 
+/**
+ * Check if a point is inside a rectangle.
+ * @param {Vector} p - The point in question.
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @returns {boolean} True if the point is inside the rectangle, false otherwise.
+ */
 function vInRect(p, x, y, w, h) {
   const result = (p.x >= x) && (p.x <= (x + w)) && (p.y >= y) && (p.y <= (y + h));
 
@@ -60,16 +135,38 @@ function vInRect(p, x, y, w, h) {
   return result;
 }
 
+/**
+ * Check if a point is inside a rectangle.
+ * @param {number} px
+ * @param {number} py
+ * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
+ * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
+ * @param {number} w - The width of the rectangle.
+ * @param {number} h - The height of the rectangle.
+ * @returns {boolean} True if the point is inside the rectangle, false otherwise.
+ */
 function inRect(px, py, x, y, w, h) {
   return (px >= x) && (px <= (x + w)) && (py >= y) && (py <= (y + h));
 }
 
-// doesn't use procedural RNG (see rng.js)
+/**
+ * doesn't use procedural RNG (see rng.js)
+ * @param min
+ * @param max
+ */
 function safeRandRange(min, max) {
   return min + Math.random() * (max - min);
 }
 
-// locate intersections between two circles
+/**
+ * locate intersections between two circles
+ * @param x0
+ * @param y0
+ * @param r0
+ * @param x1
+ * @param y1
+ * @param r1
+ */
 function intersectionAngles(x0, y0, r0, x1, y1, r1) {
   const dx = x1 - x0;
   const dy = y1 - y0;
@@ -98,6 +195,11 @@ function intersectionAngles(x0, y0, r0, x1, y1, r1) {
 }
 
 // non-negative mod
+/**
+ *
+ * @param a
+ * @param b
+ */
 function nnmod(a, b) {
   const r = a % b;
   return (r >= 0) ? r : r + b;
@@ -105,6 +207,10 @@ function nnmod(a, b) {
 
 // get angle in range [-pi,pi]
 // equivalent to given angle
+/**
+ *
+ * @param angle
+ */
 function cleanAngle(angle) {
   let a = nnmod(angle, twopi);
   if (a > Math.PI) {
@@ -117,21 +223,52 @@ function cleanAngle(angle) {
 }
 
 // oscillate from 0 to 1
+/**
+ *
+ * @param period
+ * @param offset
+ */
 function pulse(period, offset = 0) {
   return (Math.sin(offset + global.t * twopi / period) + 1) / 2;
 }
 
 // weighted avg
+/**
+ *
+ * @param a
+ * @param b
+ * @param r
+ */
 function avg(a, b, r = 0.5) {
   return (a * (1.0 - r)) + (b * r);
 }
+
+/**
+ *
+ * @param a
+ * @param b
+ * @param r
+ */
 function va(a, b, r = 0.5) {
   return v(avg(a.x, b.x, r), avg(a.y, b.y, r));
 }
+
+/**
+ *
+ * @param l1
+ * @param l2
+ * @param r
+ */
 function la(l1, l2, r) {
   return [va(l1[0], l2[0], r), va(l1[1], l2[1], r)];
 }
 
+/**
+ *
+ * @param p1
+ * @param p2
+ * @param p3
+ */
 function arePointsClockwise(p1, p2, p3) {
   const crossProduct = (p1[0] - p2[0]) * (p3[1] - p2[1]) - (p1[1] - p2[1]) * (p3[0] - p2[0]);
   return crossProduct > 0;
@@ -139,6 +276,11 @@ function arePointsClockwise(p1, p2, p3) {
 
 // compute slope and intercept
 // euclidean line with points a and b
+/**
+ *
+ * @param a
+ * @param b
+ */
 function mb(a, b) {
   const slope = (b.y - a.y) / (b.x - a.x);
   const intercept = a.y - slope * a.x;
@@ -148,6 +290,11 @@ function mb(a, b) {
 // compute intersection point of two lines
 // the two lines are described by pairs of points
 // requires two lists, each containing 2 xy points
+/**
+ *
+ * @param ab1
+ * @param ab2
+ */
 function intersection(ab1, ab2) {
   const mb1 = mb(...ab1);
   const mb2 = mb(...ab2);
@@ -174,6 +321,10 @@ function intersection(ab1, ab2) {
 }
 
 // https://stackoverflow.com/a/2450976
+/**
+ *
+ * @param array
+ */
 function shuffle(array) {
   let currentIndex = array.length; let randomIndex;
 

@@ -1,11 +1,22 @@
 // black grid gradually reveals hud
+/**
+ *
+ */
 class GridFadeIn extends FadeIn {
+  /**
+   *
+   */
   constructor() {
     super();
     this.duration = 1000;
   }
 
   // implement FadeIn
+  /**
+   *
+   * @param g
+   * @param rect
+   */
   draw(g, rect) {
 
     g.fillStyle = global.colorScheme.fg;

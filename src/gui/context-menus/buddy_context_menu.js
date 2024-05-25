@@ -1,6 +1,16 @@
 // context menu (and reticle effect)
 // that appears when a body is clicked
+/**
+ *
+ */
 class BuddyContextMenu extends BodyContextMenu {
+  /**
+   *
+   * @param rect
+   * @param s0
+   * @param s1
+   * @param buddy
+   */
   constructor(rect, s0, s1, buddy) {
     super(rect, s0, s1, buddy.getMainBody());
     this.buddy = buddy;

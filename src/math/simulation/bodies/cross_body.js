@@ -1,5 +1,13 @@
 // static flat surface body
+/**
+ *
+ */
 class CrossBody extends Body {
+  /**
+   *
+   * @param sim
+   * @param pos
+   */
   constructor(sim, pos) {
     super(sim, pos);
 
@@ -8,11 +16,19 @@ class CrossBody extends Body {
     this.icon = increaseIcon;
   }
 
+  /**
+   *
+   * @param dt
+   * @param {...any} p
+   */
   update(dt, ...p) {
     this.spin(-1e-6 * dt);
     return super.update(dt, ...p);
   }
 
+  /**
+   *
+   */
   buildEdge() {
 
     const a = 1;
@@ -34,6 +50,9 @@ class CrossBody extends Body {
     return new PolygonEdge(verts.reverse());
   }
 
+  /**
+   *
+   */
   buildGrabber() {
     return new EdgeGrabber(
       this.pos, this.angle, this.edge,

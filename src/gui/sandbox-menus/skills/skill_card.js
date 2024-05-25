@@ -1,6 +1,15 @@
 // gui element representing a skill
+/**
+ *
+ */
 class SkillCard extends CompositeGuiElement {
 
+  /**
+   *
+   * @param rect
+   * @param tree
+   * @param entry
+   */
   constructor(rect, tree, entry) {
     super(rect);
     const r = this.rect;

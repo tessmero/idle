@@ -1,7 +1,15 @@
 
-// base class for tools that spawn bodies
+/**
+ * base class for tools that spawn bodies
+ */
 class BodyTool extends Tool {
 
+  /**
+   *
+   * @param {ParticleSim} sim
+   * @param {string} title
+   * @param {Icon} icon
+   */
   constructor(sim, title, icon) {
     super(sim);
 
@@ -11,16 +19,25 @@ class BodyTool extends Tool {
     this.cursorCenter = true; // tool.js
   }
 
-  // get title of body to build e.g. 'circle'
+  /**
+   * get title of body to build e.g. 'circle'
+   */
   getTitle() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
-  // create Body instance at point p
+  /**
+   * create Body instance at point p
+   * @param _p
+   */
   buildBody(_p) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
+  /**
+   *
+   * @param p
+   */
   mouseDown(p) {
     if (this.isUsable()) {
 
@@ -43,7 +60,15 @@ class BodyTool extends Tool {
     }
   }
 
+  /**
+   *
+   * @param _p
+   */
   mouseMove(_p) {}
 
+  /**
+   *
+   * @param _p
+   */
   mouseUp(_p) {}
 }

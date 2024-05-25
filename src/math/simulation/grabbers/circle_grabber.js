@@ -1,5 +1,15 @@
 
+/**
+ *
+ */
 class CircleGrabber extends Grabber {
+  /**
+   *
+   * @param pos
+   * @param rad
+   * @param f
+   * @param edgeOffset
+   */
   constructor(pos, rad, f, edgeOffset) {
     super(f);
     this.pos = pos;
@@ -8,6 +18,10 @@ class CircleGrabber extends Grabber {
     this.edgeOffset = edgeOffset;
   }
 
+  /**
+   *
+   * @param g
+   */
   drawDebug(g) {
     const p = this.pos.xy();
     g.fillStyle = 'yellow';
@@ -17,6 +31,13 @@ class CircleGrabber extends Grabber {
     g.fill();
   }
 
+  /**
+   *
+   * @param subgroup
+   * @param i
+   * @param x
+   * @param y
+   */
   contains(subgroup, i, x, y) {
     const dx = x - this.pos.x;
     const dy = y - this.pos.y;

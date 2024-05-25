@@ -1,12 +1,19 @@
-const _allTutorialScreens = {};
 
-// base class for animation sequences
-//
-// involving a GuiParticleSim
-// + animated recreation of the user's cursor/tool
-class Tutorial {
-  constructor() {
+/**
+ * base class for animation sequence
+ * that emulates user actions
+ */
+class Macro {
+
+  /**
+   * Construct new tutorial based on
+   * implemented buildKeyFrames() method
+   * @param title
+   */
+  constructor(title) {
+    this._title = title;
     this.reset();
+
     const kf = this.buildKeyframes();
     this.keyframes = kf;
 
@@ -20,42 +27,50 @@ class Tutorial {
     this.cursorPosKeyframes = kf.filter((e) => e[1] === 'pos');
   }
 
+  /**
+   * return a list of [time,action...] animation frames
+   *
+   * times are millisecs since start of animation
+   * 'pos' action accepts a location vector, where
+   * x/y coords are in fractions of screen size
+   *
+   * move mouse diagonally across screen
+   * return [ [0,'pos',v(0,0)], [1000,'pos',v(1,1)] ]
+   *
+   *
+   *
+   */
+  buildKeyFrames() {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
+   * Default duration is computed based on
+   * implemented buildKeyFrames() method
+   */
   getDuration() {
     return this.cursorPosKeyframes.at(-1)[0];
   }
 
+  /**
+   *
+   */
   reset() {
     this.t = 0;
     this.finished = false;
   }
 
-  getScreen() {
-    const clazz = this.constructor;
-    if (!(clazz in _allTutorialScreens)) {
-      const sim = this.buildSim();
-      const screen = new GameScreen(sim.rect, sim, null, this);
-      _allTutorialScreens[clazz] = screen;
-    }
-    return _allTutorialScreens[clazz];
-  }
-
-  // should only be called in getScreen() ^
-  buildSim() {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
-  }
-
+  /**
+   * get title string
+   */
   getTitle() {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    return this._title;
   }
 
-  getTestAssertions(_sim) {
-    return [];
-  }
-
-  buildKeyFrames() {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
-  }
-
+  /**
+   *
+   * @param dt
+   */
   update(dt) {
 
     // advance clock
@@ -67,6 +82,9 @@ class Tutorial {
     return this.keyframes.filter((k) => (k[0] > t0) && (k[0] <= t1));
   }
 
+  /**
+   *
+   */
   getCursorPos() {
 
     const t = this.t;

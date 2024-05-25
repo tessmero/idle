@@ -1,8 +1,16 @@
 // group of falling rain particles
 //
 // instantiated in particle_sim.js
+/**
+ *
+ */
 class ProceduralPGroup extends ParticleGroup {
 
+  /**
+   *
+   * @param sim
+   * @param n
+   */
   constructor(sim, n) {
     super(sim, n);
     this.lastDrawTime = 0;
@@ -10,6 +18,9 @@ class ProceduralPGroup extends ParticleGroup {
     this.rngSeed = randomSeed();
   }
 
+  /**
+   *
+   */
   * generateParticles() {
     resetRand(this.rngSeed);
     const n = this.n;

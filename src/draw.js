@@ -1,5 +1,7 @@
 
-// Render graphics
+/**
+ * Render graphics
+ */
 function draw() {
   const ctx = global.ctx;
   const g = ctx;
@@ -10,16 +12,14 @@ function draw() {
   if (global.mainSim.particleRadius < -lim) { global.mainSim.particleRadius = -lim; }
 
   // draw main sim and gui
-  const sr = global.screenRect;
   const screen = global.mainScreen;
-  screen._rect = sr;
-  screen.sim.rect = sr;
+  screen.sim.rect = screen.rect;
   screen.draw(g);
 
   // debug draw mouse
   const debugMouse = false;
   if (debugMouse) {
-    const c = global.mousePos;
+    const c = global.mainScreen.mousePos;
     g.strokeStyle = 'red';
     g.beginPath();
     g.moveTo(c.x, c.y);

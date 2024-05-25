@@ -3,10 +3,17 @@
 
 let _floaterFontSpecs = null;
 
+/**
+ *
+ */
 class FloaterGroup {
 
   // allocate group with
   // maximum of n floaters
+  /**
+   *
+   * @param n
+   */
   constructor(n) {
     this.n = n;
 
@@ -14,7 +21,7 @@ class FloaterGroup {
     // n floaters with 3 props (x,y,remaining time)
     const ndims = 3;
     this.ndims = ndims;
-    this.state = new Float32Array(n * ndims);
+    this.state = new FloatArray(n * ndims).get();
 
     // lifetime for a single floater
     this.duration = 1000;
@@ -39,6 +46,11 @@ class FloaterGroup {
     }
   }
 
+  /**
+   *
+   * @param pos
+   * @param label
+   */
   spawnFloater(pos, label) {
 
     // pick address and advance for next call
@@ -54,6 +66,10 @@ class FloaterGroup {
     st[i + 2] = this.duration; // duration
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
 
     // comput ellapsed time
@@ -102,6 +118,11 @@ class FloaterGroup {
     this.activeCount = activeCount;
   }
 
+  /**
+   *
+   * @param pos
+   * @param amt
+   */
   signalChange(pos, amt) {
     if (!amt) { return; }
     let label = Math.round(amt).toString();

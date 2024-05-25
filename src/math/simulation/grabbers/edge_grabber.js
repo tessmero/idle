@@ -2,7 +2,17 @@
 // similar to a circle grabber,
 // but checks precomputed shape angle->radius
 // instead of having one radius
+/**
+ *
+ */
 class EdgeGrabber extends Grabber {
+  /**
+   *
+   * @param pos
+   * @param angle
+   * @param edge
+   * @param f
+   */
   constructor(pos, angle, edge, f) {
     super(f);
     this.pos = pos;
@@ -10,6 +20,10 @@ class EdgeGrabber extends Grabber {
     this.edge = edge;
   }
 
+  /**
+   *
+   * @param g
+   */
   drawDebug(g) {
     const p = this.pos.xy();
     g.fillStyle = 'yellow';
@@ -19,6 +33,13 @@ class EdgeGrabber extends Grabber {
     g.fill();
   }
 
+  /**
+   *
+   * @param subgroup
+   * @param i
+   * @param x
+   * @param y
+   */
   contains(subgroup, i, x, y) {
     const dx = x - this.pos.x;
     const dy = y - this.pos.y;

@@ -1,18 +1,24 @@
-// base class for top-level gui groups
-// e.g. the start menu
+/**
+ * base class for top-level gui groups
+ * e.g. the start menu
+ */
 class Gui extends CompositeGuiElement {
 
-  constructor(rect) {
-    super(rect);
+  /**
+   *
+   * @param title
+   * @param {...any} p
+   */
+  constructor(title, ...p) {
+    super(...p);
+    this.title = title;
   }
 
-  // debug
-  draw(g) {
-    super.draw(g);
-  }
-
+  /**
+   *
+   */
   getScreenEdgesForContextMenu() {
-    const rect = [...global.mainSim.rect];
+    const rect = [...this.rect];
     const topMargin = 0.1;
     const bottomMargin = 0.1;
     const sideMargin = 0.1;
@@ -23,24 +29,56 @@ class Gui extends CompositeGuiElement {
     return rect;
   }
 
-  // build list of GuiElement instances
-  buildElements() {
+  /**
+   * build list of GuiElement instances
+   * @param _screen
+   */
+  buildElements(_screen) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   // return Gui instance to draw behind this
   // e.g. draw hud behind upgrade menu
+  /**
+   *
+   */
   getBackgroundGui() {
     return null;
   }
 
-  // return true to prevent clearing in draw.js
-  // used for some start menu transition animations
-  stopCanvasClear() {
+  /**
+   * return true to prevent clearing screen
+   * used for some screen transition animations
+   */
+  stopScreenClear() {
     return false;
   }
 
-  // hooks called in game_states.js
+  /**
+   * Called in game_state_manager.js
+   */
   open() {}
+
+  /**
+   * Called in game_state_manager.js
+   */
   close() {}
+
+  /**
+   *
+   * @param {...any} p
+   */
+  update(...p) {
+    global.livePerformanceStats.flagGui(this, 'updated');
+    super.update(...p);
+  }
+
+  /**
+   *
+   * @param {...any} p
+   */
+  draw(...p) {
+    global.livePerformanceStats.flagGui(this, 'drawn');
+    super.draw(...p);
+  }
 }

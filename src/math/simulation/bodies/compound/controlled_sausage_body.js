@@ -1,6 +1,16 @@
+/**
+ *
+ */
 class ControlledSausageBody extends CompoundBody {
 
   // sim is a ParticleSim instance
+  /**
+   *
+   * @param sim
+   * @param a
+   * @param b
+   * @param rad
+   */
   constructor(sim, a, b, rad = 2e-2) {
     super(sim, va(a, b));
 
@@ -25,5 +35,8 @@ class ControlledSausageBody extends CompoundBody {
     this.dripChance = global.poiDripChance;
   }
 
+  /**
+   *
+   */
   getMainBody() { return this.sausage; }
 }

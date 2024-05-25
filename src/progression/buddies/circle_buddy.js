@@ -1,8 +1,17 @@
 // controlled circle body in global.mainSim
 // eats particles and contributes to player currency
+/**
+ *
+ */
 class CircleBuddy extends Buddy {
 
   // sim is a ParticleSim instance
+  /**
+   *
+   * @param sim
+   * @param pos
+   * @param rad
+   */
   constructor(sim, pos, rad) {
     super(sim, pos);
 
@@ -16,5 +25,8 @@ class CircleBuddy extends Buddy {
     this.controlPoints = [cp];
   }
 
+  /**
+   *
+   */
   getMainBody() { return this.circle; }
 }

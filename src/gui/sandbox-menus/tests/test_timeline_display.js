@@ -1,5 +1,15 @@
 // progress indicator with checkboxes
+/**
+ *
+ */
 class TestTimelineDisplay extends CompositeGuiElement {
+  /**
+   *
+   * @param rect
+   * @param duration
+   * @param checkTimes
+   * @param checkLabels
+   */
   constructor(rect, duration, checkTimes, checkLabels) {
     super(rect);
     this.duration = duration;
@@ -33,6 +43,10 @@ class TestTimelineDisplay extends CompositeGuiElement {
     ];
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
 
     // position line with tick marks
@@ -65,10 +79,19 @@ class TestTimelineDisplay extends CompositeGuiElement {
     super.draw(g);
   }
 
+  /**
+   *
+   * @param t
+   */
   setTime(t) {
     this.t = t;
   }
 
+  /**
+   *
+   * @param i
+   * @param icon
+   */
   setCheckboxIcon(i, icon) {
     this.checkboxes[i].icon = icon;
   }

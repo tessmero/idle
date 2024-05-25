@@ -1,6 +1,16 @@
 // a global variable readout with buttons to increase and decrease
+/**
+ *
+ */
 class ScalarDebugVar extends CompositeGuiElement {
 
+  /**
+   *
+   * @param rect
+   * @param varname
+   * @param inc
+   * @param tooltip
+   */
   constructor(rect, varname, inc, tooltip) {
     super(rect);
     const r = this.rect;
@@ -18,7 +28,7 @@ class ScalarDebugVar extends CompositeGuiElement {
         'shift-click for 10x',
         'ctrl-click for 100x',
       ].join('\n')); // tooltip
-    dtl.scale = 0.4;
+    dtl.setScale(0.4);
     dtl.tooltipScale = 0.4;
     dtl.center = false;
     dtl.fixedRect = true;
@@ -48,6 +58,11 @@ class ScalarDebugVar extends CompositeGuiElement {
     ];
 
   }
+
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     Button._draw(g, this.rect);
     super.draw(g);

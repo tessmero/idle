@@ -1,8 +1,16 @@
 // group of bouncing particles
 //
 // instantiated in particle_sim.js
+/**
+ *
+ */
 class PhysicsParticleGroup extends ParticleGroup {
 
+  /**
+   *
+   * @param sim
+   * @param n
+   */
   constructor(sim, n) {
     super(sim, n);
 
@@ -10,7 +18,7 @@ class PhysicsParticleGroup extends ParticleGroup {
     // n particles with 4 props x,y,vx,vy
     const ndims = 4;
     this.ndims = ndims;
-    this.state = new Float32Array(n * ndims);
+    this.state = new FloatArray(n * ndims).get();
 
     // maximum number of particles per subgroup
     // subgroup = (garbage-collectable unit)
@@ -28,6 +36,9 @@ class PhysicsParticleGroup extends ParticleGroup {
   // return new subgroup instance
   // should be called in constructors
   // for objects that emit particles
+  /**
+   *
+   */
   newSubgroup() {
 
     if (this.freeSubgroupIndices.size() === 0) {
@@ -43,11 +54,18 @@ class PhysicsParticleGroup extends ParticleGroup {
     return sg;
   }
 
+  /**
+   *
+   * @param sg
+   */
   deleteSubgroup(sg) {
     this.freeSubgroupIndices.add(sg.subgroupIndex);
     this.subgroups.delete(sg);
   }
 
+  /**
+   *
+   */
   * generateParticles() {
     resetRand();
 

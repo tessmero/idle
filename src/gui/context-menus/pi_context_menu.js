@@ -1,6 +1,16 @@
 // sandbox mode
 // particle inspector context menu
+/**
+ *
+ */
 class PiContextMenu extends ContextMenu {
+  /**
+   *
+   * @param rect
+   * @param s0
+   * @param s1
+   * @param pData
+   */
   constructor(rect, s0, s1, pData) {
     super(rect, s0, s1);
     this.pData = pData;
@@ -41,6 +51,10 @@ class PiContextMenu extends ContextMenu {
     ];
   }
 
+  /**
+   *
+   * @param flavor
+   */
   buildStats(flavor) {
 
     // data passed from grab event
@@ -91,6 +105,11 @@ class PiContextMenu extends ContextMenu {
     }
   }
 
+  /**
+   *
+   * @param label
+   * @param val
+   */
   showCoord(label, val) {
 
     let s = Number(val).toFixed(3);
@@ -101,6 +120,9 @@ class PiContextMenu extends ContextMenu {
     return `${label}:${s}`;
   }
 
+  /**
+   *
+   */
   deleteBody() {
     let b = this.body;
     while (b.parent) { b = b.parent; }// got top parent
@@ -108,6 +130,9 @@ class PiContextMenu extends ContextMenu {
     this.closeBodyContextMenu();
   }
 
+  /**
+   *
+   */
   closePiContextMenu() {
     global.contextMenu = null;
     global.mainSim.selectedParticle = null;

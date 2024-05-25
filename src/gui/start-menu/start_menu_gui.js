@@ -1,10 +1,24 @@
 
+/**
+ *
+ */
 class StartMenuGui extends Gui {
 
-  // implement gui
-  buildElements() {
-    const sr = global.screenRect;
+  /**
+   *
+   * @param {...any} p
+   */
+  constructor(...p) {
+    super('Start Menu Gui', ...p);
+  }
 
+  // implement gui
+  /**
+   *
+   * @param screen
+   */
+  buildElements(screen) {
+    const sr = screen.rect;
     const specs = randChoice([
       [
         [2, 'IDLE RAIN'],
@@ -46,8 +60,8 @@ class StartMenuGui extends Gui {
 
     return [
       ...this.labels,
-      new TextButton(playRect, 'PLAY', playClicked), // game_state.js
-      new IconButton(sandboxRect, sandboxIcon, sandboxClicked), // game_state.js
+      new TextButton(playRect, 'PLAY', () => this.gsm.playClicked()), // game_state_manager.js
+      new IconButton(sandboxRect, sandboxIcon, () => this.gsm.sandboxClicked()), // game_state_manager.js
     ];
   }
 }

@@ -1,8 +1,13 @@
+/**
+ * @file Pi Tool Tutorial
+ */
+class PiToolTutorial extends Macro {
 
-class PiToolTutorial extends Tutorial {
-
+  /**
+   *
+   */
   constructor() {
-    super();
+    super('Inspector Tutorial');
 
     const grabRad = 0.04;
     const t = new PiTool(null, grabRad);
@@ -10,15 +15,9 @@ class PiToolTutorial extends Tutorial {
     this.tool = t;
   }
 
-  getTitle() {
-    return 'Inspector Tutorial';
-  }
-
-  buildSim() {
-    const sim = new TutorialPSim();
-    return sim;
-  }
-
+  /**
+   *
+   */
   buildKeyframes() {
     const [startPos, clickPos, endPos] = [
       v(0.9, 0.4), // start

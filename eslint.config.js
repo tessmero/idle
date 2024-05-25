@@ -1,9 +1,11 @@
 
 import babelParser from '@babel/eslint-parser';
+import jsdoc from "eslint-plugin-jsdoc";
 
 export default [
   {
     files: ['**/*.js'],
+    ignores: ['src/gui/icons/*'],
     languageOptions: {
         ecmaVersion: 6,
         sourceType: "script",
@@ -12,7 +14,80 @@ export default [
       	'requireConfigFile': false,
     	},
     },
+    "plugins": {
+        "jsdoc": jsdoc
+    },
     'rules': {
+
+      /* jsdoc */
+        "jsdoc/check-access": 1, // Recommended
+        "jsdoc/check-alignment": 1, // Recommended
+        "jsdoc/check-examples": 0,
+        "jsdoc/check-indentation": 0,
+        "jsdoc/check-line-alignment": 0,
+        "jsdoc/check-param-names": 1, // Recommended
+        "jsdoc/check-property-names": 1, // Recommended
+        "jsdoc/check-syntax": 0,
+        "jsdoc/check-tag-names": 1, // Recommended
+        "jsdoc/check-types": 1, // Recommended
+        "jsdoc/check-values": 1, // Recommended
+        "jsdoc/empty-tags": 1, // Recommended
+        "jsdoc/implements-on-classes": 1, // Recommended
+        "jsdoc/informative-docs": 0,
+        "jsdoc/match-description": 0,
+        "jsdoc/multiline-blocks": 1, // Recommended
+        "jsdoc/no-bad-blocks": 0,
+        "jsdoc/no-blank-block-descriptions": 0,
+        "jsdoc/no-defaults": 0,
+        "jsdoc/no-missing-syntax": 0,
+        "jsdoc/no-multi-asterisks": 1, // Recommended
+        "jsdoc/no-restricted-syntax": 0,
+        "jsdoc/no-types": 0,
+
+
+    "jsdoc/no-undefined-types": ["error", {
+      "definedTypes": [
+        "Vector",
+        "GameScreen","GameStateManager","Macro",
+        "Gui","Icon",
+        "ParticleSim",
+      ]
+    }],
+
+        "jsdoc/require-asterisk-prefix": 0,
+        "jsdoc/require-description": 0,
+        "jsdoc/require-description-complete-sentence": 0,
+        "jsdoc/require-example": 0,
+        "jsdoc/require-file-overview": 0,//1,
+        "jsdoc/require-hyphen-before-param-description": 0,
+       "jsdoc/require-jsdoc": ["error", {
+        "require": {
+            "FunctionDeclaration": false,
+            "MethodDefinition": true,
+            "ClassDeclaration": true,
+            "ArrowFunctionExpression": false,
+            "FunctionExpression": false
+        },
+    }],
+        "jsdoc/require-param": 1, // Recommended
+        "jsdoc/require-param-description": 0,//1, // Recommended
+        "jsdoc/require-param-name": 1, // Recommended
+        "jsdoc/require-param-type": 0,//1, // Recommended
+        "jsdoc/require-property": 1, // Recommended
+        "jsdoc/require-property-description": 0,//1, // Recommended
+        "jsdoc/require-property-name": 1, // Recommended
+        "jsdoc/require-property-type": 1, // Recommended
+        "jsdoc/require-returns": 0,//1, // Recommended
+        "jsdoc/require-returns-check": 1, // Recommended
+        "jsdoc/require-returns-description": 1, // Recommended
+        "jsdoc/require-returns-type": 1, // Recommended
+        "jsdoc/require-throws": 0,
+        "jsdoc/require-yields": 0, // Recommended
+        "jsdoc/require-yields-check": 0, // Recommended
+        "jsdoc/sort-tags": 0,
+        "jsdoc/tag-lines": 1, // Recommended
+        "jsdoc/valid-types": 1, // Recommended
+
     /* Possible Errors */
       'comma-dangle': [1, 'always-multiline'], // disallow or enforce trailing commas (recommended)
       'no-cond-assign': [1, 'except-parens'], // disallow assignment in conditional expressions (recommended)
@@ -181,6 +256,13 @@ export default [
         'ExportAllDeclaration',
         'ExportSpecifier',
         'ImportNamespaceSpecifier',
+
+        /* no Float32Array construction */
+        {
+          "message": "Float32Array construction is not allowed.",
+          "selector": "NewExpression[callee.name='Float32Array']"
+        }
+        
       ], // disallow use of certain syntax in code
       'no-spaced-func': 1, // disallow space between function identifier and application (fixable)
       'no-ternary': 0, // disallow the use of ternary operators
@@ -228,7 +310,7 @@ export default [
       'prefer-reflect': 1, // suggest using Reflect methods where applicable
       'prefer-spread': 1, // suggest using the spread operator instead of .apply().
       'prefer-template': 1, // suggest using template literals instead of strings concatenation
-      'require-yield': 1, // disallow generator functions that do not have yield
+      'require-yield': 0, // disallow generator functions that do not have yield
 
       /* Legacy */
       'max-depth': [0, 3], // specify the maximum depth that blocks can be nested

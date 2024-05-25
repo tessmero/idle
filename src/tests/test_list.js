@@ -8,4 +8,5 @@ const iitestList = [
   new BasicRainSkillCardTest(),
 
   new TransitionTest(),
+  new GuiTest(),
 ];

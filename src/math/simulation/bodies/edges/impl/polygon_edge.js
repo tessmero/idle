@@ -1,6 +1,13 @@
 // edge defined by polygon vertices
+/**
+ *
+ */
 class PolygonEdge extends PathspecEdge {
 
+  /**
+   *
+   * @param verts
+   */
   constructor(verts) {
     super();
 
@@ -21,12 +28,19 @@ class PolygonEdge extends PathspecEdge {
     this.csl = csl;
   }
 
+  /**
+   *
+   */
   getCircumference() {
     return this.csl[this.csl.length - 1];
   }
 
   // compute position+normal [angle,radius,normal angle]
   // at given distance along circumerence
+  /**
+   *
+   * @param d
+   */
   computePoint(d) {
 
     // list of cumulative side lengths

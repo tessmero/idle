@@ -1,8 +1,17 @@
+/**
+ *
+ */
 class Snow2Skill extends Skill {
+  /**
+   *
+   */
   constructor() {
     super('Blizzard');
   }
 
+  /**
+   *
+   */
   buildThumbnailSim() {
     const sim = new ThumbnailPSim();
 

@@ -1,5 +1,14 @@
 // physics-enabled circle
+/**
+ *
+ */
 class CircleBody extends Body {
+  /**
+   *
+   * @param sim
+   * @param pos
+   * @param rad
+   */
   constructor(sim, pos, rad) {
     super(sim, pos);
 
@@ -13,16 +22,26 @@ class CircleBody extends Body {
     this.icon = circleIcon;
   }
 
+  /**
+   *
+   */
   buildEdge() {
     return new CircleEdge(this.rad);
   }
 
+  /**
+   *
+   */
   buildGrabber() {
     return new CircleGrabber(
       this.pos, this.rad,
       (...p) => this.grabbed(...p), 0);
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     const p = this.pos;
 

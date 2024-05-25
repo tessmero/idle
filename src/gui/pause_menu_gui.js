@@ -1,20 +1,32 @@
 
+/**
+ *
+ */
 class PauseMenuGui extends Gui {
 
+  /**
+   *
+   * @param {...any} p
+   */
   constructor(...p) {
-    super(...p);
-
-    this.hasHudInBackground = true; // checked in draw.js
+    super('Pause Menu Gui', ...p);
   }
 
   // override Gui
+  /**
+   *
+   */
   getBackgroundGui() {
-    return global.allGuis[GameStates.playing];
+    return this.screen.stateManager.allGuis[GameStates.playing];
   }
 
   // implement Gui
-  buildElements() {
-    const sr = global.screenRect;
+  /**
+   *
+   * @param screen
+   */
+  buildElements(screen) {
+    const sr = screen.rect;
 
     // layout a column of wide buttons in the middle of the screen
     const pad = 0.005;
@@ -28,8 +40,8 @@ class PauseMenuGui extends Gui {
     for (let i = 0; i < n; i++) { slots.push([x, y + i * (h + pad), w, h]); }
 
     return [
-      new TextButton(slots[0], 'RESUME', resume), // game_states.js
-      new TextButton(slots[2], 'QUIT', quit), // game_states.js
+      new TextButton(slots[0], 'RESUME', () => this.gsm.resume()), // game_states.js
+      new TextButton(slots[2], 'QUIT', () => this.gsm.quit()), // game_states.js
     ];
   }
 }

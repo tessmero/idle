@@ -1,56 +1,102 @@
+/**
+ *
+ */
 class Vector {
 
+  /**
+   *
+   * @param x
+   * @param y
+   */
   constructor(x, y) {
     this.x = x;
     this.y = y;
   }
 
+  /**
+   *
+   * @param angle
+   * @param magnitude
+   */
   static polar(angle, magnitude) {
     const x = magnitude * Math.cos(angle);
     const y = magnitude * Math.sin(angle);
     return new Vector(x, y);
   }
 
+  /**
+   *
+   */
   xy() {
     return [this.x, this.y];
   }
 
+  /**
+   *
+   */
   copy() {
     return new Vector(this.x, this.y);
   }
 
-  // rotate around origin
+  /**
+   * rotate around origin
+   * @param angle
+   */
   rotate(angle) {
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);
     return new Vector(this.x * cos - this.y * sin, this.y * cos + this.x * sin);
   }
 
+  /**
+   *
+   */
   getAngle() {
     return Math.atan2(this.y, this.x);
   }
 
+  /**
+   *
+   */
   getD2() {
     return Math.pow(this.x, 2) + Math.pow(this.y, 2);
   }
 
+  /**
+   *
+   */
   getMagnitude() {
     return Math.sqrt(this.getD2());
   }
 
   // get unit vector with same angle
+  /**
+   *
+   */
   normalize() {
     return this.mul(1.0 / this.getMagnitude());
   }
 
+  /**
+   *
+   * @param o
+   */
   add(o) {
     return new Vector(this.x + o.x, this.y + o.y);
   }
 
+  /**
+   *
+   * @param o
+   */
   sub(o) {
     return new Vector(this.x - o.x, this.y - o.y);
   }
 
+  /**
+   *
+   * @param k
+   */
   mul(k) {
     return new Vector(this.x * k, this.y * k);
   }

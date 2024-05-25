@@ -1,6 +1,17 @@
+/**
+ *
+ */
 class ControlledStarBody extends CompoundBody {
 
   // sim is a ParticleSim instance
+  /**
+   *
+   * @param sim
+   * @param pos
+   * @param n
+   * @param minRad
+   * @param maxRad
+   */
   constructor(sim, pos, n, minRad, maxRad) {
     super(sim, pos);
 
@@ -20,5 +31,8 @@ class ControlledStarBody extends CompoundBody {
     this.dripChance = global.poiDripChance;
   }
 
+  /**
+   *
+   */
   getMainBody() { return this.star; }
 }

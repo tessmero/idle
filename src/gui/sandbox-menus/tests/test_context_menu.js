@@ -2,7 +2,18 @@ let _testLoopSetting = null;
 
 // persistent context menu with gui sim
 // that appears when a row is clicked in tests menu
+/**
+ *
+ */
 class TestContextMenu extends ContextMenu {
+  /**
+   *
+   * @param rect
+   * @param s0
+   * @param s1
+   * @param test
+   * @param testIndex
+   */
   constructor(rect, s0, s1, test, testIndex) {
     super(rect, s0, s1);
     this.test = test;
@@ -13,7 +24,8 @@ class TestContextMenu extends ContextMenu {
     this.loopCountdown = this.loopDelay;
 
     // center simulation in first content square
-    const screen = test.getScreen();
+    const screen = test.screen;
+    screen.reset();
     const sim = screen.sim;
     const tut = screen.tut;
     this.sim = sim;
@@ -27,20 +39,23 @@ class TestContextMenu extends ContextMenu {
     gsp.reset();
     this.gsp = gsp;
 
-    const gui = screen.getGui();
-    if (gui && gui.reset) { gui.reset(); }
+    const gui = screen.gui;
+    if (gui) {
+      gui.children = gui.buildElements(screen);
+      gui.setScreen(screen);
+    }
 
     // divide second content square into rows
     const botRows = divideRows(...s1, 10);
     const textScale = 0.25;
 
-    const duration = test.getDuration();
+    const duration = test.getDuration(screen);
     this.t = 0;
     this.duration = duration;
 
     // add test criteria to second square
     let i = 2;
-    const asserts = test.getTestAssertions(sim);
+    const asserts = test.getTestAssertions(screen);
     const checkTimes = [];
     const checkTooltips = [];
     const checkReadouts = [];
@@ -103,7 +118,7 @@ class TestContextMenu extends ContextMenu {
 
     const titleRect = [...topRows[0]];
     titleRect[1] = titleRect[1] - 0.03;
-    const titleLabel = new TextLabel(titleRect, `Test for\n${test.getTitle()}`)
+    const titleLabel = new TextLabel(titleRect, test.titleKey)
       .withScale(0.3);
 
     this.children = this.children.concat([
@@ -129,6 +144,10 @@ class TestContextMenu extends ContextMenu {
 
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 
@@ -141,6 +160,9 @@ class TestContextMenu extends ContextMenu {
     }
   }
 
+  /**
+   *
+   */
   updateLoopButton() {
     const tls = _testLoopSetting;
     let tt = 'loop (off)';
@@ -153,6 +175,9 @@ class TestContextMenu extends ContextMenu {
     this.loopButton.withTooltip(tt);
   }
 
+  /**
+   *
+   */
   loopClicked() {
     const tls = _testLoopSetting;
     if (!tls) {
@@ -167,36 +192,50 @@ class TestContextMenu extends ContextMenu {
     this.updateLoopButton();
   }
 
+  /**
+   *
+   */
   playClicked() {
-    const screen = this.getScreen();
+    const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
       ...TestContextMenu.pickRects(screen.rect),
       this.test, this.testIndex);
     screen.contextMenu.setScreen(screen);
   }
 
+  /**
+   *
+   */
   prevClicked() {
     const tl = iitestList;
     const prevIndex = nnmod(this.testIndex - 1, tl.length);
     const prevTest = tl[prevIndex];
-    const screen = this.getScreen();
+    const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
       ...TestContextMenu.pickRects(screen.rect),
       prevTest, prevIndex);
     screen.contextMenu.setScreen(screen);
   }
 
+  /**
+   *
+   */
   nextClicked() {
     const tl = iitestList;
     const nextIndex = nnmod(this.testIndex + 1, tl.length);
     const nextTest = tl[nextIndex];
-    const screen = this.getScreen();
+    const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
       ...TestContextMenu.pickRects(screen.rect),
       nextTest, nextIndex);
     screen.contextMenu.setScreen(screen);
   }
 
+  /**
+   *
+   * @param dt
+   * @param disableHover
+   */
   update(dt, disableHover) {
     this.t = this.t + dt;
     const hovered = super.update(dt, disableHover);
@@ -253,6 +292,10 @@ class TestContextMenu extends ContextMenu {
     return hovered;
   }
 
+  /**
+   *
+   * @param sr
+   */
   static pickRects(sr) {
 
     // force to right/bottom isde of screen

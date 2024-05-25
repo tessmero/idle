@@ -1,6 +1,17 @@
+/**
+ *
+ */
 class TabHeaderButton extends TextButton {
 
   // called in TabPaneGroup constructor
+  /**
+   *
+   * @param parent
+   * @param tabIndex
+   * @param rect
+   * @param label
+   * @param action
+   */
   constructor(parent, tabIndex, rect, label, action) {
     super(rect, label, action);
 
@@ -9,6 +20,10 @@ class TabHeaderButton extends TextButton {
     this.debug = true;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     const rect = this.rect;
     let lineCol = global.colorScheme.fg;

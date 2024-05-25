@@ -1,6 +1,16 @@
+/**
+ *
+ */
 class SausageBody extends Body {
 
   // sim is a ParticleSim instance
+  /**
+   *
+   * @param sim
+   * @param a
+   * @param b
+   * @param rad
+   */
   constructor(sim, a, b, rad = 2e-2) {
     super(sim, va(a, b));
 
@@ -19,12 +29,18 @@ class SausageBody extends Body {
     this.icon = lineIcon;
   }
 
+  /**
+   *
+   */
   buildEdge() {
     const len = this.a.sub(this.b).getMagnitude();
     const edge = new SausageEdge(len, this.rad);
     return edge;
   }
 
+  /**
+   *
+   */
   buildGrabber() {
     // let grabber = new EdgeGrabber(
     //    this.pos,this.angle,this.edge,
@@ -35,6 +51,11 @@ class SausageBody extends Body {
     return grabber;
   }
 
+  /**
+   *
+   * @param dt
+   * @param {...any} args
+   */
   update(dt, ...args) {
     super.update(dt, ...args);
 
@@ -55,6 +76,10 @@ class SausageBody extends Body {
     this.grabber.update();
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     const a = this.a.xy();
     const b = this.b.xy();

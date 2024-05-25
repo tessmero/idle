@@ -1,30 +1,56 @@
 // progress bar
+/**
+ *
+ */
 class ProgressIndicator extends GuiElement {
 
   // valueFunc returns a number
   // will be truncated to range [0,1]
+  /**
+   *
+   * @param rect
+   * @param valueFunc
+   */
   constructor(rect, valueFunc) {
     super(rect);
     this.valueFunc = valueFunc;
 
-    this.scale = ProgressIndicator.scale();
+    this.setScale(ProgressIndicator.scale());
     this.outline = true;
   }
 
+  /**
+   *
+   * @param o
+   */
   withOutline(o) {
     this.outline = o;
     return this;
   }
 
+  /**
+   *
+   */
   static scale() { return 0.5; }
 
   // implement GuiElement
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     ProgressIndicator._draw(
       g, this.rect, this.valueFunc(), this.outline);
   }
 
   // draw bar for progress between 0 and 1
+  /**
+   *
+   * @param g
+   * @param rect
+   * @param progress
+   * @param outline
+   */
   static _draw(g, rect, progress, outline = false) {
 
     let prg = progress;

@@ -1,11 +1,24 @@
 // a button with a pixel art icon
+/**
+ *
+ */
 class IconButton extends Button {
 
+  /**
+   *
+   * @param rect
+   * @param icon
+   * @param action
+   */
   constructor(rect, icon, action) {
     super(rect, action);
     this.icon = icon;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 
@@ -15,6 +28,9 @@ class IconButton extends Button {
     drawLayout(g, ...rectCenter(...this.rect), layout, true, new FontSpec(0, this.scale)); // character.js
   }
 
+  /**
+   *
+   */
   isAnimated() {
     return this.hovered;
   }

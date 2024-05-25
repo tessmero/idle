@@ -1,8 +1,16 @@
 // circle for the user to click and drag
 // to move or rotate another body
+/**
+ *
+ */
 class ControlPoint extends Body {
 
   // anchoredTo is a body that this will be anchored to
+  /**
+   *
+   * @param sim
+   * @param anchoredTo
+   */
   constructor(sim, anchoredTo) {
     super(sim);
     this.anchoredTo = anchoredTo;
@@ -12,22 +20,44 @@ class ControlPoint extends Body {
     this.fscale = 1;
   }
 
+  /**
+   *
+   * @param r
+   */
   setRad(r) {
     this.rad = r;
     this.r2 = Math.pow(this.rad, 2);
   }
 
+  /**
+   *
+   * @param g
+   * @param color
+   * @param forceDraw
+   */
   draw(g, color = null, forceDraw = false) {
+    const screen = this.sim.screen;
     if (!forceDraw) {
       if (!this.visible) { return; }
       if (this.sim.draggingControlPoint) { return; }
-      if (global.idleCountdown <= 0) { return; }
+      if (screen.idleCountdown <= 0) { return; }
     }
-    const hoverEffectAllowed = this.sim === global.mainSim;
-    this.constructor._draw(g, this.pos, this.rad, color, forceDraw, hoverEffectAllowed);
+    this.constructor._draw(g, this.pos, this.rad,
+      screen.mousePos, color, forceDraw);
   }
 
-  static _draw(g, pos, rad, col = null, forceDraw = false, hoverEffectAllowed = false) {
+  /**
+   *
+   * @param g
+   * @param pos
+   * @param rad
+   * @param mousePos
+   * @param col
+   * @param forceDraw
+   */
+  static _draw(g, pos, rad, mousePos,
+    col = null, forceDraw = false) {
+
     let color = col;
     if (!color) { color = global.colorScheme.fg; }
 
@@ -40,11 +70,11 @@ class ControlPoint extends Body {
     if (!forceDraw) {
 
       // skip hover effect for gui simulations
-      if (!hoverEffectAllowed) { return; }
+      if (!mousePos) { return; }
 
       const ia = intersectionAngles( // util.js
         ...pos.xy(), rad,
-        ...global.mousePos.xy(),
+        ...mousePos.xy(),
         global.controlPointVisibleHoverRadius);
       if (ia === 'out') { return; }
       if ((ia !== 'in') && ia[0]) {
@@ -63,17 +93,33 @@ class ControlPoint extends Body {
   }
 
   // pass user input "force" to physics-enabled parent body
+  /**
+   *
+   * @param acc
+   */
   accel(acc) {
     this.anchoredTo.accel(acc.mul(this.fscale));
   }
 
   // remain stuck to parent
+  /**
+   *
+   * @param _dt
+   */
   update(_dt) {
     this.pos = this.anchoredTo.pos;
   }
 
-  // no direct interaction with particles
+  /**
+   * no direct interaction with particles
+   * @param _sim
+   */
   register(_sim) {}
+
+  /**
+   *
+   * @param _sim
+   */
   unregister(_sim) {}
 
 }

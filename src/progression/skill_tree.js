@@ -5,8 +5,14 @@
 // persistant instance global.skillTree
 //   contains state of purchased skills for the current game
 
+/**
+ *
+ */
 class SkillTree {
 
+  /**
+   *
+   */
   constructor() {
     this.state = {
 
@@ -48,6 +54,10 @@ class SkillTree {
     };
   }
 
+  /**
+   *
+   * @param key
+   */
   isAvalable(key) {
     s = this.specs[key];
     if (!s.requires) { return true; }

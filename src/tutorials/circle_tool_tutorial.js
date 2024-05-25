@@ -1,25 +1,25 @@
 
-class CircleToolTutorial extends Tutorial {
+/**
+ *
+ */
+class CircleToolTutorial extends Macro {
 
+  /**
+   *
+   */
   constructor() {
-    super();
+    super('Circle Tutorial');
 
     const t = new CircleTool();
-    t.circleRadius = t.circleRadius * global.tutorialToolScale;
+    t.circleRadius = t.circleRadius * global.tutorialScaleFactor;
 
     this.primaryTool = t;
     this.tool = t;
   }
 
-  getTitle() {
-    return 'Circle Tutorial';
-  }
-
-  buildSim() {
-    const sim = new TutorialPSim();
-    return sim;
-  }
-
+  /**
+   *
+   */
   buildKeyframes() {
 
     const startPos = v(0.5, 0.9);

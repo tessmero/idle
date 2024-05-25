@@ -1,11 +1,25 @@
-class LineToolTutorialTest extends TutorialTest {
+/**
+ *
+ */
+class LineToolTutorialTest extends Test {
 
+  /**
+   *
+   */
   constructor() {
-    super(new LineToolTutorial());
+    super('Line Test', new LineToolTutorial());
   }
 
-  getTestAssertions(sim) {
+  /**
+   *
+   * @param screen
+   */
+  getTestAssertions(screen) {
+    const sim = screen.sim;
 
+    /**
+     *
+     */
     function b() {
       return sim.getBodies()[0].getMainBody();
     }

@@ -1,15 +1,19 @@
 
-class DefaultToolTutorial extends Tutorial {
+/**
+ *
+ */
+class DefaultToolTutorial extends Macro {
 
-  buildSim() {
-    const sim = new TutorialPSim();
-    return sim;
+  /**
+   *
+   */
+  constructor() {
+    super('Default Tool Tutorial');
   }
 
-  getTitle() {
-    return 'Default Tool Tutorial';
-  }
-
+  /**
+   *
+   */
   buildKeyframes() {
 
     const startPos = v(0.5, 0.9);

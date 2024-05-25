@@ -53,10 +53,17 @@ function randomString(length) {
   return result;
 }
 
+/**
+ *
+ */
 function randomSeed() {
   return cyrb128(randomString(10));
 }
 
+/**
+ *
+ * @param seed
+ */
 function resetRand(seed = null) {
   let s = seed;
   if (s === null) {
@@ -65,10 +72,19 @@ function resetRand(seed = null) {
   rand = sfc32(...s);
 }
 
+/**
+ *
+ * @param min
+ * @param max
+ */
 function randRange(min, max) {
   return min + rand() * (max - min);
 }
 
+/**
+ *
+ * @param options
+ */
 function randChoice(options) {
   return options[Math.floor(Math.random() * options.length)];
 }

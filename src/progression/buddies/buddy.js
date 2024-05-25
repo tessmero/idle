@@ -1,7 +1,15 @@
 // base class for privileged bodies
 // with their own progression state
+/**
+ *
+ */
 class Buddy extends CompoundBody {
 
+  /**
+   *
+   * @param sim
+   * @param pos
+   */
   constructor(sim, pos) {
     super(sim, pos);
 
@@ -12,6 +20,10 @@ class Buddy extends CompoundBody {
     this.levelCosts = ValueCurve.power(100, 2);
   }
 
+  /**
+   *
+   * @param dt
+   */
   update(dt) {
 
     // request a particle to be eaten from edge

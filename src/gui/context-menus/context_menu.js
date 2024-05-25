@@ -6,9 +6,18 @@
 let _lastContextMenuSide = -1;
 let _lastContextMenuTime = -1;
 
+/**
+ *
+ */
 class ContextMenu extends CompositeGuiElement {
 
   // get params using ContextMenu.pickRects
+  /**
+   *
+   * @param rect
+   * @param square0
+   * @param square1
+   */
   constructor(rect, square0, square1) {
     super(rect);
 
@@ -17,6 +26,10 @@ class ContextMenu extends CompositeGuiElement {
     this.opaque = true;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     Button._draw(g, this.rect);
     super.draw(g);
@@ -27,6 +40,11 @@ class ContextMenu extends CompositeGuiElement {
   // - leaving poit of interest visible
   //
   // return [bounding rect, innner square, inner square]
+  /**
+   *
+   * @param rect
+   * @param pointOfInterest
+   */
   static pickRects(rect, pointOfInterest) {
     const pad = 0.05;
     const poi = pointOfInterest.xy();

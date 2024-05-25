@@ -1,3 +1,6 @@
+/**
+ *
+ */
 function doUnitTests() {
   // start sim unit tests
   const sim = global.mainSim;
@@ -39,6 +42,11 @@ function doUnitTests() {
   // test tool implementations
 
   let testedTools = 0;
+
+  /**
+   *
+   * @param t
+   */
   function testTool(t) {
 
     // emulate input fluke

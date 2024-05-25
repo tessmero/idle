@@ -1,6 +1,14 @@
 //
+/**
+ *
+ */
 class SausageEdge extends PathspecEdge {
 
+  /**
+   *
+   * @param length
+   * @param rad
+   */
   constructor(length, rad) {
     super();
 
@@ -8,6 +16,9 @@ class SausageEdge extends PathspecEdge {
     this.rad = rad;
   }
 
+  /**
+   *
+   */
   getCircumference() {
 
     // wrap around sausage
@@ -17,6 +28,10 @@ class SausageEdge extends PathspecEdge {
 
   // compute position+normal [angle,radius,normal angle]
   // at given distance along circumerence
+  /**
+   *
+   * @param d
+   */
   computePoint(d) {
 
     const circ = this.getCircumference(); // complete edge length

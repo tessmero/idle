@@ -1,8 +1,16 @@
 // group of particles stuck to the edges of shapes
 //
 // instantiated in particle_sim.js
+/**
+ *
+ */
 class EdgeParticleGroup extends ParticleGroup {
 
+  /**
+   *
+   * @param sim
+   * @param n
+   */
   constructor(sim, n) {
     super(sim, n);
     this.isEdgeGroup = true; // particle_group.js draw()
@@ -11,7 +19,7 @@ class EdgeParticleGroup extends ParticleGroup {
     // n particles with 2 props (pos,vel in 1D)
     const ndims = 2;
     this.ndims = ndims;
-    this.state = new Float32Array(n * ndims);
+    this.state = new FloatArray(n * ndims).get();
 
     // maximum number of particles per subgroup
     // subgroup = (garbage-collectable unit)
@@ -31,6 +39,10 @@ class EdgeParticleGroup extends ParticleGroup {
   //
   // should be called in [Body subclass]::register(sim):
   //      sim.edgeGroup.newSubgroup(edge)
+  /**
+   *
+   * @param edge
+   */
   newSubgroup(edge) {
 
     if (this.freeSubgroupIndices.size === 0) {
@@ -48,11 +60,18 @@ class EdgeParticleGroup extends ParticleGroup {
 
   // should be called in [Body subclass]::unregister(sim):
   //      sim.edgeGroup.deleteSubgroup(edge)
+  /**
+   *
+   * @param sg
+   */
   deleteSubgroup(sg) {
     this.freeSubgroupIndices.add(sg.subgroupIndex);
     this.subgroups.delete(sg);
   }
 
+  /**
+   *
+   */
   * generateParticles() {
     resetRand();
     let dt = 0;

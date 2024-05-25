@@ -1,4 +1,11 @@
+/**
+ *
+ */
 class SkillsTab extends CompositeGuiElement {
+  /**
+   *
+   * @param sr
+   */
   constructor(sr) {
     super(sr);
 

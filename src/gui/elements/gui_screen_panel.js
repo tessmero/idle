@@ -1,29 +1,49 @@
 // gui element that displays a GameScreen instance
+/**
+ *
+ */
 class GuiScreenPanel extends GuiElement {
-  constructor(rect, screen) {
+  /**
+   *
+   * @param rect
+   * @param innerScreen
+   */
+  constructor(rect, innerScreen) {
     super(rect);
-    this.screen = screen;
+    this.innerScreen = innerScreen;
     const r = this.rect;
 
-    screen.drawOffset = [r[0], r[1]];
+    innerScreen.drawOffset = [r[0], r[1]];
 
-    this.screen.loop = true;
+    this.innerScreen.loop = true;
   }
 
+  /**
+   *
+   */
   reset() {
-    this.screen.reset();
+    this.innerScreen.reset();
   }
 
+  /**
+   *
+   * @param dt
+   * @param disableHover
+   */
   update(dt, disableHover) {
     const hovered = super.update(dt, disableHover);
 
-    this.screen.update(dt);
+    this.innerScreen.update(dt);
 
     return hovered;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
-    this.screen.draw(g);
+    this.innerScreen.draw(g);
 
     // trim sides
     const [rx, ry, rw, rh] = this.rect;
@@ -40,5 +60,8 @@ class GuiScreenPanel extends GuiElement {
     g.strokeRect(...this.rect);
   }
 
+  /**
+   *
+   */
   click() {}
 }

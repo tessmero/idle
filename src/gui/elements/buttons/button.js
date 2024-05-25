@@ -1,5 +1,13 @@
 // abstract base class for typical rectangular buttons
+/**
+ *
+ */
 class Button extends GuiElement {
+  /**
+   *
+   * @param rect
+   * @param action
+   */
   constructor(rect, action) {
     super(rect);
 
@@ -7,15 +15,29 @@ class Button extends GuiElement {
     this.action = action;
   }
 
+  /**
+   *
+   */
   click() {
     const result = !this.action();
     return result;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     this.constructor._draw(g, this.rect, this.hovered);
   }
 
+  /**
+   *
+   * @param g
+   * @param rect
+   * @param hovered
+   * @param fill
+   */
   static _draw(g, rect, hovered = false, fill = true) {
     let lineCol = global.colorScheme.fg;
 

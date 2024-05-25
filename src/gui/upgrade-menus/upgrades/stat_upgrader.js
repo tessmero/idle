@@ -1,8 +1,16 @@
 // a stat readout with button to upgrade
 // modifies one entry in global.upgradeTracks.state
+/**
+ *
+ */
 class StatUpgrader extends CompositeGuiElement {
 
   // key should exist in global.upgradeTracks.state
+  /**
+   *
+   * @param rect
+   * @param key
+   */
   constructor(rect, key) {
     super(rect);
     this.key = key;
@@ -35,7 +43,7 @@ class StatUpgrader extends CompositeGuiElement {
     const dx = 0.02 + buttonWidth + displayWidth;
     const rlabel = [r[0] + dx, r[1], r[2] - dx, r[3]];
     const dtl = new StatReadout(rlabel, gutse.icon, () => `${key}`);
-    dtl.scale = 0.4;
+    dtl.setScale(0.4);
     dtl.tooltipScale = 0.4;
     dtl.center = false;
     dtl.fixedRect = true;
@@ -45,6 +53,9 @@ class StatUpgrader extends CompositeGuiElement {
     ];
   }
 
+  /**
+   *
+   */
   tooltipFunc() {
     const key = this.key;
     const gutse = this.gutse;
@@ -64,6 +75,10 @@ class StatUpgrader extends CompositeGuiElement {
     ].join('\n');
   }
 
+  /**
+   *
+   * @param gutse
+   */
   upgradeButtonClicked(gutse) {
     const budget = global.mainSim.particlesCollected;
     const lvl = gutse.level;
@@ -79,12 +94,17 @@ class StatUpgrader extends CompositeGuiElement {
 
     const s = global.mainSim;
     s.particlesCollected = s.particlesCollected - cost;
-    this.getScreen().floaters.signalChange(global.mousePos, -cost);
+    const screen = this.screen;
+    screen.floaters.signalChange(screen.mousePos, -cost);
     gutse.level = gutse.level + 1;
     updateAllBonuses();
     this.setTemporaryTooltip('upgrade purchased!');
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     Button._draw(g, this.rect);
     super.draw(g);

@@ -1,7 +1,15 @@
 // base class for groups of similar particles
 // particles may be grabbed by Grabber instances
+/**
+ *
+ */
 class ParticleGroup {
 
+  /**
+   *
+   * @param sim
+   * @param n
+   */
   constructor(sim, n) {
     // ParticleSim instance
     this.sim = sim;
@@ -11,12 +19,21 @@ class ParticleGroup {
     this.n = n;
   }
 
+  /**
+   *
+   */
   countActiveParticles() {
     return this.n - this.grabbedParticles.size();
   }
 
   // called in particle_sim.js
   // draw all the particles in this group
+  /**
+   *
+   * @param g
+   * @param counter
+   * @param pdraw
+   */
   draw(g, counter, pdraw = ((gg, x, y, r) => gg.fillRect(x - r, y - r, 2 * r, 2 * r))) {
 
     const r = this.sim.particleRadius;
@@ -77,8 +94,9 @@ class ParticleGroup {
     }
   }
 
-  // yield particle x,y coords
-  // eslint-disable-next-line require-yield
+  /**
+   * yield particle x,y coords
+   */
   * generateParticles() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }

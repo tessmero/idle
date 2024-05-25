@@ -1,11 +1,23 @@
 // draw the edges between skill cards in the skill tree gui
+/**
+ *
+ */
 class SkillTreeGraph extends GuiElement {
 
+  /**
+   *
+   * @param rect
+   * @param tree
+   */
   constructor(rect, tree) {
     super(rect);
     this.tree = tree;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     if (!this.tree) { return; }
 
@@ -22,5 +34,8 @@ class SkillTreeGraph extends GuiElement {
     g.stroke();
   }
 
+  /**
+   *
+   */
   click() {}
 }

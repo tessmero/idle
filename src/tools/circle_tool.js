@@ -1,6 +1,13 @@
 
+/**
+ *
+ */
 class CircleTool extends BodyTool {
 
+  /**
+   *
+   * @param sim
+   */
   constructor(sim) {
     super(sim, 'circle', circleIcon);
 
@@ -9,11 +16,18 @@ class CircleTool extends BodyTool {
   }
 
   // implement BodyTool
+  /**
+   *
+   * @param p
+   */
   buildBody(p) {
     return new CircleBuddy(this.sim, p, this.circleRadius);
   }
 
   // implement Tool
+  /**
+   *
+   */
   getCost() {
 
     // count previously built circles
@@ -25,11 +39,22 @@ class CircleTool extends BodyTool {
   }
 
   // implement Tool
+  /**
+   *
+   */
   getTutorial() {
     return new CircleToolTutorial();
   }
 
+  /**
+   *
+   * @param _p
+   */
   mouseMove(_p) {}
 
+  /**
+   *
+   * @param _p
+   */
   mouseUp(_p) {}
 }

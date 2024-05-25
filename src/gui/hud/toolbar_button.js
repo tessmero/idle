@@ -1,6 +1,15 @@
 // a button in the toolbar with a pixel art icon
+/**
+ *
+ */
 class ToolbarButton extends CompositeGuiElement {
 
+  /**
+   *
+   * @param rect
+   * @param tool
+   * @param indexInToolbar
+   */
   constructor(rect, tool, indexInToolbar) {
     super(rect);
 
@@ -33,6 +42,11 @@ class ToolbarButton extends CompositeGuiElement {
     this.wasUsable = this.tool.isUsable();
   }
 
+  /**
+   *
+   * @param dt
+   * @param disableHover
+   */
   update(dt, disableHover) {
 
     // check if tool just became usable
@@ -61,10 +75,16 @@ class ToolbarButton extends CompositeGuiElement {
     return super.update(dt, disableHover);
   }
 
+  /**
+   *
+   */
   isSelected() {
     return this.tool === global.mainSim.getTool();
   }
 
+  /**
+   *
+   */
   click() {
     if (this.tool.isUsable()) {
 
@@ -81,6 +101,10 @@ class ToolbarButton extends CompositeGuiElement {
     return true;
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 

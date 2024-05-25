@@ -1,12 +1,24 @@
 // particle inspector tool for sandbox mode
+/**
+ *
+ */
 class PiTool extends DefaultTool {
 
+  /**
+   *
+   * @param sim
+   * @param rad
+   */
   constructor(sim, rad) {
     super(sim, rad);
     this.icon = piToolIcon;
     this.tooltip = 'inspect';
   }
 
+  /**
+   *
+   * @param sim
+   */
   unregister(sim) {
     sim.selectedParticle = null;
     this.pData = null;
@@ -16,11 +28,18 @@ class PiTool extends DefaultTool {
   }
 
   // override DefaultTool
+  /**
+   *
+   */
   getTutorial() {
     return new PiToolTutorial();
   }
 
   // initial grab (inherited DefaultTool behavior)
+  /**
+   *
+   * @param {...any} p
+   */
   grabbed(...p) {
     const [subgroup, i, _x, _y, _dx, _dy, _hit] = p;
     const sim = this.sim;
@@ -41,6 +60,10 @@ class PiTool extends DefaultTool {
   }
 
   // continous polling of target particle
+  /**
+   *
+   * @param {...any} p
+   */
   grabbedTarget(...p) {
     const [subgroup, i, _x, _y, _dx, _dy, _hit] = p;
     const sim = this.sim;
@@ -73,6 +96,10 @@ class PiTool extends DefaultTool {
   }
 
   // grab non-target for removal
+  /**
+   *
+   * @param {...any} _p
+   */
   grabbedOther(..._p) {
 
     // return falsey
@@ -81,11 +108,19 @@ class PiTool extends DefaultTool {
   }
 
   // override DefaultTool
+  /**
+   *
+   * @param p
+   */
   mouseMove(p) {
     this.grabber.pos = p;
   }
 
   // override DefaultTool
+  /**
+   *
+   * @param _p
+   */
   mouseDown(_p) {
     const sim = this.sim;
 
@@ -96,6 +131,10 @@ class PiTool extends DefaultTool {
   }
 
   // override DefaultTool
+  /**
+   *
+   * @param _p
+   */
   mouseUp(_p) {
 
     // stop grabbing particles
@@ -103,6 +142,10 @@ class PiTool extends DefaultTool {
   }
 
   // override DefaultTool
+  /**
+   *
+   * @param _dt
+   */
   update(_dt) {
 
     // start grabbing particles
@@ -110,6 +153,12 @@ class PiTool extends DefaultTool {
     // do nothing
   }
 
+  /**
+   *
+   * @param g
+   * @param p
+   * @param {...any} args
+   */
   drawCursor(g, p, ...args) {
 
     // draw circle
@@ -135,6 +184,10 @@ class PiTool extends DefaultTool {
 
   }
 
+  /**
+   *
+   * @param g
+   */
   draw(g) {
     super.draw(g);
 

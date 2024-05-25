@@ -9,8 +9,19 @@
 // members include
 //   - body outline shape (Edge instance)
 //   - body physics state (position,orientation,momentum)
+/**
+ *
+ */
 class EdgeParticleSubgroup {
   // called in EdgePGroup newSubgroup()
+  /**
+   *
+   * @param group
+   * @param subgroupIndex
+   * @param i
+   * @param n
+   * @param edge
+   */
   constructor(group, subgroupIndex, i, n, edge) {
     this.group = group;
     this.subgroupIndex = subgroupIndex;
@@ -36,6 +47,10 @@ class EdgeParticleSubgroup {
   }
 
   // called in EdgePGroup *generateParticles()
+  /**
+   *
+   * @param dt
+   */
   * generateParticles(dt) {
 
     // prepare to multiply and offset velocities
@@ -128,6 +143,11 @@ class EdgeParticleSubgroup {
     this.acc = v(0, 0);
   }
 
+  /**
+   *
+   * @param pos
+   * @param vel
+   */
   spawnParticle(pos, vel) {
 
     const i = this.i;
@@ -153,6 +173,10 @@ class EdgeParticleSubgroup {
 
   // get x,y position at given
   // distance along cirumference
+  /**
+   *
+   * @param a
+   */
   getPos(a) {
     const [ea, er, _norm] = this.edge.lookupDist(a);
     return this.pos.add(vp(ea + this.angle, er));
@@ -160,6 +184,10 @@ class EdgeParticleSubgroup {
 
   // compute velocity of a particle
   // achored to edge at given distance along cirumference
+  /**
+   *
+   * @param a
+   */
   getVel(a) {
     const [ea, er, _norm] = this.edge.lookupDist(a);
     return this.vel // translation
@@ -168,6 +196,10 @@ class EdgeParticleSubgroup {
 
   // compute net force that would be felt by a particle
   // achored to edge at given distance along cirumference
+  /**
+   *
+   * @param a
+   */
   getAccel(a) {
     const [ea, er, _norm] = this.edge.lookupDist(a);
     const acc = this.acc // translational force
@@ -176,6 +208,10 @@ class EdgeParticleSubgroup {
     return acc;
   }
 
+  /**
+   *
+   * @param b
+   */
   count(b) {
     let result = 0;
     for (let j = 0; j < this.n; j++) {
@@ -184,12 +220,20 @@ class EdgeParticleSubgroup {
     return result;
   }
 
+  /**
+   *
+   * @param index
+   */
   isGrabbed(index) {
     const i = index + this.i;
     return this.group.grabbedParticles.has(i);
   }
 
   // get angle/vel of particle
+  /**
+   *
+   * @param index
+   */
   get(index) {
     const i = index + this.i;
     const nd = this.group.ndims;
@@ -198,6 +242,12 @@ class EdgeParticleSubgroup {
     return [a, av];
   }
 
+  /**
+   *
+   * @param index
+   * @param a
+   * @param av
+   */
   set(index, a, av) {
     const i = index + this.i;
     const nd = this.group.ndims;
@@ -206,11 +256,19 @@ class EdgeParticleSubgroup {
   }
 
   // set particle as grabbed
+  /**
+   *
+   * @param index
+   */
   grab(index) {
     const i = index + this.i;
     this.group.grabbedParticles.add(i);
   }
 
+  /**
+   *
+   * @param i
+   */
   hasIndex(i) {
     return (i >= this.i) && (i < this.i + this.n);
   }

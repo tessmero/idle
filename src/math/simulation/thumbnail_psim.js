@@ -1,10 +1,13 @@
-// extra small particle simulation that appears in the gui
-// control points will be removed from bodies
-//
-// displayed using a GuiScreenPanel instance
+/**
+ * extra small particle simulation that appears in the gui
+ */
 class ThumbnailPSim extends ParticleSim {
+
+  /**
+   *
+   */
   constructor() {
-    super(1e4, [0, 0, ...global.thumbnailSimDims], 'Extra Small Thumbnail Simulation');
+    super(1e4, [0, 0, ...global.thumbnailSimDims]);
 
     this.fallSpeed = this.fallSpeed * 0.2;
     this.particleRadius = this.particleRadius * 0.6;
@@ -17,6 +20,9 @@ class ThumbnailPSim extends ParticleSim {
     this.reset();
   }
 
+  /**
+   *
+   */
   reset() {
     super.reset();
 
