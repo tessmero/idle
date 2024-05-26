@@ -24,9 +24,8 @@ class PhysicsParticleSubgroup {
     for (let j = i; j < m; j++) { this.group.grabbedParticles.add(j); }
   }
 
-  // called in PyhsicsPGroup *generateParticles()
   /**
-   *
+   * called in PyhsicsPGroup generateParticles()
    * @param dt
    * @param vm
    * @param vb
@@ -61,12 +60,17 @@ class PhysicsParticleSubgroup {
         // check if off-screen
         let grab = false;
         if (!inRect(x, y, ...grp.sim.rect)) {
+
+          // trigger callback
+          // used for black box inner simulation
+          this.group.sim.physicsParticlePassedOffscreen(v(x, y), v(vx, vy));
+
           grab = true;
         }
 
         // yield one particle
         const ungrab = false;
-        yield [this, i, x, y, grab, ungrab];
+        yield [this, i, x, y, grab, ungrab, vx, vy];
       }
 
     }

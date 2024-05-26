@@ -1,7 +1,7 @@
-// base class for groups of similar particles
-// particles may be grabbed by Grabber instances
+
 /**
- *
+ * base class for groups of similar particles
+ * particles may be grabbed by Grabber instances
  */
 class ParticleGroup {
 
@@ -26,15 +26,14 @@ class ParticleGroup {
     return this.n - this.grabbedParticles.size();
   }
 
-  // called in particle_sim.js
-  // draw all the particles in this group
   /**
-   *
+   * called in particle_sim.js
+   * draw all the particles in this group
    * @param g
    * @param counter
    * @param pdraw
    */
-  draw(g, counter, pdraw = ((gg, x, y, r) => gg.fillRect(x - r, y - r, 2 * r, 2 * r))) {
+  draw(g, counter, pdraw) {
 
     const r = this.sim.particleRadius;
 

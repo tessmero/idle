@@ -1,5 +1,6 @@
 /**
- *
+ * Test body register and unregister methods.
+ * 05/26/2024
  */
 function doUnitTests() {
   // start sim unit tests
@@ -27,7 +28,6 @@ function doUnitTests() {
     testedBodies = testedBodies + 1;
   };
   testBody(new CircleBody(sim, v(0.5, 0.5), 0.1));
-  testBody(new ControlledCircleBody(sim, v(0.5, 0.5), 0.1));
   testBody(new CircleBuddy(sim, v(0.5, 0.5), 0.1));
   testBody(new SausageBody(sim, v(0.5, 0.5), v(0.3, 0.3)));
   testBody(new ControlledSausageBody(sim, v(0.5, 0.5), v(0.3, 0.3)));
@@ -37,6 +37,8 @@ function doUnitTests() {
   testBody(new ControlledCrossBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
   testBody(new CompassBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
   testBody(new ControlledCompassBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
+  testBody(new SquareBody(sim, v(0.5, 0.5), 0.1));
+  testBody(new BoxBuddy(sim, v(0.5, 0.5), 0.1));
   console.log(`${testedBodies} Body subclasses passed tests`);
 
   // test tool implementations
@@ -62,6 +64,7 @@ function doUnitTests() {
   testTool(new CircleTool(sim));
   testTool(new DefaultTool(sim, 0.1));
   testTool(new LineTool(sim));
+  testTool(new BoxTool(sim));
   testTool(new PiTool(sim, 0.1));
   console.log(`${testedTools} Tool subclasses passed tests`);
 

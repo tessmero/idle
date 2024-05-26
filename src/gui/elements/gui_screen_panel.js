@@ -1,6 +1,5 @@
-// gui element that displays a GameScreen instance
 /**
- *
+ * gui element that displays a GameScreen instance
  */
 class GuiScreenPanel extends GuiElement {
   /**
@@ -26,14 +25,17 @@ class GuiScreenPanel extends GuiElement {
   }
 
   /**
-   *
+   * Extend regular gui element update
+   * by updating the inner screen.
    * @param dt
    * @param disableHover
    */
   update(dt, disableHover) {
     const hovered = super.update(dt, disableHover);
 
-    this.innerScreen.update(dt);
+    if (!this.disableScreenUpdate) {
+      this.innerScreen.update(dt);
+    }
 
     return hovered;
   }

@@ -60,7 +60,6 @@ class LivePerformanceStats {
     // assert flag wasn't repeated
     // e.g. drawing the same thing twice
     if (as.get(screen).has(flag)) {
-      console.log(screen);
       throw new Error(`(screen ${flag}) repeated during single game loop`);
     }
 

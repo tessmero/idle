@@ -43,6 +43,7 @@ class LogPerformanceStats {
     if (as.has(key)) {
       throw new Error(`screen (${key}) constructed multiple times`);
     }
+    screen.key = key;
     as.set(key, screen);
   }
 }

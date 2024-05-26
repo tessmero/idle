@@ -286,7 +286,10 @@ class GameScreen {
       const rect = gui.getScreenEdgesForContextMenu();
       const cmr = ContextMenu.pickRects(rect, bodPos);
 
-      if (bod instanceof Buddy) {
+      if (bod instanceof BoxBuddy) {
+        this.contextMenu = new BoxBuddyContextMenu(...cmr, bod);
+      }
+      else if (bod instanceof Buddy) {
         this.contextMenu = new BuddyContextMenu(...cmr, bod);
       }
       else {

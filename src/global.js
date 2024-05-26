@@ -88,6 +88,7 @@ function resetProgression() {
   if (global.sandboxMode) {
     money = 1e100;
     global.toolList.push(
+      new BoxTool(s),
       new PiTool(s, global.mouseGrabRadius)
     );
   }

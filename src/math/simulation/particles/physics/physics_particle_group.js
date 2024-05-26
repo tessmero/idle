@@ -33,11 +33,8 @@ class PhysicsParticleGroup extends ParticleGroup {
     this.grabbedParticles.fill(true);
   }
 
-  // return new subgroup instance
-  // should be called in constructors
-  // for objects that emit particles
   /**
-   *
+   * return new subgroup instance
    */
   newSubgroup() {
 

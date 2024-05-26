@@ -62,7 +62,9 @@ class PerformanceTab extends CompositeGuiElement {
 
     let n = 0;
     for (const [_sim, flags] of screenFlags) {
-      n = n + flags.get(key);
+      if (flags.has(key)) {
+        n = n + flags.get(key);
+      }
     }
     return `${n} ${label}`;
   }

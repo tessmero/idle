@@ -74,17 +74,6 @@ class StartTransitionGui extends Gui {
       return;
     }
 
-    // debug
-    if (fo) {
-      console.log('A', f.t, f.duration);
-    }
-    else if (fm) {
-      console.log('B', f.t, f.duration);
-    }
-    else {
-      console.log('C', f.t, f.duration);
-    }
-
     // advance current animation stage
     f.t = f.t + dt;
 

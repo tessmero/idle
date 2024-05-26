@@ -44,7 +44,8 @@ class ScalarDebugVar extends CompositeGuiElement {
         let val = getGlobal(varname);
         val = val - m * inc;
         setGlobal(varname, val);
-        rebuildGuis(); // game_states.js
+        const screen = global.mainScreen;
+        screen.stateManager.rebuildGuis(screen, false);
       }),
       new IconButton(r1, increaseIcon, () => {
         let m = 1;
@@ -53,7 +54,8 @@ class ScalarDebugVar extends CompositeGuiElement {
         let val = getGlobal(varname);
         val = val + m * inc;
         setGlobal(varname, val);
-        rebuildGuis(); // game_states.js
+        const screen = global.mainScreen;
+        screen.stateManager.rebuildGuis(screen, false);
       }),
     ];
 

@@ -4,12 +4,11 @@
  */
 class Body {
 
-  // sim is a ParticleSim instance
   /**
    *
-   * @param sim
-   * @param pos
-   * @param angle
+   * @param {ParticleSim} sim
+   * @param {Vector} pos
+   * @param {number} angle
    */
   constructor(sim, pos, angle = 0) {
     this.sim = sim;
@@ -26,26 +25,23 @@ class Body {
     this.eatsQueued = 0;
   }
 
-  // called in register()
   /**
-   *
+   * called in register()
    */
   buildEdge() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
-  // called in register()
   /**
-   *
+   * called in register()
    */
   buildGrabber() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
-  // default draw method
   /**
-   *
-   * @param g
+   * default draw method
+   * @param {object} g The graphics context.
    */
   draw(g) {
 
@@ -57,10 +53,10 @@ class Body {
 
   }
 
-  // callback for this.grabber
-  // when a particle is grabbed (particle_group.js)
   /**
-   *
+   * callback for this.grabber
+   * called when a particle is grabbed
+   * (particle_group.js)
    * @param subgroup
    * @param i
    * @param x
@@ -204,8 +200,6 @@ class Body {
 
     return true;
   }
-
-  // debug
 
   /**
    *

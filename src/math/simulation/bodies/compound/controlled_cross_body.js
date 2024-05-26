@@ -3,7 +3,6 @@
  */
 class ControlledCrossBody extends CompoundBody {
 
-  // sim is a ParticleSim instance
   /**
    *
    * @param sim

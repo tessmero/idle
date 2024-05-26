@@ -1,29 +1,24 @@
 
-// An edge is a boundary that particles interact with
-//
-// the shape of the edge is stored in constant set of polar coords
-// where the origin is the center of a rotating body outlined by this edge
-//
-// the edge object is agnostic of the body's state
-// so we don't care about the specific position/orientation/momentum
-// here we only consider one arbitrary orientation
 /**
- *
+ * An edge is a boundary that particles interact with
+ * the shape of the edge is stored in constant set of polar coords
+ * where the origin is the center of a rotating body outlined by this edge
+ * the edge object is agnostic of the body's state
+ * so we don't care about the specific position/orientation/momentum
+ * here we only consider one arbitrary orientation
  */
 class Edge {
 
-  // compute shape lookup tables
-  // see pathspec_edge.js or radspec_edge.js
   /**
-   *
+   * compute shape lookup tables
+   * see pathspec_edge.js or radspec_edge.js
    */
   computeEdgeShape() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
-  // settings for particles sliding on edge
   /**
-   *
+   * settings for particles sliding on edge
    */
   getFriction() { return 2e-3; }
 
@@ -32,9 +27,8 @@ class Edge {
    */
   getG() { return 6e-6; }
 
-  // get precomputed [rad,r2,circ dist] at given angle
   /**
-   *
+   * get precomputed [rad,r2,circ dist] at given angle
    * @param a
    */
   lookupAngle(a) {
@@ -45,10 +39,9 @@ class Edge {
     return [s[i], s[i + 1], s[i + 2]];
   }
 
-  // get precomputed [angle,radius,normal angle,r2]
-  // at given distance along circumerence
   /**
-   *
+   * get precomputed [angle,radius,normal angle,r2]
+   * at given distance along circumerence
    * @param d
    */
   lookupDist(d) {
@@ -59,10 +52,9 @@ class Edge {
     return [s[i], s[i + 1], s[i + 2], s[i + 3]];
   }
 
-  // helper to draw edge
-  // with given pos,angle offsets onscreen
   /**
-   *
+   * helper to draw edge
+   * with given pos,angle offsets onscreen
    * @param g
    * @param pos
    * @param angle

@@ -64,9 +64,9 @@ function mouseUp(e) {
 }
 
 function keyDown(event) {
-  if (event.key === 'Escape') {
-    pause();
-  }
+  // if (event.key === 'Escape') {
+  //  pause();
+  // }
   if (event.which === 16) {
     global.shiftHeld = true;
   }

@@ -1,7 +1,6 @@
-// context menu (and reticle effect)
-// that appears when a body is clicked
 /**
- *
+ * context menu and reticle effect
+ * that appears when a body is clicked
  */
 class BodyContextMenu extends ContextMenu {
   /**

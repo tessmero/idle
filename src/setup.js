@@ -86,8 +86,6 @@ function init() {
   global.mainScreen = screen;
   screen.stateManager.quit();
 
-  // ////////////////////////////////////////
-  // unit tests 20240505
   const doTests = false;
   if (doTests) {
     doUnitTests();

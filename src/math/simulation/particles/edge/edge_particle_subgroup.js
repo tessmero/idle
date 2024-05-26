@@ -117,10 +117,8 @@ class EdgeParticleSubgroup {
           const usePos = passedSharpCorner ? oldPos : pos;
           const useVel = passedSharpCorner ? oldVel : vel;
           const useNorm = passedSharpCorner ? oldNorm + this.angle : norm;
-          const xyPos = this.getPos(usePos);
-          const xyVel = this.getVel(usePos).add(vp(useNorm + pio2, useVel));
+          const [xyPos, xyVel] = this.getXyPosVel(i, usePos, useVel, useNorm);
           this.pps.spawnParticle(xyPos, xyVel);
-
         }
 
         // check if body is waiting to eat particle
@@ -141,6 +139,29 @@ class EdgeParticleSubgroup {
 
     // reset net force
     this.acc = v(0, 0);
+  }
+
+  /**
+   * get 2d pysics state for existing particel on this edge
+   * @param  {number} i The particle index
+   * @param  {number} pos Optional 1D position along this edge,
+   * @param  {number} vel Optional 1D veloicy along this edge,
+   * @param  {number} norm Optional normal angle of this edge at pos,
+   * @returns {Vector[]} xyPos,xyVel
+   */
+  getXyPosVel(i, pos, vel, norm) {
+    const grp = this.group;
+    const tgs = grp.state;
+    const nd = grp.ndims;
+
+    const p = pos ? pos : tgs[i * nd + 0];
+    const v = vel ? vel : tgs[i * nd + 1];
+
+    const nrm = norm ? norm : this.edge.lookupDist(p)[2];
+
+    const xyPos = this.getPos(p);
+    const xyVel = this.getVel(p).add(vp(nrm + pio2, v));
+    return [xyPos, xyVel];
   }
 
   /**
@@ -171,10 +192,9 @@ class EdgeParticleSubgroup {
     }
   }
 
-  // get x,y position at given
-  // distance along cirumference
   /**
-   *
+   * get x,y position at given
+   * distance along cirumference
    * @param a
    */
   getPos(a) {
@@ -182,10 +202,9 @@ class EdgeParticleSubgroup {
     return this.pos.add(vp(ea + this.angle, er));
   }
 
-  // compute velocity of a particle
-  // achored to edge at given distance along cirumference
   /**
-   *
+   * compute velocity of a particle
+   * achored to edge at given distance along cirumference
    * @param a
    */
   getVel(a) {
@@ -194,10 +213,9 @@ class EdgeParticleSubgroup {
       .add(vp(this.angle + ea + pio2, er * this.avel)); // rotation
   }
 
-  // compute net force that would be felt by a particle
-  // achored to edge at given distance along cirumference
   /**
-   *
+   * compute net force that would be felt by a particle
+   * achored to edge at given distance along cirumference
    * @param a
    */
   getAccel(a) {
@@ -229,9 +247,8 @@ class EdgeParticleSubgroup {
     return this.group.grabbedParticles.has(i);
   }
 
-  // get angle/vel of particle
   /**
-   *
+   * get angle/vel of particle
    * @param index
    */
   get(index) {
@@ -255,9 +272,8 @@ class EdgeParticleSubgroup {
     this.group.state[i * nd + 1] = av;
   }
 
-  // set particle as grabbed
   /**
-   *
+   * set particle as grabbed
    * @param index
    */
   grab(index) {

@@ -52,7 +52,8 @@ class BooleanDebugVar extends CompositeGuiElement {
     val = !val;
     setGlobal(varname, val);
     this.checkbox.icon = val ? checkedIcon : uncheckedIcon;
-    global.mainScreen.stateManager.rebuildGuis(global.mainScreen);
+    const screen = global.mainScreen;
+    screen.stateManager.rebuildGuis(screen, false);
   }
 
   /**

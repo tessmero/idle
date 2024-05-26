@@ -1,16 +1,15 @@
-// controlled circle body in global.mainSim
-// eats particles and contributes to player currency
+
 /**
- *
+ * controlled circle body
+ * eats particles and contributes to player currency
  */
 class CircleBuddy extends Buddy {
 
-  // sim is a ParticleSim instance
   /**
    *
-   * @param sim
-   * @param pos
-   * @param rad
+   * @param {ParticleSim} sim
+   * @param {Vector} pos
+   * @param {number} rad
    */
   constructor(sim, pos, rad) {
     super(sim, pos);
@@ -23,6 +22,19 @@ class CircleBuddy extends Buddy {
 
     this.children = [this.circle, cp];
     this.controlPoints = [cp];
+  }
+
+  /**
+   *
+   * @param dt
+   */
+  update(dt) {
+
+    // request a particle to be eaten from edge
+    // edge_particle_subgroup.js
+    if (Math.random() < 0.1) { this.getMainBody().eatsQueued = 1; }
+
+    return super.update(dt);
   }
 
   /**

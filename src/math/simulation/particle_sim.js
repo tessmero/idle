@@ -230,12 +230,22 @@ class ParticleSim {
     }
   }
 
-  // called in game_screen.js
+  /**
+   * callback used for black box inner simulation
+   * called in physics_particle_subgroup.js
+   * @param _pos
+   * @param _vel
+   */
+  physicsParticlePassedOffscreen(_pos, _vel) {}
+
   /**
    *
    * @param g
+   * @param hidden 05/26/2024 hacky flag to make persistent screens work
    */
-  draw(g) {
+  draw(g, hidden = false) {
+    if (hidden) { global.livePerformanceStats.flagSim(this, 'DRAWN HIDDEN'); }
+    const pdraw = hidden ? (() => {}) : ((gg, x, y, r) => gg.fillRect(x - r, y - r, 2 * r, 2 * r));
 
     // start counting for performance stats
     const counter = {
@@ -245,45 +255,56 @@ class ParticleSim {
     };
 
     resetRand();
-    g.fillStyle = global.colorScheme.fg;
-    this._bodies.forEach((p) => p.draw(g));
-    this._bodies.forEach((p) => p.drawDebug(g));
+    if (!hidden) {
+      g.fillStyle = global.colorScheme.fg;
+      this._bodies.forEach((p) => p.draw(g));
+      this._bodies.forEach((p) => p.drawDebug(g));
+    }
 
-    const c = global.colorcodeParticles;
+    const c = hidden ? false : global.colorcodeParticles;
     if (c) { g.fillStyle = 'red'; }
-    this.rainGroup.draw(g, counter);
+    this.rainGroup.draw(g, counter, pdraw);
 
     if (c) { g.fillStyle = 'green'; }
-    this.physicsGroup.draw(g, counter);
+    this.physicsGroup.draw(g, counter, pdraw);
 
     if (c) { g.fillStyle = 'blue'; }
-    this.edgeGroup.draw(g, counter);
+    this.edgeGroup.draw(g, counter, pdraw);
 
     if (global.debugGrabbers) {
       this._grabbers.forEach((gr) => gr.drawDebug(g));
     }
 
-    let cp = this.draggingControlPoint;
-    if (!cp) { cp = this.hoveredControlPoint; }
-    if (cp) {
-      cp.draw(g, global.colorScheme.hl, true);
+    if (!hidden) {
+      let cp = this.draggingControlPoint;
+      if (!cp) { cp = this.hoveredControlPoint; }
+      if (cp) {
+        cp.draw(g, global.colorScheme.hl, true);
+      }
+
+      g.fillStyle = global.colorScheme.fg;
+
+      // draw tool overlay if applicable
+      const tool = this._tool;
+      if (tool && tool.draw) {
+        tool.draw(g);
+      }
+
+      // draw floaters
+      this.floaters.draw(g);
     }
-
-    g.fillStyle = global.colorScheme.fg;
-
-    // draw tool overlay if applicable
-    const tool = this._tool;
-    if (tool && tool.draw) {
-      tool.draw(g);
-    }
-
-    // draw floaters
-    this.floaters.draw(g);
 
     // log performance stats
-    global.livePerformanceStats.flagSim(this, 'drawn');
+    // added 05/26/2024 hack
+    if (!this.lastDrawTime) {
+      this.lastDrawTime = 0;
+    }
+    const suf = (this.lastDrawTime === this.t) ? ' (no update)' : '';
+    this.lastDrawTime = this.t;
+    global.livePerformanceStats.flagSim(this, `drawn${suf}`);
+
     Object.keys(counter).forEach((key) => {
-      global.livePerformanceStats.flagSim(this, key, counter[key]);
+      global.livePerformanceStats.flagSim(this, `${key}${suf}`, counter[key]);
     });
   }
 }
