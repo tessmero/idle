@@ -1,41 +1,72 @@
-// a line of unchanging on-screen text
 /**
- *
+ * @file TextLabel Gui Element.
+ * Instances display some fixed text on screen.
  */
 class TextLabel extends GuiElement {
+
+  #label;
+
+  #style;
+  #pad;
+  #letterPixelPad;
+  #center;
+
   /**
    *
-   * @param rect
-   * @param label
+   * @param {number[]} rect
+   * @param {string} label
    */
   constructor(rect, label) {
     super(rect);
 
-    this.rect = rect;
-    this.label = label;
-    this.pad = this.constructor.pad();
-    this.letterPixelPad = this.constructor.letterPixelPad();
-    this.center = true;
+    this.#label = label;
+    this.#pad = this.constructor.pad();
+    this.#letterPixelPad = this.constructor.letterPixelPad();
+    this.#center = true;
   }
 
-  // default vals
+  /**
+   * Assigning label with equal sign is not allowed.
+   */
+  set label(_l) { throw new Error('should use setLabel'); }
+
   /**
    *
+   * @param l
+   */
+  setLabel(l) {
+    this.#label = l;
+  }
+
+  /**
+   * Assigning center with equal sign is not allowed.
+   */
+  set center(_c) { throw new Error('should use setCenter or withCenter'); }
+
+  /**
+   * default padding space around text
+   * @returns {number} Default padding distance.
    */
   static pad() { return 0.005; }
 
   /**
-   *
+   * Get actual padding for this label.
+   * @returns {number} Padding for this instance.
+   */
+  get pad() { return this.#pad; }
+
+  /**
+   * default padding around each pixel
+   * for drawing with extra-readable 'hud' style
    */
   static letterPixelPad() { return 0.005; }
 
-  // set optional style 'tooltip', 'hud', 'tiny'
   /**
-   *
+   * set optional drawing style 'tooltip', 'hud', 'tiny'
    * @param s
    */
   withStyle(s) {
-    this.style = s;
+    this.#style = s;
     return this;
   }
 
@@ -43,8 +74,16 @@ class TextLabel extends GuiElement {
    *
    * @param c
    */
+  setCenter(c) {
+    this.#center = c;
+  }
+
+  /**
+   *
+   * @param c
+   */
   withCenter(c) {
-    this.center = c;
+    this.setCenter(c);
     return this;
   }
 
@@ -53,60 +92,63 @@ class TextLabel extends GuiElement {
    * @param p
    */
   withLetterPixelPad(p) {
-    this.letterPixelPad = p;
+    this.#letterPixelPad = p;
     return this;
   }
 
   /**
-   *
+   * Chainable
    * @param p
    */
   withPad(p) {
-    this.pad = p;
+    this.#pad = p;
     return this;
   }
 
-  // implement GuiElement
   /**
-   *
-   * @param g
+   * Draw this label.
+   * @param {object} g The graphics context.
    */
   draw(g) {
     const rect = this.rect;
-    const label = this.label;
     const scale = this.scale;
 
+    const label = this.#label;
+    const style = this.#style;
+    const center = this.#center;
+    const pad = this.#pad;
+
     let p;
-    if (this.center) {
+    if (center) {
       p = rectCenter(...rect);
     }
     else {
-      p = [rect[0] + this.pad, rect[1] + this.pad + scale * global.textPixelSize];
+      p = [rect[0] + pad, rect[1] + pad + scale * global.textPixelSize];
     }
 
-    if (this.style === 'inverted') {
+    if (style === 'inverted') {
 
       // draw simple white text
-      drawText(g, ...p, label, this.center, new FontSpec(0, scale, true));
+      drawText(g, ...p, label, center, new FontSpec(0, scale, true));
 
     }
-    else if (this.style === 'hud') {
+    else if (style === 'hud') {
 
       // draw extra readable for hud
-      drawText(g, ...p, label, this.center, new FontSpec(this.letterPixelPad, scale, true));
-      drawText(g, ...p, label, this.center, new FontSpec(0, scale, false));
+      drawText(g, ...p, label, center, new FontSpec(this.#letterPixelPad, scale, true));
+      drawText(g, ...p, label, center, new FontSpec(0, scale, false));
 
     }
-    else if (this.style === 'tiny') {
+    else if (style === 'tiny') {
 
       // should draw tiny 3x5 pixel font simple black text
-      drawText(g, ...p, label, this.center, new FontSpec(0, scale, false));
+      drawText(g, ...p, label, center, new FontSpec(0, scale, false));
 
     }
     else {
 
       // draw simple black text
-      drawText(g, ...p, label, this.center, new FontSpec(0, scale, false));
+      drawText(g, ...p, label, center, new FontSpec(0, scale, false));
     }
 
     if (global.debugUiRects) {
@@ -118,9 +160,9 @@ class TextLabel extends GuiElement {
     }
   }
 
-  // implement GuiElement
   /**
-   *
+   * Called when this label is clicked.
+   * Normally text labels do nothing when clicked.
    */
   click() {
     // do nothing

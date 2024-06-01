@@ -1,7 +1,6 @@
-// base class for short section of full-screen animation
-// involved in the (star tmenu -> playing) transition sequence
 /**
- *
+ * @file StartAnimStage base class for short section of full-screen animation
+ * involved in the (star tmenu -> playing) transition sequence
  */
 class StartAnimStage {
 
@@ -14,7 +13,7 @@ class StartAnimStage {
   }
 
   /**
-   * return true to prevent clearing screen
+   * @returns {boolean} False to let the screen be cleared before draw.
    */
   stopScreenClear() {
     return false;

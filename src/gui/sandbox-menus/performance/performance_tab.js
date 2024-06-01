@@ -1,5 +1,6 @@
 /**
- *
+ * @file PerformanceTab gui element.
+ * Contents for the "performance" tab in the sandbox menu.
  */
 class PerformanceTab extends CompositeGuiElement {
 
@@ -44,8 +45,9 @@ class PerformanceTab extends CompositeGuiElement {
       const elem = new StatReadout(
         rows[i], icon, labelFunc)
         .withScale(0.4)
+        .withTooltipScale(0.3)
         .withDynamicTooltip(tooltipFunc);
-      this.children.push(elem);
+      this.addChild(elem);
       i = i + 1;
     });
   }
@@ -110,7 +112,7 @@ class PerformanceTab extends CompositeGuiElement {
     const screenFlags = global.lupStats.activeScreens;
 
     const result = Array.from(screenFlags,
-      ([screen, flags]) => `${screen.title}\n${JSON.stringify(Array.from(flags.entries()))}`
+      ([screenTitle, _flags]) => screenTitle// `${screenTitle}\n${JSON.stringify(Array.from(flags.entries()))}`
     ).join('\n').replaceAll(']', '\n');
 
     return result;

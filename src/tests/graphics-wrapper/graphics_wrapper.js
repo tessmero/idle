@@ -1,8 +1,9 @@
-// limited wrapping jscanvas 2d graphics context
-//  - clearRect
-//  - fillRect with foreground color
 /**
+ * @file limited jscanvas wrapper for tests.
  *
+ * Only supports
+ *  - clearRect
+ *  - fillRect with foreground color
  */
 class GraphicsWrapper {
 

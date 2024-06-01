@@ -1,7 +1,6 @@
-// specification for drawing single layer
-// of   some specific text on screen
+
 /**
- *
+ * @file Dissolving Font Specification
  */
 class DissolvingFontSpec extends FontSpec {
   /**

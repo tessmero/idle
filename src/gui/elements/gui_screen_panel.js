@@ -1,27 +1,59 @@
 /**
- * gui element that displays a GameScreen instance
+ * @file GuiScreenPanel gui element.
+ * displays a GameScreen instance.
  */
 class GuiScreenPanel extends GuiElement {
+
+  #innerScreen;
+  #allowScaling;
+  hideInnerGui = false;
+
   /**
-   *
-   * @param rect
-   * @param innerScreen
+   * Normally we assume rect and innerScreen have the same size.
+   * If allowScaling is set to true, then they only
+   * need to have the same aspect ratio.
+   * @param {number[]} rect The rectangle for this gui element.
+   * @param {GameScreen} innerScreen The inner screen to display.
+   * @param {boolean} allowScaling False by default.
    */
-  constructor(rect, innerScreen) {
+  constructor(rect, innerScreen, allowScaling = false) {
     super(rect);
-    this.innerScreen = innerScreen;
+    this.setInnerScreen(innerScreen);
+    this.#allowScaling = allowScaling;
     const r = this.rect;
 
-    innerScreen.drawOffset = [r[0], r[1]];
+    innerScreen.drawOffset = allowScaling ? [0, 0] : [r[0], r[1]];
+    innerScreen.loop = true;
+    this.hoverable = false;
+  }
 
-    this.innerScreen.loop = true;
+  /**
+   *
+   */
+  set innerScreen(_s) { throw new Error('should use setInnerScreen'); }
+
+  /**
+   *
+   */
+  get innerScreen() { return this.#innerScreen; }
+
+  /**
+   *
+   * @param s
+   */
+  setInnerScreen(s) {
+    const oldScreen = this.#innerScreen;
+
+    if (oldScreen) { s.mousePos = oldScreen.mousePos; }
+    s.gsp = this;
+    this.#innerScreen = s;
   }
 
   /**
    *
    */
   reset() {
-    this.innerScreen.reset();
+    this.#innerScreen.reset();
   }
 
   /**
@@ -34,7 +66,7 @@ class GuiScreenPanel extends GuiElement {
     const hovered = super.update(dt, disableHover);
 
     if (!this.disableScreenUpdate) {
-      this.innerScreen.update(dt);
+      this.#innerScreen.update(dt);
     }
 
     return hovered;
@@ -45,7 +77,17 @@ class GuiScreenPanel extends GuiElement {
    * @param g
    */
   draw(g) {
-    this.innerScreen.draw(g);
+    if (this.#allowScaling) {
+      const scale = this.rect[2] / this.#innerScreen.rect[2];
+      const gct = global.canvasTransform;
+      g.setTransform(gct[0] * scale, 0, 0, gct[3] * scale, gct[4] + this.rect[0] * gct[0], gct[5] + this.rect[1] * gct[3]);
+    }
+
+    this.#innerScreen.draw(g, this.hideInnerGui);
+
+    if (this.#allowScaling) {
+      global.ctx.setTransform(...global.canvasTransform);
+    }
 
     // trim sides
     const [rx, ry, rw, rh] = this.rect;
@@ -59,7 +101,8 @@ class GuiScreenPanel extends GuiElement {
 
     g.strokeStyle = global.colorScheme.fg;
     g.lineWidth = global.lineWidth;
-    g.strokeRect(...this.rect);
+
+    Button._draw(g, this.rect, this.hovered, false);
   }
 
   /**

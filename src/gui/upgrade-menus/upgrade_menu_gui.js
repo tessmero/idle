@@ -1,6 +1,7 @@
 
 /**
- *
+ * @file PauseMenuGui
+ * Top-level GUI container that appears when the menu button is clicked.
  */
 class UpgradeMenuGui extends Gui {
 
@@ -30,7 +31,7 @@ class UpgradeMenuGui extends Gui {
   }
 
   /**
-   *
+   * Make HUD appear behind the upgrade menu.
    */
   getBackgroundGui() {
     return this.screen.stateManager.allGuis[GameStates.playing];
@@ -83,7 +84,7 @@ class UpgradeMenuGui extends Gui {
     const closeButton = new IconButton(topRight, xIcon, this.gsm.toggleStats)
       .withScale(0.5)
       .withTooltip('close upgrades menu');
-    tabGroup.children.splice(0, 0, closeButton);
+    tabGroup.addChild(closeButton);
 
     return [closeButton, tabGroup];
 

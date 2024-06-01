@@ -1,6 +1,6 @@
-// a global variable readout with on/off toggle
 /**
- *
+ * @file Boolean Debug Variable gui element
+ * global variable readout with on/off toggle.
  */
 class BooleanDebugVar extends CompositeGuiElement {
 
@@ -28,23 +28,21 @@ class BooleanDebugVar extends CompositeGuiElement {
 
     dtl.setScale(0.4);
     dtl.tooltipScale = 0.4;
-    dtl.center = false;
-    dtl.fixedRect = true;
+    dtl.setCenter(false);
 
     const icon = getGlobal(varname) ? checkedIcon : uncheckedIcon;
     r0[2] = r0[2] + 0.17;
     this.checkbox = new IconButton(r0, icon, () => this.toggle()).withScale(0.5);
 
-    this.children = [
+    this.setChildren([
       this.checkbox,
       dtl,
-    ];
+    ]);
 
   }
 
-  // called when clicked
   /**
-   *
+   * called when clicked
    */
   toggle() {
     const varname = this.varname;
@@ -52,7 +50,7 @@ class BooleanDebugVar extends CompositeGuiElement {
     val = !val;
     setGlobal(varname, val);
     this.checkbox.icon = val ? checkedIcon : uncheckedIcon;
-    const screen = global.mainScreen;
+    const screen = this.screen;
     screen.stateManager.rebuildGuis(screen, false);
   }
 

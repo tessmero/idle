@@ -1,6 +1,6 @@
-// a button in the toolbar with a pixel art icon
 /**
- *
+ * @file ToolbarButton gui element
+ * A button in the toolbar at the bottom of the screen.
  */
 class ToolbarButton extends CompositeGuiElement {
 
@@ -20,11 +20,11 @@ class ToolbarButton extends CompositeGuiElement {
     btn.isAnimated = (() => // override IconButton
       btn.hovered || (
         this.isSelected() &&
-                (global.gameState === GameStates.playing)
+                (this.screen.stateManager.gameState === GameStates.playing)
       )
     );
     this.button = btn;
-    this.children.push(btn);
+    this.addChild(btn);
 
     if (tool.getCost()) {
       let r = rect;
@@ -32,9 +32,9 @@ class ToolbarButton extends CompositeGuiElement {
       r = [r[0], r[1] + r[3] - h, r[2], h];
       r = padRect(...r, -0.004);
       const pi = new ProgressIndicator(r,
-        () => global.mainSim.particlesCollected / tool.getCost())
+        () => this.screen.sim.particlesCollected / tool.getCost())
         .withScale(0.2);
-      this.children.push(pi);
+      this.addChild(pi);
     }
 
     // prepare to detect when an
@@ -54,19 +54,19 @@ class ToolbarButton extends CompositeGuiElement {
     if ((!this.wasUsable) && (usable)) {
 
       // emmit particles
-      const pps = global.mainSim.leftoverPPS;
+      const pps = this.screen.sim.leftoverPPS;
       const mis = safeRandRange(1e-5, 2e-5);
       const mas = safeRandRange(1e-4, 2e-4);
       const center = v(...rectCenter(...this.rect));
       const ap = 1;
       for (let i = 0; i < 100; i++) {
-        const v = vp(safeRandRange(-pio2 - ap, -pio2 + ap), randRange(mis, mas));
-        v.y = v.y * 3;
-        pps.spawnParticle(center, v);
+        let vel = vp(safeRandRange(-pio2 - ap, -pio2 + ap), randRange(mis, mas));
+        vel = v(vel.x, vel.y * 3);
+        pps.spawnParticle(center, vel);
       }
 
       // show message
-      global.mainScreen.floaters.spawnFloater(center, 'available');
+      this.screen.floaters.spawnFloater(center, 'available');
 
     }
     this.wasUsable = usable;
@@ -79,7 +79,8 @@ class ToolbarButton extends CompositeGuiElement {
    *
    */
   isSelected() {
-    return this.tool === global.mainSim.getTool();
+    const screen = this.screen;
+    return screen && (screen.sim.tool === this.tool);
   }
 
   /**
@@ -88,10 +89,13 @@ class ToolbarButton extends CompositeGuiElement {
   click() {
     if (this.tool.isUsable()) {
 
-      global.mainSim.setTool(this.tool);
+      const screen = this.screen;
+      screen.sim.setTool(this.tool);
 
       // close the upgrades menu if it is open
-      if (global.gameState === GameStates.upgradeMenu) { toggleStats(); }
+      if (screen.stateManager.gameState === GameStates.upgradeMenu) {
+        screen.stateManager.toggleStats();
+      }
 
     }
     else {

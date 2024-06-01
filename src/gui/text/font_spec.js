@@ -1,9 +1,14 @@
-// specification for drawing single layer
-// of   some specific text on screen
+
 /**
+ * @file FontSpec object type.
+ * Font specification for drawing a single layer
+ * of text on screen.
  *
+ * Extra-readable text is displayed by drawing the same
+ * text twice with different fontspecs (text_label.js)
  */
 class FontSpec {
+
   /**
    *
    * @param pad
@@ -16,10 +21,10 @@ class FontSpec {
     this.clear = clear;
   }
 
-  // by default we draw all pixels
-  // overridden in dissolving_font_spec.js
   /**
-   *
+   * by default we draw all pixels
+   * overridden in dissolving_font_spec.js
+   * @returns {boolean} False to draw all pixels.
    */
   skipPixel() {
     return false;

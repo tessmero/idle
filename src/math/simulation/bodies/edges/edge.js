@@ -1,5 +1,6 @@
 
 /**
+ * @file Edge object type.
  * An edge is a boundary that particles interact with
  * the shape of the edge is stored in constant set of polar coords
  * where the origin is the center of a rotating body outlined by this edge

@@ -1,5 +1,5 @@
 /**
- * @file Pi Tool Tutorial
+ * @file Tutorial for Inspector Tool
  */
 class PiToolTutorial extends Macro {
 
@@ -16,7 +16,7 @@ class PiToolTutorial extends Macro {
   }
 
   /**
-   *
+   * Click somewhere to start tracking a nearby particle.
    */
   buildKeyframes() {
     const [startPos, clickPos, endPos] = [

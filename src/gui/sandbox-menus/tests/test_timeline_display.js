@@ -1,8 +1,9 @@
-// progress indicator with checkboxes
 /**
- *
+ * @file TestTimelineDisplay gui element
+ * progress indicator with checkboxes
  */
 class TestTimelineDisplay extends CompositeGuiElement {
+
   /**
    *
    * @param rect
@@ -35,17 +36,17 @@ class TestTimelineDisplay extends CompositeGuiElement {
     }
     this.checkboxes = boxes;
 
-    this.children = [
+    this.setChildren([
 
       ...this.checkboxes,
       new ProgressIndicator(innerRect, () => this.t / this.duration)
         .withOutline(false),
-    ];
+    ]);
   }
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
 

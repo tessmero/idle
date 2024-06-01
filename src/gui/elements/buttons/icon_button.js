@@ -1,35 +1,53 @@
-// a button with a pixel art icon
 /**
- *
+ * @file IconButton gui element.
+ * a button with a pixel art icon
  */
 class IconButton extends Button {
 
+  #icon;
+
   /**
    *
-   * @param rect
-   * @param icon
-   * @param action
+   * @param {number[]} rect
+   * @param {Icon} icon
+   * @param {Function} action
    */
   constructor(rect, icon, action) {
     super(rect, action);
-    this.icon = icon;
+    this.#icon = icon;
   }
 
   /**
    *
-   * @param g
+   */
+  get icon() {
+    return this.#icon;
+  }
+
+  /**
+   * Allow assigning icon with equal sign.
+   * @param {Icon} i The icon to display.
+   */
+  set icon(i) {
+    this.#icon = i;
+  }
+
+  /**
+   * Extend standard button appearance by drawing icon.
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);
 
-    // draw pixel art icon
+    const icon = this.#icon;
     const layout = this.isAnimated() ?
-      this.icon.getCurrentAnimatedLayout() : this.icon.frames[0]; // icon.js
+      icon.getCurrentAnimatedLayout() : icon.frames[0];
     drawLayout(g, ...rectCenter(...this.rect), layout, true, new FontSpec(0, this.scale)); // character.js
   }
 
   /**
-   *
+   * Show icon as animated if this button is being hovered.
+   * @returns {boolean} True if hovered.
    */
   isAnimated() {
     return this.hovered;

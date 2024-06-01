@@ -18,7 +18,7 @@ class Gui extends CompositeGuiElement {
    *
    */
   getScreenEdgesForContextMenu() {
-    const rect = [...this.rect];
+    const rect = [...global.rootScreen.rect]; // [...this.rect];
     const topMargin = 0.1;
     const bottomMargin = 0.1;
     const sideMargin = 0.1;

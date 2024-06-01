@@ -1,5 +1,5 @@
 /**
- * player emulator script for gui test
+ * @file Player emulator script for gui test.
  */
 class GuiTestMacro extends Macro {
 

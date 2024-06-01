@@ -1,5 +1,5 @@
 /**
- *
+ * @file Test for default tool.
  */
 class DefaultToolTutorialTest extends Test {
 

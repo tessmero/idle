@@ -1,5 +1,6 @@
 /**
- *
+ * @file Skills Tab gui element
+ * Content for the "skills" tab in the sandbox menu.
  */
 class SkillsTab extends CompositeGuiElement {
   /**
@@ -24,6 +25,6 @@ class SkillsTab extends CompositeGuiElement {
       result.push(card);
     }
 
-    this.children = result;
+    this.setChildren(result);
   }
 }

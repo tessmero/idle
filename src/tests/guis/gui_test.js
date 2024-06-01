@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file Test toggling upgrade menu.
  */
 class GuiTest extends Test {
 
@@ -42,7 +42,7 @@ class GuiTest extends Test {
       gsm.allGuis.forEach((k) => {
         if (k === null) { return; }
         k.gsm = gsm;
-        k.children = k.buildElements(screen);
+        k.setChildren(k.buildElements(screen));
         k.setScreen(screen);
       });
       const gui = gsm.allGuis[gsm.gameState];
@@ -104,8 +104,8 @@ class GuiTest extends Test {
       const [x, y] = rectCenter(...tabGroup.rect);
       rect[0] = x - rect[2] / 2;
       rect[1] = y - rect[3] / 2;
-      tabGroup.children = [new TextButton(rect, label, () => {}).withScale(scale)];
-      tabGroup.tabContent.forEach((tc) => { tc.children = []; });
+      tabGroup.setChildren([new TextButton(rect, label, () => {}).withScale(scale)]);
+      tabGroup.tabContent.forEach((tc) => { tc.setChildren([]); });
 
       // ommit close button
       return [tabGroup];

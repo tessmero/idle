@@ -1,25 +1,15 @@
-// base class for boddies with "children" boddies
 /**
- *
+ * @file CompoundBody
+ * base class for bodies with children bodies
  */
 class CompoundBody extends Body {
 
-  /**
-   *
-   * @param sim
-   * @param pos
-   */
-  constructor(sim, pos) {
-    super(sim, pos);
+  #constraints = [];
+  #children = [];
+  #controlPoints = [];
 
-    this.constraints = [];
-    this.children = [];
-    this.controlPoints = [];
-  }
-
-  // return Body instance in this.children
   /**
-   *
+   * return Body instance in this.children
    */
   getMainBody() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
@@ -27,10 +17,26 @@ class CompoundBody extends Body {
 
   /**
    *
+   */
+  get children() { return this.#children; }
+
+  /**
+   * Prevent setting children with equals sign.
+   */
+  set children(_c) { throw new Error('should use setChildren'); }
+
+  /**
+   * Replace children with the given list.
+   * @param {GuiElement[]} c The new list of children this composite should contain.
+   */
+  setChildren(c) { this.#children = c; }
+
+  /**
+   *
    * @param g
    */
   draw(g) {
-    this.children.forEach((c) => c.draw(g));
+    this.#children.forEach((c) => c.draw(g));
   }
 
   /**
@@ -39,7 +45,7 @@ class CompoundBody extends Body {
    */
   drawDebug(g) {
     // this.constraints.forEach(c => c.drawDebug(g) )
-    this.children.forEach((c) => c.drawDebug(g));
+    this.#children.forEach((c) => c.drawDebug(g));
   }
 
   /**
@@ -47,10 +53,10 @@ class CompoundBody extends Body {
    * @param dt
    */
   update(dt) {
-    const beingControlled = this.controlPoints.find((cp) => cp === this.sim.draggingControlPoint);
+    const beingControlled = this.#controlPoints.find((cp) => cp === this.sim.draggingControlPoint);
 
-    this.constraints.forEach((c) => c.update(dt));
-    this.children.forEach((c) => c.update(dt, beingControlled));
+    this.#constraints.forEach((c) => c.update(dt));
+    this.#children.forEach((c) => c.update(dt, beingControlled));
 
     return true;
   }
@@ -60,7 +66,7 @@ class CompoundBody extends Body {
    * @param sim
    */
   register(sim) {
-    this.children.forEach((c) => {
+    this.#children.forEach((c) => {
       c.parent = this;
       c.register(sim);
     });
@@ -71,6 +77,6 @@ class CompoundBody extends Body {
    * @param sim
    */
   unregister(sim) {
-    this.children.forEach((c) => c.unregister(sim));
+    this.#children.forEach((c) => c.unregister(sim));
   }
 }

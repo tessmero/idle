@@ -1,11 +1,13 @@
+/**
+ * @file Top-level game setup and loop.
+ */
 
-// Main game loop
 let secondsPassed;
 let oldTimeStamp;
 let fps;
 
 /**
- *
+ * Game loop function that is called repeatedly.
  * @param timeStamp
  */
 function gameLoop(timeStamp) {
@@ -80,10 +82,14 @@ function init() {
   global.ctx = cvs.getContext('2d');
 
   const sim = new MainPSim();
+  sim.usesGlobalCurrency = true;
   const gsm = new GameStateManager();
-  const screen = new GameScreen('main game', [0, 0, 1, 1], sim, gsm);
-  global.mainSim = sim;
-  global.mainScreen = screen;
+  const screen = new GameScreen('root screen', [0, 0, 1, 1], sim, gsm);
+  global.rootScreen = screen;
+  global.gsp = new GuiScreenPanel(screen.rect, screen);
+  global.gsp.setScreen = () => {
+    throw new Error('can only use global.gsp.setInnerScreen()');
+  };
   screen.stateManager.quit();
 
   const doTests = false;
@@ -120,28 +126,32 @@ function resetGame() {
 
   // init start menu background sim
   global.t = 0;
-  const gms = global.mainSim;
-  gms.particlesCollected = 0;
+  const sim = global.mainScreen.sim;
+  sim.particlesCollected = 0;
 
   global.activeReleasePatterns = [];
 
   global.startMenuTargetPos = v(0.5, 0.5);
-  gms.clearBodies();
+  sim.clearBodies();
 
   resetProgression();
-  gms.rainGroup.n = 2000;
+  sim.rainGroup.n = 2000;
 
-  // let poi = new ControlledCircleBody(gms,v(.5,.3),Math.sqrt(global.poiStartArea))
-  // gms.addBody(poi)
+  // let poi = new ControlledCircleBody(sim,v(.5,.3),Math.sqrt(global.poiStartArea))
+  // sim.addBody(poi)
 
-  const cross = new ControlledCrossBody(gms, v(0.5, 0.45), 5, 0.05, 0.1);
-  gms.addBody(cross);
+  const cross = new DefaultControlFrame(
+    new CrossBody(sim, v(0.5, 0.45)));
+  sim.addBody(cross);
 
-  const comp = new ControlledCompassBody(gms, v(0.15, 0.45), 5, 0.05, 0.1);
-  gms.addBody(comp);
+  const comp = new DefaultControlFrame(
+    new CompassBody(sim, v(0.15, 0.45)));
+  sim.addBody(comp);
 
-  const star = new ControlledStarBody(gms, v(0.85, 0.45), 5, 0.05, 0.1);
-  gms.addBody(star);
+  const nTips = 5;
+  const star = new DefaultControlFrame(
+    new StarBody(sim, v(0.85, 0.45), nTips, 0.05, 0.1));
+  sim.addBody(star);
 
   resetRand();
   fitToContainer();

@@ -1,7 +1,8 @@
-// message appears in the middle of the
-// (start menu -> playing) transition sequence
+
 /**
+ * @file StartMessage stage in the middle of (start menu -> playing) transition
  *
+ * during this stage a message is visible in the middle of the screen.
  */
 class StartMessage extends StartAnimStage {
 

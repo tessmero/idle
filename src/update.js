@@ -1,8 +1,12 @@
+/**
+ * @file update function for top-level game loop
+ */
+
 let lastCanvasOffsetWidth = -1;
 let lastCanvasOffsetHeight = -1;
 
 /**
- *
+ * Helper to continuously fit game to browser window.
  */
 function fitToContainer() {
   const cvs = global.canvas;
@@ -25,9 +29,10 @@ function fitToContainer() {
     global.canvasScale = dimension;
     global.canvasOffsetX = (ow - dimension) / 2;
     global.canvasOffsetY = (oh - dimension) / 2;
+    global.canvasTransform = [global.canvasScale, 0, 0,
+      global.canvasScale, global.canvasOffsetX, global.canvasOffsetY];
     if (global.ctx) {
-      global.ctx.setTransform(global.canvasScale, 0, 0,
-        global.canvasScale, global.canvasOffsetX, global.canvasOffsetY);
+      global.ctx.setTransform(...global.canvasTransform);
     }
 
     const xr = -global.canvasOffsetX / global.canvasScale;
@@ -36,13 +41,9 @@ function fitToContainer() {
     const sc = [v(xr, yr), v(1 - xr, yr), v(1 - xr, 1 - yr), v(xr, 1 - yr)];
     global.screenCorners = sc;
     const sr = [sc[0].x, sc[0].y, (sc[2].x - sc[0].x), (sc[2].y - sc[0].y)];
-    screen._rect = sr;
+    screen.setMainScreenRect(sr);
     screen.stateManager.rebuildGuis(screen, false);
   }
-
-  // hack to update main sim size
-  // noramlly sims don't change size
-  screen.sim._rect = screen.rect;
 }
 
 /**
@@ -62,7 +63,14 @@ function update(dt) {
   // check for resized window
   fitToContainer();
 
-  // update main sim and gui
+  // perform full/standard update of main sim and gui
+  // may also update descendant boxes
   global.mainScreen.update(dt);
 
+  // make sure all black box heirarchies were updated
+  // (in case the descendants weren't updated for some reason)
+  // (in case the main screen is itself in a box)
+  // (in case of active test with boxes)
+  // (in case some other GuiSimPanel was drawn involving separate boxes)
+  BoxBuddy.ensureAllBoxesUpdated(dt);
 }

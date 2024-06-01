@@ -1,8 +1,8 @@
-// black grid gradually reveals hud
 /**
- *
+ * @file transition effect where HUD is unveiled by black grid.
  */
 class GridFadeIn extends FadeIn {
+
   /**
    *
    */
@@ -11,7 +11,6 @@ class GridFadeIn extends FadeIn {
     this.duration = 1000;
   }
 
-  // implement FadeIn
   /**
    *
    * @param g
@@ -24,8 +23,8 @@ class GridFadeIn extends FadeIn {
     // draw grid lines
     const sr = rect;
     const d = 0.09 * sr[3];
-    const [x0, y0] = v(sr[0], sr[1]).xy();
-    const [x1, y1] = v(sr[0] + sr[2], sr[1] + sr[3]).xy();
+    const [x0, y0] = [sr[0], sr[1]];
+    const [x1, y1] = [sr[0] + sr[2], sr[1] + sr[3]];
     let maxoff = 0.5;
     const lw = ((this.duration - this.t) / (this.duration * (1 - maxoff))) * d;
     maxoff = maxoff * d;

@@ -27,12 +27,10 @@ class TutorialPSim extends ParticleSim {
     // scale down control point radius and force
     b.controlPoints.forEach((c) => {
 
-      if (b instanceof ControlledSausageBody) {
+      if ((b instanceof ControlledSausageBody) || (b instanceof BoxBuddy)) {
         c.setRad(c.rad * global.tutorialScaleFactor);
-
-        // c.fscale *= .5
       }
-      else {
+      if ((b instanceof CircleBuddy)) {
         c.fscale = c.fscale * 0.3;
       }
     });

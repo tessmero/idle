@@ -1,7 +1,7 @@
-// default tool, collect raindrops, pressure/move pois
-
 /**
+ * @file DefaultTool regular mouse cursor.
  *
+ * Drag to collect raindrops and move control points.
  */
 class DefaultTool extends Tool {
 
@@ -9,18 +9,16 @@ class DefaultTool extends Tool {
    *
    * @param sim
    * @param rad
+   * @param icon
+   * @param title
+   * @param centerCursor
    */
-  constructor(sim, rad) {
-    super(sim);
+  constructor(sim, rad, icon = defaultToolIcon, title = 'default tool', centerCursor = false) {
+    super(sim, icon, title, centerCursor);
     this.rad = rad;
 
-    this.icon = defaultToolIcon;
-
-    this.tooltip = 'default tool';
-    this.cursorCenter = false; // tool.js
-
     // null or falsey -> mouse not being pressed
-    // Poi instance -> mouse pressed on poi
+    // ControlPoint instance -> mouse pressed on poi
     // otherwise -> mouse pressed on background
     this.held = null;
 
@@ -32,14 +30,7 @@ class DefaultTool extends Tool {
 
   /**
    *
-   */
-  getTitle() {
-    return 'Default Tool Macro';
-  }
-
-  /**
-   *
-   * @param sim
+   * @param {ParticleSim} sim
    */
   unregister(sim) {
     sim.removeGrabber(this.grabber);
@@ -52,18 +43,18 @@ class DefaultTool extends Tool {
     return new DefaultToolTutorial();
   }
 
-  // callback for this.grabber
-  // when a particle is grabbed (particle_group.js)
   /**
-   *
-   * @param {...any} p
+   * callback for this.grabber
+   * when a particle is grabbed (particle_group.js)
+   * @param {...any} p Data about the particle.
    */
   grabbed(...p) {
-    DefaultTool._grabbed(this.sim, ...p);
+    DefaultTool.collectRaindrop(this.sim, ...p);
   }
 
   /**
-   *
+   * Called whenever a particle is grabbed by a DefaultTool instance.
+   * Also called by CircleBuddy when eating a particle on the player's behalf.
    * @param sim
    * @param _subgroup
    * @param _i
@@ -73,7 +64,7 @@ class DefaultTool extends Tool {
    * @param _dy
    * @param _hit
    */
-  static _grabbed(sim, _subgroup, _i, x, y, _dx, _dy, _hit) {
+  static collectRaindrop(sim, _subgroup, _i, x, y, _dx, _dy, _hit) {
 
     // increase currency
     sim.particlesCollected = sim.particlesCollected + 1;
@@ -84,8 +75,8 @@ class DefaultTool extends Tool {
   }
 
   /**
-   *
-   * @param p
+   * Called when user moves mouse.
+   * @param {Vector} p The new position of the mouse.
    */
   mouseMove(p) {
     this.sim.updateControlPointHovering(p);
@@ -94,10 +85,11 @@ class DefaultTool extends Tool {
   }
 
   /**
-   *
-   * @param p
+   * Called when user presses mouse button.
+   * @param {Vector} p the position of the mouse
    */
   mouseDown(p) {
+
     // either grab control point or start catching rain
     this.sim.updateControlPointHovering(p);
     this.held = this.sim.hoveredControlPoint;
@@ -128,8 +120,8 @@ class DefaultTool extends Tool {
   }
 
   /**
-   *
-   * @param _p
+   * Called when user releases mouse button.
+   * @param {Vector} _p The position of the mouse.
    */
   mouseUp(_p) {
     this.held = null;
@@ -140,9 +132,10 @@ class DefaultTool extends Tool {
   }
 
   /**
-   *
-   * @param g
-   * @param p
+   * If catching rain, draw circle indicating catch radius
+   * otherwise draw the standard cursor (the default tool icon).
+   * @param {object} g The graphics context.
+   * @param {Vector} p The position of the mouse.
    * @param {...any} args
    */
   drawCursor(g, p, ...args) {
@@ -157,7 +150,7 @@ class DefaultTool extends Tool {
     else if (this.held) {
 
       // held on background
-      const c = v(...p);
+      const c = p;
       const r = Math.sqrt(this.grabber.r2);
 
       g.strokeStyle = global.colorScheme.bg;

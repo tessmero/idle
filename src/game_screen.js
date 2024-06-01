@@ -4,16 +4,18 @@
  * a Game Screen is an on-screen rectangle
  * with some combination of sim, gui, and/or cursor
  *
+ * e.g. the overall game screen: global.mainScreen
+ *
  * instances are persistent and must be registered
  * contructor submits to global.logPerformanceStats
  *
  * methods like mouseDown recieve real user input (input.js)
- * or emulated user input (in this file!)
- *
- * e.g. the overall game screen
- * global.mainScreen
+ * or emulated user input (in this file)
  */
 class GameScreen {
+
+  #titleKey;
+  #rect;
 
   /**
    * Create a new Game Screen
@@ -25,12 +27,12 @@ class GameScreen {
    * @param {Macro} macro
    */
   constructor(titleKey, rect, sim, gsm, macro) {
-    global.logPerformanceStats.submitNewScreen(titleKey, this);
+    this.#titleKey = titleKey;
+    this.#rect = rect;
+
+    global.logPerformanceStats.submitNewScreen(this);
     console.assert(gsm instanceof GameStateManager);
     console.assert(sim instanceof ParticleSim);
-
-    this.title = titleKey;
-    this._rect = rect;
 
     this.sim = sim;
     sim.screen = this;
@@ -58,15 +60,36 @@ class GameScreen {
   /**
    *
    */
-  set titleKey(_ts) {
+  set titleKey(_t) {
     throw new Error('not allowed');
   }
 
   /**
    *
    */
+  get titleKey() {
+    return this.#titleKey;
+  }
+
+  /**
+   *
+   */
+  set title(_t) {
+    throw new Error('not allowed');
+  }
+
+  /**
+   *
+   */
+  get title() {
+    throw new Error('should use titleKey');
+  }
+
+  /**
+   *
+   */
   get rect() {
-    return this._rect;
+    return this.#rect;
   }
 
   /**
@@ -78,12 +101,30 @@ class GameScreen {
 
   /**
    *
-   * @param r
+   * @param {number[]} r
    */
   setRect(r) {
-    // this._rect = [...r];
-    this.drawOffset = [r[0] - this._rect[0], r[1] - this._rect[1]];
-    if (this._gui) { this._gui.rect = r; }
+    this.drawOffset = [r[0] - this.#rect[0], r[1] - this.#rect[1]];
+  }
+
+  /**
+   *
+   */
+  set _rect(_r) {
+    throw new Error('should use setMainScreenRect()');
+  }
+
+  /**
+   *
+   * @param r
+   */
+  setMainScreenRect(r) {
+    if (this === global.rootScreen) {
+      // hack to update main sim size
+      // noramlly sims don't change size
+      this.#rect = [...r];
+      this.sim._rect = screen.rect;
+    }
   }
 
   /**
@@ -101,8 +142,8 @@ class GameScreen {
   }
 
   /**
-   * close any existing gui, switch to the given gui,
-   * and call its setScreen() and open() src/gui/gui.js
+   * close() any existing gui, switch to the given gui,
+   * then call gui's setScreen() and open()
    * @param {Gui} gui instance to show on this screen
    */
   setGui(gui) {
@@ -128,28 +169,27 @@ class GameScreen {
   mouseMove(p) {
     this.mousePos = p;
 
+    // reset idle countdown
     this.idleCountdown = this.idleDelay;
 
     // trigger selected tool movement behavior
-    const tool = this.sim.getTool();
+    const tool = this.sim.tool;
     if (tool) { tool.mouseMove(p); }
   }
 
   /**
-   *
+   * Called when mouse button is released
    */
   mouseUp() {
 
-    // global.mainSim.getBodies().forEach(p => p.isHeld = false )
-
     // release tool if it was being held down
-    const tool = this.sim.getTool();
+    const tool = this.sim.tool;
     if (tool) { tool.mouseUp(this.mousePos); }
 
   }
 
   /**
-   *
+   * Called when mouse button is pressed
    */
   mouseDown() {
     // context menu
@@ -183,10 +223,13 @@ class GameScreen {
 
     // console.log('click fell through all guis')
     // close the upgrades menu if it is open
-    if (this.stateManager && (this.stateManager.gameState === GameStates.upgradeMenu)) { this.stateManager.toggleStats(); }
+    const sm = this.stateManager;
+    if (sm && (sm.gameState === GameStates.upgradeMenu)) {
+      sm.toggleStats();
+    }
 
     // may click simulation with selected tool
-    const tool = this.sim.getTool();
+    const tool = this.sim.tool;
     if (tool) { tool.mouseDown(this.mousePos); }
 
   }
@@ -242,13 +285,12 @@ class GameScreen {
         }
 
         const tool = macro.tool;
-        tool.sim = sim;
         sim.setTool(tool);
         tool.update(dt);
         const keyframes = macro.update(dt);
-        let p = macro.getCursorPos().xy();
+        let p = macro.getCursorPos();
         const sr = sim.rect;
-        p = v(sr[0] + p[0] * sr[2], sr[1] + p[1] * sr[3]);
+        p = v(sr[0] + p.x * sr[2], sr[1] + p.y * sr[3]);
         this.mouseMove(p);
 
         // emulate user input if necessary
@@ -302,7 +344,7 @@ class GameScreen {
       const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
       const rect = gui.getScreenEdgesForContextMenu();
       const cmr = ContextMenu.pickRects(rect, v(x, y));
-      this.contextMenu = new PiContextMenu(...cmr, p);
+      this.contextMenu = new PiContextMenu(...cmr, this, p);
     }
 
     if (this.contextMenu) { this.contextMenu.setScreen(this); }
@@ -331,7 +373,7 @@ class GameScreen {
     }
 
     // trigger passive tool behavior
-    const tool = sim.getTool();
+    const tool = sim.tool;
     if (tool) { tool.update(dt); }
 
     // update popups just in case they are persistent
@@ -349,10 +391,11 @@ class GameScreen {
   /**
    *
    * @param gfx
+   * @param hideGui
    */
-  draw(gfx) {
+  draw(gfx, hideGui = false) {
 
-    if (!this._rect) { return; }
+    if (!this.#rect) { return; }
 
     // wrap graphics context if necessary
     // used for screen transition test
@@ -363,26 +406,34 @@ class GameScreen {
     }
 
     g.translate(...this.drawOffset);
-    this.idraw(g);
+    this.idraw(g, hideGui);
     g.translate(-this.drawOffset[0], -this.drawOffset[1]);
   }
 
   /**
    *
    * @param g
+   * @param hideGui
    */
-  idraw(g) {
+  idraw(g, hideGui) {
 
     // clear canvas, unless gui requests not to
     const gui = this.gui;
     const stopClear = gui ? gui.stopScreenClear() : false;
     if (!stopClear) {
-      g.clearRect(...this.rect);
+
+      // make sure the whole screen is cleared,
+      // in case this is the main screen and we are
+      // inside a box with dimensions
+      // not matching the users's physical screen
+      const clearRect = (this === global.mainScreen) ?
+        global.rootScreen.rect : this.rect;
+      g.clearRect(...clearRect);
     }
 
     // draw screen
     this.sim.draw(g);
-    if (!stopClear) {
+    if ((!stopClear) && (!hideGui)) {
       this._drawGui(g);
     }
     this._drawCursor(g);
@@ -393,12 +444,13 @@ class GameScreen {
    * @param g
    */
   _drawCursor(g) {
+
     // draw  cursor
     if (this.mousePos) {
-      const p = this.mousePos.xy();
-      const tool = this.sim.getTool();
+      const p = this.mousePos;
+      const tool = this.sim.tool;
       if (tool) {
-        if (this.sim === global.mainSim) {
+        if (this === global.mainScreen) {
           tool.drawCursor(g, p);
         }
         else {
@@ -411,8 +463,8 @@ class GameScreen {
     else if (this.macro) {
       const macro = this.macro;
       const tool = macro.tool;
-      tool.sim = this.sim;
-      let p = macro.getCursorPos().xy();
+      this.sim.setTool(tool);
+      let p = macro.getCursorPos();
       const sr = this.sim.rect;
       p = [sr[0] + p[0] * sr[2], sr[1] + p[1] * sr[3]];
       if (macro.lastCursorPos) {

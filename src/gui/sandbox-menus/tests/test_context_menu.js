@@ -1,22 +1,31 @@
+/**
+ * @file TestContextMenu test runner / gui element.
+ */
 let _testLoopSetting = null;
 
-// persistent context menu with gui sim
-// that appears when a row is clicked in tests menu
 /**
- *
+ * persistent context menu with gui sim
+ * that appears when a row is clicked in tests menu
  */
 class TestContextMenu extends ContextMenu {
+
+  test;
+  testCat;
+  testIndex;
+
   /**
    *
    * @param rect
    * @param s0
    * @param s1
-   * @param test
    * @param testIndex
    */
-  constructor(rect, s0, s1, test, testIndex) {
+  constructor(rect, s0, s1, testIndex) {
     super(rect, s0, s1);
+
+    const [testCat, test] = allTests[testIndex];
     this.test = test;
+    this.testCat = testCat;
     this.testIndex = testIndex;
 
     //
@@ -26,6 +35,7 @@ class TestContextMenu extends ContextMenu {
     // center simulation in first content square
     const screen = test.screen;
     screen.reset();
+    Test.resetBoxSims(screen);
     const sim = screen.sim;
     const tut = screen.tut;
     this.sim = sim;
@@ -41,12 +51,19 @@ class TestContextMenu extends ContextMenu {
 
     const gui = screen.gui;
     if (gui) {
-      gui.children = gui.buildElements(screen);
+      gui.setChildren(gui.buildElements(screen));
       gui.setScreen(screen);
     }
 
+    const asserts = test.getTestAssertions(screen);
+
     // divide second content square into rows
-    const botRows = divideRows(...s1, 10);
+    const nRows = 13;
+    const maxAsserts = nRows - 3;
+    if (asserts.length > maxAsserts) {
+      throw new Error(`max of ${maxAsserts} asserts per test`);
+    }
+    const botRows = divideRows(...s1, nRows);
     const textScale = 0.25;
 
     const duration = test.getDuration(screen);
@@ -55,7 +72,6 @@ class TestContextMenu extends ContextMenu {
 
     // add test criteria to second square
     let i = 2;
-    const asserts = test.getTestAssertions(screen);
     const checkTimes = [];
     const checkTooltips = [];
     const checkReadouts = [];
@@ -121,7 +137,7 @@ class TestContextMenu extends ContextMenu {
     const titleLabel = new TextLabel(titleRect, test.titleKey)
       .withScale(0.3);
 
-    this.children = this.children.concat([
+    this.setChildren(this.children.concat([
 
       // title at top of first square
       titleLabel,
@@ -140,7 +156,7 @@ class TestContextMenu extends ContextMenu {
 
       // conclusion in second square
       finalDisplay,
-    ]);
+    ]));
 
   }
 
@@ -199,7 +215,7 @@ class TestContextMenu extends ContextMenu {
     const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
       ...TestContextMenu.pickRects(screen.rect),
-      this.test, this.testIndex);
+      this.testIndex);
     screen.contextMenu.setScreen(screen);
   }
 
@@ -207,13 +223,11 @@ class TestContextMenu extends ContextMenu {
    *
    */
   prevClicked() {
-    const tl = iitestList;
-    const prevIndex = nnmod(this.testIndex - 1, tl.length);
-    const prevTest = tl[prevIndex];
+    const prevIndex = nnmod(this.testIndex - 1, allTests.length);
     const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
       ...TestContextMenu.pickRects(screen.rect),
-      prevTest, prevIndex);
+      prevIndex);
     screen.contextMenu.setScreen(screen);
   }
 
@@ -221,13 +235,11 @@ class TestContextMenu extends ContextMenu {
    *
    */
   nextClicked() {
-    const tl = iitestList;
-    const nextIndex = nnmod(this.testIndex + 1, tl.length);
-    const nextTest = tl[nextIndex];
+    const nextIndex = nnmod(this.testIndex + 1, allTests.length);
     const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
       ...TestContextMenu.pickRects(screen.rect),
-      nextTest, nextIndex);
+      nextIndex);
     screen.contextMenu.setScreen(screen);
   }
 
@@ -255,7 +267,7 @@ class TestContextMenu extends ContextMenu {
       else {
         label = 'TEST FAILED';
       }
-      this.finalDisplay.label = label;
+      this.finalDisplay.setLabel(label);
 
       if (_testLoopSetting) {
         this.loopCountdown = this.loopCountdown - dt;
@@ -277,8 +289,20 @@ class TestContextMenu extends ContextMenu {
       const [time, _label, func] = this.asserts[i];
       if ((time > this.lastTime) && (time <= t)) {
 
+        // Check for syntax error in test assertions
+        if (!(typeof func === 'function')) {
+          throw new Error('test assertion must be function');
+        }
+
         // perform relevent check
-        const success = func();
+        let success = false;
+        try {
+          func();
+          success = true;
+        }
+        catch (error) {
+          console.error(error);
+        }
         if (success) { this.nChecksPassed = this.nChecksPassed + 1; }
         const icon = success ? checkedIcon : trashIcon;
         ttDisplay.setCheckboxIcon(i, icon);

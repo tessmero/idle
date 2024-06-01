@@ -1,9 +1,8 @@
 
 /**
  * main particle simulation
- * one instance: global.mainSim
+ * one instance: global.rootScreen.sim
  * constructed in setup.js
- * referenced in update.js and draw.js
  */
 class MainPSim extends ParticleSim {
   /**

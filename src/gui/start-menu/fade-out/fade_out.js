@@ -1,7 +1,7 @@
-// base class for animated transitions
-// from start menu to black screen
+
 /**
- *
+ * @file FadeOut base class for animated transitions
+ * from start menu to black screen
  */
 class FadeOut extends StartAnimStage {
   /**

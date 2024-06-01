@@ -1,47 +1,46 @@
-// base class for context menus
-// - takes up a large fraction of screen
-// - content divided into two square regions
-
-// state for sliding animation effect
+/**
+ * @file ContextMenu gobal position/animation state
+ * and base class for various context menu displays.
+ */
 let _lastContextMenuSide = -1;
 let _lastContextMenuTime = -1;
 
 /**
- *
+ * Context Menu modal gui element.
+ * - takes up a large fraction of screen
+ * - content divided into two square regions
  */
 class ContextMenu extends CompositeGuiElement {
 
-  // get params using ContextMenu.pickRects
   /**
-   *
-   * @param rect
-   * @param square0
-   * @param square1
+   * get params using ContextMenu.pickRects
+   * @param {number[]} rect
+   * @param {number[]} square0
+   * @param {number[]} square1
    */
   constructor(rect, square0, square1) {
     super(rect);
 
     this.square0 = square0;
     this.square1 = square1;
-    this.opaque = true;
+    this.withOpacity(true);
   }
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     Button._draw(g, this.rect);
     super.draw(g);
   }
 
-  // pick region for context menu
-  // - within given rect
-  // - leaving poit of interest visible
-  //
-  // return [bounding rect, innner square, inner square]
   /**
+   * pick region for context menu
+   * - within given rect
+   * - leaving poit of interest visible
    *
+   * return [bounding rect, innner square, inner square]
    * @param rect
    * @param pointOfInterest
    */

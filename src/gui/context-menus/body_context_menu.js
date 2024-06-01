@@ -1,8 +1,10 @@
 /**
+ * @file BodyContextMenu gui element
  * context menu and reticle effect
  * that appears when a body is clicked
  */
 class BodyContextMenu extends ContextMenu {
+
   /**
    *
    * @param rect
@@ -24,7 +26,7 @@ class BodyContextMenu extends ContextMenu {
     let bottomRight = [s1[0] + s1[2] - brs, s1[1] + s1[3] - brs, brs, brs];
     bottomRight = padRect(...bottomRight, 0.03);
 
-    this.children = [
+    this.setChildren([
 
       new StatReadout(s0, body.icon, () => body.title, () => 0.5),
 
@@ -35,7 +37,7 @@ class BodyContextMenu extends ContextMenu {
       new IconButton(bottomRight, trashIcon, () => this.deleteBody())
         .withTooltip(`delete ${body.title}\n(no refunds)`)
         .withScale(0.5),
-    ];
+    ]);
   }
 
   /**
@@ -44,7 +46,7 @@ class BodyContextMenu extends ContextMenu {
   deleteBody() {
     let b = this.body;
     while (b.parent) { b = b.parent; }// got top parent
-    global.mainSim.removeBody(b);
+    this.screen.sim.removeBody(b);
     this.closeBodyContextMenu();
   }
 

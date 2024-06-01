@@ -1,7 +1,8 @@
-// base class for edges that are specified
-// based on an angle->radius function
+
 /**
- *
+ * @file RadspecEdge Radius Specified Edge
+ * base class for edges that are specified
+ * based on an angle->radius function
  */
 class RadspecEdge extends Edge {
 

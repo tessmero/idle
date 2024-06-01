@@ -1,7 +1,6 @@
-// context menu (and reticle effect)
-// that appears when a body is clicked
 /**
- *
+ * @file BuddyContextMenu gui element
+ * extended body context menu that also shows particles collected
  */
 class BuddyContextMenu extends BodyContextMenu {
   /**
@@ -19,13 +18,13 @@ class BuddyContextMenu extends BodyContextMenu {
     // const topRows = divideRect(...s0, 4, true);
     const botRows = divideRect(...s1, 4, true);
 
-    this.children = this.children.concat([
+    this.setChildren(this.children.concat([
 
       new StatReadout(botRows[0], collectedIcon, () =>
         buddy.particlesCollected.toString())
         .withStyle('hud')
         .withDynamicTooltip(() => `${buddy.particlesCollected} rain drops collected`)
         .withAutoAdjustRect(true),
-    ]);
+    ]));
   }
 }

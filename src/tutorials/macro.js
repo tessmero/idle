@@ -1,17 +1,20 @@
 
 /**
+ * @file Macro
  * base class for animation sequence
  * that emulates user actions
  */
 class Macro {
 
+  #title;
+
   /**
-   * Construct new tutorial based on
+   * Construct new macro based on
    * implemented buildKeyFrames() method
    * @param title
    */
   constructor(title) {
-    this._title = title;
+    this.#title = title;
     this.reset();
 
     const kf = this.buildKeyframes();
@@ -36,8 +39,6 @@ class Macro {
    *
    * move mouse diagonally across screen
    * return [ [0,'pos',v(0,0)], [1000,'pos',v(1,1)] ]
-   *
-   *
    *
    */
   buildKeyFrames() {
@@ -64,7 +65,7 @@ class Macro {
    * get title string
    */
   getTitle() {
-    return this._title;
+    return this.#title;
   }
 
   /**

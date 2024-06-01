@@ -1,4 +1,8 @@
-
+/**
+ * @file Pixel layouts for some ascii characters.
+ *
+ * Used in characters.js to draw text.
+ */
 const charLayouts = {
 
   // apostrophe

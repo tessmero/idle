@@ -20,11 +20,11 @@ class SausageGrabber extends CompoundGrabber {
     const len = b.sub(a).getMagnitude();
     const cap = pi * rad;
 
-    this.children = [
+    this.setChildren([
       new LineGrabber(a, b, rad, null, 0, len + cap),
       new CircleGrabber(b, rad, null, len),
       new CircleGrabber(a, rad, null, len + cap + len),
-    ];
+    ]);
   }
 
   // called periodically. set member vars

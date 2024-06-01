@@ -1,17 +1,24 @@
 /**
- *
+ * @file TestListRow gui element representing a test,
+ * click to open the test context menu and start the test.
  */
 class TestListRow extends CompositeGuiElement {
+
+  #test;
+  #testIndex;
+
   /**
    *
    * @param rect
-   * @param test
    * @param testIndex
    */
-  constructor(rect, test, testIndex) {
+  constructor(rect, testIndex) {
     super(rect);
-    this.test = test;
-    this.testIndex = testIndex;
+
+    this.#testIndex = testIndex;
+
+    const [_testCat, test] = allTests[testIndex];
+    this.#test = test;
 
     const sr = new StatReadout(rect,
       playIcon, () => test.titleKey)
@@ -19,15 +26,16 @@ class TestListRow extends CompositeGuiElement {
 
     sr.isAnimated = () => sr.hovered || this.isActive();
 
-    this.children = [
+    this.setChildren([
       new Button(rect, () => this.clicked()),
       sr,
-    ];
+    ]);
   }
 
   /**
-   *
-   * @param g
+   * Extend standard composite gui element draw,
+   * by overlaying a progress indicator.
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);
@@ -42,7 +50,7 @@ class TestListRow extends CompositeGuiElement {
    */
   isActive() {
     const c = this.screen.contextMenu;
-    return c && (c.testIndex === this.testIndex);
+    return c && (c.testIndex === this.#testIndex);
   }
 
   /**
@@ -52,7 +60,7 @@ class TestListRow extends CompositeGuiElement {
     // position context menu on bottom/right
     const screen = this.screen;
     const rects = TestContextMenu.pickRects(screen.rect);
-    screen.contextMenu = new TestContextMenu(...rects, this.test, this.testIndex);
+    screen.contextMenu = new TestContextMenu(...rects, this.#testIndex);
     screen.contextMenu.setScreen(screen);
   }
 }

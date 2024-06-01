@@ -1,17 +1,48 @@
-// base class for gui elements that contain "children" gui elements
 /**
- *
+ * @file CompositeGuiElement
+ * base class for elements that contain children elements
  */
 class CompositeGuiElement extends GuiElement {
 
+  #children = [];
+  #opaque = false;
+
   /**
+   * Construct a new empty composite element with the given rectangle.
    *
-   * @param rect
+   * The rectangle may not be displayed but still should roughly
+   * enclose all the children that will be added.
+   *
+   * For opaque composites, the rectangle is
+   * visible and may absorb mouse clicks.
+   * @param {number[]} rect The rectangle for this composite.
    */
   constructor(rect) {
     super(rect);
-    this.children = [];
-    this.opaque = false;
+  }
+
+  /**
+   *
+   */
+  get children() { return this.#children; }
+
+  /**
+   * Prevent setting children with equals sign.
+   */
+  set children(_c) { throw new Error('should use setChildren'); }
+
+  /**
+   * Replace children with the given list.
+   * @param {GuiElement[]} c The new list of children this composite should contain.
+   */
+  setChildren(c) { this.#children = c; }
+
+  /**
+   *
+   * @param c
+   */
+  addChild(c) {
+    this.#children.push(c);
   }
 
   /**
@@ -20,17 +51,16 @@ class CompositeGuiElement extends GuiElement {
    */
   setScale(s) {
     super.setScale(s);
-    this.children.forEach((c) => c.setScale(s));
+    this.#children.forEach((c) => c.setScale(s));
   }
 
-  // set root GameScreen instance
   /**
-   *
+   * set root GameScreen instance
    * @param s
    */
   setScreen(s) {
     super.setScreen(s);
-    this.children.forEach((c) => c.setScreen(s));
+    this.#children.forEach((c) => c.setScreen(s));
   }
 
   /**
@@ -38,7 +68,7 @@ class CompositeGuiElement extends GuiElement {
    * @param o
    */
   withOpacity(o) {
-    this.opaque = o;
+    this.#opaque = o;
     return this;
   }
 
@@ -49,8 +79,8 @@ class CompositeGuiElement extends GuiElement {
    */
   update(dt, disableHover = false) {
     let hovered = super.update(dt, disableHover);
-    hovered = this.opaque && hovered;
-    this.children.forEach((e) => {
+    hovered = this.#opaque && hovered;
+    this.#children.forEach((e) => {
       hovered = e.update(dt, disableHover) || hovered;
     });
     return hovered;
@@ -61,8 +91,8 @@ class CompositeGuiElement extends GuiElement {
    * @param g
    */
   draw(g) {
-    if (this.opaque) { Button._draw(g, this.rect); }
-    this.children.forEach((e) => e.draw(g));
+    if (this.#opaque) { Button._draw(g, this.rect); }
+    this.#children.forEach((e) => e.draw(g));
   }
 
   /**
@@ -72,11 +102,11 @@ class CompositeGuiElement extends GuiElement {
     const mousePos = this.screen.mousePos;
     if (!mousePos) { return false; }
 
-    if (this.children.some((e) => vInRect(mousePos, ...e.rect) &&
+    if (this.#children.some((e) => vInRect(mousePos, ...e.rect) &&
                 e.click())) { return true; }
 
-    if (this.opaque && vInRect(mousePos, ...this.rect)) {
-      // console.log( 'clicked opaque composite elemnt background' )
+    if (this.#opaque && vInRect(mousePos, ...this.rect)) {
+      // console.log('clicked opaque composite element background');
       return true;
     }
 

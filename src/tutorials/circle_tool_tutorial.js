@@ -1,11 +1,11 @@
 
 /**
- *
+ * @file Tutorial for circle tool.
  */
 class CircleToolTutorial extends Macro {
 
   /**
-   *
+   * Prepare miniature circle tool.
    */
   constructor() {
     super('Circle Tutorial');
@@ -18,7 +18,8 @@ class CircleToolTutorial extends Macro {
   }
 
   /**
-   *
+   * Place a new CircleBuddy in the center of the screen.
+   * Click and drag circle to move it.
    */
   buildKeyframes() {
 

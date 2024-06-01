@@ -1,5 +1,7 @@
 /**
+ * @file StatsTab gui element.
  *
+ * Contents for the "stats" tab in the upgrade menu.
  */
 class StatsTab extends CompositeGuiElement {
   /**
@@ -17,7 +19,7 @@ class StatsTab extends CompositeGuiElement {
       r = [r[0], r[1], r[2], dy];
       global.bonusSummary.forEach((entry) => {
         const [icon, summary] = entry;
-        this.children.push(new StatReadout(
+        this.addChild(new StatReadout(
           [...r], icon, () => summary).withScale(0.4));
         r[1] = r[1] + dy;
       });

@@ -1,10 +1,14 @@
+/**
+ * @file Logic for drawing text.
+ */
+
 const charWidth = 5;
 const charHeight = 7;
 
 /**
  *
- * @param s
- * @param scale
+ * @param {string} s
+ * @param {number} scale
  */
 function getTextDims(s, scale = 1) {
   const lines = s.split(/\r?\n/);
@@ -24,7 +28,7 @@ function getTextDims(s, scale = 1) {
 
 /**
  *
- * @param g
+ * @param {object} g The graphics context.
  * @param xpos
  * @param ypos
  * @param layout

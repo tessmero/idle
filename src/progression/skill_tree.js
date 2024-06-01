@@ -1,12 +1,12 @@
-// progression tree for purchasable skills
-//
-// specify tree in constructor
-//
-// persistant instance global.skillTree
-//   contains state of purchased skills for the current game
-
 /**
+ * @file SkillTree object type.
  *
+ * progression tree for purchasable skills
+ *
+ * specify tree in constructor
+ *
+ * persistant instance global.skillTree
+ *   contains state of purchased skills for the current game
  */
 class SkillTree {
 
@@ -17,13 +17,13 @@ class SkillTree {
     this.state = {
 
       'basic_rain': {
-        skill: new BasicRainSkill(),
+        skill: Skill.basicRain,
         pos: [0.5, 0.7], // position in gui
         status: 'purchased',
       },
 
       'fast_rain': {
-        skill: new FastRainSkill(),
+        skill: Skill.fastRain,
         requires: 'basic_rain',
         precludes: 'snow',
         pos: [0.3, 0.5],
@@ -31,7 +31,7 @@ class SkillTree {
       },
 
       'snow': {
-        skill: new SnowSkill(),
+        skill: Skill.snow,
         requires: 'basic_rain',
         precludes: 'fast_rain',
         pos: [0.7, 0.5],
@@ -39,14 +39,14 @@ class SkillTree {
       },
 
       'fast_rain2': {
-        skill: new FastRain2Skill(),
+        skill: Skill.fastRain2,
         requires: 'fast_rain',
         pos: [0.3, 0.3],
         status: 'locked',
       },
 
       'snow2': {
-        skill: new Snow2Skill(),
+        skill: Skill.snow2,
         requires: 'snow',
         pos: [0.7, 0.3],
         status: 'locked',

@@ -1,23 +1,24 @@
-// base class for edges that are specified
-// based on a path along the circumference
+
 /**
- *
+ * @file PathspecEdge Path Specified Edge
+ * base class for edges that are specified
+ * by tracing path along the circumference
  */
 class PathspecEdge extends Edge {
 
-  // compute polar coord [angle,radius,normal angle,r2]
-  // at given distance along circumerence
   /**
+   * Compute edge data at given point along cirumference.
+   * Should return computed [angle,radius,normal angle].
    *
-   * @param _d
+   * Return position and orientation of this edge at that point.
+   * @param {number} _d The 1D position in question.
    */
   computePoint(_d) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
-  // get length of edge (which may loop)
   /**
-   *
+   * get length of edge (which may loop)
    */
   getCircumference() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);

@@ -52,7 +52,7 @@ class ParticleGroup {
       else {
 
         // check if newly grabbed
-        const grabbed = (grab || this.sim.getGrabbers().some((gr) => {
+        const grabbed = (grab || this.sim.grabbers.some((gr) => {
 
           // prevent body grabbing from its own edge
           // (body.js)

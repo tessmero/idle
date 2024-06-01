@@ -1,11 +1,11 @@
 
 /**
- *
+ * @file Tutorial for black box tool.
  */
 class BoxToolTutorial extends Macro {
 
   /**
-   *
+   * Prepare miniature box tool.
    */
   constructor() {
     super('Box Tutorial');
@@ -18,35 +18,33 @@ class BoxToolTutorial extends Macro {
   }
 
   /**
-   *
+   * Copied animation sequence from circle tutorial.
    */
   buildKeyframes() {
 
     const startPos = v(0.5, 0.9);
-    const i = 400;
     return [
 
       [0, 'pos', startPos],
       [1, 'primaryTool'],
 
-      [i, 'pos', v(0.5, 0.5)],
-      [2 * i, 'down'],
-      [2 * i, 'up'],
-      [2 * i, 'defaultTool'],
-      [2 * i, 'pos', v(0.5, 0.5)],
+      [400, 'pos', v(0.5, 0.5)],
+      [400, 'down'],
+      [400, 'up'],
+      [400, 'defaultTool'],
+      [1200, 'pos', v(0.7, 0.4)],
+      [1800, 'pos', v(0.7, 0.4)],
 
-      [4 * i, 'pos', v(0.7, 0.7)],
-      [4.5 * i, 'pos', v(0.7, 0.7)],
+      [2200, 'pos', v(0.5, 0.4)], // on control point
+      [2400, 'pos', v(0.5, 0.4)],
+      [2400, 'down'],
+      [3300, 'pos', v(0.4, 0.6)],
 
-      [6 * i, 'pos', v(0.5, 0.5)],
-      [6 * i, 'down'],
-      [7 * i, 'pos', v(0.3, 0.3)],
-      [8 * i, 'pos', v(0.8, 0.3)],
-      [9 * i, 'pos', v(0.5, 0.5)],
-      [9 * i, 'up'],
+      // [4000, 'pos', v(0.6, 0.6)],
+      [3300, 'up'],
 
-      [10 * i, 'pos', startPos],
-      [10.5 * i, 'pos', startPos],
+      [4500, 'pos', startPos],
+      [10000, 'pos', startPos],
 
     ];
   }

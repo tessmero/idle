@@ -1,11 +1,11 @@
 /**
- *
+ * @file TabHeaderButton gui element
+ * A button owned by a TabPaneGroup, used to switch tabs.
  */
 class TabHeaderButton extends TextButton {
 
-  // called in TabPaneGroup constructor
   /**
-   *
+   * called in TabPaneGroup constructor
    * @param parent
    * @param tabIndex
    * @param rect
@@ -21,8 +21,8 @@ class TabHeaderButton extends TextButton {
   }
 
   /**
-   *
-   * @param g
+   * Override the standard button appearance to draw tab header.
+   * @param {object} g The graphics context.
    */
   draw(g) {
     const rect = this.rect;

@@ -1,18 +1,18 @@
 
 /**
- * Render graphics
+ * @file Top level draw function for main game loop.
  */
 function draw() {
-  const ctx = global.ctx;
-  const g = ctx;
+  const g = global.ctx;
+  const screen = global.mainScreen;
+  const sim = screen.sim;
 
   // limit radius slider for sandbox debug menu
   const lim = 0.005 * 5;
-  if (global.mainSim.particleRadius > lim) { global.mainSim.particleRadius = lim; }
-  if (global.mainSim.particleRadius < -lim) { global.mainSim.particleRadius = -lim; }
+  if (sim.particleRadius > lim) { sim.particleRadius = lim; }
+  if (sim.particleRadius < -lim) { sim.particleRadius = -lim; }
 
   // draw main sim and gui
-  const screen = global.mainScreen;
   screen.sim.rect = screen.rect;
   screen.draw(g);
 

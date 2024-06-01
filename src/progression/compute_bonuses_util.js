@@ -1,9 +1,8 @@
 
-// called in updateAllBonuses
-// compute value and
-// apply conversion if applicable (human readable -> internal units)
 /**
- *
+ * called in updateAllBonuses
+ * compute value and
+ * apply conversion if applicable (human readable -> internal units)
  * @param e
  */
 function _computeBonusVal(e) {
@@ -34,13 +33,12 @@ function _updateBonus(key, f) {
   return [e.icon, summary];
 }
 
-// add and multiply together all the bonuses from
-//  - passive skills and upgrades that have been purchased
-//  - temporary effects ongoing in global.mainSim
-//
-// finally, apply bonuses by adjusting settings in global.mainSim
 /**
+ * add and multiply together all the bonuses from
+ *  - passive skills and upgrades that have been purchased
+ *  - temporary effects ongoing in global.rootScreen.sim
  *
+ * finally, apply bonuses by adjusting settings in global.rootScreen.sim
  */
 function updateAllBonuses() {
 
@@ -49,15 +47,15 @@ function updateAllBonuses() {
     // compute+apply each bonus, and build summary
     const specs = [
       ['nparticles', (val) => {
-        global.mainSim.rainGroup.n = val;
+        global.rootScreen.sim.rainGroup.n = val;
       }],
 
       ['rain_speed', (val) => {
-        global.mainSim.fallSpeed = val;
+        global.rootScreen.sim.fallSpeed = val;
       }],
 
       ['catch_radius', (val) => {
-        global.toolList[0].rad = val;
+        global.rootScreen.sim.toolList[0].rad = val;
       }],
     ];
     global.bonusSummary = specs.map((entry) => _updateBonus(...entry));

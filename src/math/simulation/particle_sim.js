@@ -1,19 +1,53 @@
 /**
- *
+ * @file ParticleSim object type.
+ * Owned by a GameScreen instance.
+ * Contains one of each type of particle group:
+ * one procedural group, one physics group, and one edge group.
  */
 class ParticleSim {
 
+  #grabbers = new Set();
+  #bodies = new Set();
+  #particlesCollected = 0;
+
   /**
    *
-   * @param n
-   * @param rect
-   * @param title
    */
-  constructor(n, rect, title = null) {
+  get particlesCollected() {
+    return this.usesGlobalCurrency ?
+      global.particlesCollected : this.#particlesCollected;
+  }
+
+  /**
+   *
+   */
+  set particlesCollected(pc) {
+    if (this.usesGlobalCurrency) {
+      global.particlesCollected = pc;
+    }
+    else {
+      this.#particlesCollected = pc;
+    }
+  }
+
+  /**
+   * Create a new Particle Simulation.
+   * @param {number} n The max number of particles in each group.
+   * @param {number[]} rect The bounding rectangle for the simulation.
+   */
+  constructor(n, rect) {
     this.rect = rect;
-    if (title) { throw new Error('title'); }
     this.t = 0;
     this.paused = false;
+
+    // prepare toolList
+    this.toolList = [
+      new DefaultTool(this, global.mouseGrabRadius),
+      new CircleTool(this),
+      new LineTool(this),
+      new BoxTool(this),
+      new PiTool(this, global.mouseGrabRadius),
+    ];
 
     // particles
     this.rainGroup = new ProceduralPGroup(this, n);
@@ -23,9 +57,6 @@ class ParticleSim {
     // prepare extra subgroup for various leftover physics particles
     // e.g. particles emitted by body, then body was deleted
     this.leftoverPPS = this.physicsGroup.newSubgroup();
-
-    this._grabbers = new Set(); // Grabber instances
-    this._bodies = new Set(); // Body instances
     this.floaters = new FloaterGroup(1000);
     this.poiMaxArea = 1e-2;
     this.poiShrinkRate = 1e-6;// vunits^2 area lost per ms
@@ -45,20 +76,22 @@ class ParticleSim {
     this.draggingControlPoint = null; // ControlPoint instance
   }
 
-  // trigger context menu if applicable
   /**
-   *
-   * @param body
+   * Called when default tool is clicked on a body.
+   * Trigger context menu if applicable.
+   * @param {Body} body The body that was clicked.
    */
   bodyClicked(body) {
+    // trigger callback
+    body.clicked();
 
-    // go to representative body if
-    // some part of a compound body was selected
+    // find Buddy instance (top level CompoundBody)
+    // or "main" Body of CompoundBody
+    // or use given Body with no heirarchy
     let b = body;
     while (b.parent) {
       b = b.parent;
     }
-
     if (b instanceof Buddy) {
       // do nothing
     }
@@ -70,11 +103,10 @@ class ParticleSim {
     this.selectedParticle = null;
   }
 
-  // trigger particle context menu
-  // using particle inspector tool
   /**
-   *
-   * @param p
+   * Called when particle inspector tool
+   * grabs a particle.
+   * @param {object} p Data about the particle.
    */
   particleClicked(p) {
     this.selectedParticle = p;
@@ -82,37 +114,53 @@ class ParticleSim {
   }
 
   /**
-   *
+   * Get the tool currently represented by the cursor.
    */
-  getTool() {
+  get tool() {
     return this._tool;
   }
 
   /**
-   *
-   * @param t
+   * Prevent changing tool with equal sign.
+   */
+  set tool(_t) {
+    throw new Error('should use setTool');
+  }
+
+  /**
+   * Unregister the current tool and switch to the new tool.
+   * @param {Tool} t The new tool show for the cursor for this sim
    */
   setTool(t) {
-    if (t === this._tool) { return; }
+    const prev = this._tool;
+    if (t === prev) { return; }
 
-    if (this._tool) {
-      this._tool.unregister(this);
+    if (prev) {
+      prev.unregister(this);
     }
     this._tool = t;
+    if (t) { t.setSim(this); }
+  }
+
+  /**
+   * Prevent assigning grabbers list with equals sign.
+   */
+  set grabbers(_g) {
+    throw new Error('not allowed');
   }
 
   /**
    *
    */
-  getGrabbers() {
-    return [...this._grabbers];
+  get grabbers() {
+    return [...this.#grabbers];
   }
 
   /**
    *
    */
   clearGrabbers() {
-    this._grabbers.clear();
+    this.#grabbers.clear();
   }
 
   /**
@@ -120,7 +168,7 @@ class ParticleSim {
    * @param b
    */
   addGrabber(b) {
-    this._grabbers.add(b);
+    this.#grabbers.add(b);
   }
 
   /**
@@ -128,54 +176,53 @@ class ParticleSim {
    * @param b
    */
   removeGrabber(b) {
-    this._grabbers.delete(b);
+    this.#grabbers.delete(b);
   }
 
   /**
-   *
+   * Get a copy of the list of bodies in this sim.
    */
-  getBodies() {
-    return [...this._bodies];
+  get bodies() {
+    return [...this.#bodies];
   }
 
   /**
-   *
-   * @param b
+   * Add a body to this simulation.
+   * @param {Body} b The body that should be added
    */
   addBody(b) {
-    if (this._bodies.length >= global.maxBodyCount) {
+    if (this.#bodies.length >= global.maxBodyCount) {
       return;
     }
 
-    if (this._bodies.has(b)) {
+    if (this.#bodies.has(b)) {
       return;
     }
 
-    this._bodies.add(b);
+    this.#bodies.add(b);
     b.sim = this;
     b.register(this);
   }
 
   /**
-   *
+   * Unregister and
    * @param b
    */
   removeBody(b) {
-    this._bodies.delete(b);
+    this.#bodies.delete(b);
     b.unregister(this);
   }
 
-  // remove all bodies
   /**
-   *
+   * remove all bodies
    */
   clearBodies() {
-    [...this._bodies].forEach((b) => this.removeBody(b));
+    [...this.#bodies].forEach((b) => this.removeBody(b));
     this.selectedBody = null;
   }
 
   /**
-   *
+   * Reset this simulation.
    */
   reset() {
     const s = this;
@@ -197,8 +244,8 @@ class ParticleSim {
   }
 
   /**
-   *
-   * @param dt
+   * Advance time and bodies in simulation.
+   * @param {number} dt The time elapsed since last update.
    */
   update(dt) {
     global.livePerformanceStats.flagSim(this, 'updated');
@@ -209,7 +256,7 @@ class ParticleSim {
     this.t = this.t + dt;
 
     // update bodies
-    const toRemove = [...this._bodies].filter((p) => {
+    const toRemove = [...this.#bodies].filter((p) => {
       const alive = p.update(dt);
       return !alive;
     });
@@ -217,14 +264,14 @@ class ParticleSim {
   }
 
   /**
-   *
-   * @param p
+   * Update member hoveredControlPoint
+   * @param {Vector} p The position of the mouse.
    */
   updateControlPointHovering(p) {
 
     // update control point hovering status
     if (!this.draggingControlPoint) {
-      const cps = this.getBodies().flatMap((b) => b.controlPoints);
+      const cps = this.bodies.flatMap((b) => b.controlPoints);
       this.hoveredControlPoint = cps.find(
         (cp) => (cp.pos.sub(p).getD2() < cp.r2));
     }
@@ -233,14 +280,14 @@ class ParticleSim {
   /**
    * callback used for black box inner simulation
    * called in physics_particle_subgroup.js
-   * @param _pos
-   * @param _vel
+   * @param {Vector} _pos The position of the particle.
+   * @param {Vector} _vel The velocity of the particle.
    */
   physicsParticlePassedOffscreen(_pos, _vel) {}
 
   /**
-   *
-   * @param g
+   * Draw this simulation.
+   * @param {object} g The graphics context.
    * @param hidden 05/26/2024 hacky flag to make persistent screens work
    */
   draw(g, hidden = false) {
@@ -257,8 +304,8 @@ class ParticleSim {
     resetRand();
     if (!hidden) {
       g.fillStyle = global.colorScheme.fg;
-      this._bodies.forEach((p) => p.draw(g));
-      this._bodies.forEach((p) => p.drawDebug(g));
+      this.#bodies.forEach((p) => p.draw(g));
+      this.#bodies.forEach((p) => p.drawDebug(g));
     }
 
     const c = hidden ? false : global.colorcodeParticles;
@@ -272,7 +319,7 @@ class ParticleSim {
     this.edgeGroup.draw(g, counter, pdraw);
 
     if (global.debugGrabbers) {
-      this._grabbers.forEach((gr) => gr.drawDebug(g));
+      this.#grabbers.forEach((gr) => gr.drawDebug(g));
     }
 
     if (!hidden) {

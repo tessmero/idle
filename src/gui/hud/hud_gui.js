@@ -1,6 +1,7 @@
 
 /**
- *
+ * @file HUD (HEads Up Display)
+ * Top-level GUI container that appears during gameplay.
  */
 class HudGui extends Gui {
 
@@ -12,7 +13,6 @@ class HudGui extends Gui {
     super('hud gui', ...p);
   }
 
-  // implement gui
   /**
    *
    * @param screen
@@ -38,8 +38,16 @@ class HudGui extends Gui {
     const topCenterP = [sr[0] + sr[2] * 0.4, topClp[1]];
     const topCrp = [sr[0] + sr[2] * 0.7, topClp[1]];
 
+    // decide which tools will be available
+    let toolList = sim.toolList;
+    if (!global.sandboxMode) {
+
+      // remove sandbox-only tools
+      const toRemove = [PiTool, BoxTool];
+      toolList = toolList.filter((t) => !toRemove.some((clazz) => t instanceof clazz));
+    }
+
     // layout toolbar at bottom of screen
-    const toolList = global.toolList;
     const nbuttons = toolList.length;
     const padding = 0.005;
     const buttonWidth = m - padding * 2;
@@ -54,11 +62,10 @@ class HudGui extends Gui {
     // build top hud
     let result = [
 
-      // stats button
+      // upgrade menu button
       new IconButton(topLeft, statsIcon, () => {
-        this.gsm.toggleStats(); // game_State_manager.js
-      })
-        .withTooltip('toggle upgrades menu'),
+        this.gsm.toggleStats();
+      }).withTooltip('toggle upgrades menu'),
 
       // stat readouts constructed with null width and height
       // dims are computed in dynamic_text_label.js
@@ -93,7 +100,7 @@ class HudGui extends Gui {
           .withAutoAdjustRect(true),
 
       // pause button
-      new IconButton(topRight, pauseIcon, () => this.gsm.pause()) // game_state.js
+      new IconButton(topRight, pauseIcon, () => this.gsm.pause())
         .withTooltip('pause or quit the game'),
     ];
 
@@ -107,7 +114,7 @@ class HudGui extends Gui {
       const tool = toolList[i];
       const button = new ToolbarButton(slots[i], tool, i);
 
-      const tooltip = tool.tooltip; // tooltip string
+      const tooltip = tool.tooltipText; // tooltip string
 
       // check if tutorial available
       const tut = tool.getTutorial();
@@ -115,7 +122,7 @@ class HudGui extends Gui {
 
         // build tooltip with string label and tutorial sim
         button.withDynamicTooltip(() => {
-          const ttpr = ToolbarTooltipPopup.pickRect(global.mainScreen, tooltip);
+          const ttpr = ToolbarTooltipPopup.pickRect(this.screen, tooltip);
           const innerScreen = ToolbarTooltipPopup.getScreen(tut);
           return new ToolbarTooltipPopup(ttpr, tooltip, innerScreen, tool);
         });
@@ -134,9 +141,8 @@ class HudGui extends Gui {
     return result;
   }
 
-  // get catch percentage string e.g. '50%'
   /**
-   *
+   * Get catch percentage string e.g. '50%'.
    */
   getPct() {
     const sim = this.sim;
@@ -167,6 +173,8 @@ class HudGui extends Gui {
     sim.selectedBody = null;
     sim.selectedParticle = null;
     screen.contextMenu = null;
-    sim.setTool(global.toolList[0]);
+
+    // switch to default tool
+    sim.setTool(sim.toolList[0]);
   }
 }

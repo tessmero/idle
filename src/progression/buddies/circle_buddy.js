@@ -1,5 +1,6 @@
 
 /**
+ * @file CircleBuddy object type.
  * controlled circle body
  * eats particles and contributes to player currency
  */
@@ -20,7 +21,7 @@ class CircleBuddy extends Buddy {
     cp.setRad(rad);
     this.controlPoint = cp;
 
-    this.children = [this.circle, cp];
+    this.setChildren([this.circle, cp]);
     this.controlPoints = [cp];
   }
 

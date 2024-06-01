@@ -1,6 +1,6 @@
-// a button with text
 /**
- *
+ * @file TextButton gui element.
+ * a button with some text.
  */
 class TextButton extends Button {
 

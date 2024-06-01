@@ -1,17 +1,60 @@
 /**
+ * @file Tool base class.
  * a tool is an element in the toolbar
  * it determines the appearnace of the mouse cursor
  * and some interaction with a particle sim when clicking
  */
 class Tool {
 
+  #sim;
+  #icon;
+  #tooltipText;
+  #cursorCenter;
+
   /**
    *
    * @param sim
+   * @param icon
+   * @param tooltipText
+   * @param cursorCenter
    */
-  constructor(sim) {
-    this.sim = sim;
+  constructor(sim, icon, tooltipText, cursorCenter) {
+    this.#sim = sim;
+    this.#icon = icon;
+    this.#tooltipText = tooltipText;
+    this.#cursorCenter = cursorCenter;
   }
+
+  /**
+   *
+   */
+  set sim(_s) { throw new Error('should use setSim'); }
+
+  /**
+   * called in particle_sim.js setTool()
+   * @param sim
+   */
+  setSim(sim) {
+    const prev = this.#sim;
+    if (prev === sim) { return; }
+    if (prev) { this.unregister(prev); }
+    this.#sim = sim;
+  }
+
+  /**
+   *
+   */
+  get sim() { return this.#sim; }
+
+  /**
+   *
+   */
+  get icon() { return this.#icon; }
+
+  /**
+   *
+   */
+  get tooltipText() { return this.#tooltipText; }
 
   /**
    *
@@ -41,20 +84,19 @@ class Tool {
   unregister(_sim) {}
 
   /**
-   *
+   * Return true if the player can afford to use this tool.
    */
   isUsable() {
-
-    if (this.sim !== global.mainSim) { return true; }
+    if (!global.mainScreen) { return false; }
+    if (this.sim !== global.mainScreen.sim) { return true; }
 
     const cost = this.getCost();
     const budget = this.sim.particlesCollected;
     return budget >= cost;
   }
 
-  // return number of raindrops
   /**
-   *
+   * Get number of raindrops required to use this tool.
    */
   getCost() {
     return 0;
@@ -69,7 +111,7 @@ class Tool {
 
   /**
    * draw overlay
-   * @param _g
+   * @param {object} _g The graphics context.
    */
   draw(_g) {
     // do nothing
@@ -77,7 +119,7 @@ class Tool {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param p
    * @param scale
    * @param enableIdleAnim
@@ -90,23 +132,8 @@ class Tool {
       this.icon.getCurrentAnimatedLayout() : this.icon.frames[0];
 
     g.fillStyle = global.colorScheme.fg;
-    drawLayout(g, ...p, layout, this.cursorCenter, new FontSpec(0.005, scale, true));
-    drawLayout(g, ...p, layout, this.cursorCenter, new FontSpec(0, scale, false));
+    drawLayout(g, ...p.xy(), layout, this.#cursorCenter, new FontSpec(0.005, scale, true));
+    drawLayout(g, ...p.xy(), layout, this.#cursorCenter, new FontSpec(0, scale, false));
 
-  }
-
-  /**
-   *
-   * @param g
-   * @param rect
-   */
-  drawToolbarIcon(g, rect) {
-
-    // get static cursor pixel art layout
-    // or get animated cursor if idle
-    const layout = (global.mainScreen.idleCountdown <= 0) ?
-      this.icon.getCurrentAnimatedLayout() : this.icon.frames[0];
-
-    drawLayout(g, ...rectCenter(...rect), layout);
   }
 }

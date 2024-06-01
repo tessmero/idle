@@ -1,11 +1,11 @@
 
 /**
- *
+ * @file Tutorial for line tool.
  */
 class LineToolTutorial extends Macro {
 
   /**
-   *
+   * Prepare miniature line tool.
    */
   constructor() {
     super('Line Tutorial');
@@ -18,32 +18,32 @@ class LineToolTutorial extends Macro {
   }
 
   /**
-   *
+   * Place line (ControlledSausageBody) in center.
+   * Click and drag control point to rotate line.
    */
   buildKeyframes() {
 
     const startPos = v(0.5, 0.9);
-    const i = 400;
     return [
 
       [0, 'pos', startPos],
       [1, 'primaryTool'],
 
-      [i, 'pos', v(0.5, 0.5)],
-      [i, 'down'],
-      [i, 'up'],
-      [i, 'defaultTool'],
-      [3 * i, 'pos', v(0.7, 0.4)],
-      [4.5 * i, 'pos', v(0.7, 0.4)],
+      [400, 'pos', v(0.5, 0.5)],
+      [400, 'down'],
+      [400, 'up'],
+      [400, 'defaultTool'],
+      [1200, 'pos', v(0.7, 0.4)],
+      [1800, 'pos', v(0.7, 0.4)],
 
-      [5.5 * i, 'pos', v(0.4, 0.4)], // on control point
-      [6 * i, 'pos', v(0.4, 0.4)],
-      [6 * i, 'down'],
-      [7 * i, 'pos', v(0.4, 0.8)],
-      [7 * i, 'up'],
+      [2200, 'pos', v(0.4, 0.4)], // on control point
+      [2400, 'pos', v(0.4, 0.4)],
+      [2400, 'down'],
+      [2800, 'pos', v(0.4, 0.8)],
+      [2800, 'up'],
 
-      [8 * i, 'pos', startPos],
-      [9 * i, 'pos', startPos],
+      [3200, 'pos', startPos],
+      [3600, 'pos', startPos],
 
     ];
   }

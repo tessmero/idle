@@ -1,6 +1,6 @@
-// keep track of the color of certain points in graphics context
 /**
- *
+ * @file limited jscanvas graphics wrapper for tests
+ * keep track of the color of certain points on screen
  */
 class PointWatcherGW extends GraphicsWrapper {
 

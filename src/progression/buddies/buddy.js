@@ -1,8 +1,10 @@
 /**
- * base class for privileged bodies
+ * @file Buddy base class for privileged bodies
  * with their own progression state
  */
 class Buddy extends CompoundBody {
+
+  particlesCollected = 0;
 
   /**
    *
@@ -14,7 +16,6 @@ class Buddy extends CompoundBody {
 
     this.exp = 0;
     this.expLevel = 1;
-    this.particlesCollected = 0;
 
     this.levelCosts = ValueCurve.power(100, 2);
   }

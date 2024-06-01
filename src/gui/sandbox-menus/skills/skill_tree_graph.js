@@ -1,6 +1,7 @@
-// draw the edges between skill cards in the skill tree gui
 /**
- *
+ * @file SkillTreeGraph gui element
+ * Used to draw the lines connecting skills in the tree
+ * Drawn behind other elements in the skills tab
  */
 class SkillTreeGraph extends GuiElement {
 

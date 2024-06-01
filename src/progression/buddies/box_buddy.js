@@ -19,6 +19,8 @@ const _allBoxInternalScreens = new Map();
  */
 class BoxBuddy extends Buddy {
 
+  #wasUnregistered;
+
   /**
    *
    * @param sim
@@ -30,6 +32,7 @@ class BoxBuddy extends Buddy {
 
     // setup new inner screen
     const outerScreen = sim.screen;
+    this.outerScreen = outerScreen;
     this.innerScreen = this._getInnerScreen(outerScreen);
 
     // override callback for inner sim
@@ -56,9 +59,19 @@ class BoxBuddy extends Buddy {
     this.controlPoints = [this.movCp, this.rotCp0];
     this.rotCp0.fscale = 6;
 
+    // detect double click on translation control point
+    let lastClickTime = 0;
+    this.movCp.clicked = () => {
+      const t = global.t;
+      if ((t - lastClickTime) < 300) {
+        global.gsp.setInnerScreen(this.innerScreen);
+      }
+      lastClickTime = t;
+    };
+
     // this.constraints = [new Spring(this.rotCp0,this.rotCp1)]
-    this.children = [square, ...this.controlPoints];
-    this.dripChance = global.poiDripChance;
+    this.setChildren([square, ...this.controlPoints]);
+
   }
 
   /**
@@ -90,24 +103,16 @@ class BoxBuddy extends Buddy {
   }
 
   /**
-   * Update inner screen, in addition to standard Buddy update.
+   * Extend standard buddy update by updating inner screen.
    * @param {number} dt The time elapsed.
    */
   update(dt) {
-
     const outerSim = this.sim;
     const innerSim = this.innerScreen.sim;
 
     innerSim.particleG = outerSim.particleG.rotate(-this.square.angle);
-    innerSim.update(dt);
 
-    // 05/26/2024 hack to make persistence work
-    // check if the inner sim will be drawn in gui
-    if (outerSim.selectedBody !== this) {
-
-      // execute hidden draw
-      innerSim.draw(null, true);
-    }
+    this.particlesCollected = innerSim.physicsGroup.countActiveParticles();
 
     return super.update(dt);
   }
@@ -122,6 +127,13 @@ class BoxBuddy extends Buddy {
    */
   _innerPoob(innerPos, innerVel) {
 
+    if (this.#wasUnregistered) {
+
+      // box is not in active sim
+      // let particle escape to nowhere
+      return;
+    }
+
     // translate to outer sim coordinates
     const bod = this.square;
     const angle = bod.angle;
@@ -133,7 +145,6 @@ class BoxBuddy extends Buddy {
     // add particle to outer sim
     const outerSim = this.sim;
     const pps = outerSim.leftoverPPS;
-    this.particlesCollected = this.particlesCollected - 1;
     pps.spawnParticle(pos, vel);
   }
 
@@ -184,7 +195,6 @@ class BoxBuddy extends Buddy {
 
     // add particle to inner sim
     const pps = innerSim.leftoverPPS;
-    this.particlesCollected = this.particlesCollected + 1;
     pps.spawnParticle(pos, vel);
   }
 
@@ -192,6 +202,16 @@ class BoxBuddy extends Buddy {
    *
    */
   getMainBody() { return this.square; }
+
+  /**
+   * Extend standard buddy unregister.
+   * Set flag so inner sim particles may escape to nowhere
+   * @param sim
+   */
+  unregister(sim) {
+    super.unregister(sim);
+    this.#wasUnregistered = true;
+  }
 
   /**
    * Called in constructor.
@@ -204,7 +224,7 @@ class BoxBuddy extends Buddy {
     }
 
     // count existing boxes (not including this)
-    const bods = outerScreen.sim.getBodies();
+    const bods = outerScreen.sim.bodies;
     const boxes = [...bods].filter((b) => b instanceof BoxBuddy);
     const boxIndex = boxes.length;
 
@@ -228,18 +248,71 @@ class BoxBuddy extends Buddy {
   _buildInnerScreen(outerScreen, boxIndex) {
 
     // prepare blank tutorial screen
-    const sim = new TutorialPSim();
-    const gsm = GameStateManager.blankGsm();
+    const sim = new BoxPSim();
+    sim.usesGlobalCurrency = this.outerScreen.sim.usesGlobalCurrency;
+    const gsm = new GameStateManager();// GameStateManager.blankGsm();
     const macro = null;
-
-    // disable procedural particles
-    sim.rainGroup.n = 0;
 
     // set terminal velocity for physics particles
     sim.fallSpeed = outerScreen.sim.fallSpeed;
 
-    const titleKey = `box ${boxIndex} in ${outerScreen.title}`;
+    const titleKey = `box ${boxIndex} in ${outerScreen.titleKey}`;
     const innerscreen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
+
+    gsm.setState(GameStates.playing);
+    sim.setTool(sim.toolList[0]);
+
     return innerscreen;
+  }
+
+  /**
+   * Check performance log and execute hidden draws as
+   * necessary to make sure all connected black box screens are updated
+   * May2024 box persistence
+   * @param {number} dt The time elapsed.
+   */
+  static ensureAllBoxesUpdated(dt) {
+
+    const abis = _allBoxInternalScreens;
+    for (const [parent, children] of abis.entries()) {
+      BoxBuddy._ensureScreenWasUpdated(parent, dt);
+      for (const child of children) {
+        BoxBuddy._ensureScreenWasUpdated(child, dt);
+      }
+    }
+
+  }
+
+  /**
+   * Check live performance stats to see if the screen was just updated.
+   * if necessary, update the given screen using a hidden draw.
+   * @param screen
+   * @param {number} dt The time elapsed.
+   */
+  static _ensureScreenWasUpdated(screen, dt) {
+    const lps = global.livePerformanceStats;
+    const key = screen.titleKey;
+
+    // check if the screen was updated
+    if (!lps.activeScreens.has(key)) {
+
+      // update screen
+      screen.sim.update(dt);
+      screen.sim.draw(null, true);
+    }
+  }
+
+  /**
+   *
+   * @param screen
+   */
+  static getParentScreen(screen) {
+    const abis = _allBoxInternalScreens;
+    for (const [parent, children] of abis.entries()) {
+      if (children.includes(screen)) {
+        return parent;
+      }
+    }
+    return null;
   }
 }

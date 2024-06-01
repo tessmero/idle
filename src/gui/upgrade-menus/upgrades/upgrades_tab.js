@@ -1,7 +1,10 @@
 /**
+ * @file UpgradesTab gui element
  *
+ * Contents for the "upgrades" tab in the upgrades menu.
  */
 class UpgradesTab extends CompositeGuiElement {
+
   /**
    *
    * @param sr
@@ -18,11 +21,12 @@ class UpgradesTab extends CompositeGuiElement {
 
     if (!global.upgradeTracks) { return; }
     const specs = global.upgradeTracks.state;
-    this.children = Object.keys(specs).map((key) => {
+    const upgraders = Object.keys(specs).map((key) => {
       const agvRect = r0;
       r0 = [...r0];
       r0[1] = r0[1] + r0[3];
       return new StatUpgrader(agvRect, key);
     });
+    this.setChildren(upgraders);
   }
 }

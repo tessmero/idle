@@ -1,8 +1,10 @@
-// a pixel art icon followed by a line of dynamic text
 /**
- *
+ * @file StatReadout Gui Element
+ * An icon followed by a line of dynamic text.
  */
 class StatReadout extends DynamicTextLabel {
+
+  #icon;
 
   /**
    *
@@ -11,41 +13,66 @@ class StatReadout extends DynamicTextLabel {
    * @param labelFunc
    */
   constructor(rect, icon, labelFunc) {
-    super(rect, () => `  ${ labelFunc()}`);
-    this.icon = icon;
+
+    // make room for icon by displaying
+    // 2 blank spaces to the left of the label
+    super(rect, () => `  ${labelFunc()}`);
+
+    this.#icon = icon;
     this.setScale(this.constructor.scale());
-    this.center = false;
+    this.setCenter(false);
   }
 
   /**
    *
    */
+  get icon() {
+    return this.#icon;
+  }
+
+  /**
+   * Allow assigning icon with equal sign.
+   * @param  {Icon} i The icon to display.
+   */
+  set icon(i) {
+    this.#icon = i;
+  }
+
+  /**
+   * Stat readout icon is animated by default.
+   * @returns {boolean} true to make the icon animated.
+   */
+  isAnimated() {
+    return true;
+  }
+
+  /**
+   * Default scale (font size) for stat readouts.
+   */
   static scale() { return 0.5; }
 
-  // implement GuiElement
   /**
-   *
-   * @param g
+   * Draw this stat readout.
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);
 
+    const rect = this.rect;
+    const pad = this.pad;
+    const scale = this.scale;
+
+    const icon = this.#icon;
+
     // draw icon
     const tps = global.textPixelSize;
-    const xy = [this.rect[0] + this.pad, this.rect[1] + this.pad + this.scale * tps];
+    const xy = [rect[0] + pad, rect[1] + pad + scale * tps];
 
-    if (!this.icon) { return; }
+    if (!icon) { return; }
     const layout = this.isAnimated() ?
-      this.icon.getCurrentAnimatedLayout() : this.icon.frames[0]; // icon.js
+      icon.getCurrentAnimatedLayout() : icon.frames[0]; // icon.js
 
-    drawLayout(g, xy[0], xy[1], layout, false, new FontSpec(this.pad, this.scale, true)); // character.js
-    drawLayout(g, xy[0], xy[1], layout, false, new FontSpec(0, this.scale, false)); // character.js
-  }
-
-  /**
-   *
-   */
-  isAnimated() {
-    return true;
+    drawLayout(g, xy[0], xy[1], layout, false, new FontSpec(pad, scale, true)); // character.js
+    drawLayout(g, xy[0], xy[1], layout, false, new FontSpec(0, scale, false)); // character.js
   }
 }

@@ -1,20 +1,19 @@
-// circle for the user to click and drag
-// to move or rotate another body
+
 /**
- *
+ * @file ControlPoint object type.
+ * Body with no direct interaction with particles.
+ * The user can click and drag to move or rotate another body.
  */
 class ControlPoint extends Body {
 
-  // anchoredTo is a body that this will be anchored to
   /**
-   *
+   * anchoredTo is a body that this will be anchored to
    * @param sim
    * @param anchoredTo
    */
   constructor(sim, anchoredTo) {
-    super(sim);
+    super(sim, anchoredTo.pos);
     this.anchoredTo = anchoredTo;
-    this.pos = anchoredTo.pos;
     this.setRad(this.sim.controlPointRadius);
     this.visible = true;
     this.fscale = 1;
@@ -61,7 +60,7 @@ class ControlPoint extends Body {
     let color = col;
     if (!color) { color = global.colorScheme.fg; }
 
-    const c = pos.xy();
+    const c = pos;
 
     let start = 0;
     let stop = twopi;
@@ -87,23 +86,21 @@ class ControlPoint extends Body {
     g.lineWidth = global.controlPointLineWidth;
     g.beginPath();
     g.moveTo(...pos.add(vp(start, rad)).xy());
-    g.arc(...c, rad, start, stop);
+    g.arc(...c.xy(), rad, start, stop);
     g.stroke();
 
   }
 
-  // pass user input "force" to physics-enabled parent body
   /**
-   *
+   * pass user input force to physics-enabled parent body
    * @param acc
    */
   accel(acc) {
     this.anchoredTo.accel(acc.mul(this.fscale));
   }
 
-  // remain stuck to parent
   /**
-   *
+   * remain stuck to parent
    * @param _dt
    */
   update(_dt) {
@@ -117,7 +114,7 @@ class ControlPoint extends Body {
   register(_sim) {}
 
   /**
-   *
+   * no direct interaction with particles
    * @param _sim
    */
   unregister(_sim) {}

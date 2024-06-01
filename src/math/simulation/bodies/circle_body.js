@@ -1,6 +1,5 @@
-// physics-enabled circle
 /**
- *
+ * @file CircleBody object type, a physics-enabled circle.
  */
 class CircleBody extends Body {
   /**
@@ -14,8 +13,6 @@ class CircleBody extends Body {
 
     this.rad = rad;
     this.md2 = rad * rad;
-
-    this.dripChance = global.poiDripChance;
 
     //
     this.title = 'circle';

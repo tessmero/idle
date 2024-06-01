@@ -1,13 +1,12 @@
-// a tooltip with some text and a simulation
-// also shows tool cost with progress indicator
+
 /**
- *
+ * a tooltip with some text and a simulation
+ * also shows tool cost with progress indicator
  */
 class ToolbarTooltipPopup extends TutorialTooltipPopup {
 
-  // get rect using ToolbarTooltipPopup.pickRect
   /**
-   *
+   * get rect using ToolbarTooltipPopup.pickRect
    * @param rect
    * @param label
    * @param tut
@@ -24,18 +23,16 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
       const h = ToolbarTooltipPopup.piHeight();
       r = [r[0], r[1] + r[3] - h, r[2], h];
 
-      /**
-       *
-       * @param f
-       */
-      function bc(f) { // apply f to budget,cost
-        const b = global.mainSim.particlesCollected;
+      // apply f to budget,cost
+      const bc = (f) => {
+        const screen = this.screen;
+        const b = screen ? screen.sim.particlesCollected : 0;
         const c = tool.getCost();
         return f(b, c);
-      }
+      };
 
       // text readout
-      this.children.push(new StatReadout(r, collectedIcon,
+      this.addChild(new StatReadout(r, collectedIcon,
         () => bc((budget, cost) => {
           if (budget > cost) { return `${cost.toFixed(0)}`; }
           return `${budget.toFixed(0)}/${cost.toFixed(0)}`;
@@ -43,7 +40,7 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
         .withCenter(true));
 
       // progress bar overlay
-      this.children.push(new ProgressIndicator(r,
+      this.addChild(new ProgressIndicator(r,
         () => bc((budget, cost) => budget / cost)));
     }
   }

@@ -1,17 +1,18 @@
-// sandbox mode
-// particle inspector context menu
 /**
- *
+ * @file PiContextMenu gui element
+ * Context menu for particle inspector in sandbox mode.
  */
 class PiContextMenu extends ContextMenu {
+
   /**
    *
    * @param rect
    * @param s0
    * @param s1
+   * @param screen
    * @param pData
    */
-  constructor(rect, s0, s1, pData) {
+  constructor(rect, s0, s1, screen, pData) {
     super(rect, s0, s1);
     this.pData = pData;
 
@@ -35,12 +36,12 @@ class PiContextMenu extends ContextMenu {
     const topRight = [rect[0] + rect[2] - w, rect[1], w, w];
 
     const statScale = 0.4;
-    let stats = this.buildStats(flavor);
+    let stats = this.buildStats(screen, flavor);
 
     stats = stats.map((e) => ((e.length === 1) ? e[0] : this.showCoord(...e)));
     stats = stats.join('\n');
 
-    this.children = [
+    this.setChildren([
 
       new StatReadout(s0, icon, () => `\n${flavor}\nparticle\nno. ${i}`, () => 0.5),
       new TextLabel(s1, stats).withScale(statScale),
@@ -48,21 +49,22 @@ class PiContextMenu extends ContextMenu {
       new IconButton(topRight, xIcon, () => this.closePiContextMenu())
         .withScale(0.5)
         .withTooltip('close'),
-    ];
+    ]);
   }
 
   /**
    *
-   * @param flavor
+   * @param screen
+   * @param {string} flavor 'physics', 'edge', or 'procedural'
    */
-  buildStats(flavor) {
+  buildStats(screen, flavor) {
 
     // data passed from grab event
     // in need of cleanup
     const [_subgroup, i, x, y, _dx, _dy, _hit] = this.pData;
 
     // lookup group needs cleanup
-    const s = global.mainSim;
+    const s = screen.sim;
     const grp = ((flavor === 'physics') ? s.physicsGroup : (
       (flavor === 'edge') ? s.edgeGroup : s.rainGroup
     ));
@@ -123,20 +125,12 @@ class PiContextMenu extends ContextMenu {
   /**
    *
    */
-  deleteBody() {
-    let b = this.body;
-    while (b.parent) { b = b.parent; }// got top parent
-    global.mainSim.removeBody(b);
-    this.closeBodyContextMenu();
-  }
-
-  /**
-   *
-   */
   closePiContextMenu() {
-    global.contextMenu = null;
-    global.mainSim.selectedParticle = null;
+    const screen = this.screen;
+    const sim = screen.sim;
 
-    global.mainSim.setTool(global.toolList[0]);
+    screen.contextMenu = null;
+    sim.selectedParticle = null;
+    sim.setTool(sim.toolList[0]);
   }
 }

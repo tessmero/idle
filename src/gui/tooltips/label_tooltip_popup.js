@@ -20,7 +20,7 @@ class LabelTooltipPopup extends TooltipPopup {
     this.setScale(s);
 
     const rr = padRect(...rect, -global.tooltipPadding);
-    this.children.push(
+    this.addChild(
       new TextLabel(rr, label)
         .withScale(s)
         .withCenter(false));

@@ -1,4 +1,6 @@
 /**
+ * @file ThumbnailPSim object type
+ * Thumbnail Particle Simulation
  * extra small particle simulation that appears in the gui
  */
 class ThumbnailPSim extends ParticleSim {

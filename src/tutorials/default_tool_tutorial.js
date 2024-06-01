@@ -1,18 +1,20 @@
 
 /**
- *
+ * @file Tutorial for default tool.
  */
 class DefaultToolTutorial extends Macro {
 
   /**
-   *
+   * Set title for this macro.
+   * Default tool is setup by Macro constructor.
    */
   constructor() {
     super('Default Tool Tutorial');
   }
 
   /**
-   *
+   * Click and drag mouse back and forth across
+   * the screen to collect particles.
    */
   buildKeyframes() {
 

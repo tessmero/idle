@@ -1,6 +1,8 @@
 
 /**
+ * @file LineTool.
  *
+ * Click to spawn a ControlledSausageBody.
  */
 class LineTool extends BodyTool {
 
@@ -10,20 +12,15 @@ class LineTool extends BodyTool {
    * @param lineLength
    */
   constructor(sim, lineLength = 0.1) {
-    super(sim);
-
-    this.icon = lineIcon;
-
-    this.tooltip = 'build line';
-    this.cursorCenter = true; // tool.js
+    super(sim, lineIcon, 'build line', true);
 
     this.lineRadius = 2e-2; // radius of caps (half of thickness)
     this.lineLength = lineLength;
   }
 
-  // implement BodyTool
+  //
   /**
-   *
+   * implement BodyTool
    * @param p
    */
   buildBody(p) {
@@ -40,7 +37,7 @@ class LineTool extends BodyTool {
   getCost() {
 
     // count previously built lines
-    const bods = this.sim.getBodies();
+    const bods = this.sim.bodies;
     const lineBods = [...bods].filter((b) => b instanceof ControlledSausageBody);
     const count = lineBods.length;
 

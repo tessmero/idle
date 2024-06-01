@@ -1,9 +1,9 @@
-//
-// provides helpers like resetRand() and rand()
-// to reliably reproduce random sequences
-//
-// https://stackoverflow.com/a/47593316
-//
+/**
+ * @file random number generator utility functions.
+ *
+ * provides helpers like resetRand() and rand()
+ * to reliably reproduce random sequences
+ */
 
 let rand;
 

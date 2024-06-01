@@ -1,108 +1,121 @@
-const global = {
+/**
+ * @file global object definition.
+ */
+class Global {
+
+  particlesCollected = 0;
 
   // graphics context
-  canvas: null,
-  ctx: null,
+  canvas = null;
+  ctx = null;
+
+  /**
+   * special GuiScreenPanel instance with no outer screen
+   * assigned in setup.js
+   */
+  gsp = null;
+
+  /**
+   * Prevent setting mainScreen with equals sign
+   */
+  set mainScreen(_s) { throw new Error('should use global.gsp.setScreen()'); }
+
+  /**
+   * allow using global.mainScreen as shorthand
+   * to get the player's GameScreen instance.
+   */
+  get mainScreen() { return this.gsp ? this.gsp.innerScreen : null; }
 
   //
-  colorScheme: ColorScheme.default,
-  lineWidth: 0.003,
+  colorScheme = ColorScheme.default;
+  lineWidth = 0.003;
 
   // relate screen pixels to virtual 2D units
-  canvasOffsetX: 0,
-  canvasOffsetY: 0,
-  canvasScale: 0,
-  centerPos: v(0.5, 0.5),
-  screenCorners: null,
+  canvasOffsetX = 0;
+  canvasOffsetY = 0;
+  canvasScale = 0;
+  centerPos = v(0.5, 0.5);
+  screenCorners = null;
 
   // text
-  textPixelSize: 0.01, // fraction of screen size
-  textLetterSpace: 1, // text pixels
-  textLineSpace: 2, // text pixels
-  tooltipPadding: 0.05, // fraction of screen size
-  tooltipShadowWidth: 0.01,
+  textPixelSize = 0.01; // fraction of screen size
+  textLetterSpace = 1; // text pixels
+  textLineSpace = 2; // text pixels
+  tooltipPadding = 0.05; // fraction of screen size
+  tooltipShadowWidth = 0.01;
 
   // synchronized gui elements idle animations
-  baseAnimPeriod: 500, // ms
+  baseAnimPeriod = 500; // ms
 
   // game state
-  gameState: GameStates.startMenu,
-  upgradeMenuTabIndex: 0,
-  t: 0, // total ellapsed time
-  maxBodyCount: 10,
-  toolList: [], // list of Tool instances
+  gameState = GameStates.startMenu;
+  upgradeMenuTabIndex = 0;
+  t = 0; // total ellapsed time
+  maxBodyCount = 10;
+  toolList = []; // list of Tool instances
 
   // debug
-  sandboxMode: false,
-  debugUiRects: false,
-  debugGrabbers: false,
-  colorcodeParticles: false,
-  showEdgeSpokesA: false,
-  showEdgeSpokesB: false,
-  showEdgeNormals: false,
-  showEdgeVel: false,
-  showEdgeAccel: false,
+  sandboxMode = false;
+  debugUiRects = false;
+  debugGrabbers = false;
+  colorcodeParticles = false;
+  showEdgeSpokesA = false;
+  showEdgeSpokesB = false;
+  showEdgeNormals = false;
+  showEdgeVel = false;
+  showEdgeAccel = false;
 
-  controlPointLineWidth: 0.005,
-  controlPointVisibleHoverRadius: 0.2,
+  controlPointLineWidth = 0.005;
+  controlPointVisibleHoverRadius = 0.2;
 
   // game advancement
-  upgradeTracks: null, // new UpgradeTracks(),
-  skillTree: null, // new SkillTree(),
-  mainSim: null, // ParticleSim instance (setup.js)
+  upgradeTracks = null; // new UpgradeTracks();
+  skillTree = null; // new SkillTree();
+  mainSim = null; // ParticleSim instance (setup.js)
 
   //
-  poiStartArea: 1e-2, // free area for new poi
+  poiStartArea = 1e-2; // free area for new poi
 
   // strength of "forces" on poi
   // force=(area/accel) in vunits...ms...
-  poiPlayerF: 1e-6, // player clicking and dragging
-  bodyFriction: 1e-3, // body translation friction
-  bodyAngleFriction: 1e-3,
-  particleStickyForce: [1e-7, 2e-6], // passive particle force into edge
+  poiPlayerF = 1e-6; // player clicking and dragging
+  bodyFriction = 1e-3; // body translation friction
+  bodyAngleFriction = 1e-3;
+  particleStickyForce = [1e-7, 2e-6]; // passive particle force into edge
 
   //
-  thumbnailSimDims: [0.1, 0.1],
-  tutorialSimDims: [0.3, 0.3],
-  tutorialScaleFactor: 0.5,
+  thumbnailSimDims = [0.1, 0.1];
+  tutorialSimDims = [0.3, 0.3];
+  boxSimDims = [1, 1];
+  tutorialScaleFactor = 0.5;
 
   // mouse
-  canvasMousePos: v(0, 0), // pixels
-  mouseGrabRadius: 0.05,
-  particlesInMouseRange: new Set(),
+  canvasMousePos = v(0, 0); // pixels
+  mouseGrabRadius = 0.05;
+  particlesInMouseRange = new Set();
 
   // debug
-  debugTileIndices: false,
+  debugTileIndices = false;
 
-};
+}
+const global = new Global();
 
 function resetProgression() {
   let money = 0;
-  const s = global.mainSim;
-  global.toolList = [
-    new DefaultTool(s, global.mouseGrabRadius),
-    new CircleTool(s),
-    new LineTool(s),
-  ];
+  const sim = global.mainScreen.sim;
+  sim.setTool(sim.toolList[0]);
+  sim.rainGroup.n = 100;
 
   if (global.sandboxMode) {
     money = 1e100;
-    global.toolList.push(
-      new BoxTool(s),
-      new PiTool(s, global.mouseGrabRadius)
-    );
   }
-
-  global.mainSim.setTool(global.toolList[0]);
-  global.mainSim.rainGroup.n = 100;
-
-  global.mainSim.particlesCollected = money;
+  sim.particlesCollected = money;
 
   if (!global.sandboxMode) {
 
     // remove bodies from start menu sim
-    global.mainSim.clearBodies();
-    global.mainSim.rainGroup.grabbedParticles.clear();
+    sim.clearBodies();
+    sim.rainGroup.grabbedParticles.clear();
   }
   global.upgradeTracks = new UpgradeTracks();
   global.skillTree = new SkillTree();

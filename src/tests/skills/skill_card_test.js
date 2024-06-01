@@ -1,5 +1,5 @@
 /**
- *
+ * @file Base class for testing skill cards' thumbnail sims.
  */
 class SkillCardTest extends Test {
 

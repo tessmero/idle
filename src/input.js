@@ -56,7 +56,7 @@ function mouseDown(e) {
 }
 
 function mouseUp(e) {
-  global.mainSim.draggingControlPoint = null;
+  global.mainScreen.sim.draggingControlPoint = null;
   global.mouseDownDisabled = false;
   global.mouseDown = false;
 

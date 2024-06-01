@@ -1,6 +1,7 @@
 
 /**
- *
+ * @file Start Menu GUI
+ * Top-level GUI container that appears when the page is loaded.
  */
 class StartMenuGui extends Gui {
 
@@ -12,7 +13,6 @@ class StartMenuGui extends Gui {
     super('Start Menu Gui', ...p);
   }
 
-  // implement gui
   /**
    *
    * @param screen

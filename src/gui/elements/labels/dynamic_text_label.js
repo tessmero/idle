@@ -30,11 +30,12 @@ class DynamicTextLabel extends TextLabel {
   draw(g) {
 
     // get updated label
-    this.label = this.labelFunc();
+    const label = this.labelFunc();
+    this.setLabel(label);
 
     if (this.autoAdjustRect) {
       // update bounding rectangle to fit label
-      const [w, h] = getTextDims(this.label, this.scale);
+      const [w, h] = getTextDims(label, this.scale);
       this.rect[2] = w + this.pad * 2;
       this.rect[3] = h + this.pad * 2;
     }

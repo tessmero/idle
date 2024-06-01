@@ -1,6 +1,6 @@
-// black grid gradually covers start menu
 /**
- *
+ * @file Unused effect where we turn off screen clearing
+ * so the particles gradually draw over the whole screen.
  */
 class NoclearFadeOut extends FadeOut {
   /**
@@ -11,15 +11,13 @@ class NoclearFadeOut extends FadeOut {
     this.duration = 5000;
   }
 
-  // overide FadeOut
   /**
-   *
+   * @returns {boolean} True to prevent screen from being cleared.
    */
   stopScreenClear() {
     return true;
   }
 
-  // implement FadeOut
   /**
    *
    * @param _g

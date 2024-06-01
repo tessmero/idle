@@ -26,10 +26,10 @@ class SausageEdge extends PathspecEdge {
     return 2 * this.length + twopi * this.rad;
   }
 
-  // compute position+normal [angle,radius,normal angle]
-  // at given distance along circumerence
   /**
+   * Compute edge data at given point along cirumference.
    *
+   * compute position+normal [angle,radius,normal angle]
    * @param d
    */
   computePoint(d) {

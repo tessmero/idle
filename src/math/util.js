@@ -1,3 +1,6 @@
+/**
+ * @file Math helper constants and functions.
+ */
 
 // shorthands
 const pi = Math.PI;

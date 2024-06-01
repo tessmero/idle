@@ -1,6 +1,5 @@
-// black grid gradually covers start menu
 /**
- *
+ * @file GridFadeOut black grid gradually covers start menu
  */
 class GridFadeOut extends FadeOut {
   /**
@@ -11,7 +10,6 @@ class GridFadeOut extends FadeOut {
     this.duration = 1000;
   }
 
-  // implement FadeOut
   /**
    *
    * @param g
@@ -24,8 +22,8 @@ class GridFadeOut extends FadeOut {
     // draw grid lines
     const sr = rect;
     const d = 0.09 * sr[3];
-    const [x0, y0] = v(sr[0], sr[1]).xy();
-    const [x1, y1] = v(sr[0] + sr[2], sr[1] + sr[3]).xy();
+    const [x0, y0] = [sr[0], sr[1]];
+    const [x1, y1] = [sr[0] + sr[2], sr[1] + sr[3]];
     let maxoff = 0.5;
     const lw = (this.t / (this.duration * (1 - maxoff))) * d;
     maxoff = maxoff * d;

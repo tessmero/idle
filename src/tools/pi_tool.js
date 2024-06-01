@@ -1,18 +1,17 @@
-// particle inspector tool for sandbox mode
 /**
+ * @file Particle Inspector Tool
  *
+ * Click to track a particle.
  */
 class PiTool extends DefaultTool {
 
   /**
    *
-   * @param sim
-   * @param rad
+   * @param {ParticleSim} sim
+   * @param {number} rad
    */
   constructor(sim, rad) {
-    super(sim, rad);
-    this.icon = piToolIcon;
-    this.tooltip = 'inspect';
+    super(sim, rad, piToolIcon, 'inspect', true);
   }
 
   /**
@@ -27,7 +26,6 @@ class PiTool extends DefaultTool {
     sim.removeGrabber(this.itopg);
   }
 
-  // override DefaultTool
   /**
    *
    */
@@ -35,9 +33,8 @@ class PiTool extends DefaultTool {
     return new PiToolTutorial();
   }
 
-  // initial grab (inherited DefaultTool behavior)
   /**
-   *
+   * Called when clicking a particle.
    * @param {...any} p
    */
   grabbed(...p) {
@@ -59,10 +56,10 @@ class PiTool extends DefaultTool {
     return true;
   }
 
-  // continous polling of target particle
   /**
-   *
-   * @param {...any} p
+   * Callback for grabber this.topg
+   * repeatedly as long as particle is selected.
+   * @param {...any} p Data about the selected particle
    */
   grabbedTarget(...p) {
     const [subgroup, i, _x, _y, _dx, _dy, _hit] = p;
@@ -83,11 +80,10 @@ class PiTool extends DefaultTool {
       (...pp) => this.grabbedTarget(...pp));
     sim.addGrabber(this.topg);
 
-    // request to grab all other particles
-    sim.removeGrabber(this.itopg);// avoid leak
-    this.itopg = new InverseGrabber(this.topg,
-      (...pp) => this.grabbedOther(...pp));
-
+    // request to remove all other particles
+    // sim.removeGrabber(this.itopg);// avoid leak
+    // this.itopg = new InverseGrabber(
+    //   this.topg, (..._pp) => false);
     // grb.add(this.itopg)
 
     // indicate that this is passive
@@ -95,19 +91,6 @@ class PiTool extends DefaultTool {
     return true;
   }
 
-  // grab non-target for removal
-  /**
-   *
-   * @param {...any} _p
-   */
-  grabbedOther(..._p) {
-
-    // return falsey
-    // particle will disapear
-    return false;
-  }
-
-  // override DefaultTool
   /**
    *
    * @param p
@@ -116,7 +99,6 @@ class PiTool extends DefaultTool {
     this.grabber.pos = p;
   }
 
-  // override DefaultTool
   /**
    *
    * @param _p
@@ -130,7 +112,6 @@ class PiTool extends DefaultTool {
     sim.addGrabber(this.grabber);
   }
 
-  // override DefaultTool
   /**
    *
    * @param _p
@@ -141,7 +122,6 @@ class PiTool extends DefaultTool {
     this.sim.removeGrabber(this.grabber);
   }
 
-  // override DefaultTool
   /**
    *
    * @param _dt
@@ -162,7 +142,7 @@ class PiTool extends DefaultTool {
   drawCursor(g, p, ...args) {
 
     // draw circle
-    const c = v(...p);
+    const c = p;
     const r = Math.sqrt(this.grabber.r2);
 
     g.strokeStyle = global.colorScheme.bg;
@@ -186,7 +166,7 @@ class PiTool extends DefaultTool {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);

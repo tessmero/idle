@@ -43,7 +43,7 @@ class TabPaneGroup extends CompositeGuiElement {
       if (tabTooltips) { tb.withTooltip(tabTooltips[i]); }
 
       tb.setScale(tabLabelScale);
-      this.children.push(tb);
+      this.addChild(tb);
       i = i + 1;
     });
 

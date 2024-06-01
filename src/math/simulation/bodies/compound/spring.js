@@ -1,8 +1,9 @@
-// physics constraint connecting two circle bodies
 /**
- *
+ * @file Spring
+ * Unused physics constraint connecting two bodies
  */
 class Spring {
+
   /**
    *
    * @param a
@@ -66,8 +67,8 @@ class Spring {
    * @param g
    */
   draw(g) {
-    g.moveTo(...this.a.pos.xy());
-    g.lineTo(...this.b.pos.xy());
+    g.moveTo(...this.a.pos);
+    g.lineTo(...this.b.pos);
     g.stroke();
   }
 }

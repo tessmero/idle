@@ -1,9 +1,10 @@
 /**
- * object to store performance
- * stats accumulated over time
+ * @file LogPerformanceStats object type.
  *
- * instance assigned in setup.js
- *   global.logPerformanceStats
+ * object to accumulate performance stats over time.
+ *
+ * constructed once in setup.js
+ * instance is global.logPerformanceStats
  */
 let _LogPerformanceStatsConstructed = false;
 
@@ -35,15 +36,14 @@ class LogPerformanceStats {
 
   /**
    * Called in GameScreen constructor.
-   * @param {string} key A readable unique title.
    * @param {GameScreen} screen The new instance to register.
    */
-  submitNewScreen(key, screen) {
+  submitNewScreen(screen) {
+    const key = screen.titleKey;
     const as = this.constructedScreens;
     if (as.has(key)) {
       throw new Error(`screen (${key}) constructed multiple times`);
     }
-    screen.key = key;
     as.set(key, screen);
   }
 }

@@ -1,5 +1,7 @@
 /**
- * transition from start menu to game
+ * @file Start Transition GUI
+ * Top-level gui container/placeholder that is active
+ * during transition from start menu to game
  */
 class StartTransitionGui extends Gui {
 

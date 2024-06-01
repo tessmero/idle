@@ -1,8 +1,11 @@
-// abstract base class for typical rectangular buttons
 /**
- *
+ * @file Button gui element.
+ * Base class for typical rectangular buttons
  */
 class Button extends GuiElement {
+
+  #action;
+
   /**
    *
    * @param rect
@@ -11,15 +14,14 @@ class Button extends GuiElement {
   constructor(rect, action) {
     super(rect);
 
-    this.rect = rect;
-    this.action = action;
+    this.#action = action;
   }
 
   /**
    *
    */
   click() {
-    const result = !this.action();
+    const result = !this.#action();
     return result;
   }
 

@@ -23,7 +23,7 @@ class CircleGrabber extends Grabber {
    * @param g
    */
   drawDebug(g) {
-    const p = this.pos.xy();
+    const p = this.pos;
     g.fillStyle = 'yellow';
     g.beginPath();
     g.moveTo(...p);

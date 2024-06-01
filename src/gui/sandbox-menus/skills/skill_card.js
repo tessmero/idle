@@ -1,6 +1,7 @@
-// gui element representing a skill
 /**
- *
+ * @file SkillCard gui element
+ * represents a skill by displaying its thumbnail screen
+ * and an overlay to indicate locked/unlocked status.
  */
 class SkillCard extends CompositeGuiElement {
 
@@ -48,10 +49,10 @@ class SkillCard extends CompositeGuiElement {
     this.gsp = gsp;
     this.statusIcon = statusIcon;
 
-    this.children = [
+    this.setChildren([
       gsp,
       statusIcon,
-    ];
+    ]);
 
   }
 }

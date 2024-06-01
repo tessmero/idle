@@ -1,6 +1,6 @@
-// physics-enabled object that interacts with particles
 /**
- *
+ * @file Body base class for physics-enabled rigid
+ * bodies that interact with particles.
  */
 class Body {
 
@@ -72,18 +72,22 @@ class Body {
 
   }
 
-  // called in particle_sim.js addBody()
   /**
-   *
-   * @param sim
+   * Called when user clicks this body.
+   */
+  clicked() {}
+
+  /**
+   * called in particle_sim.js addBody()
+   * @param {ParticleSim} sim
    */
   register(sim) {
 
-    const edge = this.buildEdge();// new SausageEdge(len,this.rad)
+    const edge = this.buildEdge();
     this.edge = edge;
 
     // prepare particle grabber instance
-    this.grabber = this.buildGrabber();// new LineGrabber(a,b,rad,(x,y) => this.grabbed(x,y))
+    this.grabber = this.buildGrabber();
     sim.addGrabber(this.grabber);
 
     // prepare to emit particles
@@ -111,10 +115,9 @@ class Body {
     this.eps.body = this;
   }
 
-  // called in particle_sim.js removeBody()
   /**
-   *
-   * @param sim
+   * called in particle_sim.js removeBody()
+   * @param {ParticleSim} sim
    */
   unregister(sim) {
     sim.removeGrabber(this.grabber);
@@ -122,39 +125,35 @@ class Body {
     sim.edgeGroup.deleteSubgroup(this.eps);
   }
 
-  // apply translational force
   /**
-   *
-   * @param acc
+   * Apply translational force to this body.
+   * @param {Vector} acc
    */
   accel(acc) {
     this.vel = this.vel.add(acc); // move this body
     this.eps.acc = this.eps.acc.add(acc);// pass momentum to particles on edge
   }
 
-  // apply torque
   /**
-   *
-   * @param spn
+   * Apply torque to this body.
+   * @param {number} spn
    */
   spin(spn) {
     this.avel = this.avel + spn; // spin this body
     this.eps.spn = this.eps.spn + spn; // pass momentum to particles on edge
   }
 
-  // called in edge_particle_subgroup.js
-  // when this.eatsQueued > 0
   /**
-   *
-   * @param x
-   * @param y
+   * Used by CircleBuddy.
+   * Called in edge_particle_subgroup.js when this.eatsQueued > 0
+   * @param {Vector} pos The position of the particle.
    */
-  eatParticleFromEdge(x, y) {
+  eatParticleFromEdge(pos) {
     const par = this.parent;
     if (par && (par instanceof Buddy)) {
       par.particlesCollected = par.particlesCollected + 1;
     }
-    DefaultTool._grabbed(this.sim, null, null, x, y, null, null, null);
+    DefaultTool.collectRaindrop(this.sim, null, null, ...pos.xy(), null, null, null);
   }
 
   /**
@@ -185,10 +184,11 @@ class Body {
 
     // push on-screen
     const sr = this.sim.rect;
-    if (this.pos.x < sr[0]) { this.pos.x = sr[0]; }
-    if (this.pos.x > sr[0] + sr[2]) { this.pos.x = sr[0] + sr[2]; }
-    if (this.pos.y < sr[1]) { this.pos.y = sr[1]; }
-    if (this.pos.y > sr[1] + sr[3]) { this.pos.y = sr[1] + sr[3]; }
+    const pos = this.pos;
+    if (pos.x < sr[0]) { this.pos = v(sr[0], pos.y); }
+    if (pos.x > sr[0] + sr[2]) { this.pos = v(sr[0] + sr[2], pos.y); }
+    if (pos.y < sr[1]) { this.pos = v(pos.x, sr[1]); }
+    if (pos.y > sr[1] + sr[3]) { this.pos = v(pos.x, sr[1] + sr[3]); }
 
     // update grabber and edge particles
     this.grabber.pos = this.pos;

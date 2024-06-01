@@ -1,4 +1,8 @@
-
+/**
+ * @file GameStateManager object type and state flag eumeration.
+ *
+ * Every GameScreen instance has a stateManager member.
+ */
 const GameStates = {
   startMenu: 0,
   startTransition: 1,
@@ -32,7 +36,7 @@ class GameStateManager {
     ];
     this.allGuis.forEach((k) => {
       k.gsm = this;
-      k.children = k.buildElements(screen);
+      k.setChildren(k.buildElements(screen));
       k.setScreen(screen);
     });
     const gui = this.allGuis[this.gameState];
@@ -166,7 +170,7 @@ class GameStateManager {
   }
 
   /**
-   *
+   * Called when pause button is clicked.
    */
   pause() {
     if (this.gameScreen !== global.mainScreen) {
@@ -183,17 +187,35 @@ class GameStateManager {
   }
 
   /**
-   *
+   * Called when quit/exit button is clicked in pause menu.
    */
   quit() {
-    if (this.gameScreen !== global.mainScreen) {
+    const screen = this.gameScreen;
+
+    if (screen !== global.mainScreen) {
       return;
     }
 
-    global.sandboxMode = false;
-    this.setState(GameStates.startMenu);
-    this.showWebsiteOverlays();
-    resetGame();
+    if (screen === global.rootScreen) {
+
+      // quit game
+      global.sandboxMode = false;
+      this.setState(GameStates.startMenu);
+      this.showWebsiteOverlays();
+      resetGame();
+
+    }
+    else {
+
+      // attempt to exit box
+      const parentScreen = BoxBuddy.getParentScreen(screen);
+      if (parentScreen) {
+        this.setState(GameStates.playing);
+        screen.gsp.setInnerScreen(parentScreen);
+        const sim = global.mainScreen.sim;
+        sim.setTool(sim.toolList[0]);
+      }
+    }
   }
 
   /**

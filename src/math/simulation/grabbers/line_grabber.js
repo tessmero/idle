@@ -1,6 +1,8 @@
 
 /**
+ * @file LineGrabber object type.
  *
+ * Grab points within a certain distance from a line segment.
  */
 class LineGrabber extends Grabber {
   /**

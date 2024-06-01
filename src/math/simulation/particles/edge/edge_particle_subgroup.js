@@ -1,21 +1,21 @@
-// Edge Particle Subgroup
-//
-// handles any particles stuck to or sliding along
-// one specific body
-//
-// a "subgroup" is a garbage-collectable unit
-// owned by an EdgePGroup
-//
-// members include
-//   - body outline shape (Edge instance)
-//   - body physics state (position,orientation,momentum)
+
 /**
+ * @file Edge Particle Subgroup object type.
  *
+ * handles any particles stuck to or sliding along
+ * one specific body
+ *
+ * a "subgroup" is a garbage-collectable unit
+ * owned by an EdgePGroup
+ *
+ * members include
+ *   - body outline shape (Edge instance)
+ *   - body physics state (position,orientation,momentum)
  */
 class EdgeParticleSubgroup {
-  // called in EdgePGroup newSubgroup()
+
   /**
-   *
+   * called in EdgePGroup newSubgroup()
    * @param group
    * @param subgroupIndex
    * @param i
@@ -28,7 +28,7 @@ class EdgeParticleSubgroup {
     this.i = i;
     this.n = n;
     this.edge = edge; // Edge instance
-    this.g = v(0, -edge.getG()); // gravity
+    this._g = v(0, -edge.getG()); // gravity
 
     // set all particles as grabbed initially
     const m = this.i + this.n;
@@ -46,9 +46,17 @@ class EdgeParticleSubgroup {
     this.spn = 0;
   }
 
-  // called in EdgePGroup *generateParticles()
   /**
-   *
+   * make gravity match nearby physics particles
+   * needs cleanup
+   */
+  get g() {
+    const angle = this.group.sim.particleG.getAngle();
+    return vp(pi + angle, this._g.getMagnitude());
+  }
+
+  /**
+   * called in EdgePGroup generateParticles()
    * @param dt
    */
   * generateParticles(dt) {
@@ -125,7 +133,7 @@ class EdgeParticleSubgroup {
         else if (bod && (bod.eatsQueued > 0)) {
           bod.eatsQueued = bod.eatsQueued - 1;
           const xyPos = this.getPos(pos);
-          bod.eatParticleFromEdge(...xyPos.xy());
+          bod.eatParticleFromEdge(xyPos);
           grab = true;
         }
 

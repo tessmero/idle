@@ -3,7 +3,6 @@
  */
 class SausageBody extends Body {
 
-  // sim is a ParticleSim instance
   /**
    *
    * @param sim
@@ -21,8 +20,6 @@ class SausageBody extends Body {
     const d = b.sub(a);
     this.length = d.getMagnitude();
     this.angle = d.getAngle();
-
-    this.dripChance = global.poiDripChance;
 
     //
     this.title = 'line';
@@ -70,7 +67,7 @@ class SausageBody extends Body {
     // this.grabber.pos = p
     // this.grabber.angle = a
 
-    // update SausageGrabber isntance
+    // update LineGrabber isntance
     this.grabber.a = this.a;
     this.grabber.b = this.b;
     this.grabber.update();
@@ -78,7 +75,7 @@ class SausageBody extends Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     const a = this.a.xy();

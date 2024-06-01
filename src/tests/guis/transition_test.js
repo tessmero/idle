@@ -1,5 +1,5 @@
 /**
- *
+ * @file Test for start menu -> playing transition sequence
  */
 class TransitionTest extends Test {
 
@@ -37,6 +37,7 @@ class TransitionTest extends Test {
   }
 
   /**
+   * Extend standard test screen by watching some points for test assertions.
    * @returns {GameScreen} Screen with graphicsWrapper property assigned.
    */
   buildScreen() {

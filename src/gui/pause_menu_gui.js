@@ -1,6 +1,7 @@
 
 /**
- *
+ * @file PauseMenuGui
+ * Top-level GUI container that appears when the pause button is clicked.
  */
 class PauseMenuGui extends Gui {
 
@@ -12,15 +13,13 @@ class PauseMenuGui extends Gui {
     super('Pause Menu Gui', ...p);
   }
 
-  // override Gui
   /**
-   *
+   * Make HUD appear behind the pause menu.
    */
   getBackgroundGui() {
     return this.screen.stateManager.allGuis[GameStates.playing];
   }
 
-  // implement Gui
   /**
    *
    * @param screen
@@ -39,9 +38,11 @@ class PauseMenuGui extends Gui {
     const slots = [];
     for (let i = 0; i < n; i++) { slots.push([x, y + i * (h + pad), w, h]); }
 
+    const quitLabel = screen === global.rootScreen ? 'QUIT' : 'EXIT BOX';
+
     return [
       new TextButton(slots[0], 'RESUME', () => this.gsm.resume()), // game_states.js
-      new TextButton(slots[2], 'QUIT', () => this.gsm.quit()), // game_states.js
+      new TextButton(slots[2], quitLabel, () => this.gsm.quit()), // game_states.js
     ];
   }
 }

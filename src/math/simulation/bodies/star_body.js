@@ -1,6 +1,5 @@
-// sinusoidal star/flower
 /**
- *
+ * @file starbody sinusoidal star/flower
  */
 class StarBody extends Body {
   /**
@@ -17,8 +16,6 @@ class StarBody extends Body {
     this.n = n;
     this.minRad = minRad;
     this.maxRad = maxRad;
-
-    this.dripChance = global.poiDripChance;
 
     //
     this.title = 'star';

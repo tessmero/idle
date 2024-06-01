@@ -1,19 +1,27 @@
-// base class for gui elements
-
-// instances represent rectangles positioned on-screen
 /**
- *
+ * @file base class for gui elements
+ * instances represent rectangles positioned on-screen
  */
 class GuiElement {
+
+  #screen;
+  #rect;
+  #scale = 1;
 
   /**
    *
    * @param rect
    */
   constructor(rect) {
-    this.rect = rect;
+    this.#rect = rect;
     this.hoverable = true;
-    this._scale = 1;
+  }
+
+  /**
+   *
+   */
+  get rect() {
+    return this.#rect;
   }
 
   /**
@@ -26,21 +34,14 @@ class GuiElement {
   /**
    *
    */
-  get scale() { return this._scale; }
+  get scale() { return this.#scale; }
 
   /**
    *
    * @param s
    */
   setScale(s) {
-    this._scale = s;
-  }
-
-  /**
-   *
-   */
-  getScale() {
-    return this._scale;
+    this.#scale = s;
   }
 
   /**
@@ -50,21 +51,20 @@ class GuiElement {
     throw new Error('should use setScreen');
   }
 
-  // set root GameScreen instance
   /**
-   *
-   * @param s
+   * set root GameScreen instance
+   * @param {GameScreen} s
    */
   setScreen(s) {
-    this._screen = s;
+    this.#screen = s;
   }
 
-  // get root GameScreen instance
+  //
   /**
-   *
+   * get root GameScreen instance
    */
   get screen() {
-    return this._screen;
+    return this.#screen;
   }
 
   /**
@@ -85,9 +85,8 @@ class GuiElement {
     return this;
   }
 
-  // set text to appear on hover
   /**
-   *
+   * set text to appear on hover
    * @param s
    */
   withTooltip(s) {
@@ -104,10 +103,9 @@ class GuiElement {
     return this;
   }
 
-  // override normal tooltip
-  // until user stops hovering
   /**
-   *
+   * override normal tooltip
+   * until user stops hovering
    * @param s
    */
   setTemporaryTooltip(s) {
@@ -145,8 +143,8 @@ class GuiElement {
       }
 
       if (this.tooltip instanceof TooltipPopup) {
-        if (this._screen) {
-          this._screen.tooltipPopup = this.tooltip;
+        if (this.#screen) {
+          this.#screen.tooltipPopup = this.tooltip;
         }
 
       }
@@ -155,8 +153,8 @@ class GuiElement {
         // build standard tooltip gui element
         let rect = LabelTooltipPopup.pickRect(screen, this.tooltip, this.tooltipScale);
         rect = padRect(...rect, TextLabel.pad());
-        if (this._screen) {
-          this._screen.tooltipPopup = new LabelTooltipPopup(rect, this.tooltip, this.tooltipScale);
+        if (this.#screen) {
+          this.#screen.tooltipPopup = new LabelTooltipPopup(rect, this.tooltip, this.tooltipScale);
         }
       }
     }

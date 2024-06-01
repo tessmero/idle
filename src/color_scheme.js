@@ -1,14 +1,16 @@
 /**
+ * @file ColorScheme object type.
  *
+ * Instance global.colorScheme determines canvas drawing colors
+ * as well as css background-color (required for inversion effect)
  */
 class ColorScheme {
 
-  // foreground, background, highlight
   /**
-   *
-   * @param fg
-   * @param bg
-   * @param hl
+   * Construct a new color scheme.
+   * @param {string} fg The foreground color.
+   * @param {string} bg The background color.
+   * @param {string} hl The highlight color.
    */
   constructor(fg, bg, hl) {
     this.fg = fg;

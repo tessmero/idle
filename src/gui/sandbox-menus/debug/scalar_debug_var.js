@@ -1,6 +1,6 @@
-// a global variable readout with buttons to increase and decrease
 /**
- *
+ * @file Scalar Debug Variable gui element
+ * a global variable readout with buttons to increase or decrease.
  */
 class ScalarDebugVar extends CompositeGuiElement {
 
@@ -30,10 +30,9 @@ class ScalarDebugVar extends CompositeGuiElement {
       ].join('\n')); // tooltip
     dtl.setScale(0.4);
     dtl.tooltipScale = 0.4;
-    dtl.center = false;
-    dtl.fixedRect = true;
+    dtl.setCenter(false);
 
-    this.children = [
+    this.setChildren([
       dtl,
 
       // buttons
@@ -44,7 +43,7 @@ class ScalarDebugVar extends CompositeGuiElement {
         let val = getGlobal(varname);
         val = val - m * inc;
         setGlobal(varname, val);
-        const screen = global.mainScreen;
+        const screen = this.screen;
         screen.stateManager.rebuildGuis(screen, false);
       }),
       new IconButton(r1, increaseIcon, () => {
@@ -54,10 +53,10 @@ class ScalarDebugVar extends CompositeGuiElement {
         let val = getGlobal(varname);
         val = val + m * inc;
         setGlobal(varname, val);
-        const screen = global.mainScreen;
+        const screen = this.screen;
         screen.stateManager.rebuildGuis(screen, false);
       }),
-    ];
+    ]);
 
   }
 

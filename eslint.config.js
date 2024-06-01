@@ -49,8 +49,8 @@ export default [
       "definedTypes": [
         "Vector",
         "GameScreen","GameStateManager","Macro",
-        "Gui","Icon",
-        "ParticleSim",
+        "Gui","GuiElement","Icon",
+        "ParticleSim","Tool","Body",
       ]
     }],
 
@@ -314,7 +314,7 @@ export default [
 
       /* Legacy */
       'max-depth': [0, 3], // specify the maximum depth that blocks can be nested
-      'max-len': [1, 121, 2], // specify the maximum length of a line in your program
+      'max-len': [1, 110, 2], // specify the maximum length of a line in your program
       'max-params': 0, // limits the number of parameters that can be used in the function declaration.
       'max-statements': 0, // specify the maximum number of statement allowed in a function
       'no-bitwise': 1, // disallow use of bitwise operators

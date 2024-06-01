@@ -4,7 +4,7 @@
  */
 function doUnitTests() {
   // start sim unit tests
-  const sim = global.mainSim;
+  const sim = global.mainScreen.sim;
   console.assert(sim._bodies.size === 3); // 3 bodies in start menu
 
   // test clearBodies
@@ -32,11 +32,11 @@ function doUnitTests() {
   testBody(new SausageBody(sim, v(0.5, 0.5), v(0.3, 0.3)));
   testBody(new ControlledSausageBody(sim, v(0.5, 0.5), v(0.3, 0.3)));
   testBody(new StarBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
-  testBody(new ControlledStarBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
+  testBody(new DefaultControlFrame(new StarBody(sim, v(0.5, 0.5), 5, 0.05, 0.1)));
   testBody(new CrossBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
-  testBody(new ControlledCrossBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
+  testBody(new DefaultControlFrame(new CrossBody(sim, v(0.5, 0.5), 5, 0.05, 0.1)));
   testBody(new CompassBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
-  testBody(new ControlledCompassBody(sim, v(0.5, 0.5), 5, 0.05, 0.1));
+  testBody(new DefaultControlFrame(new CompassBody(sim, v(0.5, 0.5), 5, 0.05, 0.1)));
   testBody(new SquareBody(sim, v(0.5, 0.5), 0.1));
   testBody(new BoxBuddy(sim, v(0.5, 0.5), 0.1));
   console.log(`${testedBodies} Body subclasses passed tests`);

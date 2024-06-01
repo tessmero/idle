@@ -1,5 +1,7 @@
 
 /**
+ * @file LivePerformanceStats object type.
+ *
  * store performance stats collected
  * during a single game loop
  *
@@ -49,21 +51,22 @@ class LivePerformanceStats {
     if (!screen) {
       throw new Error('screen is null');
     }
+    const key = screen.titleKey;
 
     const as = this.activeScreens;
 
     // make sure this screen is in list of active screens
-    if (!(as.has(screen))) {
-      as.set(screen, new Map());
+    if (!(as.has(key))) {
+      as.set(key, new Map());
     }
 
     // assert flag wasn't repeated
     // e.g. drawing the same thing twice
-    if (as.get(screen).has(flag)) {
-      throw new Error(`(screen ${flag}) repeated during single game loop`);
+    if (as.get(key).has(flag)) {
+      throw new Error(`(${key} ${flag}) repeated during single game loop`);
     }
 
     // insert flag
-    as.get(screen).set(flag, value);
+    as.get(key).set(flag, value);
   }
 }

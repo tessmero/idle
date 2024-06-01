@@ -94,8 +94,6 @@ class TooltipPopup extends CompositeGuiElement {
     return p;
   }
 
-  // pick position for tooltip
-  // called in gui_element.js
   /**
    *
    * @param anchorPoint

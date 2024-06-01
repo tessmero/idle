@@ -30,9 +30,8 @@ class ControlledSausageBody extends CompoundBody {
     this.rotCp1.fscale = 6;
 
     // this.constraints = [new Spring(this.rotCp0,this.rotCp1)]
-    this.children = [sausage, ...this.controlPoints];
+    this.setChildren([sausage, ...this.controlPoints]);
 
-    this.dripChance = global.poiDripChance;
   }
 
   /**
