@@ -97,6 +97,11 @@ class ContextMenu extends CompositeGuiElement {
     _lastContextMenuSide = side;
     _lastContextMenuTime = global.t;
 
+    // 20240602 working bandaid? for bug
+    // where test context menu stops appearing
+    if (side < 0) { side = 0; }
+    if (side > 1) { side = 1; }
+
     if (axis) {
 
       // vertical screen

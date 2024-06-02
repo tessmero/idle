@@ -82,7 +82,6 @@ function randRange(min, max) {
 }
 
 /**
- *
  * @param options
  */
 function randChoice(options) {

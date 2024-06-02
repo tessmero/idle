@@ -8,8 +8,13 @@ class FadeIn extends StartAnimStage {
    *
    */
   static random() {
-    return randChoice([
-      new GridFadeIn(),
-    ]);
+    const result = randChoice([
+      () => new GridTrans(),
+      () => new DissolveTrans(),
+    ])();
+    if (result instanceof ReversibleTransition) {
+      return result.asFadeIn();
+    }
+    return result;
   }
 }

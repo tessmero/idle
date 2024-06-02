@@ -22,10 +22,8 @@ class DissolvingFontSpec extends FontSpec {
     return this;
   }
 
-  // override FontSpec
-  // skip drawing some pixels
   /**
-   *
+   * Skip drawing some pixels based on reproducible RNG.
    */
   skipPixel() {
     return rand() > this.solidity;
