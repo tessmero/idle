@@ -3,6 +3,24 @@
  * @file Start Menu GUI
  * Top-level GUI container that appears when the page is loaded.
  */
+const _startMessageSpecs = randChoice([
+  [
+    [2, 'IDLE RAIN'],
+    [3, 'CATCHER'],
+  ],
+  [
+    [2, 'RAIN CATCHER'],
+  ],
+  [
+    [2, 'RAIN'],
+    [3, 'CATCHER'],
+    [4, 'IDLE'],
+  ],
+]);
+
+/**
+ *
+ */
 class StartMenuGui extends Gui {
 
   /**
@@ -19,20 +37,7 @@ class StartMenuGui extends Gui {
    */
   buildElements(screen) {
     const sr = screen.rect;
-    const specs = randChoice([
-      [
-        [2, 'IDLE RAIN'],
-        [3, 'CATCHER'],
-      ],
-      [
-        [2, 'RAIN CATCHER'],
-      ],
-      [
-        [2, 'RAIN'],
-        [3, 'CATCHER'],
-        [4, 'IDLE'],
-      ],
-    ]);
+    const specs = _startMessageSpecs;
 
     // layout a column of wide buttons in the middle of the screen
     const dims = getTextDims('IDLERAINNN');

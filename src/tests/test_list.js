@@ -14,7 +14,8 @@
 const allTests = [
 
   ['boxes', new BoxToolTutorialTest()],
-  ['boxes', new DropThroughBoxTest()],
+  ['boxes', new FallThruBoxTest()],
+  ['boxes', new LineThruBoxTest()],
 
   ['tools', new DefaultToolTutorialTest()],
   ['tools', new CircleToolTutorialTest()],

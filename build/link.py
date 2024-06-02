@@ -74,6 +74,7 @@ order = class_files + non_class_files
 
 # utils must be first
 order = toFirst(order, 'util.js')
+order = toFirst(order, 'rng.js')
 order = toFirst(order, 'vector.js')
 
 # setup.js must be last

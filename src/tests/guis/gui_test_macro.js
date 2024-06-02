@@ -38,7 +38,7 @@ class GuiTestMacro extends Macro {
       [4800, 'up'],
       [5000, 'pos', v(0.7, 0.7)],
 
-      // repeatedly click menu button
+      // 4x click menu button
       [5500, 'pos', btnPos],
       [5600, 'down'],
       [5700, 'up'],

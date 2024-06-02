@@ -35,11 +35,10 @@ class PolygonEdge extends PathspecEdge {
     return this.csl[this.csl.length - 1];
   }
 
-  // compute position+normal [angle,radius,normal angle]
-  // at given distance along circumerence
   /**
-   *
-   * @param d
+   * Compute edge data at given point along cirumference.
+   * @param {number} d The one-dimensionsional coordinate along this edge.
+   * @returns {number[]} The computed angle, radius, and normal angle
    */
   computePoint(d) {
 

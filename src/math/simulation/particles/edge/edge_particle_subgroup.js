@@ -90,12 +90,12 @@ class EdgeParticleSubgroup {
         const oldPos = tgs[i * nd + 0];
         const oldVel = tgs[i * nd + 1];
 
-        const [_ea, _er, oldNorm] = this.edge.lookupDist(oldPos);
+        const [_ea, _er, oldEdgeNorm] = this.edge.lookupDist(oldPos);
         const acc = this.getAccel(oldPos);
 
         const accAngle = acc.getAngle();
         const accMag = acc.getMagnitude();
-        const norm = oldNorm + this.angle;
+        const norm = oldEdgeNorm + this.angle;
         let vel = oldVel + accMag * Math.sin(norm - accAngle);// accel particle along edge
         vel = vel * vm; // friction
         let pos = oldPos + vel * dt;
@@ -113,7 +113,7 @@ class EdgeParticleSubgroup {
         const slideCentrifugalAcc = 0; // poopy
 
         // check if just passed a sharp corner
-        const dnorm = Math.abs(cleanAngle(oldNorm - edgeNorm));
+        const dnorm = Math.abs(cleanAngle(oldEdgeNorm - edgeNorm));
 
         const passedSharpCorner = dnorm > 1.6;
 
@@ -124,7 +124,7 @@ class EdgeParticleSubgroup {
           grab = true;
           const usePos = passedSharpCorner ? oldPos : pos;
           const useVel = passedSharpCorner ? oldVel : vel;
-          const useNorm = passedSharpCorner ? oldNorm + this.angle : norm;
+          const useNorm = passedSharpCorner ? oldEdgeNorm + this.angle : edgeNorm + this.angle;
           const [xyPos, xyVel] = this.getXyPosVel(i, usePos, useVel, useNorm);
           this.pps.spawnParticle(xyPos, xyVel);
         }
@@ -150,7 +150,7 @@ class EdgeParticleSubgroup {
   }
 
   /**
-   * get 2d pysics state for existing particel on this edge
+   * get 2d pysics state for existing particle on this edge
    * @param  {number} i The particle index
    * @param  {number} pos Optional 1D position along this edge,
    * @param  {number} vel Optional 1D veloicy along this edge,
@@ -165,7 +165,7 @@ class EdgeParticleSubgroup {
     const p = pos ? pos : tgs[i * nd + 0];
     const v = vel ? vel : tgs[i * nd + 1];
 
-    const nrm = norm ? norm : this.edge.lookupDist(p)[2];
+    const nrm = norm ? norm : this.edge.lookupDist(p)[2] + this.angle;
 
     const xyPos = this.getPos(p);
     const xyVel = this.getVel(p).add(vp(nrm + pio2, v));
@@ -211,8 +211,8 @@ class EdgeParticleSubgroup {
   }
 
   /**
-   * compute velocity of a particle
-   * achored to edge at given distance along cirumference
+   * compute velocity of a hypothetical particle
+   * anchored to edge at given distance along cirumference
    * @param a
    */
   getVel(a) {

@@ -7,9 +7,10 @@ class DefaultToolTutorial extends Macro {
   /**
    * Set title for this macro.
    * Default tool is setup by Macro constructor.
+   * @param {...any} p
    */
-  constructor() {
-    super('Default Tool Tutorial');
+  constructor(...p) {
+    super(...p);
   }
 
   /**

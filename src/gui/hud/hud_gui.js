@@ -123,7 +123,7 @@ class HudGui extends Gui {
         // build tooltip with string label and tutorial sim
         button.withDynamicTooltip(() => {
           const ttpr = ToolbarTooltipPopup.pickRect(this.screen, tooltip);
-          const innerScreen = ToolbarTooltipPopup.getScreen(tut);
+          const innerScreen = ToolbarTooltipPopup.getTutorialScreen(tut, tool.tooltipText);
           return new ToolbarTooltipPopup(ttpr, tooltip, innerScreen, tool);
         });
 

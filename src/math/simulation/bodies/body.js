@@ -253,7 +253,7 @@ class Body {
   }
 
   /**
-   *
+   * Draw velocity vectors along edge.
    * @param g
    */
   drawVel(g) {

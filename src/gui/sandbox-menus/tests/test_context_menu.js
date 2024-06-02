@@ -34,7 +34,6 @@ class TestContextMenu extends ContextMenu {
 
     // center simulation in first content square
     const screen = test.screen;
-    screen.reset();
     Test.resetBoxSims(screen);
     const sim = screen.sim;
     const tut = screen.tut;
@@ -297,8 +296,7 @@ class TestContextMenu extends ContextMenu {
         // perform relevent check
         let success = false;
         try {
-          func();
-          success = true;
+          success = func();
         }
         catch (error) {
           console.error(error);

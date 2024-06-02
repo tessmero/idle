@@ -51,6 +51,7 @@
 <canvas id="gameCanvas"></canvas>
 
 <!-- START_IMPORTS --><script src="src/math/vector.js"></script>
+<script src="src/math/rng.js"></script>
 <script src="src/math/util.js"></script>
 <script src="src/math/simulation/bodies/body.js"></script>
 <script src="src/color_scheme.js"></script>
@@ -109,13 +110,13 @@
 <script src="src/tutorials/default_tool_tutorial.js"></script>
 <script src="src/tests/tools/default_tool_tutorial_test.js"></script>
 <script src="src/gui/text/dissolving_font_spec.js"></script>
-<script src="src/tests/boxes/drop_through_box_test.js"></script>
 <script src="src/math/simulation/grabbers/edge_grabber.js"></script>
 <script src="src/math/simulation/particles/edge/edge_particle_group.js"></script>
 <script src="src/gui/icons/edge_particle_icon.js"></script>
 <script src="src/tests/boxes/emitter.js"></script>
 <script src="src/gui/start-menu/fade-in/fade_in.js"></script>
 <script src="src/gui/start-menu/fade-out/fade_out.js"></script>
+<script src="src/tests/boxes/fall_thru_box_test.js"></script>
 <script src="src/gui/elements/gui_screen_panel.js"></script>
 <script src="src/tests/guis/gui_test.js"></script>
 <script src="src/tests/guis/gui_test_macro.js"></script>
@@ -123,12 +124,12 @@
 <script src="src/math/simulation/grabbers/inverse_grabber.js"></script>
 <script src="src/math/simulation/grabbers/line_grabber.js"></script>
 <script src="src/gui/icons/line_icon.js"></script>
+<script src="src/tests/boxes/line_thru_box_test.js"></script>
 <script src="src/tutorials/line_tool_tutorial.js"></script>
 <script src="src/tests/tools/line_tool_tutorial_test.js"></script>
 <script src="src/gui/icons/lock_icon.js"></script>
 <script src="src/gui/icons/loop_icon.js"></script>
 <script src="src/math/simulation/main_psim.js"></script>
-<script src="src/tests/boxes/nested_boxes_test.js"></script>
 <script src="src/gui/icons/next_icon.js"></script>
 <script src="src/math/simulation/bodies/edges/pathspec_edge.js"></script>
 <script src="src/gui/icons/pause_icon.js"></script>
@@ -174,7 +175,6 @@
 <script src="src/math/simulation/bodies/compound/controlled_sausage_body.js"></script>
 <script src="src/gui/sandbox-menus/debug/debug_tab.js"></script>
 <script src="src/math/simulation/bodies/compound/default_control_frame.js"></script>
-<script src="src/tests/boxes/drop_through_box_macro.js"></script>
 <script src="src/gui/elements/labels/dynamic_text_label.js"></script>
 <script src="src/gui/start-menu/fade-in/grid_fade_in.js"></script>
 <script src="src/gui/start-menu/fade-out/grid_fade_out.js"></script>
@@ -226,7 +226,6 @@
 <script src="src/progression/compute_bonuses_util.js"></script>
 <script src="src/draw.js"></script>
 <script src="src/input.js"></script>
-<script src="src/math/rng.js"></script>
 <script src="src/tests/test_list.js"></script>
 <script src="src/update.js"></script>
 <script src="src/setup.js"></script>

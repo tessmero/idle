@@ -33,17 +33,16 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
   /**
    *
    * @param macro
+   * @param titleKey
    */
-  static getScreen(macro) {
-    const clazz = macro.constructor;
-    if (!(clazz in _allTutorialScreens)) {
+  static getTutorialScreen(macro, titleKey) {
+    if (!(titleKey in _allTutorialScreens)) {
       const sim = new TutorialPSim();
-      const titleKey = macro.getTitle();
       const gsm = GameStateManager.blankGsm();
       const screen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
-      _allTutorialScreens[clazz] = screen;
+      _allTutorialScreens[titleKey] = screen;
     }
-    return _allTutorialScreens[clazz];
+    return _allTutorialScreens[titleKey];
   }
 
   /**

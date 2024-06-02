@@ -6,9 +6,10 @@ class LineToolTutorial extends Macro {
 
   /**
    * Prepare miniature line tool.
+   * @param {...any} p
    */
-  constructor() {
-    super('Line Tutorial');
+  constructor(...p) {
+    super(...p);
 
     const t = new LineTool();
     t.lineLength = t.lineLength * global.tutorialScaleFactor;

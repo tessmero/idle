@@ -5,9 +5,10 @@ class PiToolTutorial extends Macro {
 
   /**
    *
+   * @param {...any} p
    */
-  constructor() {
-    super('Inspector Tutorial');
+  constructor(...p) {
+    super(...p);
 
     const grabRad = 0.04;
     const t = new PiTool(null, grabRad);

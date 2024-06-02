@@ -71,6 +71,8 @@ class SausageBody extends Body {
     this.grabber.a = this.a;
     this.grabber.b = this.b;
     this.grabber.update();
+
+    return true;
   }
 
   /**

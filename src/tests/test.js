@@ -6,7 +6,7 @@
 const _allTestScreens = {};
 
 /**
- * integration test for a simulation
+ * Test base class.
  */
 class Test {
 

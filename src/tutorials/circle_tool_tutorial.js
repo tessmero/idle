@@ -6,9 +6,10 @@ class CircleToolTutorial extends Macro {
 
   /**
    * Prepare miniature circle tool.
+   * @param {...any} p
    */
-  constructor() {
-    super('Circle Tutorial');
+  constructor(...p) {
+    super(...p);
 
     const t = new CircleTool();
     t.circleRadius = t.circleRadius * global.tutorialScaleFactor;

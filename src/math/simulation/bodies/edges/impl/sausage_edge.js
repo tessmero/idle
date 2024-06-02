@@ -28,9 +28,8 @@ class SausageEdge extends PathspecEdge {
 
   /**
    * Compute edge data at given point along cirumference.
-   *
-   * compute position+normal [angle,radius,normal angle]
-   * @param d
+   * @param {number} d The one-dimensionsional coordinate along this edge.
+   * @returns {number[]} The computed angle, radius, and normal angle
    */
   computePoint(d) {
 

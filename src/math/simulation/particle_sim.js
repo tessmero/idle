@@ -232,6 +232,8 @@ class ParticleSim {
     s.selectedParticle = null;
     s.selectedBody = null;
     s.particlesCollected = 0;
+    s.draggingControlPoint = null;
+    s.hoveredControlPoint = null;
 
     // activate all procedural particles
     this.rainGroup.grabbedParticles.fill(false);

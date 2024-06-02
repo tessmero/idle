@@ -11,13 +11,12 @@ class Macro {
   /**
    * Construct new macro based on
    * implemented buildKeyFrames() method
-   * @param title
+   * @param buildKeyframes
    */
-  constructor(title) {
-    this.#title = title;
+  constructor(buildKeyframes = this.buildKeyframes) {
     this.reset();
 
-    const kf = this.buildKeyframes();
+    const kf = buildKeyframes();
     this.keyframes = kf;
 
     const grabRad = 0.001;
@@ -59,13 +58,6 @@ class Macro {
   reset() {
     this.t = 0;
     this.finished = false;
-  }
-
-  /**
-   * get title string
-   */
-  getTitle() {
-    return this.#title;
   }
 
   /**
