@@ -112,6 +112,19 @@ class LineThruBoxTest extends Test {
       [17000, 'up'],
       [17500, 'pos', v(0.6, 0.9)],
 
+      // double-click box
+      [18000, 'pos', v(0.5, 0.7)],
+      [18100, 'down'],
+      [18200, 'up'],
+      [18300, 'down'],
+      [18400, 'up'],
+      [18500, 'pos', v(0.5, 0.7)],
+
     ]);
   }
+
+  /**
+   *
+   */
+  getDuration() { return 20000; }
 }

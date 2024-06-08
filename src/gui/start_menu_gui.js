@@ -54,7 +54,10 @@ class StartMenuGui extends Gui {
 
     const textPad = 0.01; // padding around letters' pixels
 
-    this.labels = specs.map((s) => new TextLabel(slots[s[0]], s[1]).withLetterPixelPad(textPad).withStyle('hud'));
+    this.labels = specs.map((s) =>
+      new TextLabel(slots[s[0]], s[1])
+        .withLetterPixelPad(textPad)
+        .withStyle('hud'));
 
     // rect to contain start and sandbox buttons
     const brect = padRect(...slots[7], 0.01);

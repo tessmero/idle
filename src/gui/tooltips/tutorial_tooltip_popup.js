@@ -25,7 +25,7 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
     const r = [x, y, ...sdims];
 
     // add inner screen to this gui
-    const gsp = new GuiScreenPanel(r, innerScreen);
+    const gsp = new GuiScreenPanel(r, innerScreen, true);
     this.children.unshift(gsp);
     this.gsp = gsp;
   }
@@ -38,7 +38,7 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
   static getTutorialScreen(macro, titleKey) {
     if (!(titleKey in _allTutorialScreens)) {
       const sim = new TutorialPSim();
-      const gsm = GameStateManager.blankGsm();
+      const gsm = new BlankGSM();
       const screen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
       _allTutorialScreens[titleKey] = screen;
     }

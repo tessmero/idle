@@ -56,7 +56,7 @@ class Skill {
   _buildThumbnailScreen() {
     const titleKey = `${this.name} skill card`;
     const sim = this.buildThumbnailSim();
-    const gsm = GameStateManager.blankGsm();
+    const gsm = new BlankGSM();
     const tut = null;
     return new GameScreen(titleKey, sim.rect, sim, gsm, tut);
   }

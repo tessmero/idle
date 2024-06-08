@@ -48,7 +48,7 @@ export default [
     "jsdoc/no-undefined-types": ["error", {
       "definedTypes": [
         "Vector",
-        "GameScreen","GameStateManager","Macro",
+        "GameScreen","GameState","GameStateManager","Macro",
         "Gui","GuiElement","Icon",
         "ParticleSim","Tool","Body",
       ]

@@ -48,11 +48,9 @@ class Global {
   baseAnimPeriod = 500; // ms
 
   // game state
-  gameState = GameStates.startMenu;
   upgradeMenuTabIndex = 0;
   t = 0; // total ellapsed time
   maxBodyCount = 10;
-  toolList = []; // list of Tool instances
 
   // debug
   sandboxMode = false;

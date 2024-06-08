@@ -4,7 +4,8 @@
  * A BoxBuddy existing in an active simulation
  * manifests a special outer->inner screen relationship
  */
-const _allBoxInternalScreens = new Map();
+const _allBoxScreenRels = new Map();
+const _allScreenBoxes = new Map();
 
 /**
  * BoxBuddy
@@ -34,6 +35,7 @@ class BoxBuddy extends Buddy {
     const outerScreen = sim.screen;
     this.outerScreen = outerScreen;
     this.innerScreen = this._getInnerScreen(outerScreen);
+    _allScreenBoxes.set(this.innerScreen, this);
 
     // override callback for inner sim
     const innerSim = this.innerScreen.sim;
@@ -63,8 +65,9 @@ class BoxBuddy extends Buddy {
     let lastClickTime = 0;
     this.movCp.clicked = () => {
       const t = global.t;
-      if ((t - lastClickTime) < 300) {
-        global.gsp.setInnerScreen(this.innerScreen);
+      const d = t - lastClickTime;
+      if (d < 300) {
+        this.enter();
       }
       lastClickTime = t;
     };
@@ -75,11 +78,54 @@ class BoxBuddy extends Buddy {
   }
 
   /**
-   * Draw orientation arrow on top of standard Buddy
+   *
+   */
+  enter() {
+    const screen = this.outerScreen;
+    const toSquare = (screen === global.rootScreen) ? [0, 0, 1, 1] : screen.rect;
+    screen.stateManager.setState(GameStates.boxTransition,
+      { fromSquare: BoxTransitionGui._car(this.square),
+        toSquare: BoxTransitionGui._car(toSquare),
+        toScreen: this.innerScreen,
+      });
+  }
+
+  /**
+   * Override standard buddy draw routine,
+   * instead draw square and orientation arrow.
    * @param g
    */
   draw(g) {
-    super.draw(g);
+    const c = this.square.pos;
+    const a = this.square.angle;
+    const r = this.square.rad;
+    BoxBuddy.drawBox(g, c, a, r);
+
+    // draw control points
+    this.controlPoints.forEach((cp) => cp.draw(g));
+  }
+
+  /**
+   *
+   * @param g
+   * @param c
+   * @param a
+   * @param r
+   */
+  static drawBox(g, c, a, r) {
+    SquareBody.drawSquare(g, c, a, r);
+    BoxBuddy.drawArrowOnBox(g, c, a, r);
+  }
+
+  /**
+   *
+   * @param g
+   * @param center
+   * @param angle
+   * @param rad
+   */
+  static drawArrowOnBox(g, center, angle, rad) {
+
     const r = 1;
     const rr = r / 2.5;
     const arrowShape = [
@@ -89,13 +135,13 @@ class BoxBuddy extends Buddy {
       [rr, -1], [-rr, -1],
     ];
     const offset = v(0, 1.2);
-    const s = this.rad * 0.4;
+    const s = rad * 0.4;
 
     g.fillStyle = global.colorScheme.bg;
     g.beginPath();
     arrowShape.forEach(([x, y]) => {
-      const pos = this.square.pos.add(v(x, y).add(offset).rotate(this.square.angle + pi).mul(s));
-      g.lineTo(...pos.xy());
+      const p = center.add(v(x, y).add(offset).rotate(angle + pi).mul(s));
+      g.lineTo(...p.xy());
     });
     g.closePath();
     g.fill();
@@ -218,7 +264,7 @@ class BoxBuddy extends Buddy {
    * @param outerScreen The screen containing this box.
    */
   _getInnerScreen(outerScreen) {
-    const abis = _allBoxInternalScreens;
+    const abis = _allBoxScreenRels;
     if (!abis.has(outerScreen)) {
       abis.set(outerScreen, []);
     }
@@ -250,19 +296,18 @@ class BoxBuddy extends Buddy {
     // prepare blank tutorial screen
     const sim = new BoxPSim();
     sim.usesGlobalCurrency = this.outerScreen.sim.usesGlobalCurrency;
-    const gsm = new GameStateManager();// GameStateManager.blankGsm();
+    const gsm = new GameStateManager();// new BlankGSM();
     const macro = null;
 
     // set terminal velocity for physics particles
     sim.fallSpeed = outerScreen.sim.fallSpeed;
 
     const titleKey = `box ${boxIndex} in ${outerScreen.titleKey}`;
-    const innerscreen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
+    const innerScreen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
 
     gsm.setState(GameStates.playing);
     sim.setTool(sim.toolList[0]);
-
-    return innerscreen;
+    return innerScreen;
   }
 
   /**
@@ -273,7 +318,7 @@ class BoxBuddy extends Buddy {
    */
   static ensureAllBoxesUpdated(dt) {
 
-    const abis = _allBoxInternalScreens;
+    const abis = _allBoxScreenRels;
     for (const [parent, children] of abis.entries()) {
       BoxBuddy._ensureScreenWasUpdated(parent, dt);
       for (const child of children) {
@@ -307,7 +352,7 @@ class BoxBuddy extends Buddy {
    * @param screen
    */
   static getParentScreen(screen) {
-    const abis = _allBoxInternalScreens;
+    const abis = _allBoxScreenRels;
     for (const [parent, children] of abis.entries()) {
       if (children.includes(screen)) {
         return parent;

@@ -39,7 +39,7 @@ class Test {
    * @returns {GameStateManager} new mock instance with no GUIs.
    */
   getGameStateManager() {
-    return GameStateManager.blankGsm();
+    return new BlankGSM();
   }
 
   /**
@@ -106,14 +106,15 @@ class Test {
    * Called in tests to form the subject of a test assertion.
    *
    * Asserts that the screen has exactly one top-level
-   * body that is an instance of the given class.
+   * body that fits the given criteria/class.
    * @param  {GameScreen} screen The screen to search in.
-   * @param  {object} clazz The Body subclass to find.
-   * @returns {Body} The instance that exists in screen.
+   * @param  {object} crit The body->boolean function or Body subclass to use as criteria.
+   * @returns {Body} The matching instance that exists in screen.
    */
-  static getSingleBody(screen, clazz) {
-    const bods = screen.sim.bodies;
-    const matches = bods.filter((b) => b instanceof clazz);
+  static getSingleBody(screen, crit) {
+    const f = (crit.prototype instanceof Body) ?
+      ((b) => b instanceof crit) : ((b) => crit(b));
+    const matches = screen.sim.bodies.filter(f);
     console.assert(matches.length === 1);
     return matches[0];
   }
@@ -123,7 +124,7 @@ class Test {
    * @param screen
    */
   static resetBoxSims(screen) {
-    const abis = _allBoxInternalScreens;
+    const abis = _allBoxScreenRels;
     if (abis.has(screen)) {
       abis.get(screen).forEach((inner) => { inner.sim.reset(); });
     }

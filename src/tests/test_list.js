@@ -3,16 +3,21 @@
  *
  * Used to build the test menu gui in sandbox mode.
  *
- * This is the only file where tests should be constructed.
+ * This is the only file where tests are constructed.
  *
- * Test screens are no constructed until the first time the tests are
- * run in the test context menu /src/gui/sandbox-menus/tests/
+ * Each test's screen is finally constructed the first time it is
+ * opened in the test context menu gui (/src/gui/sandbox-menus/tests/)
  *
- * Note that classes like Test imps always get loaded before
+ * Note that classes always get loaded before
  * non-class files like this one (build/link.py)
  */
 const allTests = [
 
+  ['gui', new ToggleMenuTest()],
+  ['gui', new CloseButtonTest()],
+  ['gui', new TransitionTest()],
+
+  // ['boxes', new NestedBoxesTest()],
   ['boxes', new BoxToolTutorialTest()],
   ['boxes', new FallThruBoxTest()],
   ['boxes', new LineThruBoxTest()],
@@ -23,6 +28,4 @@ const allTests = [
   ['tools', new PiToolTutorialTest()],
 
   ['other', new BasicRainSkillCardTest()],
-  ['other', new TransitionTest()],
-  ['other', new GuiTest()],
 ];

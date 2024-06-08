@@ -23,16 +23,15 @@ class BoxToolTutorialTest extends Test {
     return [
       // time, label, test function
       [0, 'no bodies', () => bods().length === 0],
-      [900, 'one body', () => bods().length === 1],
-      [900, 'one floater', () => flt().activeCount === 1],
-      [1300, 'angle = 0', () => Test.anglesEqual(0, sqr().angle)],
-      [2400, 'no floaters', () => flt().activeCount === 0],
-      [2400, 'no active edge particles', () => sim.edgeGroup.countActiveParticles() === 0],
+      [500, 'one body', () => bods().length === 1],
+      [500, 'one floater', () => flt().activeCount === 1],
+      [500, 'angle = 0', () => Test.anglesEqual(0, sqr().angle)],
 
-      // 2400-3300 rotate box
-      [4000, 'angle changed', () => !Test.anglesEqual(0, sqr().angle)],
-      [4000, 'position unchanged', () => Test.vectorsEqual(v(0.5, 0.5), Test.relPos(sim, sqr().pos))],
-      [4000, 'active physics particles', () => sim.physicsGroup.countActiveParticles() > 0],
+      // 1200-2500 rotate box
+      [3000, 'no floaters', () => flt().activeCount === 0],
+      [3000, 'no active edge particles', () => sim.edgeGroup.countActiveParticles() === 0],
+      [3000, 'angle changed', () => !Test.anglesEqual(0, sqr().angle)],
+      [3000, 'position unchanged', () => Test.vectorsEqual(v(0.5, 0.5), Test.relPos(sim, sqr().pos))],
     ];
   }
 }

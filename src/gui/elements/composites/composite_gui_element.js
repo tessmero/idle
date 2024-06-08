@@ -102,11 +102,12 @@ class CompositeGuiElement extends GuiElement {
     const mousePos = this.screen.mousePos;
     if (!mousePos) { return false; }
 
-    if (this.#children.some((e) => vInRect(mousePos, ...e.rect) &&
+    // check children in reverse order (last drawn = first clicked)
+    if (this.#children.toReversed().some((e) => vInRect(mousePos, ...e.rect) &&
                 e.click())) { return true; }
 
     if (this.#opaque && vInRect(mousePos, ...this.rect)) {
-      // console.log('clicked opaque composite element background');
+      console.log('clicked opaque composite element background');
       return true;
     }
 

@@ -38,27 +38,6 @@ class HudGui extends Gui {
     const topCenterP = [sr[0] + sr[2] * 0.4, topClp[1]];
     const topCrp = [sr[0] + sr[2] * 0.7, topClp[1]];
 
-    // decide which tools will be available
-    let toolList = sim.toolList;
-    if (!global.sandboxMode) {
-
-      // remove sandbox-only tools
-      const toRemove = [PiTool, BoxTool];
-      toolList = toolList.filter((t) => !toRemove.some((clazz) => t instanceof clazz));
-    }
-
-    // layout toolbar at bottom of screen
-    const nbuttons = toolList.length;
-    const padding = 0.005;
-    const buttonWidth = m - padding * 2;
-    const rowHeight = buttonWidth + padding * 2;
-    const rowWidth = buttonWidth * nbuttons + padding * (nbuttons + 1);
-    const brow = [sr[0] + sr[2] / 2 - rowWidth / 2, sr[1] + sr[3] - rowHeight, rowWidth, rowHeight];
-    const slots = [];
-    for (let i = 0; i < nbuttons; i++) {
-      slots.push([brow[0] + padding + i * (buttonWidth + padding), brow[1] + padding, buttonWidth, buttonWidth]);
-    }
-
     // build top hud
     let result = [
 
@@ -108,12 +87,51 @@ class HudGui extends Gui {
     // conveniently toggle things above
     result = result.filter(Boolean);
 
-    // build toolbar buttons
+    // append toolbar buttons
+    result = result.concat(this._buildToolbarButtons());
+
+    return result;
+  }
+
+  /**
+   *
+   */
+  _buildToolbarButtons() {
+    const sr = this.screen.rect;
+    const sim = this.screen.sim;
+
+    // decide which tools will be available
+    let toolList = sim.toolList;
+    if (!global.sandboxMode) {
+
+      // remove sandbox-only tools
+      const toRemove = [PiTool, BoxTool];
+      toolList = toolList.filter((t) => !toRemove.some((clazz) => t instanceof clazz));
+    }
+
+    // layout toolbar at bottom of screen
+    const m = 0.1;
+    const nbuttons = toolList.length;
+    const padding = 0.005;
+    const buttonWidth = m - padding * 2;
+    const rowHeight = buttonWidth + padding * 2;
+    const rowWidth = buttonWidth * nbuttons + padding * (nbuttons + 1);
+    const brow = [sr[0] + sr[2] / 2 - rowWidth / 2, sr[1] + sr[3] - rowHeight, rowWidth, rowHeight];
+    const slots = [];
+    const sloty = brow[1] + padding;
+    for (let i = 0; i < nbuttons; i++) {
+      const slotx = brow[0] + padding + i * (buttonWidth + padding);
+      slots.push([slotx, sloty, buttonWidth, buttonWidth]);
+    }
+
+    const result = [];
+
+    // iterate over tools in toolbar
     for (let i = 0; i < toolList.length; i++) {
-
       const tool = toolList[i];
-      const button = new ToolbarButton(slots[i], tool, i);
 
+      // build button
+      const button = new ToolbarButton(slots[i], tool, i);
       const tooltip = tool.tooltipText; // tooltip string
 
       // check if tutorial available

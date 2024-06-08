@@ -9,6 +9,7 @@ const GameStates = {
   playing: 2,
   upgradeMenu: 3,
   pauseMenu: 4,
+  boxTransition: 5,
 };
 
 /**
@@ -16,38 +17,116 @@ const GameStates = {
  */
 class GameStateManager {
 
+  _screen;
+  _state;
+  _guis;
+
+  /**
+   *
+   */
+  get currentGui() { return this.getGuiForState(this._state); }
+
+  /**
+   *
+   * @param s
+   */
+  getGuiForState(s) { return this._guis[s]; }
+
   /**
    *
    * @param screen
    * @param resetState
    */
   rebuildGuis(screen, resetState = true) {
-    this.gameScreen = screen;
+    this._screen = screen;
     if (resetState) {
-      this.gameState = GameStates.startMenu;
+      this._state = GameStates.startMenu;
     }
     const sr = screen.rect;
-    this.allGuis = [
-      new StartMenuGui(sr),
-      new StartTransitionGui(sr, true),
-      new HudGui(sr),
-      new UpgradeMenuGui(sr),
-      new PauseMenuGui(sr),
-    ];
-    this.allGuis.forEach((k) => {
-      k.gsm = this;
-      k.setChildren(k.buildElements(screen));
-      k.setScreen(screen);
+
+    const guis = Object.keys(GameStates)
+      .map((state) => this._buildGuiForState(GameStates[state], sr));
+    guis.filter(Boolean).forEach((gui) => {
+      gui.gsm = this;
+      gui.setChildren(gui.buildElements(screen));
+      gui.setScreen(screen);
     });
-    const gui = this.allGuis[this.gameState];
-    screen.setGui(gui);
+    this._guis = guis;
+
+    const currentGui = guis[this._state];
+    screen.setGui(currentGui);
+  }
+
+  /**
+   * called in rebuildGuis()
+   * @param {GameState} state
+   * @param {number[]} sr The screen rectangle to allign the gui inside of.
+   */
+  _buildGuiForState(state, sr) {
+    switch (state) {
+    case GameStates.startMenu:
+      return new StartMenuGui(sr);
+
+    case GameStates.startTransition:
+      return new StartTransitionGui(sr, true);
+
+    case GameStates.playing:
+      return new HudGui(sr);
+
+    case GameStates.upgradeMenu:
+      return new UpgradeMenuGui(sr);
+
+    case GameStates.pauseMenu:
+      return new PauseMenuGui(sr);
+
+    case GameStates.boxTransition:
+      return new BoxTransitionGui(sr);
+
+    default:
+      return null;
+    }
   }
 
   /**
    *
    */
+  set screen(_s) { throw new Error('not allowed'); }
+
+  /**
+   *
+   */
+  set gameScreen(_s) { throw new Error('not allowed'); }
+
+  /**
+   *
+   */
+  get gameScreen() { throw new Error('should use screen'); }
+
+  /**
+   *
+   */
+  get gameState() { throw new Error('should use state'); }
+
+  /**
+   *
+   */
+  get allGuis() { throw new Error('not allowed'); }
+
+  /**
+   *
+   */
+  get screen() { return this._screen; }
+
+  /**
+   *
+   */
+  get state() { return this._state; }
+
+  /**
+   *
+   */
   hideWebsiteOverlays() {
-    if (this.gameScreen !== global.mainScreen) {
+    if (this._screen !== global.mainScreen) {
       return;
     }
     const ids = ['navbar', 'source-link'];
@@ -61,7 +140,7 @@ class GameStateManager {
    *
    */
   showWebsiteOverlays() {
-    if (this.gameScreen !== global.mainScreen) {
+    if (this._screen !== global.mainScreen) {
       return;
     }
     const ids = ['navbar', 'source-link'];
@@ -74,10 +153,14 @@ class GameStateManager {
   /**
    *
    * @param s
+   * @param params
    */
-  setState(s) {
-    this.gameState = s;
-    this.rebuildGuis(this.gameScreen, false);
+  setState(s, params = {}) {
+    this._state = s;
+    this.rebuildGuis(this._screen, false);
+
+    const gui = this.currentGui;
+    if (gui) { gui.setStateParams = params; }
 
     global.shiftHeld = false;
     global.controlHeld = false;
@@ -87,11 +170,11 @@ class GameStateManager {
    * toggle the stats / upgrades menu overlay
    */
   toggleStats() {
-    if (this.gameState === GameStates.upgradeMenu) {
+    if (this._state === GameStates.upgradeMenu) {
       this.setState(GameStates.playing);
     }
     else {
-      this.gameScreen.sim.selectedBody = null; // close context menu
+      this._screen.sim.selectedBody = null; // close context menu
       this.setState(GameStates.upgradeMenu);
     }
   }
@@ -100,7 +183,7 @@ class GameStateManager {
    * user clicked play button on start menu
    */
   playClicked() {
-    if (this.gameScreen !== global.mainScreen) {
+    if (this._screen !== global.mainScreen) {
       return;
     }
 
@@ -115,7 +198,7 @@ class GameStateManager {
    *
    */
   resume() {
-    if (this.gameScreen !== global.mainScreen) {
+    if (this._screen !== global.mainScreen) {
       return;
     }
 
@@ -127,7 +210,7 @@ class GameStateManager {
    *
    */
   play() {
-    if (this.gameScreen !== global.mainScreen) {
+    if (this._screen !== global.mainScreen) {
       return;
     }
 
@@ -173,11 +256,11 @@ class GameStateManager {
    * Called when pause button is clicked.
    */
   pause() {
-    if (this.gameScreen !== global.mainScreen) {
+    if (this._screen !== global.mainScreen) {
       return;
     }
 
-    if (this.gameState === GameStates.pauseMenu) {
+    if (this._state === GameStates.pauseMenu) {
       this.setState(GameStates.playing);
     }
     else {
@@ -190,7 +273,7 @@ class GameStateManager {
    * Called when quit/exit button is clicked in pause menu.
    */
   quit() {
-    const screen = this.gameScreen;
+    const screen = this._screen;
 
     if (screen !== global.mainScreen) {
       return;
@@ -208,29 +291,19 @@ class GameStateManager {
     else {
 
       // attempt to exit box
-      const parentScreen = BoxBuddy.getParentScreen(screen);
-      if (parentScreen) {
-        this.setState(GameStates.playing);
-        screen.gsp.setInnerScreen(parentScreen);
-        const sim = global.mainScreen.sim;
-        sim.setTool(sim.toolList[0]);
+      const outerScreen = BoxBuddy.getParentScreen(screen);
+      if (outerScreen) {
+
+        // trigger screen change before animation
+        screen.gsp.setInnerScreen(outerScreen);
+
+        // trigger box animation
+        const boxBuddy = _allScreenBoxes.get(screen);
+        outerScreen.stateManager.setState(GameStates.boxTransition, {
+          fromSquare: BoxTransitionGui._car(screen.gsp.rect),
+          toSquare: BoxTransitionGui._car(boxBuddy.square),
+          toScreen: null });
       }
     }
-  }
-
-  /**
-   * @returns {GameStateManager} new mock instance with no GUIs.
-   */
-  static blankGsm() {
-
-    const gsm = new GameStateManager();
-    gsm.rebuildGuis = (screen) => {
-      gsm.gameScreen = screen;
-      gsm.allGuis = [
-        null, null, null, null, null,
-      ];
-      screen.setGui(null);
-    };
-    return gsm;
   }
 }

@@ -34,7 +34,7 @@ class UpgradeMenuGui extends Gui {
    * Make HUD appear behind the upgrade menu.
    */
   getBackgroundGui() {
-    return this.screen.stateManager.allGuis[GameStates.playing];
+    return this.screen.stateManager.getGuiForState(GameStates.playing);
   }
 
   /**
@@ -81,7 +81,7 @@ class UpgradeMenuGui extends Gui {
 
     w = 0.05;
     const topRight = [r0[0] + r0[2] - w - 0.02, r0[1] + 0.05, w, w];
-    const closeButton = new IconButton(topRight, xIcon, this.gsm.toggleStats)
+    const closeButton = new IconButton(topRight, xIcon, () => this.gsm.toggleStats())
       .withScale(0.5)
       .withTooltip('close upgrades menu');
     tabGroup.addChild(closeButton);
@@ -127,7 +127,7 @@ class UpgradeMenuGui extends Gui {
       this.transitionRadius = this.transitionRadius + dt * this.transitionSpeed;
 
       // check if the upgrade menu is open
-      const tval = (this.gsm.gameState === GameStates.upgradeMenu);
+      const tval = (this.gsm.state === GameStates.upgradeMenu);
 
       // set transition effect within radius
       const md2 = Math.pow(this.transitionRadius, 2);

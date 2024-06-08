@@ -17,7 +17,7 @@ class PauseMenuGui extends Gui {
    * Make HUD appear behind the pause menu.
    */
   getBackgroundGui() {
-    return this.screen.stateManager.allGuis[GameStates.playing];
+    return this.screen.stateManager.getGuiForState(GameStates.playing);
   }
 
   /**

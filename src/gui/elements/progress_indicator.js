@@ -1,13 +1,12 @@
-// progress bar
+
 /**
- *
+ * @file ProgressIndicator gui element.
  */
 class ProgressIndicator extends GuiElement {
 
-  // valueFunc returns a number
-  // will be truncated to range [0,1]
   /**
-   *
+   * valueFunc returns a number
+   * will be truncated to range [0,1]
    * @param rect
    * @param valueFunc
    */
@@ -33,7 +32,6 @@ class ProgressIndicator extends GuiElement {
    */
   static scale() { return 0.5; }
 
-  // implement GuiElement
   /**
    *
    * @param g
@@ -43,9 +41,15 @@ class ProgressIndicator extends GuiElement {
       g, this.rect, this.valueFunc(), this.outline);
   }
 
-  // draw bar for progress between 0 and 1
   /**
    *
+   */
+  click() {
+    // do nothing
+  }
+
+  /**
+   * draw bar for progress between 0 and 1
    * @param g
    * @param rect
    * @param progress

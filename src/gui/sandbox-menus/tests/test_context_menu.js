@@ -13,6 +13,8 @@ class TestContextMenu extends ContextMenu {
   testCat;
   testIndex;
 
+  #guiLetterScale = 0.25;
+
   /**
    *
    * @param rect
@@ -42,7 +44,7 @@ class TestContextMenu extends ContextMenu {
     const c = rectCenter(...s0);
     const gspRect = [c[0] - sdims[0] / 2, c[1] - sdims[1] / 2, ...sdims];
     screen.setRect(gspRect);
-    const gsp = new GuiScreenPanel(gspRect, screen);
+    const gsp = new GuiScreenPanel(gspRect, screen, true);
     screen.loop = false; // disable loop flag set in gsp constructor
     gsp.tut = tut;
     gsp.reset();
@@ -63,7 +65,6 @@ class TestContextMenu extends ContextMenu {
       throw new Error(`max of ${maxAsserts} asserts per test`);
     }
     const botRows = divideRows(...s1, nRows);
-    const textScale = 0.25;
 
     const duration = test.getDuration(screen);
     this.t = 0;
@@ -84,8 +85,8 @@ class TestContextMenu extends ContextMenu {
       checkReadouts.push(
         new StatReadout(botRows[i], uncheckedIcon,
           () => label)
-          .withScale(textScale)
-          .withTooltipScale(textScale)
+          .withScale(this.#guiLetterScale)
+          .withTooltipScale(this.#guiLetterScale)
           .withTooltip(tooltip)
       );
       i = i + 1;
@@ -106,30 +107,7 @@ class TestContextMenu extends ContextMenu {
     // play/pause/etc buttons at bottom of first square
     const topRows = divideRows(...padRect(...s0, 0), 10);
     const controlRow = divideCols(...topRows.at(-1), 10);
-    const specs = [
-      // icon, tooltip, action
-      [prevIcon, 'previous test', () => this.prevClicked()],
-      [playIcon, 'reset', () => this.playClicked()],
-
-      // [pauseIcon, 'pause',        ()=>{}],
-      [nextIcon, 'next test', () => this.nextClicked()],
-      [loopIcon, 'loop (off)', () => this.loopClicked()],
-    ];
-    const xOff = 0.75 * specs.length * controlRow[0][2]; // center buttons
-    i = 0;
-    const controlButtons = specs.map((entry) => {
-      const [icon, tooltip, action] = entry;
-      const r = [...controlRow[i]];
-      r[0] = r[0] + xOff;
-      const result = new IconButton(r, icon, action)
-        .withScale(0.3)
-        .withTooltip(tooltip)
-        .withTooltipScale(textScale);
-      i = i + 1;
-      return result;
-    });
-    this.loopButton = controlButtons.at(-1);
-    this.updateLoopButton();
+    const controlButtons = this._buildControlButtons(controlRow);
 
     const titleRect = [...topRows[0]];
     titleRect[1] = titleRect[1] - 0.03;
@@ -157,6 +135,42 @@ class TestContextMenu extends ContextMenu {
       finalDisplay,
     ]));
 
+  }
+
+  /**
+   * Get elements and set member 'loopButton'
+   * @param  {number[][]} controlRow The rectangles for positioning each button.
+   * @returns {GuiElement[]} The new IconButton instances.
+   */
+  _buildControlButtons(controlRow) {
+
+    const specs = [
+      // icon, tooltip, action
+      [prevIcon, 'previous test', () => this.prevClicked()],
+      [playIcon, 'reset', () => this.playClicked()],
+
+      // [pauseIcon, 'pause',        ()=>{}],
+      [nextIcon, 'next test', () => this.nextClicked()],
+      [loopIcon, 'loop (off)', () => this.loopClicked()],
+    ];
+    const xOff = 0.75 * specs.length * controlRow[0][2]; // center buttons
+    let i = 0;
+    const controlButtons = specs.map((entry) => {
+      const [icon, tooltip, action] = entry;
+      const r = [...controlRow[i]];
+      r[0] = r[0] + xOff;
+      const result = new IconButton(r, icon, action)
+        .withScale(0.3)
+        .withTooltip(tooltip)
+        .withTooltipScale(this.#guiLetterScale);
+      i = i + 1;
+      return result;
+    });
+
+    this.loopButton = controlButtons.at(-1);
+    this.updateLoopButton();
+
+    return controlButtons;
   }
 
   /**
@@ -301,6 +315,7 @@ class TestContextMenu extends ContextMenu {
         catch (error) {
           console.error(error);
         }
+
         if (success) { this.nChecksPassed = this.nChecksPassed + 1; }
         const icon = success ? checkedIcon : trashIcon;
         ttDisplay.setCheckboxIcon(i, icon);

@@ -14,6 +14,7 @@
  */
 class GameScreen {
 
+  #stateManager;
   #titleKey;
   #rect;
 
@@ -36,7 +37,7 @@ class GameScreen {
 
     this.sim = sim;
     sim.screen = this;
-    this.stateManager = gsm;
+    this.#stateManager = gsm;
 
     if (gsm) {
       gsm.rebuildGuis(this);
@@ -56,6 +57,11 @@ class GameScreen {
     this.floaters = new FloaterGroup(100);
 
   }
+
+  /**
+   *
+   */
+  get stateManager() { return this.#stateManager; }
 
   /**
    *
@@ -224,7 +230,7 @@ class GameScreen {
     // console.log('click fell through all guis')
     // close the upgrades menu if it is open
     const sm = this.stateManager;
-    if (sm && (sm.gameState === GameStates.upgradeMenu)) {
+    if (sm && (sm.state === GameStates.upgradeMenu)) {
       sm.toggleStats();
     }
 
@@ -269,42 +275,12 @@ class GameScreen {
     const macro = this.macro;
 
     // stop if game is paused
-    if ((!this.stateManager) || (this.stateManager.gameState !== GameStates.pauseMenu)) {
+    if ((!this.stateManager) || (this.stateManager.state !== GameStates.pauseMenu)) {
 
       sim.update(dt);
 
       if (macro) {
-
-        if (macro.finished) {
-          if (this.loop) {
-            this.reset();
-          }
-          else {
-            return;
-          }
-        }
-
-        const tool = macro.tool;
-        sim.setTool(tool);
-        tool.update(dt);
-        const keyframes = macro.update(dt);
-        let p = macro.getCursorPos();
-        const sr = sim.rect;
-        p = v(sr[0] + p.x * sr[2], sr[1] + p.y * sr[3]);
-        this.mouseMove(p);
-
-        // emulate user input if necessary
-        // (tutorial.js)
-        keyframes.forEach((event) => {
-          if (event[1] === 'down') { this.mouseDown(p); }
-          if (event[1] === 'up') { this.mouseUp(p); }
-          if (event[1] === 'primaryTool') { macro.tool = macro.primaryTool; }
-          if (event[1] === 'defaultTool') { macro.tool = macro.defaultTool; }
-        });
-
-        // like update.js
-        // update control point hovering status
-        sim.updateControlPointHovering(p);
+        this._updateMacro(sim, macro, dt);
       }
     }
 
@@ -319,7 +295,7 @@ class GameScreen {
     // if (global.gameState !== GameStates.playing) {
     //   sim.selectedBody = null;
     // }
-    if (gui && sim.selectedBody) {
+    if (gui && sim.selectedBody && (this === global.mainScreen)) {
       const bod = sim.selectedBody;
       let bodPos = bod.pos;
       if (bod instanceof CompoundBody) {
@@ -363,7 +339,7 @@ class GameScreen {
       // e.g. hud behind upgrade menu
       const bgGui = gui.getBackgroundGui();
       if (bgGui) {
-        if (this.stateManager.gameState === GameStates.startTransition) {
+        if (this.stateManager.state === GameStates.startTransition) {
           // skip bg hud updates during start transition
         }
         else {
@@ -383,9 +359,49 @@ class GameScreen {
     }
 
     // update menu gui transition effect
-    const menuGui = this.stateManager.allGuis[GameStates.upgradeMenu];
+    const menuGui = this.stateManager.getGuiForState(GameStates.upgradeMenu);
     if (menuGui) { menuGui.updateTransitionEffect(dt); } // upgrade_menu.js
 
+  }
+
+  /**
+   * Called in update()
+   * @param sim
+   * @param macro
+   * @param dt
+   */
+  _updateMacro(sim, macro, dt) {
+
+    if (macro.finished) {
+      if (this.loop) {
+        this.reset();
+      }
+      else {
+        return;
+      }
+    }
+
+    const tool = macro.tool;
+    sim.setTool(tool);
+    tool.update(dt);
+    const keyframes = macro.update(dt);
+    let p = macro.getCursorPos();
+    const sr = sim.rect;
+    p = v(sr[0] + p.x * sr[2], sr[1] + p.y * sr[3]);
+    this.mouseMove(p);
+
+    // emulate user input if necessary
+    // (tutorial.js)
+    keyframes.forEach((event) => {
+      if (event[1] === 'down') { this.mouseDown(p); }
+      if (event[1] === 'up') { this.mouseUp(p); }
+      if (event[1] === 'primaryTool') { macro.tool = macro.primaryTool; }
+      if (event[1] === 'defaultTool') { macro.tool = macro.defaultTool; }
+    });
+
+    // like update.js
+    // update control point hovering status
+    sim.updateControlPointHovering(p);
   }
 
   /**
@@ -502,7 +518,7 @@ class GameScreen {
       }
 
       // draw upgrade menu gui transition effect
-      const menuGui = this.stateManager.allGuis[GameStates.upgradeMenu];
+      const menuGui = this.stateManager.getGuiForState(GameStates.upgradeMenu);
       if (menuGui) { menuGui.drawTransitionEffect(g); } // upgrade_menu.js
 
       // draw current gui

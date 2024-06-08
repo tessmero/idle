@@ -69,10 +69,14 @@ function keyDown(event) {
   // }
   if (event.which === 16) {
     global.shiftHeld = true;
+
+    // testSound();
   }
   if (event.which === 17) {
     global.controlHeld = true;
   }
+
+  // console.log(event.which);
 }
 
 function keyUp(event) {

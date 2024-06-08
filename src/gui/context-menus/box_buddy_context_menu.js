@@ -22,20 +22,12 @@ class BoxBuddyContextMenu extends BuddyContextMenu {
       .withTooltip('Click to enter');
     gsp.hoverable = true;
     gsp.hideInnerGui = true;
-    gsp.click = () => this.screenPanelClicked();
+    gsp.click = () => boxBuddy.enter();
 
     // exempt inner screen from standard update-on-draw
     // instead it is updated persistently
     gsp.disableScreenUpdate = true;
 
     this.addChild(gsp);
-  }
-
-  /**
-   * Called when user clicks inner simulation display.
-   */
-  screenPanelClicked() {
-    const boxBuddy = this.buddy;
-    this.screen.gsp.setInnerScreen(boxBuddy.innerScreen);
   }
 }

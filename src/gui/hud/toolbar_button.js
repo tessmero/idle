@@ -20,7 +20,7 @@ class ToolbarButton extends CompositeGuiElement {
     btn.isAnimated = (() => // override IconButton
       btn.hovered || (
         this.isSelected() &&
-                (this.screen.stateManager.gameState === GameStates.playing)
+                (this.screen.stateManager.state === GameStates.playing)
       )
     );
     this.button = btn;
@@ -93,7 +93,7 @@ class ToolbarButton extends CompositeGuiElement {
       screen.sim.setTool(this.tool);
 
       // close the upgrades menu if it is open
-      if (screen.stateManager.gameState === GameStates.upgradeMenu) {
+      if (screen.stateManager.state === GameStates.upgradeMenu) {
         screen.stateManager.toggleStats();
       }
 

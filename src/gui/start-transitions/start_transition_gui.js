@@ -21,9 +21,8 @@ class StartTransitionGui extends Gui {
     }
   }
 
-  // implement Gui
   /**
-   *
+   * implement Gui
    * @param _screen
    */
   buildElements(_screen) {
@@ -31,22 +30,13 @@ class StartTransitionGui extends Gui {
   }
 
   /**
-   * pass flag to disable clearing (game_screen.js)
-   * required for some fade-to-black segments
-   */
-  stopScreenClear() {
-    const fo = this._startTransFadeOut;
-    return fo ? fo.stopScreenClear() : false;
-  }
-
-  /**
-   * show the start menu then hud,
+   * show the old screen
    * behind the transition effect
    */
   getBackgroundGui() {
     const bgState = this._startTransFadeOut ?
       GameStates.startMenu : GameStates.playing;
-    return this.screen.stateManager.allGuis[bgState];
+    return this.screen.stateManager.getGuiForState(bgState);
   }
 
   /**

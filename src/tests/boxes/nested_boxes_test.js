@@ -1,13 +1,13 @@
 /**
  * @file Test dropping particles through box.
  */
-class FallThruBoxTest extends Test {
+class NestedBoxesTest extends Test {
 
   /**
    * Use macro sequence defined in this file.
    */
   constructor() {
-    super('Fall Thru Box Test', FallThruBoxTest._macro());
+    super('Nested Boxes Test', NestedBoxesTest._macro());
   }
 
   /**
@@ -65,10 +65,11 @@ class FallThruBoxTest extends Test {
     // use minature box tool from BoxToolTutorial
     // override buildKeyFrames()
     return new BoxToolTutorial(() => [
+
       [0, 'pos', startPos],
       [1, 'primaryTool'],
 
-      // place box at center
+      // build first box
       [500, 'pos', v(0.5, 0.5)],
       [1000, 'down'],
       [1000, 'up'],
@@ -77,29 +78,26 @@ class FallThruBoxTest extends Test {
 
       [2000, 'pos', startPos],
 
-      // expect to catch nothing
-      [2000, 'down'],
-      [5000, 'up'],
+      // double-click first box
+      [3000, 'pos', v(0.5, 0.5)],
+      [3200, 'down'],
+      [3300, 'up'],
+      [3400, 'down'],
+      [3500, 'up'],
+      [3600, 'pos', v(0.5, 0.5)],
 
-      // expect to catch particles
-      [8000, 'down'],
-      [9000, 'up'],
+      [4000, 'pos', startPos],
+      [4500, 'pos', startPos],
 
-      [10000, 'pos', startPos],
+      // build second box
+      [4500, 'primaryTool'],
+      [5000, 'pos', v(0.5, 0.5)],
+      [5000, 'down'],
+      [5200, 'up'],
+      [5200, 'defaultTool'],
+      [6000, 'pos', startPos],
 
-      // double-click box
-      [10500, 'pos', v(0.5, 0.5)],
-      [10600, 'down'],
-      [10700, 'up'],
-      [10800, 'down'],
-      [10900, 'up'],
-      [11000, 'pos', v(0.5, 0.5)],
-
+      [7000, 'pos', startPos],
     ]);
   }
-
-  /**
-   *
-   */
-  getDuration() { return 11000; }
 }

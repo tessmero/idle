@@ -16,10 +16,10 @@ class TransitionTest extends Test {
   getGameStateManager() {
     const gsm = new GameStateManager();
     gsm.rebuildGuis = (screen) => {
-      gsm.gameState = GameStates.startTransition;
-      gsm.gameScreen = screen;
+      gsm._state = GameStates.startTransition;
+      gsm._screen = screen;
       const sr = screen.rect;
-      gsm.allGuis = [
+      gsm._guis = [
         null,
         new StartTransitionGui(sr),
         null,
@@ -29,7 +29,7 @@ class TransitionTest extends Test {
 
       // mock Hud Gui implementation
       // with only upgrade menu button
-      const gui = gsm.allGuis[gsm.gameState];
+      const gui = gsm.currentGui;
       gui.isMain = false;
       screen.setGui(gui);
     };

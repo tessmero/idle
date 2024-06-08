@@ -73,6 +73,7 @@ class_files = sorted(class_files, key=get_hierarchy_depth)
 order = class_files + non_class_files
 
 # utils must be first
+order = toFirst(order, 'music_theory.js')
 order = toFirst(order, 'util.js')
 order = toFirst(order, 'rng.js')
 order = toFirst(order, 'vector.js')

@@ -18,11 +18,8 @@ class GuiScreenPanel extends GuiElement {
    */
   constructor(rect, innerScreen, allowScaling = false) {
     super(rect);
-    this.setInnerScreen(innerScreen);
     this.#allowScaling = allowScaling;
-    const r = this.rect;
-
-    innerScreen.drawOffset = allowScaling ? [0, 0] : [r[0], r[1]];
+    this.setInnerScreen(innerScreen);
     innerScreen.loop = true;
     this.hoverable = false;
   }
@@ -46,6 +43,8 @@ class GuiScreenPanel extends GuiElement {
 
     if (oldScreen) { s.mousePos = oldScreen.mousePos; }
     s.gsp = this;
+    const r = this.rect;
+    s.drawOffset = this.#allowScaling ? [0, 0] : [r[0], r[1]];
     this.#innerScreen = s;
   }
 
@@ -74,13 +73,28 @@ class GuiScreenPanel extends GuiElement {
 
   /**
    *
+   */
+  getScale() {
+    return this.rect[2] / this.#innerScreen.rect[2];
+  }
+
+  /**
+   *
    * @param g
    */
   draw(g) {
     if (this.#allowScaling) {
-      const scale = this.rect[2] / this.#innerScreen.rect[2];
+      const scale = this.getScale();
       const gct = global.canvasTransform;
-      g.setTransform(gct[0] * scale, 0, 0, gct[3] * scale, gct[4] + this.rect[0] * gct[0], gct[5] + this.rect[1] * gct[3]);
+
+      const mx = gct[0] * scale;
+      const my = gct[3] * scale;
+
+      const bx = gct[4] + this.rect[0] * gct[0];
+      const by = gct[5] + this.rect[1] * gct[3];
+
+      // transform a,b,c,d,e,f
+      g.setTransform(mx, 0, 0, my, bx, by);
     }
 
     this.#innerScreen.draw(g, this.hideInnerGui);
