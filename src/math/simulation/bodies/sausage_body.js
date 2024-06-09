@@ -1,5 +1,5 @@
 /**
- *
+ * @file SsausageBody thick line segment with round ends.
  */
 class SausageBody extends Body {
 

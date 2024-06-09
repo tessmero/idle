@@ -1,5 +1,5 @@
 /**
- *
+ * @file CircleEdge defined by radius.
  */
 class CircleEdge extends RadspecEdge {
 

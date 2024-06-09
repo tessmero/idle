@@ -1,5 +1,6 @@
 
 /**
+ * @file ToolbarTooltipPopup gui element.
  * a tooltip with some text and a simulation
  * also shows tool cost with progress indicator
  */
@@ -7,11 +8,11 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
 
   /**
    * get rect using ToolbarTooltipPopup.pickRect
-   * @param rect
-   * @param label
-   * @param tut
-   * @param tool
-   * @param scale
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {string} label
+   * @param {Macro} tut
+   * @param {Tool} tool
+   * @param {number} scale
    */
   constructor(rect, label, tut, tool, scale = null) {
     super(rect, label, tut, scale);
@@ -49,11 +50,12 @@ class ToolbarTooltipPopup extends TutorialTooltipPopup {
    *
    */
   static piHeight() { return 0.05; } // thickness of progress bar
+
   /**
    *
-   * @param screen
-   * @param label
-   * @param scale
+   * @param {GameScreen} screen
+   * @param {string} label
+   * @param {number} scale
    */
   static pickRect(screen, label, scale = null) {
 

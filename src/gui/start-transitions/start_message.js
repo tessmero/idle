@@ -43,9 +43,9 @@ class StartMessage extends StartAnimStage {
   }
 
   /**
-   *
-   * @param g
-   * @param rect
+   * Draw message at the center of the given rectangle.
+   * @param {object} g The graphics context.
+   * @param {number[]} rect The rectangle in question.
    */
   draw(g, rect) {
 

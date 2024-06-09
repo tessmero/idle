@@ -8,8 +8,8 @@ class Button extends GuiElement {
 
   /**
    *
-   * @param rect
-   * @param action
+   * @param {number[]} rect The x,y,w,h of this button.
+   * @param {Function} action The function to call when clicked.
    */
   constructor(rect, action) {
     super(rect);
@@ -27,18 +27,18 @@ class Button extends GuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     this.constructor._draw(g, this.rect, this.hovered);
   }
 
   /**
-   *
-   * @param g
-   * @param rect
-   * @param hovered
-   * @param fill
+   * Draw standard button rectangle.
+   * @param {object} g The graphics context.
+   * @param {number[]} rect The x,y,w,h of the rectangle.
+   * @param {boolean} hovered True if the user is hovering over the button.
+   * @param {boolean} fill True if the interior of the button should be filled.
    */
   static _draw(g, rect, hovered = false, fill = true) {
     let lineCol = global.colorScheme.fg;

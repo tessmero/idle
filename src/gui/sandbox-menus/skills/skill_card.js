@@ -7,7 +7,7 @@ class SkillCard extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
+   * @param {number[]} rect The rectangle to align elements in.
    * @param tree
    * @param entry
    */

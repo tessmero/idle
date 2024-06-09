@@ -7,9 +7,9 @@ class BodyContextMenu extends ContextMenu {
 
   /**
    *
-   * @param rect
-   * @param s0
-   * @param s1
+   * @param {number[]} rect The rectangle enclosing the whole menu.
+   * @param {number[]} s0 The first content square to align elements in.
+   * @param {number[]} s1 The second content square to align elements in.
    * @param body
    */
   constructor(rect, s0, s1, body) {
@@ -61,7 +61,7 @@ class BodyContextMenu extends ContextMenu {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);

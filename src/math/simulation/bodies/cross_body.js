@@ -1,6 +1,6 @@
 
 /**
- *
+ * @file CrossBody cross shaped body.
  */
 class CrossBody extends Body {
   /**

@@ -6,9 +6,9 @@ class PiContextMenu extends ContextMenu {
 
   /**
    *
-   * @param rect
-   * @param s0
-   * @param s1
+   * @param {number[]} rect The rectangle enclosing the whole menu.
+   * @param {number[]} s0 The first content square to align elements in.
+   * @param {number[]} s1 The second content square to align elements in.
    * @param screen
    * @param pData
    */

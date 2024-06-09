@@ -1,7 +1,9 @@
 
 /**
- * used to construct an inverted copy
- * of an existing grabber
+ * @file InversGrabber wrapper that inverts
+ * the grabbing criteria of an existing grabber.
+ *
+ * This grabs only what the original grabber would not grab.
  */
 class InverseGrabber extends Grabber {
 

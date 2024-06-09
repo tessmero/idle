@@ -1,21 +1,21 @@
 /**
- *
+ * @file ValueCurve object type for math functions
+ * used to compute in-game costs and bonuses.
  */
 class ValueCurve {
 
-  // f(i) => value after i upgrades
   /**
-   *
-   * @param f
+   * f(i) => value after i upgrades
+   * @param {Function} f The math function f(i).
    */
   constructor(f) {
     this.f = f;
   }
 
   /**
-   *
-   * @param m
-   * @param b
+   * Convenience function to construct linear ValueCurve.
+   * @param {number} m The slope.
+   * @param {number} b The intercept.
    */
   static linear(m, b) {
     return new ValueCurve(
@@ -24,9 +24,9 @@ class ValueCurve {
   }
 
   /**
-   *
-   * @param start
-   * @param scale
+   * Convenience function to construct power ValueCurve.
+   * @param {number} start
+   * @param {number} scale
    */
   static power(start, scale) {
     return new ValueCurve(

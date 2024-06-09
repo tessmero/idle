@@ -33,7 +33,7 @@ class CompoundBody extends Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     this.#children.forEach((c) => c.draw(g));
@@ -41,7 +41,7 @@ class CompoundBody extends Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawDebug(g) {
     // this.constraints.forEach(c => c.drawDebug(g) )

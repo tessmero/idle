@@ -1,15 +1,14 @@
 /**
- *
+ * @file ControlledSausageBody sausage with control points.
  */
 class ControlledSausageBody extends CompoundBody {
 
-  // sim is a ParticleSim instance
   /**
    *
-   * @param sim
-   * @param a
-   * @param b
-   * @param rad
+   * @param {ParticleSim} sim The simulation this will exist in.
+   * @param {Vector} a The position of one end.
+   * @param {Vector} b The position of the other end.
+   * @param {number} rad Half of the thickness.
    */
   constructor(sim, a, b, rad = 2e-2) {
     super(sim, va(a, b));

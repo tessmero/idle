@@ -135,7 +135,7 @@ class PiTool extends DefaultTool {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param p
    * @param {...any} args
    */

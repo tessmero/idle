@@ -71,7 +71,7 @@ function drawLayout(g, xpos, ypos, layout, center = true, fontSpec) {
 
 /**
  *
- * @param g
+ * @param {object} g The graphics context.
  * @param xpos
  * @param ypos
  * @param s
@@ -97,10 +97,9 @@ function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
   }
 }
 
-// draw text centered at point xy
 /**
- *
- * @param g
+ * draw text centered at point xy
+ * @param {object} g The graphics context.
  * @param x
  * @param y
  * @param s

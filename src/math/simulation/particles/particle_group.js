@@ -1,7 +1,9 @@
 
 /**
- * base class for groups of similar particles
- * particles may be grabbed by Grabber instances
+ * @file ParticleGroup base class for groups of particles.
+ *
+ * All the particles in a group are in the same simulation and
+ * the same fundamental type (procedural, physics, or edge).
  */
 class ParticleGroup {
 
@@ -29,7 +31,7 @@ class ParticleGroup {
   /**
    * called in particle_sim.js
    * draw all the particles in this group
-   * @param g
+   * @param {object} g The graphics context.
    * @param counter
    * @param pdraw
    */

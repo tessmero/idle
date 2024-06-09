@@ -6,10 +6,10 @@ class ScalarDebugVar extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
-   * @param varname
-   * @param inc
-   * @param tooltip
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {string} varname The variable name/path in global.
+   * @param {number} inc The change increment value.
+   * @param {string} tooltip The description of the variable.
    */
   constructor(rect, varname, inc, tooltip) {
     super(rect);
@@ -62,7 +62,7 @@ class ScalarDebugVar extends CompositeGuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     Button._draw(g, this.rect);

@@ -6,9 +6,9 @@ class TextButton extends Button {
 
   /**
    *
-   * @param rect
-   * @param label
-   * @param action
+   * @param {number[]} rect The x,y,w,h of this button.
+   * @param {string} label The text to display.
+   * @param {Function} action The function to call when clicked.
    */
   constructor(rect, label, action) {
     super(rect, action);
@@ -18,7 +18,7 @@ class TextButton extends Button {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);

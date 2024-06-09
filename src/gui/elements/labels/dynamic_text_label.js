@@ -1,13 +1,13 @@
-// a line of text that may change
 /**
- *
+ * @file DynamicTextLabel gui element
+ * on-screen text that may change even if the gui element is persistent.
  */
 class DynamicTextLabel extends TextLabel {
 
   /**
-   *
-   * @param rect
-   * @param labelFunc
+   * Construct a new label that will refer to the given function when drawing.
+   * @param {number[]} rect The rectangle to align text in.
+   * @param {Function} labelFunc The function who's returned string will be display.
    */
   constructor(rect, labelFunc) {
     super(rect, '');
@@ -25,7 +25,7 @@ class DynamicTextLabel extends TextLabel {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
 

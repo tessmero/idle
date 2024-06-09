@@ -30,7 +30,7 @@ class ControlPoint extends Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param color
    * @param forceDraw
    */
@@ -47,7 +47,7 @@ class ControlPoint extends Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param pos
    * @param rad
    * @param mousePos

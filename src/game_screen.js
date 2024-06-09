@@ -406,7 +406,7 @@ class GameScreen {
 
   /**
    *
-   * @param gfx
+   * @param {object} gfx The graphics context.
    * @param hideGui
    */
   draw(gfx, hideGui = false) {
@@ -428,7 +428,7 @@ class GameScreen {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param hideGui
    */
   idraw(g, hideGui) {
@@ -457,7 +457,7 @@ class GameScreen {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   _drawCursor(g) {
 
@@ -502,7 +502,7 @@ class GameScreen {
 
   /**
    * draw gui and cursor
-   * @param g
+   * @param {object} g The graphics context.
    */
   _drawGui(g) {
     const gui = this.gui;

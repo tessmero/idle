@@ -6,9 +6,9 @@ class ToolbarButton extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
-   * @param tool
-   * @param indexInToolbar
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {Tool} tool The tool instance.
+   * @param {number} indexInToolbar The index of this button in the toolbar.
    */
   constructor(rect, tool, indexInToolbar) {
     super(rect);
@@ -107,7 +107,7 @@ class ToolbarButton extends CompositeGuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);

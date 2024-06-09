@@ -1,14 +1,16 @@
 
 /**
  * @file ProgressIndicator gui element.
+ *
+ * Displays progress bar overlay with color-inversion effect.
  */
 class ProgressIndicator extends GuiElement {
 
   /**
    * valueFunc returns a number
    * will be truncated to range [0,1]
-   * @param rect
-   * @param valueFunc
+   * @param {number[]} rect The rectangle that will be fully covered at value=1
+   * @param {Function} valueFunc The function who's return value will be used.
    */
   constructor(rect, valueFunc) {
     super(rect);
@@ -34,7 +36,7 @@ class ProgressIndicator extends GuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     ProgressIndicator._draw(
@@ -50,8 +52,8 @@ class ProgressIndicator extends GuiElement {
 
   /**
    * draw bar for progress between 0 and 1
-   * @param g
-   * @param rect
+   * @param {object} g The graphics context.
+   * @param {number[]} rect The rectangle to align elements in.
    * @param progress
    * @param outline
    */

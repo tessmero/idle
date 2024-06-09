@@ -10,7 +10,7 @@ class GuiElement {
 
   /**
    *
-   * @param rect
+   * @param {number[]} rect The rectangle for this element.
    */
   constructor(rect) {
     this.#rect = rect;

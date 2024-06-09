@@ -1,5 +1,5 @@
 /**
- * $file VoiceNote A single note in sheet music.
+ * @file VoiceNote A single note in sheet music.
  */
 class MusicNote {
   #volume = 0.02;

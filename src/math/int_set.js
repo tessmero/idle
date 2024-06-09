@@ -1,8 +1,11 @@
 /**
- * a wrapper for a set of small integers
+ * @file IntSet object type
+ *
+ * wrapper for a set of small integers
  * and corresponding boolean array
  */
 class IntSet {
+
   /**
    *
    * @param n

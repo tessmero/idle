@@ -1,14 +1,14 @@
 /**
- *
+ * @file SausageGrabber grabs particles within a thick line with circular ends.
  */
 class SausageGrabber extends CompoundGrabber {
 
   /**
    *
-   * @param a
-   * @param b
-   * @param rad
-   * @param f
+   * @param {Vector} a The position of one end.
+   * @param {Vector} b The position of the other end.
+   * @param {number} rad Half of the thickness.
+   * @param {Function} f The function to call when a particle is grabbed.
    */
   constructor(a, b, rad, f) {
     super(f);

@@ -13,7 +13,7 @@ class BoxTransitionGui extends Gui {
 
   /**
    *
-   * @param rect
+   * @param {number[]} rect The rectangle to cover.
    */
   constructor(rect) {
     super('Box Transition Gui', rect);
@@ -39,7 +39,7 @@ class BoxTransitionGui extends Gui {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);
@@ -73,7 +73,7 @@ class BoxTransitionGui extends Gui {
 
   /**
    * Unused lid opening/closing animation segment.
-   * @param g
+   * @param {object} g The graphics context.
    * @param anim
    */
   drawLid(g, anim) {
@@ -89,7 +89,7 @@ class BoxTransitionGui extends Gui {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param anim
    */
   drawGliding(g, anim) {

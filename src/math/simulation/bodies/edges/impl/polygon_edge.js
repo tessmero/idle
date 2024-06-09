@@ -1,6 +1,5 @@
-// edge defined by polygon vertices
 /**
- *
+ * @file PolygonEdge defined by polygon vertices.
  */
 class PolygonEdge extends PathspecEdge {
 

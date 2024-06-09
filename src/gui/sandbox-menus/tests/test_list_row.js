@@ -9,7 +9,7 @@ class TestListRow extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
+   * @param {number[]} rect The rectangle to align elements in.
    * @param testIndex
    */
   constructor(rect, testIndex) {

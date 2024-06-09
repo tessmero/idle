@@ -1,5 +1,6 @@
 /**
- * small particle simulation that appears in the gui
+ * @file Tutorial Particle Simulation
+ * a small particle simulation that appears in the gui
  */
 class TutorialPSim extends ParticleSim {
   /**

@@ -1,8 +1,8 @@
-// group of particles stuck to the edges of shapes
-//
-// instantiated in particle_sim.js
+
 /**
+ * @file EdgeParticleGroup
  *
+ * a group of particles stuck to edges.
  */
 class EdgeParticleGroup extends ParticleGroup {
 

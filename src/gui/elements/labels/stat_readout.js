@@ -8,9 +8,9 @@ class StatReadout extends DynamicTextLabel {
 
   /**
    *
-   * @param rect
-   * @param icon
-   * @param labelFunc
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {Icon} icon The pixel art icon to display.
+   * @param {string} labelFunc The funciton who's string return value will be displayed.
    */
   constructor(rect, icon, labelFunc) {
 

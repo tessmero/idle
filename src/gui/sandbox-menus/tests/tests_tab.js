@@ -10,7 +10,7 @@ class TestsTab extends CompositeGuiElement {
 
   /**
    *
-   * @param sr
+   * @param {number[]} sr The rectangle to align elemnts in.
    */
   constructor(sr) {
     super(sr);
@@ -37,7 +37,7 @@ class TestsTab extends CompositeGuiElement {
   /**
    * Build content for a tab within the tests tab.
    * Here we show the tests within one category
-   * @param rect
+   * @param {number[]} rect The rectangle to align elements in.
    * @param cat
    */
   buildTabContent(rect, cat) {
@@ -88,7 +88,7 @@ class TestsTab extends CompositeGuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);
@@ -114,8 +114,8 @@ class TestsTab extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
-   * @param n
+   * @param {number[]} rect The rectangle to align rows in.
+   * @param {number} n The desired number of rows
    */
   buildRows(rect, n) {
     const sr = rect;

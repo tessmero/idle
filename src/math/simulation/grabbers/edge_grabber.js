@@ -1,17 +1,19 @@
 
-// similar to a circle grabber,
-// but checks precomputed shape angle->radius
-// instead of having one radius
 /**
+ * @file EdgeGrabber particle grabber object.
  *
+ * similar to a circle grabber,
+ * but checks precomputed shape angle->radius
+ * instead of having one radius
  */
 class EdgeGrabber extends Grabber {
+
   /**
    *
-   * @param pos
-   * @param angle
-   * @param edge
-   * @param f
+   * @param {Vector} pos
+   * @param {number} angle
+   * @param {object} edge
+   * @param {Function} f The grab event callback function.
    */
   constructor(pos, angle, edge, f) {
     super(f);
@@ -22,25 +24,12 @@ class EdgeGrabber extends Grabber {
 
   /**
    *
-   * @param g
-   */
-  drawDebug(g) {
-    const p = this.pos;
-    g.fillStyle = 'yellow';
-    g.beginPath();
-    g.moveTo(...p);
-    g.arc(...p, this.rad, 0, twopi);
-    g.fill();
-  }
-
-  /**
-   *
-   * @param subgroup
-   * @param i
+   * @param _subgroup
+   * @param _i
    * @param x
    * @param y
    */
-  contains(subgroup, i, x, y) {
+  contains(_subgroup, _i, x, y) {
     const dx = x - this.pos.x;
     const dy = y - this.pos.y;
     const a = Math.atan2(dy, dx) - this.angle;

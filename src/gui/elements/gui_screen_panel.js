@@ -80,7 +80,7 @@ class GuiScreenPanel extends GuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     if (this.#allowScaling) {

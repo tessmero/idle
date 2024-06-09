@@ -1,3 +1,6 @@
+/**
+ * @file utlities to aggregate and enact various in-game bonus effects.
+ */
 
 /**
  * called in updateAllBonuses

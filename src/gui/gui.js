@@ -1,6 +1,6 @@
 /**
- * base class for top-level gui groups
- * e.g. the start menu
+ * @file Gui base class for top-level gui groups
+ * associated with game states e.g. the start menu.
  */
 class Gui extends CompositeGuiElement {
 

@@ -6,9 +6,9 @@ class BooleanDebugVar extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
-   * @param varname
-   * @param tooltip
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {string} varname The variable name/path in global.
+   * @param {string} tooltip The description of the variable.
    */
   constructor(rect, varname, tooltip) {
     super(rect);
@@ -56,7 +56,7 @@ class BooleanDebugVar extends CompositeGuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     Button._draw(g, this.rect);

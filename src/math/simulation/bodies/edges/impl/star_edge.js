@@ -1,5 +1,6 @@
 /**
- *
+ * @file StarEdge wavey star/flower edge shape.
+ * defined by number of petals and radii.
  */
 class StarEdge extends RadspecEdge {
 

@@ -6,10 +6,10 @@ class TestTimelineDisplay extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
-   * @param duration
-   * @param checkTimes
-   * @param checkLabels
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {number} duration The total milliseconds in the timeline.
+   * @param {number[]} checkTimes
+   * @param {string[]} checkLabels
    */
   constructor(rect, duration, checkTimes, checkLabels) {
     super(rect);

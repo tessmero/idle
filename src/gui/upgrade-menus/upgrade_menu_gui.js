@@ -146,10 +146,9 @@ class UpgradeMenuGui extends Gui {
     }
   }
 
-  // called in draw.js
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawTransitionEffect(g) {
     const screen = this.screen;

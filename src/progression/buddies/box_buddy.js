@@ -93,7 +93,7 @@ class BoxBuddy extends Buddy {
   /**
    * Override standard buddy draw routine,
    * instead draw square and orientation arrow.
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     const c = this.square.pos;
@@ -107,7 +107,7 @@ class BoxBuddy extends Buddy {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param c
    * @param a
    * @param r
@@ -119,7 +119,7 @@ class BoxBuddy extends Buddy {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param center
    * @param angle
    * @param rad

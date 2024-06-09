@@ -1,8 +1,8 @@
-// static flat surface body
 /**
- *
+ * @file CompassBody compass shaped body.
  */
 class CompassBody extends Body {
+
   /**
    *
    * @param sim

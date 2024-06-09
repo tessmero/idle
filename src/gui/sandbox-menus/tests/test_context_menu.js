@@ -17,10 +17,10 @@ class TestContextMenu extends ContextMenu {
 
   /**
    *
-   * @param rect
-   * @param s0
-   * @param s1
-   * @param testIndex
+   * @param {number[]} rect The rectangle enclosing the whole menu.
+   * @param {number[]} s0 The first content square to align elements in.
+   * @param {number[]} s1 The second content square to align elements in.
+   * @param {number} testIndex The index of the test in test_list.js
    */
   constructor(rect, s0, s1, testIndex) {
     super(rect, s0, s1);
@@ -175,7 +175,7 @@ class TestContextMenu extends ContextMenu {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);

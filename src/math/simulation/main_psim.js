@@ -1,8 +1,8 @@
 
 /**
- * main particle simulation
- * one instance: global.rootScreen.sim
- * constructed in setup.js
+ * @file Main Particle Simulation
+ *
+ * A full-size simulation.
  */
 class MainPSim extends ParticleSim {
   /**

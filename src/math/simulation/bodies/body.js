@@ -203,7 +203,7 @@ class Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawDebug(g) {
     if (global.showEdgeNormals) { this.drawNormals(g, this.pos, this.angle); }
@@ -215,7 +215,7 @@ class Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawNormals(g) {
     if (!this.edge) { return; }
@@ -229,7 +229,7 @@ class Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawDistLutSpokes(g) {
     if (!this.edge) { return; }
@@ -241,7 +241,7 @@ class Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawAngleLutSpokes(g) {
     if (!this.edge) { return; }
@@ -254,7 +254,7 @@ class Body {
 
   /**
    * Draw velocity vectors along edge.
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawVel(g) {
     if (!this.edge) { return; }
@@ -267,7 +267,7 @@ class Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawAccel(g) {
     if (!this.edge) { return; }
@@ -280,7 +280,7 @@ class Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param t0
    * @param t1
    * @param f

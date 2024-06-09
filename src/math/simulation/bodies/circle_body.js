@@ -37,7 +37,7 @@ class CircleBody extends Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     const p = this.pos;

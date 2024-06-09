@@ -1,4 +1,5 @@
 /**
+ * @file TutorialTooltipPopup gui element
  * a tooltip with some text and inner screen running a macro
  */
 const _allTutorialScreens = {};
@@ -10,7 +11,7 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
 
   /**
    * get rect using TutorialTooltipPopup.pickRect
-   * @param rect
+   * @param {number[]} rect The rectangle to align elements in.
    * @param label
    * @param innerScreen
    * @param scale

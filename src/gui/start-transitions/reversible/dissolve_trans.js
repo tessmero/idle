@@ -8,8 +8,8 @@ class DissolveTrans extends ReversibleTransition {
 
   /**
    *
-   * @param g
-   * @param rect
+   * @param {object} g The graphics context.
+   * @param {number[]} rect The screen rectangle to cover.
    */
   draw(g, rect) {
     const t = this.reversed ? this.t : this.duration - this.t;

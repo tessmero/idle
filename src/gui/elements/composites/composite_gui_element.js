@@ -88,7 +88,7 @@ class CompositeGuiElement extends GuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     if (this.#opaque) { Button._draw(g, this.rect); }

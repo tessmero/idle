@@ -1,6 +1,6 @@
 
 /**
- *
+ * @file CircleGrabber grabs particles in circular region.
  */
 class CircleGrabber extends Grabber {
   /**
@@ -16,19 +16,6 @@ class CircleGrabber extends Grabber {
     this.rad = rad;
     this.r2 = rad * rad;
     this.edgeOffset = edgeOffset;
-  }
-
-  /**
-   *
-   * @param g
-   */
-  drawDebug(g) {
-    const p = this.pos;
-    g.fillStyle = 'yellow';
-    g.beginPath();
-    g.moveTo(...p);
-    g.arc(...p, this.rad, 0, twopi);
-    g.fill();
   }
 
   /**

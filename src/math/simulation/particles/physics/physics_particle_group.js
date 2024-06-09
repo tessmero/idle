@@ -1,8 +1,8 @@
-// group of bouncing particles
-//
-// instantiated in particle_sim.js
+
 /**
+ * @file PhysicsParticleGroup
  *
+ * A group of paticles with 2d positions and velocities.
  */
 class PhysicsParticleGroup extends ParticleGroup {
 

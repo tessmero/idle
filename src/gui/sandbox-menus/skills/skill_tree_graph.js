@@ -7,8 +7,8 @@ class SkillTreeGraph extends GuiElement {
 
   /**
    *
-   * @param rect
-   * @param tree
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {object} tree The SkillTree instance.
    */
   constructor(rect, tree) {
     super(rect);
@@ -17,7 +17,7 @@ class SkillTreeGraph extends GuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     if (!this.tree) { return; }

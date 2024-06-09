@@ -1,5 +1,5 @@
 /**
- * @class VoicMeasure base class
+ * @file VoicMeasure base class
  * One specific immutable measure in one voice's sheet music.
  */
 class VoiceMeasure {

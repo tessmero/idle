@@ -1,6 +1,6 @@
-//
+
 /**
- *
+ * @file SausageEdge thick line segment with circular terminals.
  */
 class SausageEdge extends PathspecEdge {
 

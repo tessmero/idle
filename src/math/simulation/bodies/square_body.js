@@ -1,5 +1,5 @@
 /**
- * base square body
+ * @file SquareBody square-shaped body
  */
 class SquareBody extends Body {
 
@@ -47,7 +47,7 @@ class SquareBody extends Body {
 
   /**
    * Override standard body draw routine.
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     const c = this.pos;
@@ -58,7 +58,7 @@ class SquareBody extends Body {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    * @param center
    * @param angle
    * @param rad

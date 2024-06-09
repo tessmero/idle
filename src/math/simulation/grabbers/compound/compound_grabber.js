@@ -31,7 +31,7 @@ class CompoundGrabber extends Grabber {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawDebug(g) {
     this.#children.forEach((c) => c.drawDebug(g));

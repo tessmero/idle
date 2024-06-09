@@ -3,6 +3,7 @@
  * Contents for the "debug" tab in the sandbox menu.
  */
 class DebugTab extends CompositeGuiElement {
+
   /**
    *
    * @param sr
@@ -76,8 +77,8 @@ class DebugTab extends CompositeGuiElement {
 
   /**
    * Build content for a tab within the debug tab.
-   * @param rect
-   * @param tabSpecs
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {object} tabSpecs Specifications for the tab.
    */
   buildTabContent(rect, tabSpecs) {
 

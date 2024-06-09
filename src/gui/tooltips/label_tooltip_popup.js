@@ -1,15 +1,15 @@
-// a tooltip with just text
 /**
+ * @file LabelTooltipPopup gui element.
  *
+ * a tooltip with just text
  */
 class LabelTooltipPopup extends TooltipPopup {
 
-  // get rect using LabelTooltipPopup.pickRect
   /**
-   *
-   * @param rect
-   * @param label
-   * @param scale
+   * get rect using LabelTooltipPopup.pickRect
+   * @param {number[]} rect The rectangle to align text in.
+   * @param {string} label The text content to display.
+   * @param {number} scale The font size to display.
    */
   constructor(rect, label, scale = null) {
     super(rect);
@@ -33,9 +33,9 @@ class LabelTooltipPopup extends TooltipPopup {
 
   /**
    *
-   * @param screen
-   * @param label
-   * @param scale
+   * @param {GameScreen} screen
+   * @param {string} label
+   * @param {number} scale
    */
   static pickRect(screen, label, scale = null) {
 

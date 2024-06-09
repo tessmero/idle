@@ -7,8 +7,8 @@ class StartTransitionGui extends Gui {
 
   /**
    *
-   * @param rect
-   * @param isMain
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {boolean} isMain need cleanup
    */
   constructor(rect, isMain) {
     super('Start Transition Gui', rect);
@@ -41,7 +41,7 @@ class StartTransitionGui extends Gui {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     super.draw(g);

@@ -16,7 +16,7 @@ class GraphicsWrapper {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   wrap(g) {
     g.fillStyle = global.colorScheme.fg;

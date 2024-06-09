@@ -11,7 +11,7 @@ class StatUpgrader extends CompositeGuiElement {
 
   /**
    * key should exist in global.upgradeTracks.state
-   * @param rect
+   * @param {number[]} rect The rectangle to align elements in.
    * @param key
    */
   constructor(rect, key) {

@@ -1,8 +1,9 @@
-// used in pi_context_menu.js
-// to continuously poll the state
-// of one particle by subgroup and (index in subgroup)
+
 /**
+ * @file TrackOneParticleGrabber
  *
+ * used by particle inspector to poll the state
+ * of one particle by subgroup and (index in subgroup)
  */
 class TrackOneParticleGrabber extends Grabber {
 
@@ -18,7 +19,6 @@ class TrackOneParticleGrabber extends Grabber {
     this.i = i;
   }
 
-  // implement Grabber
   /**
    *
    * @param subgroup
@@ -29,15 +29,6 @@ class TrackOneParticleGrabber extends Grabber {
   contains(subgroup, i, _x, _y) {
     return (subgroup === this.subgroup) &&
             (i === this.i);
-  }
-
-  // implement Grabber
-  /**
-   *
-   * @param _g
-   */
-  drawDebug(_g) {
-    // do nothing
   }
 
 }

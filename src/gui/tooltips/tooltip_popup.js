@@ -1,13 +1,13 @@
-// a rectangle of text that appears on top of all other elements
 /**
+ * @file TooltipPopup gui element.
  *
+ * a rectangle that appears on top of all other elements
  */
 class TooltipPopup extends CompositeGuiElement {
 
-  // get rect using TooltipPopup.pickTooltipRect
   /**
-   *
-   * @param rect
+   * get rect using TooltipPopup.pickTooltipRect
+   * @param {number[]} rect The rectangle to display on-screen.
    */
   constructor(rect) {
     super(rect);
@@ -15,7 +15,7 @@ class TooltipPopup extends CompositeGuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     const r = this.rect;
@@ -44,19 +44,16 @@ class TooltipPopup extends CompositeGuiElement {
     super.draw(g);
   }
 
-  // implement GuiElement
   /**
-   *
+   * implement GuiElement
    */
   click() {
     // do nothing
   }
 
-  // pick anchor point for pickTooltipRect
-  // called in label_tooltip_popup.js
   /**
    *
-   * @param screen
+   * @param {GameScreen} screen
    */
   static pickMouseAnchorPoint(screen) {
     const sr = screen.rect;

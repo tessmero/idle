@@ -14,9 +14,9 @@ class ContextMenu extends CompositeGuiElement {
 
   /**
    * get params using ContextMenu.pickRects
-   * @param {number[]} rect
-   * @param {number[]} square0
-   * @param {number[]} square1
+   * @param {number[]} rect The rectangle enclosing the whole menu.
+   * @param {number[]} square0 The first content square to align elements in.
+   * @param {number[]} square1 The second content square to align elements in.
    */
   constructor(rect, square0, square1) {
     super(rect);
@@ -41,8 +41,8 @@ class ContextMenu extends CompositeGuiElement {
    * - leaving poit of interest visible
    *
    * return [bounding rect, innner square, inner square]
-   * @param rect
-   * @param pointOfInterest
+   * @param {number[]} rect The screen boundaries to align menu in.
+   * @param {Vector} pointOfInterest The position on-screen that should be kept visible.
    */
   static pickRects(rect, pointOfInterest) {
     const pad = 0.05;

@@ -56,9 +56,9 @@ class Edge {
   /**
    * helper to draw edge
    * with given pos,angle offsets onscreen
-   * @param g
-   * @param pos
-   * @param angle
+   * @param {object} g The graphics context.
+   * @param {Vector} pos
+   * @param {number} angle
    */
   trace(g, pos, angle) {
     g.beginPath();

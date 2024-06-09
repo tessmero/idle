@@ -64,7 +64,7 @@ class Spring {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     g.moveTo(...this.a.pos);

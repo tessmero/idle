@@ -7,8 +7,8 @@ class GridTrans extends ReversibleTransition {
 
   /**
    *
-   * @param g
-   * @param rect
+   * @param {object} g The graphics context.
+   * @param {number[]} rect The rectangle to cover.
    */
   draw(g, rect) {
 

@@ -1,15 +1,17 @@
 /**
+ * @file TabPaneGroup gui element
  *
+ * Contains multiple content panels, only one is shown,
+ * tab header buttons are used to switch.
  */
 class TabPaneGroup extends CompositeGuiElement {
 
-  // tabContent is list of rect->element callbacks
   /**
-   *
-   * @param rect
-   * @param tabLabels
-   * @param tabContents
-   * @param tabTooltips
+   * tabContent is list of rect->element callbacks
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param {string[]} tabLabels
+   * @param {Function} tabContents
+   * @param {string[]} tabTooltips
    */
   constructor(rect, tabLabels, tabContents, tabTooltips = null) {
     super(rect);
@@ -104,7 +106,7 @@ class TabPaneGroup extends CompositeGuiElement {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   draw(g) {
     this.tabContent[this._selectedTabIndex].draw(g); // draw tab content

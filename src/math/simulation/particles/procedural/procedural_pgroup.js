@@ -1,8 +1,7 @@
-// group of falling rain particles
-//
-// instantiated in particle_sim.js
 /**
+ * @file Procedural Particle Group.
  *
+ * A group of falling rain particles.
  */
 class ProceduralPGroup extends ParticleGroup {
 

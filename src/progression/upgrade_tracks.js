@@ -1,12 +1,10 @@
-// progression tree for purchasable upgrades
-//
-// specify tree in constructor
-//
-// persistant instance global.upgradeTracks
-//   contains state of purchased upgrades for the current game
 
 /**
+ * @file UpgradeTracks object type
  *
+ * progression tree and state for purchasable upgrades
+ *
+ * instance is global.upgradeTracks
  */
 class UpgradeTracks {
 

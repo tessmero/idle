@@ -6,7 +6,7 @@ class PerformanceTab extends CompositeGuiElement {
 
   /**
    *
-   * @param {number[]} rect
+   * @param {number[]} rect The rectangle to align elements in.
    */
   constructor(rect) {
     super(rect);
@@ -132,8 +132,8 @@ class PerformanceTab extends CompositeGuiElement {
 
   /**
    *
-   * @param rect
-   * @param n
+   * @param {number[]} rect The rectangle to align rows in.
+   * @param {number} n the desired number of rows.
    */
   buildRows(rect, n) {
     const sr = rect;

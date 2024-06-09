@@ -27,7 +27,7 @@ class LineGrabber extends Grabber {
 
   /**
    *
-   * @param g
+   * @param {object} g The graphics context.
    */
   drawDebug(g) {
     g.strokeStyle = 'yellow';
