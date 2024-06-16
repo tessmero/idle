@@ -8,6 +8,9 @@ class GuiElement {
   #rect;
   #scale = 1;
 
+  #tempTooltip;
+  #tempTooltipEndTime;
+
   /**
    *
    * @param {number[]} rect The rectangle for this element.
@@ -37,8 +40,8 @@ class GuiElement {
   get scale() { return this.#scale; }
 
   /**
-   *
-   * @param s
+   * Set font size for thie gui element.
+   * @param {number} s The new font size.
    */
   setScale(s) {
     this.#scale = s;
@@ -59,7 +62,6 @@ class GuiElement {
     this.#screen = s;
   }
 
-  //
   /**
    * get root GameScreen instance
    */
@@ -68,8 +70,8 @@ class GuiElement {
   }
 
   /**
-   *
-   * @param s
+   * Chainable helper to set font size.
+   * @param {number} s The new font size.
    */
   withScale(s) {
     this.setScale(s);
@@ -77,8 +79,8 @@ class GuiElement {
   }
 
   /**
-   *
-   * @param s
+   * Chainable helper to set tooltip fontsize.
+   * @param {number} s The new font size.
    */
   withTooltipScale(s) {
     this.tooltipScale = s;
@@ -86,8 +88,8 @@ class GuiElement {
   }
 
   /**
-   * set text to appear on hover
-   * @param s
+   * Chainable helper to set text that appears when hovering.
+   * @param {string} s The tooltip text to display.
    */
   withTooltip(s) {
     this.tooltip = s;
@@ -95,8 +97,8 @@ class GuiElement {
   }
 
   /**
-   *
-   * @param f
+   * Chainable helper to set callback to determine text to appear when hovering.
+   * @param {Function} f The function who's return value will be displayed.
    */
   withDynamicTooltip(f) {
     this.tooltipFunc = f;
@@ -104,19 +106,19 @@ class GuiElement {
   }
 
   /**
-   * override normal tooltip
-   * until user stops hovering
-   * @param s
+   * Temporarily override the normal tooltip text.
+   * Reverts after the user stops hovering or some time passes.
+   * @param {string} s The temporary tooltip text.
    */
   setTemporaryTooltip(s) {
-    this.tempTooltip = s;
-    this.tempTooltipEndTime = global.t + 1000; // millisecs
+    this.#tempTooltip = s;
+    this.#tempTooltipEndTime = global.t + 1000; // millisecs
   }
 
   /**
    *
-   * @param dt
-   * @param disableHover
+   * @param {number} dt The time elapsed in millseconds.
+   * @param {boolean} disableHover The if mouse hovering should be disabled.
    */
   update(dt, disableHover = false) {
     if (disableHover) {
@@ -131,12 +133,12 @@ class GuiElement {
     this.hovered = mousePos ? (this.hoverable && vInRect(mousePos, ...this.rect)) : false;
 
     // reset temporary tooltip if necessary
-    if (!this.hovered || (global.t > this.tempTooltipEndTime)) { this.tempTooltip = null; }
+    if (!this.hovered || (global.t > this.#tempTooltipEndTime)) { this.#tempTooltip = null; }
 
     // check if a tooltip should be shown
-    if (this.hovered && (this.tempTooltip || this.tooltipFunc || this.tooltip)) {
-      if (this.tempTooltip) {
-        this.tooltip = this.tempTooltip;
+    if (this.hovered && (this.#tempTooltip || this.tooltipFunc || this.tooltip)) {
+      if (this.#tempTooltip) {
+        this.tooltip = this.#tempTooltip;
       }
       else if (this.tooltipFunc) {
         this.tooltip = this.tooltipFunc();
@@ -164,14 +166,16 @@ class GuiElement {
 
   /**
    *
-   * @param _g
+   * @param {object} _g The graphics context
    */
   draw(_g) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   /**
-   *
+   * If this element is opaque and under the mouse cursor,
+   * execute any appropriate click action and return true.
+   * Return false to indicate that the click event as not consumed by this element.
    */
   click() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);

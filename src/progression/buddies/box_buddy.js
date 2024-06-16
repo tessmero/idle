@@ -19,14 +19,15 @@ const _allScreenBoxes = new Map();
  * body orientation and accel = "gravity" for inner sim
  */
 class BoxBuddy extends Buddy {
+  expMechDesc = 'transfer raindrops in or out';
 
   #wasUnregistered;
 
   /**
    *
-   * @param sim
-   * @param pos
-   * @param rad
+   * @param {ParticleSim} sim
+   * @param {Vector} pos
+   * @param {number} rad
    */
   constructor(sim, pos, rad) {
     super(sim, pos);
@@ -78,6 +79,24 @@ class BoxBuddy extends Buddy {
   }
 
   /**
+   * Called in constructor.
+   * Determines experience needed to advance through exp levels.
+   * @returns {object} The ValueCurve instance.
+   */
+  getExpLevelCostCurve() {
+    return ValueCurve.power(100, 2);
+  }
+
+  /**
+   * Extend BuddyContextMenu (should add somehting).
+   * @param {number[][]} rects The allignment rectangles for the menu.
+   */
+  buildContextMenu(rects) {
+    const bcm = new BuddyContextMenu(...rects, this);
+    return bcm;
+  }
+
+  /**
    *
    */
   enter() {
@@ -99,32 +118,32 @@ class BoxBuddy extends Buddy {
     const c = this.square.pos;
     const a = this.square.angle;
     const r = this.square.rad;
-    BoxBuddy.drawBox(g, c, a, r);
+    BoxBuddy.drawBoxWithArrow(g, c, a, r);
 
     // draw control points
     this.controlPoints.forEach((cp) => cp.draw(g));
   }
 
   /**
-   *
+   * Draw a square with an orientation arrow.
    * @param {object} g The graphics context.
-   * @param c
-   * @param a
-   * @param r
+   * @param {Vector} c The position of the center of the box.
+   * @param {number} a The orientation of the box.
+   * @param {number} r Half of the side length of the box.
    */
-  static drawBox(g, c, a, r) {
+  static drawBoxWithArrow(g, c, a, r) {
     SquareBody.drawSquare(g, c, a, r);
-    BoxBuddy.drawArrowOnBox(g, c, a, r);
+    BoxBuddy._drawArrow(g, c, a, r);
   }
 
   /**
-   *
+   * Draw the orientation arrow for a box buddy.
    * @param {object} g The graphics context.
-   * @param center
-   * @param angle
-   * @param rad
+   * @param {Vector} center The position of the center of the box.
+   * @param {number} angle The orientation of the box.
+   * @param {number} rad Half of the side length of the box.
    */
-  static drawArrowOnBox(g, center, angle, rad) {
+  static _drawArrow(g, center, angle, rad) {
 
     const r = 1;
     const rr = r / 2.5;
@@ -158,8 +177,6 @@ class BoxBuddy extends Buddy {
 
     innerSim.particleG = outerSim.particleG.rotate(-this.square.angle);
 
-    this.particlesCollected = innerSim.physicsGroup.countActiveParticles();
-
     return super.update(dt);
   }
 
@@ -168,8 +185,8 @@ class BoxBuddy extends Buddy {
    * Callback for when particle moves out of inner screen bounds
    * particle will be removed from inner sim no matter what
    * called in physics_particle_subgroup.js
-   * @param innerPos
-   * @param innerVel
+   * @param {Vector} innerPos
+   * @param {Vector} innerVel
    */
   _innerPoob(innerPos, innerVel) {
 
@@ -199,15 +216,10 @@ class BoxBuddy extends Buddy {
    *
    * when particle hits square body edge
    * pass it into the inner sim
-   * @param subgroup
-   * @param i
-   * @param x
-   * @param y
-   * @param dx
-   * @param dy
-   * @param hit 1D position along circumference
+   * @param {...any} p Data about the particle.
    */
-  grabbed(subgroup, i, x, y, dx, dy, hit) {
+  grabbed(...p) {
+    const [subgroup, i, _x, _y, dx, dy, hit] = p;
     const innerSim = this.innerScreen.sim;
     const edge = this.square.edge;
 
@@ -252,7 +264,7 @@ class BoxBuddy extends Buddy {
   /**
    * Extend standard buddy unregister.
    * Set flag so inner sim particles may escape to nowhere
-   * @param sim
+   * @param {ParticleSim} sim
    */
   unregister(sim) {
     super.unregister(sim);
@@ -260,8 +272,8 @@ class BoxBuddy extends Buddy {
   }
 
   /**
-   * Called in constructor.
-   * @param outerScreen The screen containing this box.
+   * Create or reconnect inner screen. Called in constructor.
+   * @param {GameScreen} outerScreen The screen containing this box.
    */
   _getInnerScreen(outerScreen) {
     const abis = _allBoxScreenRels;
@@ -287,7 +299,7 @@ class BoxBuddy extends Buddy {
   }
 
   /**
-   *
+   * Create new inner screen. Called in _getInnerScreen().
    * @param {GameScreen} outerScreen
    * @param {number} boxIndex
    */
@@ -331,7 +343,7 @@ class BoxBuddy extends Buddy {
   /**
    * Check live performance stats to see if the screen was just updated.
    * if necessary, update the given screen using a hidden draw.
-   * @param screen
+   * @param {GameScreen} screen The screen in question.
    * @param {number} dt The time elapsed.
    */
   static _ensureScreenWasUpdated(screen, dt) {
@@ -348,8 +360,8 @@ class BoxBuddy extends Buddy {
   }
 
   /**
-   *
-   * @param screen
+   * Find a screen that has a black box containing the given screen.
+   * @param {GameScreen} screen The child screen who's parent should be found.
    */
   static getParentScreen(screen) {
     const abis = _allBoxScreenRels;

@@ -3,12 +3,13 @@
  * @file CircleGrabber grabs particles in circular region.
  */
 class CircleGrabber extends Grabber {
+
   /**
    *
-   * @param pos
-   * @param rad
-   * @param f
-   * @param edgeOffset
+   * @param {Vector} pos
+   * @param {Vector} rad
+   * @param {Function} f
+   * @param {number} edgeOffset
    */
   constructor(pos, rad, f, edgeOffset) {
     super(f);
@@ -20,10 +21,10 @@ class CircleGrabber extends Grabber {
 
   /**
    *
-   * @param subgroup
-   * @param i
-   * @param x
-   * @param y
+   * @param {object} subgroup
+   * @param {number} i
+   * @param {number} x
+   * @param {number} y
    */
   contains(subgroup, i, x, y) {
     const dx = x - this.pos.x;

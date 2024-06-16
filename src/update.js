@@ -48,7 +48,7 @@ function fitToContainer() {
 
 /**
  *
- * @param dt
+ * @param {number} dt The time elapsed in millisecs.
  */
 function update(dt) {
 

@@ -121,8 +121,8 @@ class GameScreen {
   }
 
   /**
-   *
-   * @param r
+   * Set bounding rectangle only if this is the root screen.
+   * @param {number[]} r The new bounding x,y,w,h.
    */
   setMainScreenRect(r) {
     if (this === global.rootScreen) {
@@ -261,7 +261,7 @@ class GameScreen {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millisecs.
    */
   update(dt) {
 
@@ -308,7 +308,7 @@ class GameScreen {
         this.contextMenu = new BoxBuddyContextMenu(...cmr, bod);
       }
       else if (bod instanceof Buddy) {
-        this.contextMenu = new BuddyContextMenu(...cmr, bod);
+        this.contextMenu = bod.buildContextMenu(cmr);
       }
       else {
         this.contextMenu = new BodyContextMenu(...cmr, bod);
@@ -366,9 +366,9 @@ class GameScreen {
 
   /**
    * Called in update()
-   * @param sim
-   * @param macro
-   * @param dt
+   * @param {ParticleSim} sim
+   * @param {Macro} macro
+   * @param {number} dt The time elapsed in millisecs.
    */
   _updateMacro(sim, macro, dt) {
 
@@ -407,7 +407,7 @@ class GameScreen {
   /**
    *
    * @param {object} gfx The graphics context.
-   * @param hideGui
+   * @param {boolean} hideGui True if the gui should not be drawn.
    */
   draw(gfx, hideGui = false) {
 
@@ -416,9 +416,9 @@ class GameScreen {
     // wrap graphics context if necessary
     // used for screen transition test
     let g = gfx;
-    const gWrap = this.graphicsWrapper;
-    if (gWrap) {
-      g = gWrap.wrap(g);
+    const gWraps = this.graphicsWrappers;
+    if (gWraps) {
+      gWraps.forEach((gw) => { g = gw.wrap(g); });
     }
 
     g.translate(...this.drawOffset);
@@ -429,7 +429,7 @@ class GameScreen {
   /**
    *
    * @param {object} g The graphics context.
-   * @param hideGui
+   * @param {boolean} hideGui True if the gui should not be drawn.
    */
   idraw(g, hideGui) {
 
@@ -537,7 +537,10 @@ class GameScreen {
     // draw gui floaters on top of gui
     this.floaters.draw(g);
 
-    if (g.drawDebug) { g.drawDebug(); }
+    // draw debug overlay
+    // if the graphics context has been wrapped
+    // used for transition test
+    if (g.drawDebug) { g.drawDebug(g); }
   }
 }
 

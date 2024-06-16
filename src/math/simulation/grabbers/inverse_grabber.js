@@ -9,8 +9,8 @@ class InverseGrabber extends Grabber {
 
   /**
    *
-   * @param grabber The grabber to invert.
-   * @param callback function to call when particle is grabbed.
+   * @param {object}  grabber The grabber to invert.
+   * @param {Function} callback The function to call when particle is grabbed.
    */
   constructor(grabber, callback) {
     super(callback);

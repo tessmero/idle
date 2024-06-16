@@ -15,8 +15,10 @@ class DynamicTextLabel extends TextLabel {
   }
 
   /**
-   *
-   * @param a
+   * Chainable helper to set automatic resize.
+   * Used to make HUD displays precisely hoverable as their values change.
+   * @param {boolean} a True if the bounding rectangle
+   *                    should resize when text updates.
    */
   withAutoAdjustRect(a) {
     this.autoAdjustRect = a;

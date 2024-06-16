@@ -1,4 +1,3 @@
-
 /**
  * @file PhysicsParticleGroup
  *
@@ -8,8 +7,8 @@ class PhysicsParticleGroup extends ParticleGroup {
 
   /**
    *
-   * @param sim
-   * @param n
+   * @param {ParticleSim} sim
+   * @param {number} n
    */
   constructor(sim, n) {
     super(sim, n);
@@ -53,7 +52,7 @@ class PhysicsParticleGroup extends ParticleGroup {
 
   /**
    *
-   * @param sg
+   * @param {object} sg
    */
   deleteSubgroup(sg) {
     this.freeSubgroupIndices.add(sg.subgroupIndex);
@@ -77,7 +76,6 @@ class PhysicsParticleGroup extends ParticleGroup {
     // prepare to multiply and offset velocities
     // to apply friction and gravity to all particles
     const vm = (1 - particleFriction * dt);
-
     const vb = this.sim.particleG.mul(dt);
 
     for (const pps of this.subgroups) {

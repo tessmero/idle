@@ -6,9 +6,9 @@ class StarEdge extends RadspecEdge {
 
   /**
    *
-   * @param n
-   * @param minRad
-   * @param maxRad
+   * @param {number} n
+   * @param {number} minRad
+   * @param {number} maxRad
    */
   constructor(n, minRad, maxRad) {
     super();
@@ -19,7 +19,7 @@ class StarEdge extends RadspecEdge {
 
   /**
    *
-   * @param angle
+   * @param {number} angle
    */
   computeRadius(angle) {
     const mi = this.minRad;

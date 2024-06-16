@@ -24,10 +24,10 @@ class EdgeGrabber extends Grabber {
 
   /**
    *
-   * @param _subgroup
-   * @param _i
-   * @param x
-   * @param y
+   * @param {object} _subgroup
+   * @param {number} _i
+   * @param {number} x
+   * @param {number} y
    */
   contains(_subgroup, _i, x, y) {
     const dx = x - this.pos.x;

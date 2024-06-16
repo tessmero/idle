@@ -16,11 +16,11 @@ class EdgeParticleSubgroup {
 
   /**
    * called in EdgePGroup newSubgroup()
-   * @param group
-   * @param subgroupIndex
-   * @param i
-   * @param n
-   * @param edge
+   * @param {object} group
+   * @param {number} subgroupIndex
+   * @param {number} i
+   * @param {number} n
+   * @param {object} edge
    */
   constructor(group, subgroupIndex, i, n, edge) {
     this.group = group;
@@ -57,7 +57,7 @@ class EdgeParticleSubgroup {
 
   /**
    * called in EdgePGroup generateParticles()
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    */
   * generateParticles(dt) {
 
@@ -174,8 +174,8 @@ class EdgeParticleSubgroup {
 
   /**
    *
-   * @param pos
-   * @param vel
+   * @param {Vector} pos
+   * @param {Vector} vel
    */
   spawnParticle(pos, vel) {
 
@@ -203,7 +203,7 @@ class EdgeParticleSubgroup {
   /**
    * get x,y position at given
    * distance along cirumference
-   * @param a
+   * @param {number} a The 1D position along the edge.
    */
   getPos(a) {
     const [ea, er, _norm] = this.edge.lookupDist(a);
@@ -213,7 +213,7 @@ class EdgeParticleSubgroup {
   /**
    * compute velocity of a hypothetical particle
    * anchored to edge at given distance along cirumference
-   * @param a
+   * @param {number} a The 1D position along the edge.
    */
   getVel(a) {
     const [ea, er, _norm] = this.edge.lookupDist(a);
@@ -224,7 +224,7 @@ class EdgeParticleSubgroup {
   /**
    * compute net force that would be felt by a particle
    * achored to edge at given distance along cirumference
-   * @param a
+   * @param {number} a The 1D position along the edge.
    */
   getAccel(a) {
     const [ea, er, _norm] = this.edge.lookupDist(a);
@@ -236,7 +236,7 @@ class EdgeParticleSubgroup {
 
   /**
    *
-   * @param b
+   * @param {boolean} b
    */
   count(b) {
     let result = 0;
@@ -248,7 +248,7 @@ class EdgeParticleSubgroup {
 
   /**
    *
-   * @param index
+   * @param {number} index
    */
   isGrabbed(index) {
     const i = index + this.i;
@@ -257,7 +257,7 @@ class EdgeParticleSubgroup {
 
   /**
    * get angle/vel of particle
-   * @param index
+   * @param {number} index
    */
   get(index) {
     const i = index + this.i;
@@ -269,9 +269,9 @@ class EdgeParticleSubgroup {
 
   /**
    *
-   * @param index
-   * @param a
-   * @param av
+   * @param {number} index
+   * @param {number} a
+   * @param {number} av
    */
   set(index, a, av) {
     const i = index + this.i;
@@ -282,7 +282,7 @@ class EdgeParticleSubgroup {
 
   /**
    * set particle as grabbed
-   * @param index
+   * @param {number} index
    */
   grab(index) {
     const i = index + this.i;
@@ -291,7 +291,7 @@ class EdgeParticleSubgroup {
 
   /**
    *
-   * @param i
+   * @param {number} i
    */
   hasIndex(i) {
     return (i >= this.i) && (i < this.i + this.n);

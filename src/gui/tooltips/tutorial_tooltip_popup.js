@@ -12,9 +12,9 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
   /**
    * get rect using TutorialTooltipPopup.pickRect
    * @param {number[]} rect The rectangle to align elements in.
-   * @param label
-   * @param innerScreen
-   * @param scale
+   * @param {string} label
+   * @param {GameScreen} innerScreen
+   * @param {number} scale The font size.
    */
   constructor(rect, label, innerScreen, scale = null) {
     super(rect, label, scale);
@@ -33,8 +33,8 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
 
   /**
    *
-   * @param macro
-   * @param titleKey
+   * @param {Macro} macro
+   * @param {string} titleKey
    */
   static getTutorialScreen(macro, titleKey) {
     if (!(titleKey in _allTutorialScreens)) {
@@ -47,15 +47,17 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
   }
 
   /**
-   *
+   * @returns {number} Font size.
    */
   static scale() { return 0.4; }
 
   /**
-   *
-   * @param screen
-   * @param label
-   * @param scale
+   * Pick the location to display a tooltip with enough space
+   * for a tutorial simulation and the given label.
+   * @param {GameScreen} screen The screen that will contain the tooltip.
+   * @param {string} label The text that the tooltip will need room for.
+   * @param {number} scale The font size of the text to make room for.
+   * @returns {number[]} The computed x,y,w,h for the tooltip.
    */
   static pickRect(screen, label, scale = null) {
     let s = scale;

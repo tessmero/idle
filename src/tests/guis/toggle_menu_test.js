@@ -12,6 +12,7 @@ class ToggleMenuTest extends GuiTest {
 
   /**
    * Called in constructor.
+   * @returns {Macro} The player emulator script for this test.
    */
   static _macro() {
 

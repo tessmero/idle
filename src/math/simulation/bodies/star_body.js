@@ -1,14 +1,15 @@
 /**
- * @file starbody sinusoidal star/flower
+ * @file StarBody wavey star/flower shaped body.
  */
 class StarBody extends Body {
+
   /**
    *
-   * @param sim
-   * @param pos
-   * @param n
-   * @param minRad
-   * @param maxRad
+   * @param {ParticleSim} sim
+   * @param {Vector} pos
+   * @param {number} n
+   * @param {number} minRad
+   * @param {number} maxRad
    */
   constructor(sim, pos, n, minRad, maxRad) {
     super(sim, pos);
@@ -24,7 +25,7 @@ class StarBody extends Body {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    * @param {...any} p
    */
   update(dt, ...p) {

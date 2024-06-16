@@ -111,8 +111,9 @@ class PerformanceTab extends CompositeGuiElement {
     // live_performance_stats.js
     const screenFlags = global.lupStats.activeScreens;
 
+    // `${screenTitle}\n${JSON.stringify(Array.from(flags.entries()))}`
     const result = Array.from(screenFlags,
-      ([screenTitle, _flags]) => screenTitle// `${screenTitle}\n${JSON.stringify(Array.from(flags.entries()))}`
+      ([screenTitle, _flags]) => screenTitle
     ).join('\n').replaceAll(']', '\n');
 
     return result;

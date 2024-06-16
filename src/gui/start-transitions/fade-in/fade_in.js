@@ -4,8 +4,9 @@
  * from black screen to playing hud
  */
 class FadeIn extends StartAnimStage {
+
   /**
-   *
+   * Construct a random FadeIn implementation.
    */
   static random() {
     const result = randChoice([

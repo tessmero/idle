@@ -1,12 +1,12 @@
 /**
- * @file utlities to aggregate and enact various in-game bonus effects.
+ * @file Utlities to aggregate and enact various in-game bonus effects.
  */
 
 /**
  * called in updateAllBonuses
  * compute value and
  * apply conversion if applicable (human readable -> internal units)
- * @param e
+ * @param {object} e The bonus state entry in upgrade_tracks.js
  */
 function _computeBonusVal(e) {
   const readableVal = e.value.f(e.level - 1);
@@ -16,9 +16,10 @@ function _computeBonusVal(e) {
 }
 
 /**
- *
- * @param key
- * @param f
+ * Compute the total bonus value, build explaination text,
+ * and enact the bonus effect in-game.
+ * @param {string} key The key in upgrade_tracks.js
+ * @param {Function} f The function to apply the bonus effect.
  */
 function _updateBonus(key, f) {
 

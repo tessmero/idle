@@ -20,8 +20,8 @@ class NoclearFadeOut extends FadeOut {
 
   /**
    *
-   * @param _g
-   * @param _rect
+   * @param {object} _g The graphics context.
+   * @param {number[]} _rect The rectangle to cover with the animation.
    */
   draw(_g, _rect) {
     // do nothing

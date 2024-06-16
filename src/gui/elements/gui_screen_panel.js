@@ -25,18 +25,19 @@ class GuiScreenPanel extends GuiElement {
   }
 
   /**
-   *
+   * Prevent assigning inner screen with equals sign.
    */
   set innerScreen(_s) { throw new Error('should use setInnerScreen'); }
 
   /**
-   *
+   * Get the screen being displayed.
+   * @returns {GameScreen} The inner screen.
    */
   get innerScreen() { return this.#innerScreen; }
 
   /**
-   *
-   * @param s
+   * Set the screen to display. Used to enter and exit boxes.
+   * @param {GameScreen} s The screen to display.
    */
   setInnerScreen(s) {
     const oldScreen = this.#innerScreen;
@@ -58,8 +59,8 @@ class GuiScreenPanel extends GuiElement {
   /**
    * Extend regular gui element update
    * by updating the inner screen.
-   * @param dt
-   * @param disableHover
+   * @param {number} dt The time elapsed in millseconds.
+   * @param {boolean} disableHover True if mouse hovering should be disabled.
    */
   update(dt, disableHover) {
     const hovered = super.update(dt, disableHover);

@@ -12,7 +12,7 @@ class LineToolTutorialTest extends Test {
 
   /**
    *
-   * @param screen
+   * @param {GameScreen} screen The screen under test.
    */
   getTestAssertions(screen) {
     const b = () => Test.getSingleBody(screen, ControlledSausageBody).getMainBody();

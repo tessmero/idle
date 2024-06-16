@@ -26,9 +26,6 @@ class TransitionTest extends Test {
         null,
         null,
       ];
-
-      // mock Hud Gui implementation
-      // with only upgrade menu button
       const gui = gsm.currentGui;
       gui.isMain = false;
       screen.setGui(gui);
@@ -43,33 +40,65 @@ class TransitionTest extends Test {
   buildScreen() {
     const screen = super.buildScreen();
 
-    // start watching some points on the screen
-    const watcher = new PointWatcherGW(screen.sim.rect);
-    screen.graphicsWrapper = watcher;
-    this.watcher = watcher;
+    // watch some points across the whole screen
+    const sr = screen.sim.rect;
+    const screenWatcher = new PointWatcherGW(sr, 8, 8);
+    this.screenWatcher = screenWatcher;
 
+    // watch some points where the message should appear
+    const [x, y, w, h] = sr;
+    const rx = 0.2 * w;
+    const ry = 0.015 * h;
+    const mr = [x + w / 2 - rx, y + h / 2 - ry, rx * 2, ry * 2];
+    const msgWatcher = new PointWatcherGW(mr, 25, 4);
+
+    // helper to debug watcher
+    msgWatcher._gfgr = msgWatcher.getFgRate;
+    msgWatcher.getFgRate = () => {
+      const result = msgWatcher._gfgr();
+
+      // console.log(result);
+      return result;
+    };
+
+    this.msgWatcher = msgWatcher;
+
+    screen.graphicsWrappers = [msgWatcher, screenWatcher];
     return screen;
   }
 
   /**
    *
    *
-   * @param {GameScreen} screen - The simulation object containing the state and methods for the test.
+   * @param {GameScreen} _screen - The screen under test.
    * @returns {Array.<Array>} An array of assertions, where each assertion is an array consisting of:
    *  - {number} time - The time in milliseconds at which the assertion is evaluated.
    *  - {string} description - A description of the expected state at the given time.
    *  - {Function} condition - A function that returns a boolean indicating if the condition is met.
    */
-  getTestAssertions(screen) {
-    const w = screen.graphicsWrapper;
+  getTestAssertions(_screen) {
+    const scr = () => this.screenWatcher.getFgRate();
+    const msg = () => this.msgWatcher.getFgRate();
+
     return [
-      [100, 'mostly uncovered', () => w.getFgRate() < 0.50],
 
-      [1500, '90% covered', () => w.getFgRate() > 0.90],
+      // 0-1000 fade out to dark screen
+      [100, 'mostly uncovered', () => scr() < 0.50],
+      [1100, '100% covered', () => scr() === 1],
+      [1100, 'no message', () => msg() === 1],
 
-      [3000, '90% covered', () => w.getFgRate() > 0.90],
+      // 1500-1700 message materializes
+      [1600, 'partial message', () => (msg() > 0.85) && (msg() < 1)],
 
-      [6000, 'mostly uncovered', () => w.getFgRate() < 0.50],
+      // 1700-3700 message readable
+      [3500, 'message fully visible', () => msg() < 0.85],
+
+      // 3700-4200 message dissolves
+      [4000, 'partial message', () => (msg() > 0.85) && (msg() < 1)],
+
+      // 4200-5200 dark fade in
+      [4200, '100% covered', () => scr() === 1],
+      [5300, 'mostly uncovered', () => scr() < 0.50],
     ];
   }
 }

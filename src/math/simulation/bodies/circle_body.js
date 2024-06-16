@@ -2,11 +2,12 @@
  * @file CircleBody object type, a physics-enabled circle.
  */
 class CircleBody extends Body {
+
   /**
    *
-   * @param sim
-   * @param pos
-   * @param rad
+   * @param {ParticleSim} sim
+   * @param {Vector} pos
+   * @param {number} rad
    */
   constructor(sim, pos, rad) {
     super(sim, pos);

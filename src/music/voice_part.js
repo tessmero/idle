@@ -9,8 +9,8 @@ class VoicePart {
 
   /**
    *
-   * @param chordProg
-   * @param melody
+   * @param {number[][]} chordProg All note frequencies used in the song.
+   * @param {object[]} melody The VoiceMeasure instances.
    */
   constructor(chordProg, melody) {
     this.#chordProg = chordProg;
@@ -18,9 +18,9 @@ class VoicePart {
   }
 
   /**
-   * @param repIndex
-   * @param measureIndex
-   * @param beatIndex
+   * @param {number} repIndex
+   * @param {number} measureIndex
+   * @param {number} beatIndex
    */
   getNotes(repIndex, measureIndex, beatIndex) {
     const freqs = this.#chordProg[measureIndex];

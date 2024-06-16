@@ -25,10 +25,10 @@ class Grabber {
   /**
    * check if point in grab region
    * if so, return nearest edge location
-   * @param _subgroup
-   * @param _i
-   * @param _x
-   * @param _y
+   * @param {object} _subgroup
+   * @param {number} _i
+   * @param {number} _x
+   * @param {number} _y
    */
   contains(_subgroup, _i, _x, _y) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);

@@ -3,6 +3,7 @@
  * a small particle simulation that appears in the gui
  */
 class TutorialPSim extends ParticleSim {
+
   /**
    *
    */
@@ -17,7 +18,7 @@ class TutorialPSim extends ParticleSim {
 
   /**
    *
-   * @param b
+   * @param {Body} b
    */
   addBody(b) {
 

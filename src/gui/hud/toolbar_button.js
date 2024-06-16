@@ -44,8 +44,8 @@ class ToolbarButton extends CompositeGuiElement {
 
   /**
    *
-   * @param dt
-   * @param disableHover
+   * @param {number} dt The time elapsed in millseconds.
+   * @param {boolean} disableHover True if mouse hovering should be disabled.
    */
   update(dt, disableHover) {
 

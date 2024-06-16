@@ -5,16 +5,14 @@ class SquareBody extends Body {
 
   /**
    *
-   * @param sim
-   * @param pos
-   * @param rad
+   * @param {ParticleSim} sim The simulation the body will live in.
+   * @param {Vector} pos The position of the center of the square.
+   * @param {number} rad Half of the side length of the square.
    */
   constructor(sim, pos, rad) {
     super(sim, pos);
 
     this.rad = rad;
-
-    //
     this.title = 'square';
     this.icon = uncheckedIcon;
   }
@@ -37,15 +35,6 @@ class SquareBody extends Body {
   }
 
   /**
-   *
-   */
-  buildGrabber() {
-    return new EdgeGrabber(
-      this.pos, this.angle, this.edge,
-      (...p) => this.grabbed(...p), 0);
-  }
-
-  /**
    * Override standard body draw routine.
    * @param {object} g The graphics context.
    */
@@ -57,11 +46,11 @@ class SquareBody extends Body {
   }
 
   /**
-   *
+   * Draw rotated square shape.
    * @param {object} g The graphics context.
-   * @param center
-   * @param angle
-   * @param rad
+   * @param {Vector} center The position of the center of the square.
+   * @param {number} angle The orientation of the square.
+   * @param {number} rad Half of the side length of the square.
    */
   static drawSquare(g, center, angle, rad) {
     g.fillStyle = global.colorScheme.fg;

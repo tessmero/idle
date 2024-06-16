@@ -16,7 +16,7 @@ class PiTool extends DefaultTool {
 
   /**
    *
-   * @param sim
+   * @param {ParticleSim} sim
    */
   unregister(sim) {
     sim.selectedParticle = null;
@@ -92,16 +92,16 @@ class PiTool extends DefaultTool {
   }
 
   /**
-   *
-   * @param p
+   * Called in game_screen.js when the mouse moves.
+   * @param {Vector} p The new mouse cursor position.
    */
   mouseMove(p) {
     this.grabber.pos = p;
   }
 
   /**
-   *
-   * @param _p
+   * Called in game_screen.js when the mouse button is pressed.
+   * @param {Vector} _p The position of the mouse cursor.
    */
   mouseDown(_p) {
     const sim = this.sim;
@@ -113,8 +113,8 @@ class PiTool extends DefaultTool {
   }
 
   /**
-   *
-   * @param _p
+   * Called in game_screen.js when the mouse button is released.
+   * @param {Vector} _p The position of the mouse cursor.
    */
   mouseUp(_p) {
 
@@ -123,20 +123,9 @@ class PiTool extends DefaultTool {
   }
 
   /**
-   *
-   * @param _dt
-   */
-  update(_dt) {
-
-    // start grabbing particles
-    // this.sim.addGrabber(this.topg)
-    // do nothing
-  }
-
-  /**
-   *
+   * Draw the particle inspector tool mouse cursor.
    * @param {object} g The graphics context.
-   * @param p
+   * @param {Vector} p The position to draw at.
    * @param {...any} args
    */
   drawCursor(g, p, ...args) {
@@ -162,6 +151,14 @@ class PiTool extends DefaultTool {
     // draw standard tool cursor
     super.drawCursor(g, p, ...args);
 
+  }
+
+  /**
+   *
+   * @param {number} _dt
+   */
+  update(_dt) {
+    // do nothing
   }
 
   /**

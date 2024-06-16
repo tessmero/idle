@@ -4,17 +4,22 @@
  */
 class PiContextMenu extends ContextMenu {
 
+  #sim;
+  #pData;
+
   /**
-   *
+   * A specific particle was selected. Construct a context
+   * menu to show its detailed status.
    * @param {number[]} rect The rectangle enclosing the whole menu.
    * @param {number[]} s0 The first content square to align elements in.
    * @param {number[]} s1 The second content square to align elements in.
-   * @param screen
-   * @param pData
+   * @param {GameScreen} screen The screen that will contain this menu.
+   * @param {object[]} pData The detailed state of the particle in quetion.
    */
   constructor(rect, s0, s1, screen, pData) {
     super(rect, s0, s1);
-    this.pData = pData;
+    this.#sim = screen.sim;
+    this.#pData = pData;
 
     // idenfity particle type
     const [subgroup, i, _x, _y, _dx, _dy, _hit] = pData;
@@ -36,7 +41,7 @@ class PiContextMenu extends ContextMenu {
     const topRight = [rect[0] + rect[2] - w, rect[1], w, w];
 
     const statScale = 0.4;
-    let stats = this.buildStats(screen, flavor);
+    let stats = this.buildStats(flavor);
 
     stats = stats.map((e) => ((e.length === 1) ? e[0] : this.showCoord(...e)));
     stats = stats.join('\n');
@@ -54,17 +59,16 @@ class PiContextMenu extends ContextMenu {
 
   /**
    *
-   * @param screen
    * @param {string} flavor 'physics', 'edge', or 'procedural'
    */
-  buildStats(screen, flavor) {
+  buildStats(flavor) {
 
     // data passed from grab event
     // in need of cleanup
-    const [_subgroup, i, x, y, _dx, _dy, _hit] = this.pData;
+    const s = this.#sim;
+    const [_subgroup, i, x, y, _dx, _dy, _hit] = this.#pData;
 
     // lookup group needs cleanup
-    const s = screen.sim;
     const grp = ((flavor === 'physics') ? s.physicsGroup : (
       (flavor === 'edge') ? s.edgeGroup : s.rainGroup
     ));
@@ -108,9 +112,9 @@ class PiContextMenu extends ContextMenu {
   }
 
   /**
-   *
-   * @param label
-   * @param val
+   * Display a short label and floating point value.
+   * @param {string} label The short label to display.
+   * @param {number} val The float value to display.
    */
   showCoord(label, val) {
 

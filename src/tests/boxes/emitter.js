@@ -1,5 +1,5 @@
 /**
- * @file Emitter body used for box tests.
+ * @file Emitter pseudo-body used for box tests.
  *
  * Spawns physics particles.
  * Otherwise this has no interaction similar to ControlPoint.
@@ -15,9 +15,9 @@ class Emitter extends Body {
 
   /**
    *
-   * @param sim
-   * @param pos
-   * @param angle
+   * @param {ParticleSim} sim
+   * @param {Vector} pos
+   * @param {number} angle
    */
   constructor(sim, pos, angle = 0) {
     super(sim, pos, angle);
@@ -40,13 +40,13 @@ class Emitter extends Body {
 
   /**
    * no direct interaction with particles
-   * @param _sim
+   * @param {ParticleSim} _sim
    */
   register(_sim) {}
 
   /**
    * no direct interaction with particles
-   * @param _sim
+   * @param {ParticleSim} _sim
    */
   unregister(_sim) {}
 }

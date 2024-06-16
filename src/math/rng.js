@@ -54,7 +54,7 @@ function randomString(length) {
 }
 
 /**
- *
+ * @returns {number[]} A seed suitable for resetRand.
  */
 function randomSeed() {
   return cyrb128(randomString(10));
@@ -62,7 +62,7 @@ function randomSeed() {
 
 /**
  *
- * @param seed
+ * @param {number[]} seed
  */
 function resetRand(seed = null) {
   let s = seed;
@@ -74,15 +74,15 @@ function resetRand(seed = null) {
 
 /**
  *
- * @param min
- * @param max
+ * @param {number} min
+ * @param {number} max
  */
 function randRange(min, max) {
   return min + rand() * (max - min);
 }
 
 /**
- * @param options
+ * @param {object[]} options
  */
 function randChoice(options) {
   return options[Math.floor(Math.random() * options.length)];

@@ -6,10 +6,10 @@
 class DefaultControlFrame extends CompoundBody {
 
   /**
-   *
-   * @param body
-   * @param angle
-   * @param dist
+   * Wrap the given body and add two control points to move and rotate it.
+   * @param {Body} body The body to add control points to.
+   * @param {number} angle The angle to position the rotation control point.
+   * @param {number} dist The distance to put between the two control points.
    */
   constructor(body, angle = pio2, dist = 0.1) {
     super(body.sim, body.pos);

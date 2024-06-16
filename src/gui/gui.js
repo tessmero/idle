@@ -6,7 +6,7 @@ class Gui extends CompositeGuiElement {
 
   /**
    *
-   * @param title
+   * @param {string} title
    * @param {...any} p
    */
   constructor(title, ...p) {
@@ -30,17 +30,16 @@ class Gui extends CompositeGuiElement {
   }
 
   /**
-   * build list of GuiElement instances
-   * @param _screen
+   * Construct array of GuiElement instances for the given game screen.
+   * @param {GameScreen} _screen The screen in need of gui elements.
    */
   buildElements(_screen) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
-  // return Gui instance to draw behind this
-  // e.g. draw hud behind upgrade menu
   /**
-   *
+   * return Gui instance to draw behind this
+   * e.g. draw hud behind upgrade menu
    */
   getBackgroundGui() {
     return null;

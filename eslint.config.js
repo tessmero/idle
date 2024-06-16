@@ -72,7 +72,7 @@ export default [
         "jsdoc/require-param": 1, // Recommended
         "jsdoc/require-param-description": 0,//1, // Recommended
         "jsdoc/require-param-name": 1, // Recommended
-        "jsdoc/require-param-type": 0,//1, // Recommended
+        "jsdoc/require-param-type": 1, // Recommended
         "jsdoc/require-property": 1, // Recommended
         "jsdoc/require-property-description": 0,//1, // Recommended
         "jsdoc/require-property-name": 1, // Recommended

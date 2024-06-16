@@ -10,7 +10,7 @@ class BodyContextMenu extends ContextMenu {
    * @param {number[]} rect The rectangle enclosing the whole menu.
    * @param {number[]} s0 The first content square to align elements in.
    * @param {number[]} s1 The second content square to align elements in.
-   * @param body
+   * @param {Body} body The body to highlight.
    */
   constructor(rect, s0, s1, body) {
     super(rect, s0, s1);
@@ -28,7 +28,7 @@ class BodyContextMenu extends ContextMenu {
 
     this.setChildren([
 
-      new StatReadout(s0, body.icon, () => body.title, () => 0.5),
+      new StatReadout(s0, body.icon, () => body.title),
 
       new IconButton(topRight, xIcon, () => this.closeBodyContextMenu())
         .withScale(0.5)
@@ -73,21 +73,26 @@ class BodyContextMenu extends ContextMenu {
     g.fillStyle = global.colorScheme.hl;
     const bod = this.body;
     const edge = bod.edge;
-    const n = Math.floor(edge.circ * 500);
     const center = bod.pos;
     const thickness = 1e-2;
 
-    // strip pattern in units of index (up to n)
-    const period = Math.floor(n / 20);
+    // compute number of straight segments to draw
+    const res = 500; // ~segs per screen length
+    const n = Math.floor(edge.circ * res);
+
+    // specs for stripe pattern. Stripes
+    // and are made of multiple segments
+    const nStripes = 20;
+    const period = Math.floor(n / nStripes);
     const fill = Math.floor(period * 0.75);
 
     const animAng = global.t / 1e3; // anim state
     // space += 1e-2*Math.cos(animAng) // in-out anim
     const cdo = 6e-2 * animAng;// 1e-1*Math.sin(animAng/2) // slide anim
 
-    let inners = [];
-    let outers = [];
+    let stripeShape = [];
 
+    // iterate over segments
     for (let i = 0; i < n; i++) {
       const cd = cdo + i * edge.circ / n;
       const [eAngle, r, eNorm, _r2] = bod.edge.lookupDist(cd);
@@ -98,27 +103,24 @@ class BodyContextMenu extends ContextMenu {
 
       const im = i % period;
       if (im === 0) {
-        // start segment
-        inners = [inner];
-        outers = [outer];
+        // start stripe
+        stripeShape = [inner, outer];
       }
       else if (im < fill) {
-        // mid segment
-        inners.push(inner);
-        outers.push(outer);
+        // mid stripe
+        stripeShape.unshift(inner);
+        stripeShape.push(outer);
 
       }
       else if (im === fill) {
-        // finish segment
+        // finish stripe
         g.beginPath();
-        inners.reverse()
-          .concat(outers)
-          .forEach((p) => g.lineTo(...p.xy()));
+        stripeShape.forEach((p) => g.lineTo(...p.xy()));
         g.fill();
 
       }
       else {
-        // between segments
+        // between stripes
         // do nothing
       }
     }

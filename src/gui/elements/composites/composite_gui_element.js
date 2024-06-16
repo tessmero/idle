@@ -38,16 +38,24 @@ class CompositeGuiElement extends GuiElement {
   setChildren(c) { this.#children = c; }
 
   /**
-   *
-   * @param c
+   * Add a child gui element to this composite.
+   * @param {GuiElement} c The new gui element to include.
    */
   addChild(c) {
     this.#children.push(c);
   }
 
   /**
-   *
-   * @param s
+   * Add children gui elements to this composite.
+   * @param {GuiElement[]} cs The new elements to include.
+   */
+  addChildren(cs) {
+    cs.forEach((c) => this.addChild(c));
+  }
+
+  /**
+   * Set the font size for this element and descendants.
+   * @param {number} s The font size.
    */
   setScale(s) {
     super.setScale(s);
@@ -55,8 +63,9 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   * set root GameScreen instance
-   * @param s
+   * Set root GameScreen instance for this and
+   * all descendant gui elements.
+   * @param {GameScreen} s The screen containing this element.
    */
   setScreen(s) {
     super.setScreen(s);
@@ -64,8 +73,10 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   *
-   * @param o
+   * Chainable helper to set opacity.
+   * If opaque is set to true, this element's rectangle will
+   * be filled, may cover sims or guis, and will absorb clicks.
+   * @param {boolean} o The opacity flag.
    */
   withOpacity(o) {
     this.#opaque = o;
@@ -73,9 +84,9 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   *
-   * @param dt
-   * @param disableHover
+   * Update this element and descendants.
+   * @param {number} dt The time elapsed in millseconds.
+   * @param {boolean} disableHover
    */
   update(dt, disableHover = false) {
     let hovered = super.update(dt, disableHover);
@@ -87,7 +98,7 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   *
+   * Draw this element and descendants.
    * @param {object} g The graphics context.
    */
   draw(g) {
@@ -96,7 +107,12 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
+   * Execute the clicking action for the front-most
+   * opaque descendant element under the mouse cursor.
    *
+   * Return false if click passed through a transparent
+   * point in this gui layer.
+   * @returns {boolean} True if the click was absorbed.
    */
   click() {
     const mousePos = this.screen.mousePos;
@@ -107,7 +123,7 @@ class CompositeGuiElement extends GuiElement {
                 e.click())) { return true; }
 
     if (this.#opaque && vInRect(mousePos, ...this.rect)) {
-      console.log('clicked opaque composite element background');
+      // console.log('clicked opaque composite element background');
       return true;
     }
 

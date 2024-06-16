@@ -5,8 +5,8 @@ class SkillCardTest extends Test {
 
   /**
    *
-   * @param titleKey
-   * @param skill
+   * @param {string} titleKey The readable unique title for this test.
+   * @param {object} skill The Skill instance who's thumbnail screen will be tested.
    */
   constructor(titleKey, skill) {
     super(titleKey);

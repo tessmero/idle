@@ -8,9 +8,9 @@ class VoiceMeasure {
 
   /**
    *
-   * @param delay
-   * @param sustain
-   * @param scaleIndex
+   * @param {number} delay The number of beats from the start of this measure.
+   * @param {number} sustain The number of beats to hold.
+   * @param {number} scaleIndex The pitch of the note.
    */
   addNote(delay, sustain, scaleIndex) {
     this.#allNotes.push([delay, sustain, scaleIndex]);
@@ -18,8 +18,8 @@ class VoiceMeasure {
 
   /**
    *
-   * @param beatIndex
-   * @param scaleFreqs
+   * @param {number} beatIndex The beat index in this measure.
+   * @param {number[]} scaleFreqs The list of note frequencies in the current music key.
    */
   buildNotesForBeat(beatIndex, scaleFreqs) {
 

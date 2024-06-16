@@ -11,9 +11,10 @@ class FontSpec {
 
   /**
    *
-   * @param pad
-   * @param scale
-   * @param clear
+   * @param {number} pad The extra distance to dilate each pixel drawn.
+   * @param {number} scale The font size.
+   * @param {boolean} clear True to clear instead of fill. Used to draw
+   *                        background-color text that can be inverted later
    */
   constructor(pad = 0, scale = 1, clear = false) {
     this.pad = pad;
@@ -22,9 +23,8 @@ class FontSpec {
   }
 
   /**
-   * by default we draw all pixels
-   * overridden in dissolving_font_spec.js
-   * @returns {boolean} False to draw all pixels.
+   * Return true to skip drawing a pixel. Used in dissolving_font_spec.js
+   * @returns {boolean} False so all pixels are drawn by default.
    */
   skipPixel() {
     return false;

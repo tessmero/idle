@@ -9,9 +9,9 @@ class TrackOneParticleGrabber extends Grabber {
 
   /**
    *
-   * @param subgroup
-   * @param i
-   * @param f
+   * @param {object} subgroup
+   * @param {number} i
+   * @param {Function} f
    */
   constructor(subgroup, i, f) {
     super(f);
@@ -21,10 +21,10 @@ class TrackOneParticleGrabber extends Grabber {
 
   /**
    *
-   * @param subgroup
-   * @param i
-   * @param _x
-   * @param _y
+   * @param {object} subgroup
+   * @param {number} i
+   * @param {number} _x
+   * @param {number} _y
    */
   contains(subgroup, i, _x, _y) {
     return (subgroup === this.subgroup) &&

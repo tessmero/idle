@@ -7,17 +7,20 @@
 class Macro {
 
   #title;
+  #keyframes;
+  #cursorPosKeyframes;
 
   /**
    * Construct new macro based on
-   * implemented buildKeyFrames() method
-   * @param buildKeyframes
+   * implemented buildKeyframes() method
+   * @param {Function} buildKeyframes
+   *        optional shorthand to implement Macro
    */
   constructor(buildKeyframes = this.buildKeyframes) {
     this.reset();
 
     const kf = buildKeyframes();
-    this.keyframes = kf;
+    this.#keyframes = kf;
 
     const grabRad = 0.001;
     const t = new DefaultTool(null, grabRad);
@@ -26,7 +29,7 @@ class Macro {
     this.tool = t;
 
     // extract cursor position data
-    this.cursorPosKeyframes = kf.filter((e) => e[1] === 'pos');
+    this.#cursorPosKeyframes = kf.filter((e) => e[1] === 'pos');
   }
 
   /**
@@ -38,18 +41,18 @@ class Macro {
    *
    * move mouse diagonally across screen
    * return [ [0,'pos',v(0,0)], [1000,'pos',v(1,1)] ]
-   *
+   * @abstract
    */
-  buildKeyFrames() {
+  buildKeyframes() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   /**
    * Default duration is computed based on
-   * implemented buildKeyFrames() method
+   * implemented buildKeyframes() method
    */
   getDuration() {
-    return this.cursorPosKeyframes.at(-1)[0];
+    return this.#cursorPosKeyframes.at(-1)[0];
   }
 
   /**
@@ -62,7 +65,7 @@ class Macro {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millisecs.
    */
   update(dt) {
 
@@ -72,7 +75,7 @@ class Macro {
 
     // return list of events since last update
     const t1 = this.t;
-    return this.keyframes.filter((k) => (k[0] > t0) && (k[0] <= t1));
+    return this.#keyframes.filter((k) => (k[0] > t0) && (k[0] <= t1));
   }
 
   /**
@@ -81,7 +84,7 @@ class Macro {
   getCursorPos() {
 
     const t = this.t;
-    const kf = this.cursorPosKeyframes;
+    const kf = this.#cursorPosKeyframes;
 
     if (t < kf[0][0]) { return kf[0][2]; } // return first position
 

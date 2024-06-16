@@ -31,8 +31,8 @@ class Skill {
 
   /**
    *
-   * @param name
-   * @param prepSim
+   * @param {string} name The in-game label for this skill.
+   * @param {Function} prepSim Modification to simulation.
    */
   constructor(name, prepSim) {
     this.name = name;

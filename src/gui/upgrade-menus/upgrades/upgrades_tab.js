@@ -7,7 +7,7 @@ class UpgradesTab extends CompositeGuiElement {
 
   /**
    *
-   * @param sr
+   * @param {number[]} sr The rectange to align elements in.
    */
   constructor(sr) {
     super(sr);

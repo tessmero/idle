@@ -114,7 +114,7 @@ class TestContextMenu extends ContextMenu {
     const titleLabel = new TextLabel(titleRect, test.titleKey)
       .withScale(0.3);
 
-    this.setChildren(this.children.concat([
+    this.addChildren([
 
       // title at top of first square
       titleLabel,
@@ -133,7 +133,7 @@ class TestContextMenu extends ContextMenu {
 
       // conclusion in second square
       finalDisplay,
-    ]));
+    ]);
 
   }
 
@@ -258,8 +258,8 @@ class TestContextMenu extends ContextMenu {
 
   /**
    *
-   * @param dt
-   * @param disableHover
+   * @param {number} dt The time elapsed in millseconds.
+   * @param {boolean} disableHover True if mouse hovering should be disabled.
    */
   update(dt, disableHover) {
     this.t = this.t + dt;
@@ -331,7 +331,7 @@ class TestContextMenu extends ContextMenu {
 
   /**
    *
-   * @param sr
+   * @param {number[]} sr The rectangle to align elements in.
    */
   static pickRects(sr) {
 

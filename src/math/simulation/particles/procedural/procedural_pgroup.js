@@ -7,8 +7,8 @@ class ProceduralPGroup extends ParticleGroup {
 
   /**
    *
-   * @param sim
-   * @param n
+   * @param {ParticleSim} sim
+   * @param {number} n
    */
   constructor(sim, n) {
     super(sim, n);
@@ -26,7 +26,6 @@ class ProceduralPGroup extends ParticleGroup {
     const sr = this.sim.rect;
     const animAngle = this.sim.t * 1e-4;
     const wiggle = this.wiggle;
-    global.particlesInMouseRange.clear();
     for (let i = 0; i < n; i++) {
       const a = animAngle + rand() * Math.PI * 2;
       const r = randRange(0, wiggle);

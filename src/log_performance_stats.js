@@ -28,7 +28,7 @@ class LogPerformanceStats {
 
   /**
    * Called in FloatArray constructor.
-   * @param n Size of Float32Array allocated.
+   * @param {number} n Size of Float32Array allocated.
    */
   submitNewArray(n) {
     this.totalFloat32Alloc = this.totalFloat32Alloc + n;

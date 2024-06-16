@@ -12,7 +12,7 @@ class CircleToolTutorialTest extends Test {
 
   /**
    *
-   * @param screen
+   * @param {GameScreen} screen The screen under test.
    */
   getTestAssertions(screen) {
     const sim = screen.sim;

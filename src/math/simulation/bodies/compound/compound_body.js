@@ -50,7 +50,7 @@ class CompoundBody extends Body {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    */
   update(dt) {
     const beingControlled = this.#controlPoints.find((cp) => cp === this.sim.draggingControlPoint);
@@ -63,7 +63,7 @@ class CompoundBody extends Body {
 
   /**
    *
-   * @param sim
+   * @param {ParticleSim} sim
    */
   register(sim) {
     this.#children.forEach((c) => {
@@ -74,7 +74,7 @@ class CompoundBody extends Body {
 
   /**
    *
-   * @param sim
+   * @param {ParticleSim} sim
    */
   unregister(sim) {
     this.#children.forEach((c) => c.unregister(sim));

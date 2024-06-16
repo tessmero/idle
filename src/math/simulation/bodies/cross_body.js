@@ -5,8 +5,8 @@
 class CrossBody extends Body {
   /**
    *
-   * @param sim
-   * @param pos
+   * @param {ParticleSim} sim
+   * @param {Vector} pos
    */
   constructor(sim, pos) {
     super(sim, pos);
@@ -18,7 +18,7 @@ class CrossBody extends Body {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    * @param {...any} p
    */
   update(dt, ...p) {

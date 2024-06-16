@@ -8,7 +8,7 @@ class RadspecEdge extends Edge {
 
   /**
    *
-   * @param _angle
+   * @param {number} _angle
    */
   computeRadius(_angle) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
@@ -58,12 +58,11 @@ class RadspecEdge extends Edge {
     this.distLut = distLut;
   }
 
-  // called when pre-computing edge shape
-  // compute position+normal [angle,radius,normal angle]
-  // at given distance along circumerence
   /**
-   *
-   * @param targetD
+   * called when pre-computing edge shape
+   * compute position+normal [angle,radius,normal angle]
+   * at given distance along circumerence
+   * @param {number} targetD The 1D position along circumference.
    */
   computePoint(targetD) {
 

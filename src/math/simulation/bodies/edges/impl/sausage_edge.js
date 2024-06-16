@@ -6,8 +6,8 @@ class SausageEdge extends PathspecEdge {
 
   /**
    *
-   * @param length
-   * @param rad
+   * @param {number} length
+   * @param {number} rad
    */
   constructor(length, rad) {
     super();

@@ -7,7 +7,7 @@ class CircleTool extends BodyTool {
 
   /**
    *
-   * @param sim
+   * @param {ParticleSim} sim
    */
   constructor(sim) {
     super(sim, circleIcon, 'build circle', true);
@@ -41,16 +41,4 @@ class CircleTool extends BodyTool {
   getTutorial() {
     return new CircleToolTutorial();
   }
-
-  /**
-   *
-   * @param _p
-   */
-  mouseMove(_p) {}
-
-  /**
-   *
-   * @param _p
-   */
-  mouseUp(_p) {}
 }

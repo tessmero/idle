@@ -2,16 +2,17 @@
 /**
  * @file Edge object type.
  * An edge is a boundary that particles interact with
- * the shape of the edge is stored in constant set of polar coords
- * where the origin is the center of a rotating body outlined by this edge
- * the edge object is agnostic of the body's state
- * so we don't care about the specific position/orientation/momentum
- * here we only consider one arbitrary orientation
+ *
+ * the shape of the edge is stored in polar coords
+ * where the origin is the center of mass of a rotating body
+ *
+ * Otherwise the edge object is agnostic of the body's state
+ * and doesn't care about the specific position/orientation/momentum
  */
 class Edge {
 
   /**
-   * compute shape lookup tables
+   * Compute lookup table members.
    * see pathspec_edge.js or radspec_edge.js
    */
   computeEdgeShape() {
@@ -30,7 +31,7 @@ class Edge {
 
   /**
    * get precomputed [rad,r2,circ dist] at given angle
-   * @param a
+   * @param {number} a The angle in radians.
    */
   lookupAngle(a) {
     let i = Math.round(a * this.angleLutN / twopi);
@@ -43,7 +44,7 @@ class Edge {
   /**
    * get precomputed [angle,radius,normal angle,r2]
    * at given distance along circumerence
-   * @param d
+   * @param {number} d The 1D position along this edge.
    */
   lookupDist(d) {
     let i = Math.round(d * this.distLutN / this.circ);
@@ -54,11 +55,10 @@ class Edge {
   }
 
   /**
-   * helper to draw edge
-   * with given pos,angle offsets onscreen
+   * Trace the shape of the edge with the given pos,angle offsets.
    * @param {object} g The graphics context.
-   * @param {Vector} pos
-   * @param {number} angle
+   * @param {Vector} pos The position to draw at.
+   * @param {number} angle The orientation to draw the edge with.
    */
   trace(g, pos, angle) {
     g.beginPath();

@@ -5,6 +5,18 @@
  * eats particles and contributes to player currency
  */
 class CircleBuddy extends Buddy {
+  expMechDesc = 'collect raindrops';
+
+  #maxSatiety;
+  #maxSatietyCurve = ValueCurve.power(5, 2);
+  #satiety;
+
+  /**
+   * Passive loss in satiety per millisecond, at max satiety.
+   * @type {number}
+   */
+  #satietyDecay;
+  #satietyDecayCurve = ValueCurve.power(5e-3, 1.5);
 
   /**
    *
@@ -14,6 +26,10 @@ class CircleBuddy extends Buddy {
    */
   constructor(sim, pos, rad) {
     super(sim, pos);
+
+    this.#maxSatiety = this.#maxSatietyCurve.f(this.expLevel);
+    this.#satietyDecay = this.#satietyDecayCurve.f(this.expLevel);
+    this.#satiety = this.#maxSatiety;
 
     this.circle = new CircleBody(sim, pos, rad);
     const cp = new ControlPoint(sim, this.circle);
@@ -26,16 +42,90 @@ class CircleBuddy extends Buddy {
   }
 
   /**
-   *
-   * @param dt
+   * Called in constructor.
+   * Determines experience needed to advance through exp levels.
+   * @returns {object} The ValueCurve instance.
+   */
+  getExpLevelCostCurve() {
+    return ValueCurve.power(100, 2);
+  }
+
+  /**
+   * Extend buddy exp gain mechanic, adding restoring satiety.
+   * @param {number} amt The amount of experience to gain.
+   */
+  gainExp(amt) {
+    super.gainExp(amt);
+
+    // increase satiety
+    this.#satiety = Math.min(
+      this.#satiety + amt, this.#maxSatiety);
+  }
+
+  /**
+   * Extend buddy level up mechanic, adding increasing appetite.
+   */
+  leveledUp() {
+    super.leveledUp();
+    this.#maxSatiety = this.#maxSatietyCurve.f(this.expLevel);
+    this.#satietyDecay = this.#satietyDecayCurve.f(this.expLevel);
+  }
+
+  /**
+   * Extend standard update, adding management of hunger and eating.
+   * @param {number} dt The time elapsed in millseconds.
    */
   update(dt) {
 
-    // request a particle to be eaten from edge
-    // edge_particle_subgroup.js
-    if (Math.random() < 0.1) { this.getMainBody().eatsQueued = 1; }
+    // decrease satiety
+    const s = this.#satiety;
+    this.#satiety = Math.max(
+      s - dt * this.#satietyDecay * (s / this.#maxSatiety), 0);
 
+    // attempt to stay near max satiety
+    // by eating edge particles (edge_particle_subgroup.js)
+    const hunger = this.#maxSatiety - this.#satiety;
+    this.getMainBody().eatsQueued = Math.floor(hunger);
+
+    // perform standard update
     return super.update(dt);
+  }
+
+  /**
+   * Extend BuddyContextMenu by adding hunger and total collected.
+   * @param {number[][]} rects The allignment rectangles for the menu.
+   */
+  buildContextMenu(rects) {
+    const bcm = new BuddyContextMenu(...rects, this);
+    bcm.addBuddyContextRow((r) => [
+      new StatReadout(r, hungerIcon, () => this._satLabel())
+        .withAutoAdjustRect(false)
+        .withDynamicTooltip(() => this._satTooltip()),
+      new ProgressIndicator(r, () => this.#satiety / this.#maxSatiety),
+    ]);
+    return bcm;
+  }
+
+  /**
+   * Get one-word description of satiety state e.g. 'hungry'.
+   * @returns {string} The one-word description.
+   */
+  _satLabel() {
+    const s = this.#satiety / this.#maxSatiety;
+    if (s < 0.25) { return 'starving'; }
+    if (s < 0.5) { return 'hungry'; }
+    if (s < 0.75) { return 'peckish'; }
+    return 'full';
+  }
+
+  /**
+   * Get report of satiety as readable integers.
+   * @returns {string} The report.
+   */
+  _satTooltip() {
+    const sat = this.#satiety.toFixed(0);
+    const max = this.#maxSatiety.toFixed(0);
+    return `${sat}/${max} satiety`;
   }
 
   /**

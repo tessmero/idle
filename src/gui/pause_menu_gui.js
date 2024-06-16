@@ -21,8 +21,9 @@ class PauseMenuGui extends Gui {
   }
 
   /**
-   *
-   * @param screen
+   * Construct pause menu gui elements for the given game screen.
+   * @param {GameScreen} screen The screen in need of gui elements.
+   * @returns {GuiElement[]} The gui elements for the screen.
    */
   buildElements(screen) {
     const sr = screen.rect;

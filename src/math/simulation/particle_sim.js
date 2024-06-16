@@ -47,6 +47,7 @@ class ParticleSim {
       new LineTool(this),
       new BoxTool(this),
       new PiTool(this, global.mouseGrabRadius),
+      new ExpTool(this),
     ];
 
     // particles
@@ -85,10 +86,26 @@ class ParticleSim {
     // trigger callback
     body.clicked();
 
-    // find Buddy instance (top level CompoundBody)
-    // or "main" Body of CompoundBody
-    // or use given Body with no heirarchy
+    const b = this.findRepresentativeBody(body);
+    this.selectedBody = b;
+    this.selectedParticle = null;
+  }
+
+  /**
+   * Given some body which may be just a control point, find the related
+   * body of interest that should be shown in the context menu.
+   *
+   * Used in bodyClicked. Also used for exp tool.
+   * @param {Body} body The starting point to search from.
+   * @returns {Body} The Buddy instance or at least a tangible
+   *                     body that could be highlighted on-screen.
+   */
+  findRepresentativeBody(body) {
+
     let b = body;
+    if (!b) {
+      return null;
+    }
     while (b.parent) {
       b = b.parent;
     }
@@ -99,8 +116,7 @@ class ParticleSim {
       b = b.getMainBody();
     }
 
-    this.selectedBody = b;
-    this.selectedParticle = null;
+    return b;
   }
 
   /**
@@ -165,7 +181,7 @@ class ParticleSim {
 
   /**
    *
-   * @param b
+   * @param {object} b
    */
   addGrabber(b) {
     this.#grabbers.add(b);
@@ -173,7 +189,7 @@ class ParticleSim {
 
   /**
    *
-   * @param b
+   * @param {object} b
    */
   removeGrabber(b) {
     this.#grabbers.delete(b);
@@ -206,7 +222,7 @@ class ParticleSim {
 
   /**
    * Unregister and
-   * @param b
+   * @param {Body} b
    */
   removeBody(b) {
     this.#bodies.delete(b);
@@ -290,7 +306,8 @@ class ParticleSim {
   /**
    * Draw this simulation.
    * @param {object} g The graphics context.
-   * @param hidden 05/26/2024 hacky flag to make persistent screens work
+   * @param {boolean} hidden True to skip actually drawing. Used
+   *                         To make black box screens persistent.
    */
   draw(g, hidden = false) {
     if (hidden) { global.livePerformanceStats.flagSim(this, 'DRAWN HIDDEN'); }

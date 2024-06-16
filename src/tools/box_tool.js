@@ -8,7 +8,7 @@ class BoxTool extends BodyTool {
 
   /**
    *
-   * @param sim
+   * @param {ParticleSim} sim
    */
   constructor(sim) {
     super(sim, boxIcon, 'build black box', true);
@@ -43,16 +43,4 @@ class BoxTool extends BodyTool {
   getTutorial() {
     return new BoxToolTutorial();
   }
-
-  /**
-   *
-   * @param _p
-   */
-  mouseMove(_p) {}
-
-  /**
-   *
-   * @param _p
-   */
-  mouseUp(_p) {}
 }

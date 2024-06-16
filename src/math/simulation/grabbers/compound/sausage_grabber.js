@@ -3,6 +3,11 @@
  */
 class SausageGrabber extends CompoundGrabber {
 
+  #rad;
+  #line;
+  #circle0;
+  #circle1;
+
   /**
    *
    * @param {Vector} a The position of one end.
@@ -13,46 +18,32 @@ class SausageGrabber extends CompoundGrabber {
   constructor(a, b, rad, f) {
     super(f);
 
-    this.a = a;
-    this.b = b;
-    this.rad = rad;
-
     const len = b.sub(a).getMagnitude();
     const cap = pi * rad;
 
+    this.#rad = rad;
+    this.#line = new LineGrabber(a, b, rad, null, 0, len + cap);
+    this.#circle0 = new CircleGrabber(b, rad, null, len);
+    this.#circle1 = new CircleGrabber(a, rad, null, len + cap + len);
+
     this.setChildren([
-      new LineGrabber(a, b, rad, null, 0, len + cap),
-      new CircleGrabber(b, rad, null, len),
-      new CircleGrabber(a, rad, null, len + cap + len),
+      this.#line, this.#circle0, this.#circle1,
     ]);
   }
 
-  // called periodically. set member vars
-  // for objects in this.children
-  // do not add or remove children
   /**
-   *
+   * Called periodically. set member vars
+   * for objects in this.children
+   * do not add or remove children
+   * @param {Vector} a
+   * @param {Vector} b
    */
-  update() {
-    const a = this.a;
-    const b = this.b;
-    const d = b.sub(a);
-    const c = this.children;
+  updateEndpoints(a, b) {
+    const line = this.#line;
+    line.a = a;
+    line.b = b;
 
-    const rad = this.rad;
-    const angle = d.getAngle();
-    const len = d.getMagnitude();
-    const cap = pi * rad;
-
-    c[0].a = a; // line
-    c[0].b = b;
-
-    c[1].pos = b; // circle
-    c[1].rad = rad;
-    c[1].edgeOffset = len - cap - rad * (pio2 + angle);
-
-    c[2].pos = a; // circle
-    c[2].rad = rad;
-    c[2].edgeOffset = len + len + cap - rad * (pio2 + angle);
+    this.#circle0.pos = b;
+    this.#circle1.pos = a;
   }
 }

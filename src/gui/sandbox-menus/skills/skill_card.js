@@ -8,8 +8,8 @@ class SkillCard extends CompositeGuiElement {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param tree
-   * @param entry
+   * @param {object} tree The SkillTree isntance, global.skillTree.
+   * @param {object} entry The value in tree.state containing specs for one skill.
    */
   constructor(rect, tree, entry) {
     super(rect);

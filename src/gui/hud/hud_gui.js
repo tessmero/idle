@@ -1,6 +1,6 @@
 
 /**
- * @file HUD (HEads Up Display)
+ * @file HudGui Heads Up Display
  * Top-level GUI container that appears during gameplay.
  */
 class HudGui extends Gui {
@@ -14,13 +14,13 @@ class HudGui extends Gui {
   }
 
   /**
-   *
-   * @param screen
+   * Construct HUD elements for the given game screen.
+   * @param {GameScreen} screen The screen in need of gui elements.
+   * @returns {GuiElement[]} The gui elements for the screen.
    */
   buildElements(screen) {
     const rect = screen.rect;
     const sim = screen.sim;
-    this.setScreen(screen);
     this.sim = sim;
 
     const sc = rectCorners(...rect);
@@ -88,17 +88,19 @@ class HudGui extends Gui {
     result = result.filter(Boolean);
 
     // append toolbar buttons
-    result = result.concat(this._buildToolbarButtons());
+    result = result.concat(this._buildToolbarButtons(screen));
 
     return result;
   }
 
   /**
-   *
+   * Construct toolbar elements for the given game screen.
+   * @param {GameScreen} screen The screen in need of toolbar elements.
+   * @returns {GuiElement[]} The toolbar elements for the screen.
    */
-  _buildToolbarButtons() {
-    const sr = this.screen.rect;
-    const sim = this.screen.sim;
+  _buildToolbarButtons(screen) {
+    const sr = screen.rect;
+    const sim = screen.sim;
 
     // decide which tools will be available
     let toolList = sim.toolList;
@@ -170,9 +172,8 @@ class HudGui extends Gui {
     return `${pct.toFixed(0)}%`;
   }
 
-  // get catch percentage explaination string
   /**
-   *
+   * get catch percentage explaination string
    */
   getPctTooltip() {
     const sim = this.sim;

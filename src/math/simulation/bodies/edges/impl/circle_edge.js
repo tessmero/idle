@@ -5,7 +5,7 @@ class CircleEdge extends RadspecEdge {
 
   /**
    *
-   * @param rad
+   * @param {number} rad
    */
   constructor(rad) {
     super();
@@ -21,7 +21,7 @@ class CircleEdge extends RadspecEdge {
 
   /**
    *
-   * @param _a
+   * @param {number} _a
    */
   computeRadius(_a) {
     return this.rad;

@@ -1,16 +1,17 @@
 /**
  * @file global object definition.
+ *
+ * class "Global" has one instance "global".
  */
 class Global {
-
-  particlesCollected = 0;
 
   // graphics context
   canvas = null;
   ctx = null;
 
   /**
-   * special GuiScreenPanel instance with no outer screen
+   * Special "root gui element" orphaned GuiScreenPanel.
+   * Displays the current main GameScreen instance.
    * assigned in setup.js
    */
   gsp = null;
@@ -18,11 +19,11 @@ class Global {
   /**
    * Prevent setting mainScreen with equals sign
    */
-  set mainScreen(_s) { throw new Error('should use global.gsp.setScreen()'); }
+  set mainScreen(_s) { throw new Error('should use global.gsp.setInnerScreen()'); }
 
   /**
    * allow using global.mainScreen as shorthand
-   * to get the player's GameScreen instance.
+   * to get the current main GameScreen instance.
    */
   get mainScreen() { return this.gsp ? this.gsp.innerScreen : null; }
 
@@ -49,7 +50,7 @@ class Global {
 
   // game state
   upgradeMenuTabIndex = 0;
-  t = 0; // total ellapsed time
+  t = 0; // total elapsed time
   maxBodyCount = 10;
 
   // debug
@@ -67,6 +68,7 @@ class Global {
   controlPointVisibleHoverRadius = 0.2;
 
   // game advancement
+  particlesCollected = 0;
   upgradeTracks = null; // new UpgradeTracks();
   skillTree = null; // new SkillTree();
   mainSim = null; // ParticleSim instance (setup.js)
@@ -90,7 +92,6 @@ class Global {
   // mouse
   canvasMousePos = v(0, 0); // pixels
   mouseGrabRadius = 0.05;
-  particlesInMouseRange = new Set();
 
   // debug
   debugTileIndices = false;
@@ -120,13 +121,14 @@ function resetProgression() {
   updateAllBonuses();
 }
 
-// start helpers to access global vars
-// by dotpath string like "mainSim.rainGroup.n"
-// https://codereview.stackexchange.com/a/240907
+/**
+ * start helpers to access global vars
+ * by dotpath string like "mainSim.rainGroup.n"
+ * https: *codereview.stackexchange.com/a/240907
+ */
 
 /**
- *
- * @param obj
+ * @param {any} obj
  */
 function isObj(obj) {
   return (typeof obj === 'object') &&
@@ -136,8 +138,8 @@ function isObj(obj) {
 
 /**
  *
- * @param propertyStr
- * @param value
+ * @param {string} propertyStr
+ * @param {any} value
  */
 function setGlobal(propertyStr, value) {
   const properties = propertyStr.split('.');
@@ -153,7 +155,7 @@ function setGlobal(propertyStr, value) {
 
 /**
  *
- * @param propertyStr
+ * @param {string} propertyStr
  */
 function getGlobal(propertyStr) {
   const properties = propertyStr.split('.');

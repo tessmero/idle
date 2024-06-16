@@ -1,17 +1,19 @@
-// a group of particles owned by a PhysicsParticleGroup
-// has fixed address range i to i+n
-//
-// "subgroup" meaning one garbage-collectable unit
 /**
+ * @file PhysicsParticleSubgroup
  *
+ * handles some particles owned by a PhysicsParticleGroup
+ * has fixed particle address range i to i+n in the group
+ *
+ * "subgroup" meaning one garbage-collectable unit
  */
 class PhysicsParticleSubgroup {
+
   /**
    *
-   * @param group
-   * @param subgroupIndex
-   * @param i
-   * @param n
+   * @param {object} group
+   * @param {number} subgroupIndex
+   * @param {number} i
+   * @param {number} n
    */
   constructor(group, subgroupIndex, i, n) {
     this.group = group;
@@ -26,9 +28,9 @@ class PhysicsParticleSubgroup {
 
   /**
    * called in PyhsicsPGroup generateParticles()
-   * @param dt
-   * @param vm
-   * @param vb
+   * @param {number} dt The time elapsed in millseconds.
+   * @param {number} vm The multiplier for all velocities (friction).
+   * @param {number} vb The offset for all velocities (gravity).
    */
   * generateParticles(dt, vm, vb) {
     const grp = this.group;
@@ -78,16 +80,16 @@ class PhysicsParticleSubgroup {
 
   /**
    *
-   * @param i
+   * @param {number} i
    */
   hasIndex(i) {
     return (i >= this.i) && (i < this.i + this.n);
   }
 
   /**
-   *
-   * @param pos
-   * @param vel
+   * Add a particle to this subgroup.
+   * @param {Vector} pos The position.
+   * @param {Vector} vel The velocity.
    */
   spawnParticle(pos, vel) {
     const i = this.i;

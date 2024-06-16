@@ -9,8 +9,8 @@ class ParticleGroup {
 
   /**
    *
-   * @param sim
-   * @param n
+   * @param {ParticleSim} sim
+   * @param {number} n
    */
   constructor(sim, n) {
     // ParticleSim instance
@@ -32,8 +32,8 @@ class ParticleGroup {
    * called in particle_sim.js
    * draw all the particles in this group
    * @param {object} g The graphics context.
-   * @param counter
-   * @param pdraw
+   * @param {object} counter Performance logging object to increment.
+   * @param {Function} pdraw Function to draw a particle.
    */
   draw(g, counter, pdraw) {
 

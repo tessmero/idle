@@ -31,8 +31,8 @@ class TextLabel extends GuiElement {
   set label(_l) { throw new Error('should use setLabel'); }
 
   /**
-   *
-   * @param l
+   * Set display text after construction. Used in dynamic_text_label.js.
+   * @param {string} l The new text to display.
    */
   setLabel(l) {
     this.#label = l;
@@ -62,8 +62,8 @@ class TextLabel extends GuiElement {
   static letterPixelPad() { return 0.005; }
 
   /**
-   * set optional drawing style 'tooltip', 'hud', 'tiny'
-   * @param s
+   * Chainable helper to apply special drawing style 'hud' or 'tiny'.
+   * @param {string} s The new drawing style.
    */
   withStyle(s) {
     this.#style = s;
@@ -71,16 +71,16 @@ class TextLabel extends GuiElement {
   }
 
   /**
-   *
-   * @param c
+   * Set whether the text in this label should be centered.
+   * @param {boolean} c True if the text should be centered.
    */
   setCenter(c) {
     this.#center = c;
   }
 
   /**
-   *
-   * @param c
+   * Chainable helper to set whether the text in this label should be centered.
+   * @param {boolean} c True if the text should be centered.
    */
   withCenter(c) {
     this.setCenter(c);
@@ -88,8 +88,9 @@ class TextLabel extends GuiElement {
   }
 
   /**
-   *
-   * @param p
+   * Chainable helper to set character pixel padding for 'hud' style text.
+   * Used to add extra padding for big text in start menu.
+   * @param {number} p The distance to clear around each pixel.
    */
   withLetterPixelPad(p) {
     this.#letterPixelPad = p;
@@ -97,8 +98,9 @@ class TextLabel extends GuiElement {
   }
 
   /**
-   * Chainable
-   * @param p
+   * Chainable helper to set padding distance between the text
+   * and this elements bounding rectangle.
+   * @param {number} p The new padding distance.
    */
   withPad(p) {
     this.#pad = p;

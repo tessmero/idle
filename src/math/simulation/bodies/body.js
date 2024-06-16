@@ -26,26 +26,29 @@ class Body {
   }
 
   /**
-   * called in register()
+   * Called in register().
    */
   buildEdge() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   /**
-   * called in register()
+   * Build generic pizza grabber for whatever shape buildEdge() returns.
+   * Called in register().
    */
   buildGrabber() {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    return new EdgeGrabber(
+      this.pos, this.angle, this.edge,
+      (...p) => this.grabbed(...p), 0);
   }
 
   /**
-   * default draw method
+   * Default draw implementation using brute force.
+   * Trace many small intervals along the edge.
    * @param {object} g The graphics context.
    */
   draw(g) {
 
-    // draw edge shape by brute-force
     if (!this.edge) { return; }
     this.edge.trace(g, this.pos, this.angle);
     g.fillStyle = global.colorScheme.fg;
@@ -57,19 +60,13 @@ class Body {
    * callback for this.grabber
    * called when a particle is grabbed
    * (particle_group.js)
-   * @param subgroup
-   * @param i
-   * @param x
-   * @param y
-   * @param dx
-   * @param dy
-   * @param hit
+   * @param {...any} p
    */
-  grabbed(subgroup, i, x, y, dx, dy, hit) {
+  grabbed(...p) {
+    const [_subgroup, _i, _x, _y, _dx, _dy, hit] = p;
 
     // place particle on edge
     this.eps.spawnParticle(hit, 0);
-
   }
 
   /**
@@ -139,7 +136,7 @@ class Body {
    * @param {number} spn
    */
   spin(spn) {
-    this.avel = this.avel + spn; // spin this body
+    this.avel = this.avel + spn; // rotate this body
     this.eps.spn = this.eps.spn + spn; // pass momentum to particles on edge
   }
 
@@ -150,25 +147,21 @@ class Body {
    */
   eatParticleFromEdge(pos) {
     const par = this.parent;
-    if (par && (par instanceof Buddy)) {
+    if (par && (par instanceof CircleBuddy)) {
+      par.gainExp(1);
       par.particlesCollected = par.particlesCollected + 1;
     }
-    DefaultTool.collectRaindrop(this.sim, null, null, ...pos.xy(), null, null, null);
+    DefaultTool.collectRaindrop(this.sim, ...pos.xy());
   }
 
   /**
    *
-   * @param dt
-   * @param beingControlled
+   * @param {number} dt The time elapsed in millseconds.
    */
-  update(dt, beingControlled = false) {
+  update(dt) {
 
     const stopForce = global.bodyFriction;
     const angleStopForce = global.bodyAngleFriction;
-    if (!beingControlled) {
-      // stopForce *= 1e3
-      // angleStopForce *= 1e3
-    }
 
     // advance physics for poi
 
@@ -206,11 +199,11 @@ class Body {
    * @param {object} g The graphics context.
    */
   drawDebug(g) {
-    if (global.showEdgeNormals) { this.drawNormals(g, this.pos, this.angle); }
-    if (global.showEdgeSpokesA) { this.drawDistLutSpokes(g, this.pos, this.angle); }
-    if (global.showEdgeSpokesB) { this.drawAngleLutSpokes(g, this.pos, this.angle); }
-    if (global.showEdgeVel) { this.drawVel(g, this.pos, this.angle); }
-    if (global.showEdgeAccel) { this.drawAccel(g, this.pos, this.angle); }
+    if (global.showEdgeNormals) { this.drawNormals(g); }
+    if (global.showEdgeSpokesA) { this.drawDistLutSpokes(g); }
+    if (global.showEdgeSpokesB) { this.drawAngleLutSpokes(g); }
+    if (global.showEdgeVel) { this.drawVel(g); }
+    if (global.showEdgeAccel) { this.drawAccel(g); }
   }
 
   /**
@@ -281,9 +274,9 @@ class Body {
   /**
    *
    * @param {object} g The graphics context.
-   * @param t0
-   * @param t1
-   * @param f
+   * @param {number} t0 The starting 1D point.
+   * @param {number} t1 The ending 1D point.
+   * @param {Function} f The function to compute vector at 1D point.
    */
   _drawDebugVectors(g, t0, t1, f) {
     if (!this.edge) { return; }

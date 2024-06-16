@@ -45,12 +45,7 @@ function doUnitTests() {
   // test tool implementations
 
   let testedTools = 0;
-
-  /**
-   *
-   * @param t
-   */
-  function testTool(t) {
+  const testTool = (t) => {
 
     // emulate input fluke
     // (no mouse up event)
@@ -61,7 +56,7 @@ function doUnitTests() {
     assertClear();
 
     testedTools = testedTools + 1;
-  }
+  };
   testTool(new CircleTool(sim));
   testTool(new DefaultTool(sim, 0.1));
   testTool(new LineTool(sim));

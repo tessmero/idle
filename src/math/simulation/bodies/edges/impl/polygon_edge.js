@@ -5,7 +5,7 @@ class PolygonEdge extends PathspecEdge {
 
   /**
    *
-   * @param verts
+   * @param {Vector[]} verts
    */
   constructor(verts) {
     super();

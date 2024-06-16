@@ -7,12 +7,10 @@
 class RotationControlPoint extends ControlPoint {
 
   /**
-   * anchoredTo is a body that this will be anchored to
-   * aparent will recieve opposite force when dragging
-   * @param sim
-   * @param anchoredTo
-   * @param angle
-   * @param radius
+   * @param {ParticleSim} sim
+   * @param {Body} anchoredTo
+   * @param {number} angle
+   * @param {number} radius
    */
   constructor(sim, anchoredTo, angle, radius) {
     super(sim, anchoredTo);
@@ -22,7 +20,7 @@ class RotationControlPoint extends ControlPoint {
 
   /**
    * pass user input "force" to physics-enabled parent body
-   * @param acc
+   * @param {Vector} acc
    */
   accel(acc) {
 
@@ -34,10 +32,9 @@ class RotationControlPoint extends ControlPoint {
     this.anchoredTo.spin(spn);
   }
 
-  // remain stuck to parent
   /**
-   *
-   * @param _dt
+   * remain stuck to parent
+   * @param {number} _dt
    */
   update(_dt) {
     const par = this.anchoredTo;

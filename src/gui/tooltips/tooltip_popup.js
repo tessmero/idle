@@ -92,10 +92,11 @@ class TooltipPopup extends CompositeGuiElement {
   }
 
   /**
-   *
-   * @param anchorPoint
-   * @param w
-   * @param h
+   * Pick a rectangle on-screen to position a new popup.
+   * @param {Vector} anchorPoint The point near the mouse that must be touched by the tooltip.
+   * @param {number} w The width needed for the tooltip content.
+   * @param {number} h The height needed for the tooltip content.
+   * @returns {number[]} The x,y,w,h for the popup.
    */
   static pickTooltipRect(anchorPoint, w, h) {
     const sr = global.mainScreen.rect;

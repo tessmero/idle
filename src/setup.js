@@ -8,7 +8,7 @@ let fps;
 
 /**
  * Game loop function that is called repeatedly.
- * @param timeStamp
+ * @param {number} timeStamp The system time in milliecs.
  */
 function gameLoop(timeStamp) {
 
@@ -105,7 +105,7 @@ function init() {
 
 /**
  *
- * @param cs
+ * @param {object} cs
  */
 function setColorScheme(cs) {
   global.colorScheme = cs;

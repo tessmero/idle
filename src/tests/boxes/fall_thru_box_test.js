@@ -31,7 +31,7 @@ class FallThruBoxTest extends Test {
 
   /**
    *
-   * @param screen
+   * @param {GameScreen} screen The screen under test.
    */
   getTestAssertions(screen) {
     const sim = screen.sim;
@@ -57,13 +57,14 @@ class FallThruBoxTest extends Test {
 
   /**
    * Called in constructor.
+   * @returns {Macro} The player emulator script for this test.
    */
   static _macro() {
 
     const startPos = v(0.5, 0.9);
 
     // use minature box tool from BoxToolTutorial
-    // override buildKeyFrames()
+    // override buildKeyframes()
     return new BoxToolTutorial(() => [
       [0, 'pos', startPos],
       [1, 'primaryTool'],

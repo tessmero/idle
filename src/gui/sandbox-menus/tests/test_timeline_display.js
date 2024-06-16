@@ -8,8 +8,9 @@ class TestTimelineDisplay extends CompositeGuiElement {
    *
    * @param {number[]} rect The rectangle to align elements in.
    * @param {number} duration The total milliseconds in the timeline.
-   * @param {number[]} checkTimes
-   * @param {string[]} checkLabels
+   * @param {number[]} checkTimes The times when checks are performed,
+   *                              in milliseconds from start of test.
+   * @param {string[]} checkLabels The labels for the checks.
    */
   constructor(rect, duration, checkTimes, checkLabels) {
     super(rect);
@@ -45,7 +46,7 @@ class TestTimelineDisplay extends CompositeGuiElement {
   }
 
   /**
-   *
+   * Draw the test timeline display.
    * @param {object} g The graphics context.
    */
   draw(g) {
@@ -81,17 +82,19 @@ class TestTimelineDisplay extends CompositeGuiElement {
   }
 
   /**
-   *
-   * @param t
+   * Set the time elapsed to display.
+   * @param {number} t The millisecs to show as elapsed
+   *                   since the start of the test.
    */
   setTime(t) {
     this.t = t;
   }
 
   /**
-   *
-   * @param i
-   * @param icon
+   * Set the displayed checked/unchecked status of one checkbox.
+   * @param {number} i The index of the checkbox.
+   * @param {Icon} icon The icon instance to display,
+   *                    checkedIcon or uncheckedIcon
    */
   setCheckboxIcon(i, icon) {
     this.checkboxes[i].icon = icon;

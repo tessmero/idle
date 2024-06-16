@@ -6,9 +6,10 @@ const charWidth = 5;
 const charHeight = 7;
 
 /**
- *
- * @param {string} s
- * @param {number} scale
+ * Compute the width and height of the rectangle needed to contain
+ * the given text label on-screen.
+ * @param {string} s The text to fit, which may contain newlines.
+ * @param {number} scale The font size to accomodate.
  */
 function getTextDims(s, scale = 1) {
   const lines = s.split(/\r?\n/);
@@ -27,13 +28,14 @@ function getTextDims(s, scale = 1) {
 }
 
 /**
- *
+ * Draw a text character or icon.
  * @param {object} g The graphics context.
- * @param xpos
- * @param ypos
- * @param layout
- * @param center
- * @param fontSpec
+ * @param {number} xpos The x coord of the position to draw at.
+ * @param {number} ypos The y coord of the position to draw at.
+ * @param {string[]} layout The pixel layout to draw.
+ * @param {boolean} center True if the layout should be centered at the given position,
+ *                         otherwise it will extend down and to the right.
+ * @param {object} fontSpec The font specifications.
  */
 function drawLayout(g, xpos, ypos, layout, center = true, fontSpec) {
   if (!layout) { return; }
@@ -70,13 +72,14 @@ function drawLayout(g, xpos, ypos, layout, center = true, fontSpec) {
 }
 
 /**
- *
+ * Draw one line of text. Called in drawText.
  * @param {object} g The graphics context.
- * @param xpos
- * @param ypos
- * @param s
- * @param center
- * @param fontSpec
+ * @param {number} xpos The x coord of the position to draw at.
+ * @param {number} ypos The y coord of the position to draw at.
+ * @param {string} s The line of text to draw.
+ * @param {boolean} center True if the line should be centered at the given position,
+ *                         otherwise it will extend down and to the right.
+ * @param {object} fontSpec The font specifications.
  */
 function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
   // s = s.toUpperCase()
@@ -98,13 +101,14 @@ function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
 }
 
 /**
- * draw text centered at point xy
+ * Draw text.
  * @param {object} g The graphics context.
- * @param x
- * @param y
- * @param s
- * @param center
- * @param fontSpec
+ * @param {number} x The x coord of the position to draw at.
+ * @param {number} y The y coord of the position to draw at.
+ * @param {string} s The text to draw, which may contain newlines.
+ * @param {boolean} center True if the text should be centered at the given position,
+ *                         otherwise it will extend down and to the right.
+ * @param {object} fontSpec The font specifications.
  */
 function drawText(g, x, y, s, center = true, fontSpec) {
   const lines = s.split('\n');

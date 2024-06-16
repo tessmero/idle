@@ -6,17 +6,19 @@
  */
 class TabPaneGroup extends CompositeGuiElement {
 
+  #selectedTabIndex = 0;
+  #tabChangeListeners = [];
+
   /**
    * tabContent is list of rect->element callbacks
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {string[]} tabLabels
-   * @param {Function} tabContents
-   * @param {string[]} tabTooltips
+   * @param {string[]} tabLabels The labels fot he tab header buttons.
+   * @param {Function[]} tabContents The functions to build each tab's elements.
+   * @param {string[]} tabTooltips The tooltips for the tab header buttons.
    */
   constructor(rect, tabLabels, tabContents, tabTooltips = null) {
     super(rect);
     this.tabLabels = tabLabels;
-    this._selectedTabIndex = 0;
 
     let x = rect[0];
     let y = rect[1];
@@ -38,8 +40,8 @@ class TabPaneGroup extends CompositeGuiElement {
       x = x + (w + p);
       const tb = new TabHeaderButton(this, ii, rr, label,
         () => {
-          this._selectedTabIndex = ii;
-          if (this.tabChangeListeners) { this.tabChangeListeners.forEach((l) => l(ii)); }
+          this.#selectedTabIndex = ii;
+          this.#tabChangeListeners.forEach((l) => l(ii));
         }
       );
       if (tabTooltips) { tb.withTooltip(tabTooltips[i]); }
@@ -56,27 +58,27 @@ class TabPaneGroup extends CompositeGuiElement {
     this.tabContent = tabContents.map((cons) => cons(r).withOpacity(true));
 
     this.nTabs = tabLabels.length;
-    this._selectedTabIndex = 0;
+    this.#selectedTabIndex = 0;
   }
 
   /**
-   *
-   * @param i
+   * Make a tab visible.
+   * @param {number} i The index of the tab to display.
    */
   setSelectedTabIndex(i) {
-    this._selectedTabIndex = nnmod(i, this.nTabs);
+    this.#selectedTabIndex = nnmod(i, this.nTabs);
   }
 
   /**
-   *
+   * @returns {number} The index of the currently displayed tab.
    */
   getSelectedTabIndex() {
-    return this._selectedTabIndex;
+    return this.#selectedTabIndex;
   }
 
   /**
-   *
-   * @param s
+   * Set the containing screen recursively.
+   * @param {GameScreen} s The screen containing this.
    */
   setScreen(s) {
     super.setScreen(s);
@@ -84,24 +86,21 @@ class TabPaneGroup extends CompositeGuiElement {
   }
 
   /**
-   *
-   * @param l
+   * Register new tab change callback.
+   * @param {Function} l The callback function.
    */
   addTabChangeListener(l) {
-    if (!this.tabChangeListeners) {
-      this.tabChangeListeners = [];
-    }
-    this.tabChangeListeners.push(l);
+    this.#tabChangeListeners.push(l);
   }
 
   /**
    *
-   * @param dt
-   * @param disableHover
+   * @param {number} dt The time elapsed in millseconds.
+   * @param {boolean} disableHover
    */
   update(dt, disableHover) {
     super.update(dt, disableHover);
-    this.tabContent[this._selectedTabIndex].update(dt, disableHover);
+    this.tabContent[this.#selectedTabIndex].update(dt, disableHover);
   }
 
   /**
@@ -109,7 +108,7 @@ class TabPaneGroup extends CompositeGuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    this.tabContent[this._selectedTabIndex].draw(g); // draw tab content
+    this.tabContent[this.#selectedTabIndex].draw(g); // draw tab content
     super.draw(g); // draw tab labels
   }
 
@@ -118,6 +117,6 @@ class TabPaneGroup extends CompositeGuiElement {
    */
   click() {
     return super.click() || // click tab label
-            this.tabContent[this._selectedTabIndex].click(); // click tab content
+            this.tabContent[this.#selectedTabIndex].click(); // click tab content
   }
 }

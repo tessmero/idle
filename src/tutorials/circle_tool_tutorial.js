@@ -25,30 +25,29 @@ class CircleToolTutorial extends Macro {
   buildKeyframes() {
 
     const startPos = v(0.5, 0.9);
-    const i = 400;
     return [
 
       [0, 'pos', startPos],
       [1, 'primaryTool'],
 
-      [i, 'pos', v(0.5, 0.5)],
-      [2 * i, 'down'],
-      [2 * i, 'up'],
-      [2 * i, 'defaultTool'],
-      [2 * i, 'pos', v(0.5, 0.5)],
+      [400, 'pos', v(0.5, 0.5)],
+      [800, 'down'],
+      [800, 'up'],
+      [800, 'defaultTool'],
+      [800, 'pos', v(0.5, 0.5)],
 
-      [4 * i, 'pos', v(0.7, 0.7)],
-      [4.5 * i, 'pos', v(0.7, 0.7)],
+      [1600, 'pos', v(0.7, 0.7)],
+      [1800, 'pos', v(0.7, 0.7)],
 
-      [6 * i, 'pos', v(0.5, 0.5)],
-      [6 * i, 'down'],
-      [7 * i, 'pos', v(0.3, 0.3)],
-      [8 * i, 'pos', v(0.8, 0.3)],
-      [9 * i, 'pos', v(0.5, 0.5)],
-      [9 * i, 'up'],
+      [2400, 'pos', v(0.5, 0.5)],
+      [2400, 'down'],
+      [2800, 'pos', v(0.3, 0.3)],
+      [3200, 'pos', v(0.8, 0.3)],
+      [3600, 'pos', v(0.5, 0.5)],
+      [3600, 'up'],
 
-      [10 * i, 'pos', startPos],
-      [10.5 * i, 'pos', startPos],
+      [4000, 'pos', startPos],
+      [4200, 'pos', startPos],
 
     ];
   }

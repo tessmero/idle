@@ -1,7 +1,7 @@
 /**
- * @file Start Transition GUI
+ * @file Box Transition GUI
  * Top-level gui container/placeholder that is active
- * as player enters or exita a box.
+ * as player enters or exits a box.
  */
 class BoxTransitionGui extends Gui {
 
@@ -22,23 +22,25 @@ class BoxTransitionGui extends Gui {
   }
 
   /**
-   * implement Gui
-   * @param _screen
+   * Implement Gui, but contain no children gui elements.
+   * Instead we extend the Gui draw method in this file.
+   * @param {GameScreen} _screen The screen that will display this transition.
+   * @returns {GuiElement[]} An empty array indicating no gui elements.
    */
   buildElements(_screen) {
-    return []; // no gui elements
+    return [];
   }
 
   /**
-   * show the start menu then hud,
-   * behind the transition effect
+   * Show the the hud behind this transition effect.
+   * @returns {Gui} The gui to display in the background.
    */
   getBackgroundGui() {
     return this.screen.stateManager.getGuiForState(GameStates.playing);
   }
 
   /**
-   *
+   * Extend Gui draw method by adding an animated box.
    * @param {object} g The graphics context.
    */
   draw(g) {
@@ -74,7 +76,7 @@ class BoxTransitionGui extends Gui {
   /**
    * Unused lid opening/closing animation segment.
    * @param {object} g The graphics context.
-   * @param anim
+   * @param {number} anim The animation state in range 0-1.
    */
   drawLid(g, anim) {
 
@@ -88,9 +90,9 @@ class BoxTransitionGui extends Gui {
   }
 
   /**
-   *
+   * Draw a box moving and rotating from the old to the new position.
    * @param {object} g The graphics context.
-   * @param anim
+   * @param {number} anim The animation state in range 0-1.
    */
   drawGliding(g, anim) {
     const params = this.setStateParams;
@@ -105,27 +107,27 @@ class BoxTransitionGui extends Gui {
     const r = avg(r0, r1, anim);
 
     // draw animated square
-    BoxBuddy.drawBox(g, c, a, r);
+    BoxBuddy.drawBoxWithArrow(g, c, a, r);
   }
 
   /**
-   * Get center, angle, radius of the given square.
-   * @param  {number[]|Body} square The on-screen rectangle or SquareBody instance.
+   * Get the center, angle, and radius of the given square thing.
+   * @param  {number[]|Body} square The on-screen x,y,w,h or SquareBody instance.
    */
   static _car(square) {
     if (square instanceof SquareBody) {
       return [square.pos, cleanAngle(square.angle), square.rad];
     }
+
     const rc = rectCorners(...square);
     const c = va(rc[0], rc[2]);
     const rad = Math.abs(c.x - rc[0].x);
     return [c, 0, rad];
-
   }
 
   /**
-   *
-   * @param dt
+   * Extend standard Gui update by advancing the animation.
+   * @param {number} dt The time elapsed in millseconds.
    */
   update(dt) {
     super.update(dt);

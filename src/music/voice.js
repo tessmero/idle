@@ -17,8 +17,8 @@ class Voice {
   }
 
   /**
-   *
-   * @param t
+   * Set oscillator type "sine","square","sawtooth","triangle", or "custom".
+   * @param {string} t The new type for this voice.
    */
   withType(t) {
     this.#type = t;
@@ -30,7 +30,7 @@ class Voice {
    * @param {object} ac The audio context to output to.
    * @param {number} time The time when the note should start.
    * @param {object} note The sheet music note to play.
-   * @param beatDuration
+   * @param {number} beatDuration
    */
   playNote(ac, time, note, beatDuration) {
     // play current melody note

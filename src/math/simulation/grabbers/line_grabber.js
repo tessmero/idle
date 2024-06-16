@@ -5,14 +5,15 @@
  * Grab points within a certain distance from a line segment.
  */
 class LineGrabber extends Grabber {
+
   /**
    *
-   * @param a
-   * @param b
-   * @param rad
-   * @param f
-   * @param edgeOffsetA
-   * @param edgeOffsetB
+   * @param {Vector} a
+   * @param {Vector} b
+   * @param {number} rad
+   * @param {Function} f
+   * @param {number} edgeOffsetA
+   * @param {number} edgeOffsetB
    */
   constructor(a, b, rad, f, edgeOffsetA, edgeOffsetB) {
     super(f);
@@ -40,21 +41,24 @@ class LineGrabber extends Grabber {
 
   /**
    *
-   * @param subgroup
-   * @param i
-   * @param x
-   * @param y
+   * @param {object} _subgroup
+   * @param {number} _i
+   * @param {number} x
+   * @param {number} y
    */
-  contains(subgroup, i, x, y) {
-    let dx = x - this.a.x;
-    let dy = y - this.a.y;
-    const d = this.b.sub(this.a);
+  contains(_subgroup, _i, x, y) {
+    const a = this.a;
+    const b = this.b;
+    const d = b.sub(a);
+
+    let dx = x - a.x;
+    let dy = y - a.y;
     let r = (dx * d.x + dy * d.y) / d.getD2();
     if ((r < 0) || (r > 1)) { return false; }
 
     // nearest point on line
-    const px = this.a.x + d.x * r;
-    const py = this.a.y + d.y * r;
+    const px = a.x + d.x * r;
+    const py = a.y + d.y * r;
 
     dx = px - x;
     dy = py - y;
@@ -63,8 +67,8 @@ class LineGrabber extends Grabber {
     if (!hit) { return null; }
 
     // return 1D edge location
-    const cw = clockwise(this.a, this.b, v(x, y)); // which side (boolean)
-    const len = this.a.sub(this.b).getMagnitude();
+    const cw = clockwise(a, b, v(x, y)); // which side (boolean)
+    const len = a.sub(b).getMagnitude();
     r = r * len;
     return cw ? this.edgeOffsetA + r : this.edgeOffsetB + (len - r);
   }

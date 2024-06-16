@@ -56,7 +56,7 @@ class SkillTree {
 
   /**
    *
-   * @param key
+   * @param {string} key The key in this.state.
    */
   isAvalable(key) {
     s = this.specs[key];

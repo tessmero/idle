@@ -8,9 +8,9 @@ class TestListRow extends CompositeGuiElement {
   #testIndex;
 
   /**
-   *
+   * Construct gui list element for one test in test_list.js
    * @param {number[]} rect The rectangle to align elements in.
-   * @param testIndex
+   * @param {number} testIndex The index of the test in test_list.js.
    */
   constructor(rect, testIndex) {
     super(rect);
@@ -46,7 +46,7 @@ class TestListRow extends CompositeGuiElement {
   }
 
   /**
-   *
+   * @returns {boolean} True if the relevent test is currently running.
    */
   isActive() {
     const c = this.screen.contextMenu;
@@ -54,7 +54,8 @@ class TestListRow extends CompositeGuiElement {
   }
 
   /**
-   *
+   * Called when this element is clicked.
+   * Activate the test context menu which will run the test.
    */
   clicked() {
     // position context menu on bottom/right

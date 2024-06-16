@@ -8,17 +8,15 @@ class BodyTool extends Tool {
   /**
    * Called when this tool is used.
    * Create a new body at the given position.
-   * @abstract
-   * @param _p The position for the new body.
-   * @returns {Body} The new Body instance.
+   * @param {Vector} _p The position for the new body.
    */
   buildBody(_p) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   /**
-   *
-   * @param p
+   * Attempt to add a new body to this.sim and switch back to the default tool.
+   * @param {Vector} p The position of the mouse.
    */
   mouseDown(p) {
     if (this.isUsable()) {
@@ -40,16 +38,4 @@ class BodyTool extends Tool {
 
     }
   }
-
-  /**
-   *
-   * @param _p
-   */
-  mouseMove(_p) {}
-
-  /**
-   *
-   * @param _p
-   */
-  mouseUp(_p) {}
 }

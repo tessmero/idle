@@ -6,8 +6,8 @@ class BlankGSM extends GameStateManager {
 
   /**
    * override GameStateManager
-   * @param state
-   * @param sr
+   * @param {number} state
+   * @param {number[]} sr The rectangle to align elements in.
    */
   _buildGuiForState(state, sr) {
     switch (state) {

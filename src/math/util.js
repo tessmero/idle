@@ -153,9 +153,10 @@ function inRect(px, py, x, y, w, h) {
 }
 
 /**
- * doesn't use procedural RNG (see rng.js)
- * @param min
- * @param max
+ * doesn't use procedural RNG
+ * @param {number} min
+ * @param {number} max
+ * @returns {number} The random value.
  */
 function safeRandRange(min, max) {
   return min + Math.random() * (max - min);
@@ -163,12 +164,12 @@ function safeRandRange(min, max) {
 
 /**
  * locate intersections between two circles
- * @param x0
- * @param y0
- * @param r0
- * @param x1
- * @param y1
- * @param r1
+ * @param {number} x0 The center x coord of the first circle.
+ * @param {number} y0 The center y coord of the first circle.
+ * @param {number} r0 The radius of the first circle.
+ * @param {number} x1 The center x coord of the second circle.
+ * @param {number} y1 The center y coord of the second circle.
+ * @param {number} r1 The radius of the second circle.
  */
 function intersectionAngles(x0, y0, r0, x1, y1, r1) {
   const dx = x1 - x0;
@@ -197,22 +198,20 @@ function intersectionAngles(x0, y0, r0, x1, y1, r1) {
   return [intersectionAngle1, intersectionAngle2];
 }
 
-// non-negative mod
 /**
- *
- * @param a
- * @param b
+ * non-negative mod
+ * @param {number} a
+ * @param {number} b
  */
 function nnmod(a, b) {
   const r = a % b;
   return (r >= 0) ? r : r + b;
 }
 
-// get angle in range [-pi,pi]
-// equivalent to given angle
 /**
- *
- * @param angle
+ * Get equivalent angle in range [-pi,pi]
+ * equivalent to given angle
+ * @param {number} angle
  */
 function cleanAngle(angle) {
   let a = nnmod(angle, twopi);
@@ -225,32 +224,33 @@ function cleanAngle(angle) {
   return a;
 }
 
-// oscillate from 0 to 1
 /**
- *
- * @param period
- * @param offset
+ * Get value oscillate from 0 to 1
+ * @param {number} period The desired duration in millisecs per cycle.
+ * @param {number} offset The phase of the sin curve over global.t
+ * @returns {number} The oscillating value.
  */
 function pulse(period, offset = 0) {
   return (Math.sin(offset + global.t * twopi / period) + 1) / 2;
 }
 
-// weighted avg
 /**
- *
- * @param a
- * @param b
- * @param r
+ * Compute the average of two numbers.
+ * @param {number} a
+ * @param {number} b
+ * @param {number} r
+ * @returns {number} The average.
  */
 function avg(a, b, r = 0.5) {
   return (a * (1.0 - r)) + (b * r);
 }
 
 /**
- *
- * @param a
- * @param b
- * @param r
+ * Compute midpoint of two vectors.
+ * @param {Vector} a
+ * @param {Vector} b
+ * @param {number} r
+ * @returns {Vector} The midpoint.
  */
 function va(a, b, r = 0.5) {
   return v(avg(a.x, b.x, r), avg(a.y, b.y, r));
@@ -258,31 +258,22 @@ function va(a, b, r = 0.5) {
 
 /**
  *
- * @param l1
- * @param l2
- * @param r
- */
-function la(l1, l2, r) {
-  return [va(l1[0], l2[0], r), va(l1[1], l2[1], r)];
-}
-
-/**
- *
- * @param p1
- * @param p2
- * @param p3
+ * @param {Vector} p1
+ * @param {Vector} p2
+ * @param {Vector} p3
+ * @returns {boolean} True if the points are clockwise.
  */
 function arePointsClockwise(p1, p2, p3) {
   const crossProduct = (p1[0] - p2[0]) * (p3[1] - p2[1]) - (p1[1] - p2[1]) * (p3[0] - p2[0]);
   return crossProduct > 0;
 }
 
-// compute slope and intercept
-// euclidean line with points a and b
 /**
- *
- * @param a
- * @param b
+ * compute slope and intercept
+ * euclidean line with points a and b
+ * @param {Vector} a
+ * @param {Vector} b
+ * @returns {number[]} The slope and intercept.
  */
 function mb(a, b) {
   const slope = (b.y - a.y) / (b.x - a.x);
@@ -290,13 +281,13 @@ function mb(a, b) {
   return { slope, intercept };
 }
 
-// compute intersection point of two lines
-// the two lines are described by pairs of points
-// requires two lists, each containing 2 xy points
 /**
- *
- * @param ab1
- * @param ab2
+ * compute intersection point of two lines
+ * the two lines are described by pairs of points
+ * requires two lists, each containing 2 xy points
+ * @param {Vector[]} ab1
+ * @param {Vector[]} ab2
+ * @returns {Vector} The intersection point.
  */
 function intersection(ab1, ab2) {
   const mb1 = mb(...ab1);
@@ -323,10 +314,9 @@ function intersection(ab1, ab2) {
   return new Vector(x, y);
 }
 
-// https://stackoverflow.com/a/2450976
 /**
- *
- * @param array
+ * https://stackoverflow.com/a/2450976
+ * @param {any[]} array
  */
 function shuffle(array) {
   let currentIndex = array.length; let randomIndex;

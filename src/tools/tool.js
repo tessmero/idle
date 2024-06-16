@@ -13,10 +13,10 @@ class Tool {
 
   /**
    *
-   * @param sim
-   * @param icon
-   * @param tooltipText
-   * @param cursorCenter
+   * @param {ParticleSim} sim
+   * @param {Icon} icon
+   * @param {string} tooltipText
+   * @param {boolean} cursorCenter
    */
   constructor(sim, icon, tooltipText, cursorCenter) {
     this.#sim = sim;
@@ -26,13 +26,22 @@ class Tool {
   }
 
   /**
-   *
+   * Tool implementations should define a distinct mouse click behavior.
+   * @abstract
+   * @param {Vector} _p The position of the mouse.
+   */
+  mouseDown(_p) {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
+   * Prevent assigning sim with equals sign.
    */
   set sim(_s) { throw new Error('should use setSim'); }
 
   /**
    * called in particle_sim.js setTool()
-   * @param sim
+   * @param {ParticleSim} sim
    */
   setSim(sim) {
     const prev = this.#sim;
@@ -58,12 +67,7 @@ class Tool {
 
   /**
    *
-   */
-  mouseDown() { throw new Error('not implemented'); }
-
-  /**
-   *
-   * @param _dt
+   * @param {number} _dt The time elapsed in millisecs.
    */
   update(_dt) {}
 
@@ -79,12 +83,12 @@ class Tool {
 
   /**
    * remove any grabbers submitted to sim
-   * @param _sim
+   * @param {ParticleSim} _sim
    */
   unregister(_sim) {}
 
   /**
-   * Return true if the player can afford to use this tool.
+   * @returns {boolean} True if the player can afford to use this tool.
    */
   isUsable() {
     if (!global.mainScreen) { return false; }
@@ -96,14 +100,14 @@ class Tool {
   }
 
   /**
-   * Get number of raindrops required to use this tool.
+   * @returns {number} The cost to use this tool.
    */
   getCost() {
     return 0;
   }
 
   /**
-   * return Macro instance
+   * @returns {?Macro} The tutorial associated with this tool.
    */
   getTutorial() {
     return null;
@@ -118,11 +122,11 @@ class Tool {
   }
 
   /**
-   *
+   * Draw mouse cursor for this tool.
    * @param {object} g The graphics context.
-   * @param p
-   * @param scale
-   * @param enableIdleAnim
+   * @param {Vector} p The positiont to draw at.
+   * @param {number} scale The optional size scale factor.
+   * @param {boolean} enableIdleAnim True if the icon should be animated.
    */
   drawCursor(g, p, scale = 1, enableIdleAnim = false) {
 

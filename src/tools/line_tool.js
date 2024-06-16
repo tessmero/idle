@@ -8,8 +8,8 @@ class LineTool extends BodyTool {
 
   /**
    *
-   * @param sim
-   * @param lineLength
+   * @param {ParticleSim} sim
+   * @param {number} lineLength
    */
   constructor(sim, lineLength = 0.1) {
     super(sim, lineIcon, 'build line', true);
@@ -18,10 +18,9 @@ class LineTool extends BodyTool {
     this.lineLength = lineLength;
   }
 
-  //
   /**
-   * implement BodyTool
-   * @param p
+   * Create a new body at the given position.
+   * @param {Vector} p The position to center the new body at.
    */
   buildBody(p) {
     let d = sqrt2 * this.lineLength / 2;

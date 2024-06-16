@@ -22,20 +22,20 @@ class GameStateManager {
   _guis;
 
   /**
-   *
+   * @returns {?Gui} The currently active Gui.
    */
   get currentGui() { return this.getGuiForState(this._state); }
 
   /**
-   *
-   * @param s
+   * @param {number} s The value in the GameStates enumeration.
+   * @returns {?Gui} The the corresponding gui.
    */
   getGuiForState(s) { return this._guis[s]; }
 
   /**
    *
-   * @param screen
-   * @param resetState
+   * @param {GameScreen} screen The screen that will contain the guis.
+   * @param {boolean} resetState
    */
   rebuildGuis(screen, resetState = true) {
     this._screen = screen;
@@ -68,7 +68,7 @@ class GameStateManager {
       return new StartMenuGui(sr);
 
     case GameStates.startTransition:
-      return new StartTransitionGui(sr, true);
+      return new StartTransitionGui(sr);
 
     case GameStates.playing:
       return new HudGui(sr);
@@ -152,8 +152,8 @@ class GameStateManager {
 
   /**
    *
-   * @param s
-   * @param params
+   * @param {number} s The new state value in GameStates.
+   * @param {object} params The extra parameters, used for box transition gui.
    */
   setState(s, params = {}) {
     this._state = s;
@@ -239,6 +239,16 @@ class GameStateManager {
 
       // do short transition
       this.setState(GameStates.startTransition);
+    }
+  }
+
+  /**
+   * called in start_transition_gui.js
+   * Called near the end of the transition, when the hud is about to become visible.
+   */
+  startTransitionFadeInStarted() {
+    if (this._screen === global.rootScreen) {
+      resetProgression();
     }
   }
 

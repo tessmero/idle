@@ -6,8 +6,8 @@ class Spring {
 
   /**
    *
-   * @param a
-   * @param b
+   * @param {Body} a
+   * @param {Body} b
    */
   constructor(a, b) {
     this.a = a;
@@ -22,7 +22,7 @@ class Spring {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    */
   update(dt) {
 

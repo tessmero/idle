@@ -15,24 +15,17 @@ class ProgressIndicator extends GuiElement {
   constructor(rect, valueFunc) {
     super(rect);
     this.valueFunc = valueFunc;
-
-    this.setScale(ProgressIndicator.scale());
     this.outline = true;
   }
 
   /**
-   *
-   * @param o
+   * Chainable helper to set outline.
+   * @param {boolean} o True if an outline should be drawn.
    */
   withOutline(o) {
     this.outline = o;
     return this;
   }
-
-  /**
-   *
-   */
-  static scale() { return 0.5; }
 
   /**
    *
@@ -51,11 +44,11 @@ class ProgressIndicator extends GuiElement {
   }
 
   /**
-   * draw bar for progress between 0 and 1
+   * Draw progress bar displaying given progress value between 0 and 1
    * @param {object} g The graphics context.
    * @param {number[]} rect The rectangle to align elements in.
-   * @param progress
-   * @param outline
+   * @param {number} progress The value to display, 0 is empty, 1 is full.
+   * @param {boolean} outline True if the outline should also be drawn.
    */
   static _draw(g, rect, progress, outline = false) {
 

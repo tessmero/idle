@@ -5,7 +5,7 @@
 class SkillsTab extends CompositeGuiElement {
   /**
    *
-   * @param sr
+   * @param {number[]} sr The rectangle to align elements in.
    */
   constructor(sr) {
     super(sr);

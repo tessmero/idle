@@ -38,7 +38,7 @@ class TestsTab extends CompositeGuiElement {
    * Build content for a tab within the tests tab.
    * Here we show the tests within one category
    * @param {number[]} rect The rectangle to align elements in.
-   * @param cat
+   * @param {string} cat The category key/name.
    */
   buildTabContent(rect, cat) {
 

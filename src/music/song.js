@@ -84,9 +84,9 @@ class Song {
 
   /**
    * Schedule notes for the next beat.
-   * @param ac
-   * @param t
-   * @param beatDuration
+   * @param {object} ac The audio context.
+   * @param {number} t
+   * @param {number} beatDuration
    */
   playBeat(ac, t, beatDuration) {
     const voices = this.#voices;

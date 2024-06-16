@@ -7,7 +7,7 @@ class CompoundGrabber extends Grabber {
 
   /**
    *
-   * @param f
+   * @param {Function} f
    */
   constructor(f = null) {
     super(f);
@@ -49,11 +49,11 @@ class CompoundGrabber extends Grabber {
   /**
    * check if point in grab region
    * if so, return nearest edge location
-   * @param subgroup
-   * @param _i
-   * @param x
-   * @param y
-   * @param angle
+   * @param {object} subgroup
+   * @param {number} _i
+   * @param {number} x
+   * @param {number} y
+   * @param {number} angle
    */
   contains(subgroup, _i, x, y, angle = 0) {
     const children = this.#children;

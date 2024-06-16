@@ -4,8 +4,9 @@
  * from start menu to black screen
  */
 class FadeOut extends StartAnimStage {
+
   /**
-   *
+   * Construct a random FadeIn implementation.
    */
   static random() {
     const result = randChoice([

@@ -7,9 +7,9 @@
 class ControlPoint extends Body {
 
   /**
-   * anchoredTo is a body that this will be anchored to
-   * @param sim
-   * @param anchoredTo
+   * Construct a new control point.
+   * @param {ParticleSim} sim The simulation it will live in.
+   * @param {Body} anchoredTo The body it will stick to.
    */
   constructor(sim, anchoredTo) {
     super(sim, anchoredTo.pos);
@@ -21,7 +21,7 @@ class ControlPoint extends Body {
 
   /**
    *
-   * @param r
+   * @param {number} r
    */
   setRad(r) {
     this.rad = r;
@@ -31,8 +31,8 @@ class ControlPoint extends Body {
   /**
    *
    * @param {object} g The graphics context.
-   * @param color
-   * @param forceDraw
+   * @param {string} color
+   * @param {boolean} forceDraw
    */
   draw(g, color = null, forceDraw = false) {
     const screen = this.sim.screen;
@@ -48,11 +48,11 @@ class ControlPoint extends Body {
   /**
    *
    * @param {object} g The graphics context.
-   * @param pos
-   * @param rad
-   * @param mousePos
-   * @param col
-   * @param forceDraw
+   * @param {Vector} pos
+   * @param {number} rad
+   * @param {Vector} mousePos
+   * @param {string} col
+   * @param {boolean} forceDraw
    */
   static _draw(g, pos, rad, mousePos,
     col = null, forceDraw = false) {
@@ -93,15 +93,15 @@ class ControlPoint extends Body {
 
   /**
    * pass user input force to physics-enabled parent body
-   * @param acc
+   * @param {Vector} acc The user input force.
    */
   accel(acc) {
     this.anchoredTo.accel(acc.mul(this.fscale));
   }
 
   /**
-   * remain stuck to parent
-   * @param _dt
+   * Remain stuck to parent.
+   * @param {number} _dt The time elapsed in millisecs.
    */
   update(_dt) {
     this.pos = this.anchoredTo.pos;
@@ -109,13 +109,13 @@ class ControlPoint extends Body {
 
   /**
    * no direct interaction with particles
-   * @param _sim
+   * @param {ParticleSim} _sim
    */
   register(_sim) {}
 
   /**
    * no direct interaction with particles
-   * @param _sim
+   * @param {ParticleSim} _sim
    */
   unregister(_sim) {}
 

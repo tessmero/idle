@@ -87,8 +87,7 @@ class FloaterGroup {
   }
 
   /**
-   * Helper to display a floater indicating
-   * a gain or loss in player money.
+   * Helper to display a gain or loss in player money.
    * @param {Vector} pos The position for the new floater.
    * @param {number} amt The signed value to display.
    */
@@ -105,7 +104,7 @@ class FloaterGroup {
    */
   draw(g) {
 
-    // comput ellapsed time
+    // comput elapsed time
     // since last draw
     const t = global.t;
     let t0 = this.#lastT;
@@ -143,8 +142,7 @@ class FloaterGroup {
         let sld = (r + dissolveStart);
         if (sld < 1) { sld = sld * (1 - dissolveStart); }
         this.#fontSpecs.forEach((fs) => {
-          fs.solidity = sld;
-          drawText(g, x, y, label, center, fs);
+          drawText(g, x, y, label, center, fs.withSolidity(sld));
         });
       }
     }

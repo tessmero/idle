@@ -7,52 +7,59 @@
  */
 class GraphicsWrapper {
 
-  /**
-   *
-   */
-  constructor() {
-    this.tOffset = v(0, 0);
-  }
+  #tOffset = v(0, 0);
+  #g;
 
   /**
-   *
-   * @param {object} g The graphics context.
+   * Wrap the given canvas graphics context.
+   * @param {object} g The CanvasRenderingContext2D instance.
    */
   wrap(g) {
-    g.fillStyle = global.colorScheme.fg;
-    this.g = g;
+    this._g = g;
     return this;
   }
 
   /**
    *
-   * @param x
-   * @param y
    */
-  translate(x, y) {
-    this.g.translate(x, y);
-    this.tOffset = this.tOffset.add(v(x, y));
-  }
+  get g() { throw new Error('not allowed'); }
 
-  //
   /**
    *
+   */
+  set g(_g) { throw new Error('should use wrap()'); }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   */
+  translate(x, y) {
+    this._g.translate(x, y);
+    this.#tOffset = this.#tOffset.add(v(x, y));
+  }
+
+  /**
+   * Called after a rect is filled
    */
   rectFilled() {}
 
   /**
-   *
+   * Called after a rect is cleared
    */
   rectCleared() {}
 
   /**
    *
    */
-  drawDebug() {}
+  drawDebug() {
 
-  // mock unsupported js canvas funcs
+    // recurse if this is wrapping another wrapper
+    if (this._g.drawDebug) { this._g.drawDebug(); }
+  }
+
   /**
-   *
+   * mock unsupported js canvas funcs
    */
   arc() {
     // console.log('arc() ignored');
@@ -107,7 +114,7 @@ class GraphicsWrapper {
     // if (fs !== global.colorScheme.fg) {
     //  throw new Error('fillStyle must be foreground color');
     // }
-    this.g.fillStyle = fs;
+    this._g.fillStyle = fs;
   }
 
   /**
@@ -118,30 +125,21 @@ class GraphicsWrapper {
   }
 
   /**
-   *
+   * Superficially allow setting operation with equals sign,
+   * but only support normal op (color inversion not supported).
    */
   set globalCompositeOperation(gco) {
     if (gco !== 'source-over') {
       throw new Error('xor operation not supported');
     }
-    this.g.globalCompositeOperation = gco;
+    this._g.globalCompositeOperation = gco;
   }
 
   /**
    *
    */
   get globalCompositeOperation() {
-    return this.g.globalCompositeOperation;
-  }
-
-  // get translated rect position
-  /**
-   *
-   * @param r
-   */
-  _tr(r) {
-    const t = this.tOffset;
-    return [r[0] - t.x, r[1] - t.y, r[2], r[3]];
+    return this._g.globalCompositeOperation;
   }
 
   /**
@@ -149,8 +147,8 @@ class GraphicsWrapper {
    * @param {...any} r
    */
   fillRect(...r) {
-    this.g.fillRect(...r);
-    this.rectFilled(...r);// this._tr(r));
+    this._g.fillRect(...r);
+    this.rectFilled(r);
   }
 
   /**
@@ -158,7 +156,7 @@ class GraphicsWrapper {
    * @param {...any} r
    */
   clearRect(...r) {
-    this.g.clearRect(...r);
-    this.rectCleared(...r);// this._tr(r));
+    this._g.clearRect(...r);
+    this.rectCleared(r);
   }
 }

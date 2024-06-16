@@ -1,7 +1,11 @@
+
 /**
- * @param bpm
- * @param dur
  * @file Unused base audio loop
+ */
+
+/**
+ * @param {number} bpm
+ * @param {number} dur
  */
 function noteDurationToMs(bpm, dur) {
   return 60000 * 4 * dur / bpm;

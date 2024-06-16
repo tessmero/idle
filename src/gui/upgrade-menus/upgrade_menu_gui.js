@@ -38,8 +38,9 @@ class UpgradeMenuGui extends Gui {
   }
 
   /**
-   *
-   * @param screen
+   * Construct upgrade menu gui elements for the given game screen.
+   * @param {GameScreen} screen The screen in need of gui elements.
+   * @returns {GuiElement[]} The gui elements for the screen.
    */
   buildElements(screen) {
     const sr = screen.rect;
@@ -111,7 +112,7 @@ class UpgradeMenuGui extends Gui {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    */
   updateTransitionEffect(dt) {
 

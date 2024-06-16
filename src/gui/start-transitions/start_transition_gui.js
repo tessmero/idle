@@ -8,12 +8,9 @@ class StartTransitionGui extends Gui {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {boolean} isMain need cleanup
    */
-  constructor(rect, isMain) {
+  constructor(rect,) {
     super('Start Transition Gui', rect);
-
-    this.isMain = isMain;
 
     // initiate fade out animation if necessary
     if (!(this._startTransFadeOut || this._startTransMid || this._startTransFadeIn)) {
@@ -22,16 +19,18 @@ class StartTransitionGui extends Gui {
   }
 
   /**
-   * implement Gui
-   * @param _screen
+   * Implement Gui, but contain no children gui elements.
+   * Instead we extend the Gui draw method in this file.
+   * @param {GameScreen} _screen The screen that will display this transition.
+   * @returns {GuiElement[]} An empty array indicating no gui elements.
    */
   buildElements(_screen) {
-    return []; // no gui elements
+    return [];
   }
 
   /**
-   * show the old screen
-   * behind the transition effect
+   * Show the old screen behind this transition effect.
+   * @returns {Gui} The gui to display in the background.
    */
   getBackgroundGui() {
     const bgState = this._startTransFadeOut ?
@@ -51,7 +50,7 @@ class StartTransitionGui extends Gui {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    */
   update(dt) {
     super.update(dt);
@@ -87,7 +86,7 @@ class StartTransitionGui extends Gui {
         this._startTransFadeOut = null;
         this._startTransMid = null;
         this._startTransFadeIn = FadeIn.random();
-        if (this.isMain) { resetProgression(); } // global.js
+        this.screen.stateManager.startTransitionFadeInStarted(); // game_state_manager.js
 
       }
       else {

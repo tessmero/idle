@@ -7,11 +7,11 @@ class DefaultTool extends Tool {
 
   /**
    *
-   * @param sim
-   * @param rad
-   * @param icon
-   * @param title
-   * @param centerCursor
+   * @param {ParticleSim} sim
+   * @param {number} rad
+   * @param {Icon} icon
+   * @param {string} title
+   * @param {Vector} centerCursor
    */
   constructor(sim, rad, icon = defaultToolIcon, title = 'default tool', centerCursor = false) {
     super(sim, icon, title, centerCursor);
@@ -49,22 +49,19 @@ class DefaultTool extends Tool {
    * @param {...any} p Data about the particle.
    */
   grabbed(...p) {
-    DefaultTool.collectRaindrop(this.sim, ...p);
+    const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
+    DefaultTool.collectRaindrop(this.sim, x, y);
   }
 
   /**
+   * Increment player currency and spawn a floater.
    * Called whenever a particle is grabbed by a DefaultTool instance.
-   * Also called by CircleBuddy when eating a particle on the player's behalf.
-   * @param sim
-   * @param _subgroup
-   * @param _i
-   * @param x
-   * @param y
-   * @param _dx
-   * @param _dy
-   * @param _hit
+   * Also called when a CircleBuddy eats a particle on the player's behalf.
+   * @param {ParticleSim} sim The simulation where the raindrop was collected.
+   * @param {number} x The x coordinate of the particle.
+   * @param {number} y The y coordinate of the particle.
    */
-  static collectRaindrop(sim, _subgroup, _i, x, y, _dx, _dy, _hit) {
+  static collectRaindrop(sim, x, y) {
 
     // increase currency
     sim.particlesCollected = sim.particlesCollected + 1;
@@ -181,7 +178,7 @@ class DefaultTool extends Tool {
 
   /**
    *
-   * @param dt
+   * @param {number} dt The time elapsed in millseconds.
    */
   update(dt) {
 

@@ -8,8 +8,8 @@ class EdgeParticleGroup extends ParticleGroup {
 
   /**
    *
-   * @param sim
-   * @param n
+   * @param {ParticleSim} sim
+   * @param {number} n
    */
   constructor(sim, n) {
     super(sim, n);
@@ -34,14 +34,13 @@ class EdgeParticleGroup extends ParticleGroup {
     this.grabbedParticles.fill(true);
   }
 
-  // return new subgroup instance
-  // for bodies that emit particles
-  //
-  // should be called in [Body subclass]::register(sim):
-  //      sim.edgeGroup.newSubgroup(edge)
   /**
+   * return new subgroup instance
+   * for bodies that emit particles
    *
-   * @param edge
+   * should be called in [Body subclass]::register(sim):
+   *      sim.edgeGroup.newSubgroup(edge)
+   * @param {object} edge
    */
   newSubgroup(edge) {
 
@@ -58,11 +57,10 @@ class EdgeParticleGroup extends ParticleGroup {
     return sg;
   }
 
-  // should be called in [Body subclass]::unregister(sim):
-  //      sim.edgeGroup.deleteSubgroup(edge)
   /**
-   *
-   * @param sg
+   * should be called in [Body subclass]::unregister(sim):
+   *      sim.edgeGroup.deleteSubgroup(edge)
+   * @param {object} sg
    */
   deleteSubgroup(sg) {
     this.freeSubgroupIndices.add(sg.subgroupIndex);

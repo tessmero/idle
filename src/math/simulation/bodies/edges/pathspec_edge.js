@@ -71,12 +71,11 @@ class PathspecEdge extends Edge {
     this.angleLut = angleLut;
   }
 
-  // get
   /**
    *
-   * @param distLut
-   * @param ndims
-   * @param targetAngle
+   * @param {number[]} distLut
+   * @param {number} ndims
+   * @param {number} targetAngle
    */
   _getBestMatch(distLut, ndims, targetAngle) {
     const n = distLut.length / ndims;

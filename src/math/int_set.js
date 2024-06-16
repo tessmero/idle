@@ -8,8 +8,9 @@ class IntSet {
 
   /**
    *
-   * @param n
-   * @param fill
+   * @param {number} n The fixed size of this set.
+   * @param {boolean} fill True if all integers  [0...this.n)
+   *                  should be included initially
    */
   constructor(n, fill = false) {
     this.n = n;
@@ -22,15 +23,16 @@ class IntSet {
   }
 
   /**
-   * get number of true elements
+   * Count how many integers are included in this set.
    */
   size() {
     return this.set.size;
   }
 
   /**
-   * get first index matching b
-   * @param b target value
+   * Get smallest integer with the given state.
+   * @param {boolean} b True to find first included integer,
+   *                    or false to find first NOT included integer.
    */
   find(b) {
     for (let i = 0; i < this.n; i++) {
@@ -45,16 +47,17 @@ class IntSet {
   clear() { this.fill(false); }
 
   /**
-   *
-   * @param i
+   * Check if the given integer is in this set.
+   * @param {number} i The integer in question.
    */
   has(i) {
     return this.bools[i];
   }
 
   /**
-   *
-   * @param b
+   * Completely fill or clear this set.
+   * @param {boolean} b True to add integers [0...this.n)
+   *                    or false to remove all.
    */
   fill(b) {
     for (let i = 0; i < this.n; i++) {
@@ -68,8 +71,9 @@ class IntSet {
   }
 
   /**
-   *
-   * @param i
+   * Add an integer to this set.
+   * Does nothing if it was already included.
+   * @param {number} i The integer in [0...this.n)
    */
   add(i) {
     this.bools[i] = true;
@@ -77,8 +81,9 @@ class IntSet {
   }
 
   /**
-   *
-   * @param i
+   * Remove an integer from this set.
+   * Does nothing if it was already removed.
+   * @param {number} i The integer in [0...this.n)
    */
   delete(i) {
     this.bools[i] = false;
