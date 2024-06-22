@@ -30,4 +30,11 @@ class BoxBuddyContextMenu extends BuddyContextMenu {
 
     this.addChild(gsp);
   }
+
+  /**
+   *
+   */
+  deleteEnabled() {
+    return false;
+  }
 }

@@ -5,24 +5,60 @@
  * and some interaction with a particle sim when clicking
  */
 class Tool {
+  #screen;
 
-  #sim;
-  #icon;
-  #tooltipText;
-  #cursorCenter;
+  /**
+   * @abstract
+   * @type {Icon}
+   */
+  _icon;
+
+  /**
+   * @abstract
+   * @type {string}
+   */
+  _tooltipText;
+
+  /**
+   * @abstract
+   * @type {boolean}
+   */
+  _cursorCenter;
 
   /**
    *
-   * @param {ParticleSim} sim
-   * @param {Icon} icon
-   * @param {string} tooltipText
-   * @param {boolean} cursorCenter
+   * @param {GameScreen} screen
    */
-  constructor(sim, icon, tooltipText, cursorCenter) {
-    this.#sim = sim;
-    this.#icon = icon;
-    this.#tooltipText = tooltipText;
-    this.#cursorCenter = cursorCenter;
+  constructor(screen) {
+    this.setScreen(screen);
+  }
+
+  /**
+   * called in particle_sim.js setTool()
+   * @param {GameScreen} screen
+   */
+  setScreen(screen) {
+    if (!screen) {
+      return;
+    }
+    if (!(screen instanceof GameScreen)) {
+      throw new Error('must be GameScreen isntance');
+    }
+    const sim = screen.sim;
+    if (this.#screen) {
+      const prev = this.#screen.sim;
+      if (prev === sim) { return; }
+      if (prev) { this.unregister(prev); }
+    }
+    this.#screen = screen;
+  }
+
+  /**
+   *
+   */
+  get iconScale() {
+    const s = this.screen;
+    return s ? s.iconScale : 1;
   }
 
   /**
@@ -37,33 +73,38 @@ class Tool {
   /**
    * Prevent assigning sim with equals sign.
    */
-  set sim(_s) { throw new Error('should use setSim'); }
+  set sim(_s) { throw new Error('should use setScreen'); }
 
   /**
-   * called in particle_sim.js setTool()
-   * @param {ParticleSim} sim
+   * Prevent assigning screen with equals sign.
    */
-  setSim(sim) {
-    const prev = this.#sim;
-    if (prev === sim) { return; }
-    if (prev) { this.unregister(prev); }
-    this.#sim = sim;
-  }
+  set screen(_s) { throw new Error('should use setScreen'); }
+
+  /**
+   *
+   * @param {object} _s
+   */
+  setSim(_s) { throw new Error('should use setScreen'); }
 
   /**
    *
    */
-  get sim() { return this.#sim; }
+  get sim() { return this.#screen.sim; }
 
   /**
    *
    */
-  get icon() { return this.#icon; }
+  get screen() { return this.#screen; }
 
   /**
    *
    */
-  get tooltipText() { return this.#tooltipText; }
+  get icon() { return this._icon; }
+
+  /**
+   *
+   */
+  get tooltipText() { return this._tooltipText; }
 
   /**
    *
@@ -125,19 +166,22 @@ class Tool {
    * Draw mouse cursor for this tool.
    * @param {object} g The graphics context.
    * @param {Vector} p The positiont to draw at.
-   * @param {number} scale The optional size scale factor.
-   * @param {boolean} enableIdleAnim True if the icon should be animated.
+   * @param {Icon} icon Optional override the icon to draw.
+   * @param {boolean} enableIdleAnim True if the icon may be animated when idle.
+   * @param {boolean} forceAnim True if the icon should always be animated.
    */
-  drawCursor(g, p, scale = 1, enableIdleAnim = false) {
+  drawCursor(g, p, icon = null, enableIdleAnim = false, forceAnim = false) {
+    const icn = icon ? icon : this._icon;
+    const scale = this.iconScale;
 
     // get static cursor pixel art layout
     // or get animated cursor if idle
-    const layout = (enableIdleAnim && (global.idleCountdown <= 0)) ?
-      this.icon.getCurrentAnimatedLayout() : this.icon.frames[0];
+    const anim = forceAnim || (enableIdleAnim && (global.idleCountdown <= 0));
+    const layout = anim ? icn.getCurrentAnimatedLayout() : icn.frames[0];
 
     g.fillStyle = global.colorScheme.fg;
-    drawLayout(g, ...p.xy(), layout, this.#cursorCenter, new FontSpec(0.005, scale, true));
-    drawLayout(g, ...p.xy(), layout, this.#cursorCenter, new FontSpec(0, scale, false));
+    drawLayout(g, ...p.xy(), layout, this._cursorCenter, new FontSpec(0.005, scale, true));
+    drawLayout(g, ...p.xy(), layout, this._cursorCenter, new FontSpec(0, scale, false));
 
   }
 }

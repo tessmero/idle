@@ -4,8 +4,7 @@
  * A BoxBuddy existing in an active simulation
  * manifests a special outer->inner screen relationship
  */
-const _allBoxScreenRels = new Map();
-const _allScreenBoxes = new Map();
+const _allInnerScreens = new Set();
 
 /**
  * BoxBuddy
@@ -19,24 +18,33 @@ const _allScreenBoxes = new Map();
  * body orientation and accel = "gravity" for inner sim
  */
 class BoxBuddy extends Buddy {
-  expMechDesc = 'transfer raindrops in or out';
+  expMechLabel = 'spatial phenomenon';
+  expMechIcon = tunnelingIcon;
 
   #wasUnregistered;
+
+  // total number of particles transferred
+  // through edge of box
+  #totalTrans = 0;
 
   /**
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
    * @param {number} rad
+   * @param {?GameScreen} prebuiltInnerScreen
    */
-  constructor(sim, pos, rad) {
+  constructor(sim, pos, rad, prebuiltInnerScreen = null) {
     super(sim, pos);
+    this.rad = rad;
 
     // setup new inner screen
     const outerScreen = sim.screen;
     this.outerScreen = outerScreen;
-    this.innerScreen = this._getInnerScreen(outerScreen);
-    _allScreenBoxes.set(this.innerScreen, this);
+    const ins = prebuiltInnerScreen ? prebuiltInnerScreen :
+      BoxBuddy.buildInnerScreen(outerScreen);
+    ins.containingBoxBuddy = this;
+    this.innerScreen = ins;
 
     // override callback for inner sim
     const innerSim = this.innerScreen.sim;
@@ -49,7 +57,6 @@ class BoxBuddy extends Buddy {
 
     // outer/inner square lenght ratio
     const innerRad = this.innerScreen.sim.rect[2] / 2;
-    this.rad = rad;
     this.scaleFactor = innerRad / rad;
 
     // override grabbed method
@@ -79,20 +86,33 @@ class BoxBuddy extends Buddy {
   }
 
   /**
+   * Used to build tooltip for exp level indicator.
+   * @abstract
+   * @returns {string} The readable explaination of the bonuses
+   *                      imparted by this buddy's exp level
+   */
+  describeCurrentExpLevel() {
+    const n = Math.floor(this.getExpDeficit());
+    return [
+      `transfer ${n} more rain to level up`,
+    ].join('\n');
+  }
+
+  /**
    * Called in constructor.
    * Determines experience needed to advance through exp levels.
    * @returns {object} The ValueCurve instance.
    */
   getExpLevelCostCurve() {
-    return ValueCurve.power(100, 2);
+    return ValueCurve.power(100, 10);
   }
 
   /**
-   * Extend BuddyContextMenu (should add somehting).
+   * Construct BoxBuddyContextMenu.
    * @param {number[][]} rects The allignment rectangles for the menu.
    */
   buildContextMenu(rects) {
-    const bcm = new BuddyContextMenu(...rects, this);
+    const bcm = new BoxBuddyContextMenu(...rects, this);
     return bcm;
   }
 
@@ -209,6 +229,8 @@ class BoxBuddy extends Buddy {
     const outerSim = this.sim;
     const pps = outerSim.leftoverPPS;
     pps.spawnParticle(pos, vel);
+
+    this._transferedParticle();
   }
 
   /**
@@ -254,6 +276,16 @@ class BoxBuddy extends Buddy {
     // add particle to inner sim
     const pps = innerSim.leftoverPPS;
     pps.spawnParticle(pos, vel);
+
+    this._transferedParticle();
+  }
+
+  /**
+   *
+   */
+  _transferedParticle() {
+    this.gainExp(1);
+    this.#totalTrans = this.#totalTrans + 1;
   }
 
   /**
@@ -272,54 +304,36 @@ class BoxBuddy extends Buddy {
   }
 
   /**
-   * Create or reconnect inner screen. Called in constructor.
-   * @param {GameScreen} outerScreen The screen containing this box.
-   */
-  _getInnerScreen(outerScreen) {
-    const abis = _allBoxScreenRels;
-    if (!abis.has(outerScreen)) {
-      abis.set(outerScreen, []);
-    }
-
-    // count existing boxes (not including this)
-    const bods = outerScreen.sim.bodies;
-    const boxes = [...bods].filter((b) => b instanceof BoxBuddy);
-    const boxIndex = boxes.length;
-
-    // count existing screens
-    const existingScreens = abis.get(outerScreen);
-    console.assert(boxIndex <= existingScreens.length);
-    if (boxIndex === existingScreens.length) {
-      const myScreen = this._buildInnerScreen(outerScreen, boxIndex);
-      existingScreens.push(myScreen);
-    }
-
-    // use new or existing screen
-    return existingScreens[boxIndex];
-  }
-
-  /**
    * Create new inner screen. Called in _getInnerScreen().
    * @param {GameScreen} outerScreen
-   * @param {number} boxIndex
    */
-  _buildInnerScreen(outerScreen, boxIndex) {
+  static buildInnerScreen(outerScreen) {
 
     // prepare blank tutorial screen
     const sim = new BoxPSim();
-    sim.usesGlobalCurrency = this.outerScreen.sim.usesGlobalCurrency;
+    sim.usesGlobalCurrency = outerScreen.sim.usesGlobalCurrency;
     const gsm = new GameStateManager();// new BlankGSM();
     const macro = null;
 
     // set terminal velocity for physics particles
     sim.fallSpeed = outerScreen.sim.fallSpeed;
 
-    const titleKey = `box ${boxIndex} in ${outerScreen.titleKey}`;
+    const titleKey = `box ${_allInnerScreens.size}`;
     const innerScreen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
+    _allInnerScreens.add(innerScreen);
 
     gsm.setState(GameStates.playing);
-    sim.setTool(sim.toolList[0]);
+    innerScreen.setTool(innerScreen.toolList[0]);
+    innerScreen.boxOuterScreen = outerScreen;
     return innerScreen;
+  }
+
+  /**
+   *
+   * @param {GameScreen} screen
+   */
+  static getParentScreen(screen) {
+    return screen.boxOuterScreen;
   }
 
   /**
@@ -329,15 +343,14 @@ class BoxBuddy extends Buddy {
    * @param {number} dt The time elapsed.
    */
   static ensureAllBoxesUpdated(dt) {
-
-    const abis = _allBoxScreenRels;
-    for (const [parent, children] of abis.entries()) {
-      BoxBuddy._ensureScreenWasUpdated(parent, dt);
-      for (const child of children) {
-        BoxBuddy._ensureScreenWasUpdated(child, dt);
-      }
+    BoxBuddy._ensureScreenWasUpdated(global.rootScreen, dt);
+    for (const screen of _allInnerScreens) {
+      BoxBuddy._ensureScreenWasUpdated(screen, dt);
     }
 
+    for (const [_key, screen] of Object.entries(_allTestScreens)) {
+      BoxBuddy._ensureScreenWasUpdated(screen, dt);
+    }
   }
 
   /**
@@ -357,19 +370,5 @@ class BoxBuddy extends Buddy {
       screen.sim.update(dt);
       screen.sim.draw(null, true);
     }
-  }
-
-  /**
-   * Find a screen that has a black box containing the given screen.
-   * @param {GameScreen} screen The child screen who's parent should be found.
-   */
-  static getParentScreen(screen) {
-    const abis = _allBoxScreenRels;
-    for (const [parent, children] of abis.entries()) {
-      if (children.includes(screen)) {
-        return parent;
-      }
-    }
-    return null;
   }
 }

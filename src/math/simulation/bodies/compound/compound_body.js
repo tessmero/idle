@@ -57,6 +57,7 @@ class CompoundBody extends Body {
 
     this.#constraints.forEach((c) => c.update(dt));
     this.#children.forEach((c) => c.update(dt, beingControlled));
+    this.pos = this.getMainBody().pos;
 
     return true;
   }

@@ -11,6 +11,15 @@ class FallThruBoxTest extends Test {
   }
 
   /**
+   *
+   */
+  buildScreen() {
+    const screen = super.buildScreen();
+    screen.prebuiltBoxScreen = BoxBuddy.buildInnerScreen(screen);
+    return screen;
+  }
+
+  /**
    * Test sim has emitter at the top
    */
   buildSim() {
@@ -67,13 +76,13 @@ class FallThruBoxTest extends Test {
     // override buildKeyframes()
     return new BoxToolTutorial(() => [
       [0, 'pos', startPos],
-      [1, 'primaryTool'],
+      [1, 'tool', BoxTool],
 
       // place box at center
       [500, 'pos', v(0.5, 0.5)],
       [1000, 'down'],
       [1000, 'up'],
-      [1000, 'defaultTool'],
+      [1000, 'tool', DefaultTool],
       [1500, 'pos', v(0.5, 0.5)],
 
       [2000, 'pos', startPos],

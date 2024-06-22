@@ -54,13 +54,23 @@ class SquareBody extends Body {
    */
   static drawSquare(g, center, angle, rad) {
     g.fillStyle = global.colorScheme.fg;
+    SquareBody.traceSquare(g, center, angle, rad);
+    g.fill();
+  }
+
+  /**
+   * Trace path of rotated square shape.
+   * @param {object} g The graphics context.
+   * @param {Vector} center The position of the center of the square.
+   * @param {number} angle The orientation of the square.
+   * @param {number} rad Half of the side length of the square.
+   */
+  static traceSquare(g, center, angle, rad) {
     g.beginPath();
     for (let i = 0; i < 4; i++) {
       const p = center.add(vp(angle + pio2 * (i + 0.5), rad * sqrt2));
       g.lineTo(...p.xy());
     }
     g.closePath();
-    g.fill();
   }
-
 }

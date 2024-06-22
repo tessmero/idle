@@ -3,17 +3,12 @@
  * @file ExpTool Click a buddy to grant free exp in sandbox mode.
  */
 class ExpTool extends Tool {
+  _icon = increaseIcon;
+  _tooltipText = 'give EXP';
+  _cursorCenter = true;
 
   // amount to increase exp each click
   #amt = 120;
-
-  /**
-   *
-   * @param {ParticleSim} sim
-   */
-  constructor(sim) {
-    super(sim, increaseIcon, 'give EXP', true);
-  }
 
   /**
    *

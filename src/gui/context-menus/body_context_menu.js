@@ -34,10 +34,22 @@ class BodyContextMenu extends ContextMenu {
         .withScale(0.5)
         .withTooltip('close menu'),
 
-      new IconButton(bottomRight, trashIcon, () => this.deleteBody())
-        .withTooltip(`delete ${body.title}\n(no refunds)`)
-        .withScale(0.5),
     ]);
+
+    if (this.deleteEnabled()) {
+      this.addChild(
+        new IconButton(bottomRight, trashIcon, () => this.deleteBody())
+          .withTooltip(`delete ${body.title}\n(no refunds)`)
+          .withScale(0.5),
+      );
+    }
+  }
+
+  /**
+   *
+   */
+  deleteEnabled() {
+    return true;
   }
 
   /**

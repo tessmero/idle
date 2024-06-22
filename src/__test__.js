@@ -58,10 +58,10 @@ function doUnitTests() {
     testedTools = testedTools + 1;
   };
   testTool(new CircleTool(sim));
-  testTool(new DefaultTool(sim, 0.1));
+  testTool(new DefaultTool(sim));
   testTool(new LineTool(sim));
   testTool(new BoxTool(sim));
-  testTool(new PiTool(sim, 0.1));
+  testTool(new PiTool(sim));
   console.log(`${testedTools} Tool subclasses passed tests`);
 
   // specific test for default tool

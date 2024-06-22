@@ -50,7 +50,7 @@ function rectCenter(x, y, w, h) {
  * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
  * @param {number} w - The width of the rectangle.
  * @param {number} h - The height of the rectangle.
- * @returns {number[][]} An array of [x, y] coordinates for each corner.
+ * @returns {Vector[]} An array of xy coordinates for each corner.
  */
 function rectCorners(x, y, w, h) {
   const result = [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];

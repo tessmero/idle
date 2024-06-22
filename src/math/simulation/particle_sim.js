@@ -40,16 +40,6 @@ class ParticleSim {
     this.t = 0;
     this.paused = false;
 
-    // prepare toolList
-    this.toolList = [
-      new DefaultTool(this, global.mouseGrabRadius),
-      new CircleTool(this),
-      new LineTool(this),
-      new BoxTool(this),
-      new PiTool(this, global.mouseGrabRadius),
-      new ExpTool(this),
-    ];
-
     // particles
     this.rainGroup = new ProceduralPGroup(this, n);
     this.physicsGroup = new PhysicsParticleGroup(this, n);
@@ -130,32 +120,17 @@ class ParticleSim {
   }
 
   /**
-   * Get the tool currently represented by the cursor.
+   *
    */
   get tool() {
-    return this._tool;
+    throw new Error('tool member moved from sim to screen');
   }
 
   /**
-   * Prevent changing tool with equal sign.
+   *
    */
   set tool(_t) {
-    throw new Error('should use setTool');
-  }
-
-  /**
-   * Unregister the current tool and switch to the new tool.
-   * @param {Tool} t The new tool show for the cursor for this sim
-   */
-  setTool(t) {
-    const prev = this._tool;
-    if (t === prev) { return; }
-
-    if (prev) {
-      prev.unregister(this);
-    }
-    this._tool = t;
-    if (t) { t.setSim(this); }
+    throw new Error('tool member moved from sim to screen');
   }
 
   /**
@@ -216,7 +191,6 @@ class ParticleSim {
     }
 
     this.#bodies.add(b);
-    b.sim = this;
     b.register(this);
   }
 
@@ -244,7 +218,6 @@ class ParticleSim {
     const s = this;
     s.clearBodies();
     s.clearGrabbers();
-    s.setTool(null);
     s.selectedParticle = null;
     s.selectedBody = null;
     s.particlesCollected = 0;
@@ -349,12 +322,6 @@ class ParticleSim {
       }
 
       g.fillStyle = global.colorScheme.fg;
-
-      // draw tool overlay if applicable
-      const tool = this._tool;
-      if (tool && tool.draw) {
-        tool.draw(g);
-      }
 
       // draw floaters
       this.floaters.draw(g);

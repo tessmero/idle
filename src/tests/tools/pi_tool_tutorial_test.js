@@ -19,7 +19,7 @@ class PiToolTutorialTest extends Test {
     return [
       // time, label, func
       [0, 'no particle selected', () => sim.selectedParticle === null],
-      [1000, 'particle selected', () => sim.selectedParticle !== null],
+      [1200, 'particle selected', () => sim.selectedParticle !== null],
       [1400, 'particle at bottom', () => {
         const sp = sim.selectedParticle;
         if (!sp) { return false; }

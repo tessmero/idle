@@ -13,7 +13,6 @@ class CircleBody extends Body {
     super(sim, pos);
 
     this.rad = rad;
-    this.md2 = rad * rad;
 
     //
     this.title = 'circle';

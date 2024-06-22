@@ -79,7 +79,7 @@ class Body {
    * @param {ParticleSim} sim
    */
   register(sim) {
-
+    this.sim = sim;
     const edge = this.buildEdge();
     this.edge = edge;
 

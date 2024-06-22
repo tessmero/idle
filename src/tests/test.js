@@ -129,10 +129,8 @@ class Test {
    * @param {GameScreen} screen The screen who's boxes should be reset.
    */
   static resetBoxSims(screen) {
-    const abis = _allBoxScreenRels;
-    if (abis.has(screen)) {
-      abis.get(screen).forEach((inner) => { inner.sim.reset(); });
-    }
+    screen.sim.bodies.filter((b) => b instanceof BoxBuddy)
+      .forEach((box) => box.innerScreen.sim.reset());
   }
 
   /**

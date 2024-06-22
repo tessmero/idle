@@ -22,12 +22,6 @@ class Macro {
     const kf = buildKeyframes();
     this.#keyframes = kf;
 
-    const grabRad = 0.001;
-    const t = new DefaultTool(null, grabRad);
-    this.defaultTool = t;
-    this.primaryTool = t;
-    this.tool = t;
-
     // extract cursor position data
     this.#cursorPosKeyframes = kf.filter((e) => e[1] === 'pos');
   }

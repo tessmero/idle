@@ -15,6 +15,18 @@ function _computeBonusVal(e) {
   return [readableVal, realVal];
 }
 
+// helper to apply bonus to all relevant screens
+function _enactBonus(f, screen, value) {
+
+  // enact bonus on given screen
+  f(screen, value);
+
+  // enact bonus on descendant black boxes
+  screen.sim.bodies.filter((b) => b instanceof BoxBuddy)
+    .forEach((box) =>
+      _enactBonus(f, box.innerScreen, value));
+}
+
 /**
  * Compute the total bonus value, build explaination text,
  * and enact the bonus effect in-game.
@@ -31,8 +43,8 @@ function _updateBonus(key, f) {
   // explain in words
   const summary = `base ${readableVal}${e.subject}\n  (upgrade level ${e.level})`;
 
-  // enact bonus
-  f(realVal);
+  // enact bonux effect
+  _enactBonus(f, global.rootScreen, realVal);
 
   return [e.icon, summary];
 }
@@ -50,16 +62,16 @@ function updateAllBonuses() {
 
     // compute+apply each bonus, and build summary
     const specs = [
-      ['nparticles', (val) => {
-        global.rootScreen.sim.rainGroup.n = val;
+      ['nparticles', (screen, val) => {
+        screen.sim.rainGroup.n = val;
       }],
 
-      ['rain_speed', (val) => {
-        global.rootScreen.sim.fallSpeed = val;
+      ['rain_speed', (screen, val) => {
+        screen.sim.fallSpeed = val;
       }],
 
-      ['catch_radius', (val) => {
-        global.rootScreen.sim.toolList[0].rad = val;
+      ['catch_radius', (screen, val) => {
+        screen.toolList[0].rad = val;
       }],
     ];
     global.bonusSummary = specs.map((entry) => _updateBonus(...entry));

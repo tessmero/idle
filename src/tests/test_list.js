@@ -18,6 +18,7 @@ const allTests = [
   ['gui', new TransitionTest()],
 
   // ['boxes', new NestedBoxesTest()],
+  ['boxes', new CircleIntoBoxTest()],
   ['boxes', new BoxToolTutorialTest()],
   ['boxes', new FallThruBoxTest()],
   ['boxes', new LineThruBoxTest()],

@@ -28,12 +28,12 @@ class LineToolTutorial extends Macro {
     return [
 
       [0, 'pos', startPos],
-      [1, 'primaryTool'],
+      [1, 'tool', LineTool],
 
       [400, 'pos', v(0.5, 0.5)],
       [400, 'down'],
       [400, 'up'],
-      [400, 'defaultTool'],
+      [400, 'tool', DefaultTool],
       [1200, 'pos', v(0.7, 0.4)],
       [1800, 'pos', v(0.7, 0.4)],
 

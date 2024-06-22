@@ -28,12 +28,12 @@ class CircleToolTutorial extends Macro {
     return [
 
       [0, 'pos', startPos],
-      [1, 'primaryTool'],
+      [1, 'tool', CircleTool],
 
       [400, 'pos', v(0.5, 0.5)],
       [800, 'down'],
       [800, 'up'],
-      [800, 'defaultTool'],
+      [800, 'tool', DefaultTool],
       [800, 'pos', v(0.5, 0.5)],
 
       [1600, 'pos', v(0.7, 0.7)],

@@ -20,23 +20,22 @@ class DefaultToolTutorial extends Macro {
   buildKeyframes() {
 
     const startPos = v(0.5, 0.9);
-    const i = 400;
     const x0 = 0.1;
     const x1 = 0.9;
     return [
 
       [0, 'pos', startPos],
+      [1, 'tool', DefaultTool],
 
-      [i, 'down'],
-      [i, 'pos', v(x0, 0.5)],
-      [2 * i, 'pos', v(x1, 0.5)],
-      [3 * i, 'pos', v(x0, 0.5)],
-      [4 * i, 'pos', v(x1, 0.5)],
-      [5 * i, 'pos', v(x0, 0.5)],
-      [5 * i, 'up'],
-
-      [6 * i, 'pos', startPos],
-      [6.5 * i, 'pos', startPos],
+      [400, 'down'],
+      [400, 'pos', v(x0, 0.5)],
+      [800, 'pos', v(x1, 0.5)],
+      [1200, 'pos', v(x0, 0.5)],
+      [1600, 'pos', v(x1, 0.5)],
+      [2000, 'pos', v(x0, 0.5)],
+      [2000, 'up'],
+      [2400, 'pos', startPos],
+      [3000, 'pos', startPos],
 
     ];
   }

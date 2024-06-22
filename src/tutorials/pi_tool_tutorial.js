@@ -26,18 +26,17 @@ class PiToolTutorial extends Macro {
       v(0.9, 0.4), // end
     ];
 
-    const i = 400; // duration scale in ms
-
     return [
 
       // time, ...action/position
-      [0 * i, 'pos', startPos],
-      [1.5 * i, 'pos', clickPos],
-      [1.5 * i, 'down'],
-      [2 * i, 'up'],
-      [2 * i, 'pos', clickPos],
-      [3 * i, 'pos', endPos],
-      [9 * i, 'pos', endPos],
+      [0, 'pos', startPos],
+      [1, 'tool', PiTool],
+      [1000, 'pos', clickPos],
+      [1000, 'down'],
+      [1100, 'up'],
+      [1200, 'pos', clickPos],
+      [1600, 'pos', endPos],
+      [5000, 'pos', endPos],
 
     ];
   }

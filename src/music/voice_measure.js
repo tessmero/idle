@@ -1,10 +1,40 @@
 /**
- * @file VoicMeasure base class
- * One specific immutable measure in one voice's sheet music.
+ * @file VoicMeasure
+ * One measure in the sheet music for one voice.
  */
 class VoiceMeasure {
 
   #allNotes = [];
+
+  /**
+   * Construct measure frame given note/chord/rest arrays.
+   * @param {...number[][]} beats The the scale indices for each beat.
+   */
+  constructor(...beats) {
+
+    // Beat Index
+    let bi = 0;
+
+    // iterate over Chords In each Beat
+    beats.forEach((cib) => {
+
+      // Chord Index
+      let ci = 0;
+
+      // iteate over Notes In each Chord
+      cib.forEach((nic) => {
+        const t = bi + ci / nic.length;
+        const dur = 1 / nic.length;
+        nic.forEach((scaleIndex) => {
+          this.addNote(t, dur, scaleIndex);
+        });
+
+        ci = ci + 1;
+      });
+
+      bi = bi + 1;
+    });
+  }
 
   /**
    *

@@ -60,49 +60,18 @@ class TestContextMenu extends ContextMenu {
 
     // divide second content square into rows
     const nRows = 13;
+    const botRows = divideRows(...s1, nRows);
     const maxAsserts = nRows - 3;
     if (asserts.length > maxAsserts) {
       throw new Error(`max of ${maxAsserts} asserts per test`);
     }
-    const botRows = divideRows(...s1, nRows);
 
     const duration = test.getDuration(screen);
     this.t = 0;
     this.duration = duration;
 
     // add test criteria to second square
-    let i = 2;
-    const checkTimes = [];
-    const checkTooltips = [];
-    const checkReadouts = [];
-    asserts.forEach((e) => {
-      const [time, lbl, _func] = e;
-      const seconds = (time / 1000).toFixed(1);
-      const label = `${seconds}s: ${lbl}`;
-      const tooltip = `at ${seconds} seconds:\n${lbl}`;
-      checkTimes.push(time);
-      checkTooltips.push(tooltip);
-      checkReadouts.push(
-        new StatReadout(botRows[i], uncheckedIcon,
-          () => label)
-          .withScale(this.#guiLetterScale)
-          .withTooltipScale(this.#guiLetterScale)
-          .withTooltip(tooltip)
-      );
-      i = i + 1;
-    });
-    this.asserts = asserts;
-    this.checkTimes = checkTimes;
-    this.checkTooltips = checkTooltips;
-    this.checkReadouts = checkReadouts;
-    this.nChecks = checkTimes.length;
-    this.nChecksPassed = 0;
-
-    const ttDisplay = new TestTimelineDisplay(botRows[1], duration, checkTimes, checkTooltips);
-    this.ttDisplay = ttDisplay;
-
-    const finalDisplay = new TextLabel(botRows.at(-1), '').withScale(0.3);
-    this.finalDisplay = finalDisplay;
+    this._buildCriteriaRows(botRows, asserts);
 
     // play/pause/etc buttons at bottom of first square
     const topRows = divideRows(...padRect(...s0, 0), 10);
@@ -126,14 +95,58 @@ class TestContextMenu extends ContextMenu {
       ...controlButtons,
 
       // timeline at top of second square
-      ttDisplay,
+      this.ttDisplay,
 
       // readouts in second square
-      ...checkReadouts,
+      ...this.checkReadouts,
 
       // conclusion in second square
-      finalDisplay,
+      this.finalDisplay,
     ]);
+
+  }
+
+  /**
+   * Used in constructor.
+   * assign members with criteria specs and gui elements.
+   * @param  {number[][]} rows The rectangles to align elements in.
+   * @param  {Array.<Array>} asserts The test assertions to display.
+   */
+  _buildCriteriaRows(rows, asserts) {
+
+    let i = 2;
+    const checkTimes = [];
+    const checkTooltips = [];
+    const checkReadouts = [];
+    asserts.forEach((e) => {
+      const [time, lbl, _func] = e;
+      const seconds = (time / 1000).toFixed(1);
+      const label = `${seconds}s: ${lbl}`;
+      const tooltip = `at ${seconds} seconds:\n${lbl}`;
+      checkTimes.push(time);
+      checkTooltips.push(tooltip);
+      checkReadouts.push(
+        new StatReadout(rows[i], uncheckedIcon,
+          () => label)
+          .withScale(this.#guiLetterScale)
+          .withTooltipScale(this.#guiLetterScale)
+          .withTooltip(tooltip)
+      );
+      i = i + 1;
+    });
+    this.asserts = asserts;
+    this.checkTimes = checkTimes;
+    this.checkTooltips = checkTooltips;
+    this.checkReadouts = checkReadouts;
+    this.nChecks = checkTimes.length;
+    this.nChecksPassed = 0;
+
+    const ttDisplay = new TestTimelineDisplay(rows[1],
+      this.duration, checkTimes, checkTooltips);
+    this.ttDisplay = ttDisplay;
+
+    const finalDisplay = new TextLabel(rows.at(-1), '').withScale(0.3);
+    this.finalDisplay = finalDisplay;
 
   }
 

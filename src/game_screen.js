@@ -19,6 +19,14 @@ class GameScreen {
   #rect;
 
   /**
+   *
+   */
+  get iconScale() {
+    return ((this === global.mainScreen) ?
+      1 : global.tutorialScaleFactor);
+  }
+
+  /**
    * Create a new Game Screen
    * @param {string} titleKey readable title, also used as
    *                          key for performance log.
@@ -39,9 +47,16 @@ class GameScreen {
     sim.screen = this;
     this.#stateManager = gsm;
 
-    if (gsm) {
-      gsm.rebuildGuis(this);
-    }
+    const grabRad = global.rootScreen ? global.rootScreen.toolList[0].rad : global.mouseGrabRadius;
+    this.toolList = [
+      new DefaultTool(this, grabRad),
+      new CircleTool(this),
+      new LineTool(this),
+      new BoxTool(this),
+      new PiTool(this, grabRad),
+      new ExpTool(this),
+    ];
+
     this.macro = macro;
     this.drawOffset = [0, 0];
 
@@ -56,6 +71,42 @@ class GameScreen {
     // floaters to draw on top of gui
     this.floaters = new FloaterGroup(100);
 
+    if (gsm) {
+      gsm.rebuildGuis(this);
+    }
+  }
+
+  /**
+   * Get the tool currently represented by the cursor.
+   */
+  get tool() {
+    return this._tool;
+  }
+
+  /**
+   * Prevent changing tool with equal sign.
+   */
+  set tool(_t) {
+    throw new Error('should use setTool');
+  }
+
+  /**
+   * Unregister the current tool and switch to the new tool.
+   * @param {Tool} t The new tool show for the cursor for this sim
+   */
+  setTool(t) {
+    const prev = this._tool;
+    if (t === prev) { return; }
+
+    if (prev) {
+      prev.held = false;
+      prev.unregister(this.sim);
+    }
+    this._tool = t;
+    if (t) {
+      t.held = false;
+      t.setScreen(this);
+    }
   }
 
   /**
@@ -179,7 +230,7 @@ class GameScreen {
     this.idleCountdown = this.idleDelay;
 
     // trigger selected tool movement behavior
-    const tool = this.sim.tool;
+    const tool = this.tool;
     if (tool) { tool.mouseMove(p); }
   }
 
@@ -189,7 +240,7 @@ class GameScreen {
   mouseUp() {
 
     // release tool if it was being held down
-    const tool = this.sim.tool;
+    const tool = this.tool;
     if (tool) { tool.mouseUp(this.mousePos); }
 
   }
@@ -235,7 +286,7 @@ class GameScreen {
     }
 
     // may click simulation with selected tool
-    const tool = this.sim.tool;
+    const tool = this.tool;
     if (tool) { tool.mouseDown(this.mousePos); }
 
   }
@@ -245,13 +296,12 @@ class GameScreen {
    */
   reset() {
     this.sim.reset();
+    this.setTool(null);
+
     const macro = this.macro;
     if (macro) {
       macro.t = 0;
       macro.finished = false;
-      const tool = macro.defaultTool;
-      tool.held = false; // release mouse button
-      this.sim.setTool(tool);
     }
 
     if (this.stateManager) {
@@ -304,10 +354,7 @@ class GameScreen {
       const rect = gui.getScreenEdgesForContextMenu();
       const cmr = ContextMenu.pickRects(rect, bodPos);
 
-      if (bod instanceof BoxBuddy) {
-        this.contextMenu = new BoxBuddyContextMenu(...cmr, bod);
-      }
-      else if (bod instanceof Buddy) {
+      if (bod instanceof Buddy) {
         this.contextMenu = bod.buildContextMenu(cmr);
       }
       else {
@@ -349,7 +396,7 @@ class GameScreen {
     }
 
     // trigger passive tool behavior
-    const tool = sim.tool;
+    const tool = this.tool;
     if (tool) { tool.update(dt); }
 
     // update popups just in case they are persistent
@@ -381,27 +428,34 @@ class GameScreen {
       }
     }
 
-    const tool = macro.tool;
-    sim.setTool(tool);
-    tool.update(dt);
     const keyframes = macro.update(dt);
+
+    // emulate mouse movement
     let p = macro.getCursorPos();
     const sr = sim.rect;
     p = v(sr[0] + p.x * sr[2], sr[1] + p.y * sr[3]);
     this.mouseMove(p);
 
-    // emulate user input if necessary
+    // emulate other user input if necessary
     // (tutorial.js)
     keyframes.forEach((event) => {
       if (event[1] === 'down') { this.mouseDown(p); }
       if (event[1] === 'up') { this.mouseUp(p); }
-      if (event[1] === 'primaryTool') { macro.tool = macro.primaryTool; }
-      if (event[1] === 'defaultTool') { macro.tool = macro.defaultTool; }
+      if (event[1] === 'tool') { this.setTool(this.getTool(event[2])); }
     });
 
     // like update.js
     // update control point hovering status
     sim.updateControlPointHovering(p);
+  }
+
+  /**
+   * Find owned tool matching the given class.
+   * @param {object} clazz The tool subclass to search for.
+   * @returns {?Tool} The matching tool instance.
+   */
+  getTool(clazz) {
+    return this.toolList.find((t) => t instanceof clazz);
   }
 
   /**
@@ -460,38 +514,11 @@ class GameScreen {
    * @param {object} g The graphics context.
    */
   _drawCursor(g) {
-
-    // draw  cursor
-    if (this.mousePos) {
-      const p = this.mousePos;
-      const tool = this.sim.tool;
-      if (tool) {
-        if (this === global.mainScreen) {
-          tool.drawCursor(g, p);
-        }
-        else {
-          tool.drawCursor(g, p, global.tutorialScaleFactor, false);
-        }
-      }
-    }
-
-    // draw automated cursor
-    else if (this.macro) {
-      const macro = this.macro;
-      const tool = macro.tool;
-      this.sim.setTool(tool);
-      let p = macro.getCursorPos();
-      const sr = this.sim.rect;
-      p = [sr[0] + p[0] * sr[2], sr[1] + p[1] * sr[3]];
-      if (macro.lastCursorPos) {
-        const lp = macro.lastCursorPos;
-        if ((p[0] !== lp[0]) || (p[1] !== lp[1])) {
-          tool.mouseMove(v(...p));
-        }
-      }
-      else {
-        macro.lastCursorPos = p;
-      }
+    const tool = this.tool;
+    const p = this.mousePos;
+    if (!p) { return; }
+    if (tool) {
+      tool.drawCursor(g, p);
 
       // draw tool overlay if applicable
       if (tool.draw) {

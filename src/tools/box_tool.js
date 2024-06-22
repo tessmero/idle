@@ -5,23 +5,20 @@
  * Click to spawn a BoxBuddy.
  */
 class BoxTool extends BodyTool {
+  _icon = boxIcon;
+  _tooltipText = 'build black box';
+  _cursorCenter = true;
 
-  /**
-   *
-   * @param {ParticleSim} sim
-   */
-  constructor(sim) {
-    super(sim, boxIcon, 'build black box', true);
-
-    this.boxRadius = 0.05;
-  }
+  #baseRad = 0.05;
 
   /**
    * Get a new BoxBuddy instance with the given position.
    * @param {Vector} p The position.
    */
   buildBody(p) {
-    return new BoxBuddy(this.sim, p, this.boxRadius);
+    const rad = this.#baseRad * this.iconScale;
+    return new BoxBuddy(this.sim, p, rad,
+      this.screen.prebuiltBoxScreen);
   }
 
   /**

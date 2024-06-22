@@ -12,6 +12,15 @@ class BoxToolTutorialTest extends Test {
 
   /**
    *
+   */
+  buildScreen() {
+    const screen = super.buildScreen();
+    screen.prebuiltBoxScreen = BoxBuddy.buildInnerScreen(screen);
+    return screen;
+  }
+
+  /**
+   *
    * @param {GameScreen} screen The screen under test.
    */
   getTestAssertions(screen) {

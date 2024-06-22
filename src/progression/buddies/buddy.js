@@ -10,7 +10,8 @@ class Buddy extends CompoundBody {
    * @abstract
    * @type {string}
    */
-  expMechDesc;
+  expMechLabel;
+  expMechIcon;
 
   #expPoints;
   #expPointsOffset;
@@ -47,6 +48,16 @@ class Buddy extends CompoundBody {
   }
 
   /**
+   * Used to build tooltip for exp level indicator.
+   * @abstract
+   * @returns {string} The readable explaination of the bonuses
+   *                      imparted by this buddy's exp level
+   */
+  describeCurrentExpLevel() {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
    * Buddy implementations should construct a BuddyContextMenu
    * and add some subclass-specific gui elements.
    * @abstract
@@ -74,14 +85,23 @@ class Buddy extends CompoundBody {
   }
 
   /**
+   * Compute how many exp points must still be gained
+   * to reach the next level.
+   * @returns {number} The number of additional exp points needed.
+   */
+  getExpDeficit() {
+    const lvl = this.#expLevel;
+    const nextLevelCost = this.#expLevelCostCurve.f(lvl);
+    return nextLevelCost - this.#expPoints;
+  }
+
+  /**
    * Called in gainExp.
    * Check exp and increment level as many times as necessary.
    */
   _checkLevelUp() {
-    const lvl = this.#expLevel;
-    const nextLevelCost = this.#expLevelCostCurve.f(lvl);
-    if (this.#expPoints > nextLevelCost) {
-      this.#expLevel = lvl + 1;
+    if (this.getExpDeficit() < 0) {
+      this.#expLevel = this.#expLevel + 1;
       this.leveledUp();
       this._checkLevelUp();
     }

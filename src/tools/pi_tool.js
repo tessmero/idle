@@ -4,15 +4,9 @@
  * Click to track a particle.
  */
 class PiTool extends DefaultTool {
-
-  /**
-   *
-   * @param {ParticleSim} sim
-   * @param {number} rad
-   */
-  constructor(sim, rad) {
-    super(sim, rad, piToolIcon, 'inspect', true);
-  }
+  _icon = piToolIcon;
+  _tooltipText = 'inspect';
+  _cursorCenter = true;
 
   /**
    *
@@ -126,11 +120,10 @@ class PiTool extends DefaultTool {
    * Draw the particle inspector tool mouse cursor.
    * @param {object} g The graphics context.
    * @param {Vector} p The position to draw at.
-   * @param {...any} args
    */
-  drawCursor(g, p, ...args) {
+  drawCursor(g, p) {
 
-    // draw circle
+    // held on background
     const c = p;
     const r = Math.sqrt(this.grabber.r2);
 
@@ -149,16 +142,8 @@ class PiTool extends DefaultTool {
     g.stroke();
 
     // draw standard tool cursor
-    super.drawCursor(g, p, ...args);
+    super.drawCursor(g, p);
 
-  }
-
-  /**
-   *
-   * @param {number} _dt
-   */
-  update(_dt) {
-    // do nothing
   }
 
   /**
@@ -170,7 +155,7 @@ class PiTool extends DefaultTool {
 
     if (this.pData) {
       const [_subgroup, _i, x, y, _dx, _dy, _hit] = this.pData;
-      const r = this.rad / 2;
+      const r = 0.02 * this.iconScale;
 
       g.strokeStyle = global.colorScheme.hl;
       g.lineWidth = 0.01;

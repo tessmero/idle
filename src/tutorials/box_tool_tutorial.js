@@ -5,20 +5,6 @@
 class BoxToolTutorial extends Macro {
 
   /**
-   * Prepare miniature box tool.
-   * @param {...any} p
-   */
-  constructor(...p) {
-    super(...p);
-
-    const t = new BoxTool();
-    t.boxRadius = t.boxRadius * global.tutorialScaleFactor;
-
-    this.primaryTool = t;
-    this.tool = t;
-  }
-
-  /**
    * Place box in center and rotate it
    */
   buildKeyframes() {
@@ -27,12 +13,12 @@ class BoxToolTutorial extends Macro {
     return [
 
       [0, 'pos', startPos],
-      [1, 'primaryTool'],
+      [1, 'tool', BoxTool],
 
       [400, 'pos', v(0.5, 0.5)],
       [400, 'down'],
       [400, 'up'],
-      [400, 'defaultTool'],
+      [400, 'tool', DefaultTool],
 
       [1000, 'pos', v(0.5, 0.4)], // on control point
       [1200, 'pos', v(0.5, 0.4)],

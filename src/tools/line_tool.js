@@ -5,29 +5,27 @@
  * Click to spawn a ControlledSausageBody.
  */
 class LineTool extends BodyTool {
+  _icon = lineIcon;
+  _tooltipText = 'build line';
+  _cursorCenter = true;
 
-  /**
-   *
-   * @param {ParticleSim} sim
-   * @param {number} lineLength
-   */
-  constructor(sim, lineLength = 0.1) {
-    super(sim, lineIcon, 'build line', true);
-
-    this.lineRadius = 2e-2; // radius of caps (half of thickness)
-    this.lineLength = lineLength;
-  }
+  #baseLen = 0.1;
+  #baseRad = 2e-2;
 
   /**
    * Create a new body at the given position.
    * @param {Vector} p The position to center the new body at.
    */
   buildBody(p) {
-    let d = sqrt2 * this.lineLength / 2;
-    d = v(d, d);
+    const scale = this.iconScale;
+    const len = this.#baseLen * scale;
+    const rad = this.#baseRad * scale;
+
+    const d = sqrt2 * len / 2;
+    const dd = v(d, d);
+
     return new ControlledSausageBody(this.sim,
-      p.add(d), p.sub(d),
-      this.lineRadius);
+      p.add(dd), p.sub(dd), rad);
   }
 
   /**

@@ -4,18 +4,19 @@
  * Drag to collect raindrops and move control points.
  */
 class DefaultTool extends Tool {
+  _icon = defaultToolIcon;
+  _tooltipText = 'default tool';
+  _cursorCenter = false;
+
+  #baseRad = global.mouseGrabRadius;
 
   /**
    *
-   * @param {ParticleSim} sim
-   * @param {number} rad
-   * @param {Icon} icon
-   * @param {string} title
-   * @param {Vector} centerCursor
+   * @param {GameScreen} screen
    */
-  constructor(sim, rad, icon = defaultToolIcon, title = 'default tool', centerCursor = false) {
-    super(sim, icon, title, centerCursor);
-    this.rad = rad;
+  constructor(screen) {
+    super(screen);
+    this.rad = this.#baseRad * this.iconScale;
 
     // null or falsey -> mouse not being pressed
     // ControlPoint instance -> mouse pressed on poi
@@ -25,7 +26,7 @@ class DefaultTool extends Tool {
     // prepare grabber instance that will be
     // added/removed from sim
     this.grabber = new CircleGrabber(v(0, 0),
-      rad, (...p) => this.grabbed(...p));
+      this.rad, (...p) => this.grabbed(...p));
   }
 
   /**
@@ -97,10 +98,6 @@ class DefaultTool extends Tool {
     if (this.held) {
       this.sim.bodyClicked(this.held);
     }
-
-    if (this.held) {
-      this.held.isHeld = true;
-    }
     else {
       this.held = 'catching';
       this.sim.selectedBody = null; // close context menu
@@ -121,10 +118,35 @@ class DefaultTool extends Tool {
    * @param {Vector} _p The position of the mouse.
    */
   mouseUp(_p) {
+
+    // check if held control point over box or edge of screen for some time
+    if (this._transferOnMouseUp && this._transferToScreen && this.held) {
+
+      // transfer held body to the other screen
+      let b = this.held;
+      while (b.parent) {
+        b = b.parent;
+      }
+      const innerScreen = this._transferToScreen;
+      const innerSim = innerScreen.sim;
+      this.sim.removeBody(b);
+      b.getMainBody().pos = v(...rectCenter(...innerSim.rect));
+      if (b instanceof BoxBuddy) {
+        b.outerScreen = innerScreen;
+        b.innerScreen.boxOuterScreen = innerScreen;
+      }
+      innerSim.addBody(b);
+
+      // remove context menu and reticle
+      this.sim.selectedBody = null;
+    }
+
+    // reset holding/dragging/grabbing state
+    this._transferToScreen = null;
+    this._transferTime = null;
+    this._transferOnMouseUp = false;
     this.held = null;
     this.sim.draggingControlPoint = null;
-
-    // stop grabbing particles
     this.sim.removeGrabber(this.grabber);
   }
 
@@ -133,15 +155,21 @@ class DefaultTool extends Tool {
    * otherwise draw the standard cursor (the default tool icon).
    * @param {object} g The graphics context.
    * @param {Vector} p The position of the mouse.
-   * @param {...any} args
    */
-  drawCursor(g, p, ...args) {
+  drawCursor(g, p) {
 
-    if (this.held instanceof ControlPoint) {
+    if (this._transferToScreen && this._transferOnMouseUp) {
+
+      // has held control point over box for some time
+      const forceAnim = true;
+      super.drawCursor(g, p, insertIcon, null, forceAnim);
+
+    }
+    else if (this.held instanceof ControlPoint) {
 
       // held on control point
       this.sim.hoveredControlPoint = this.held;
-      super.drawCursor(g, p, ...args);
+      super.drawCursor(g, p);
 
     }
     else if (this.held) {
@@ -168,7 +196,7 @@ class DefaultTool extends Tool {
     else {
 
       // not held
-      super.drawCursor(g, p, ...args);
+      super.drawCursor(g, p);
 
       // debug control points hover vis radius
       // let r = global.controlPointVisibleHoverRadius
@@ -187,23 +215,72 @@ class DefaultTool extends Tool {
     this.grabber.r2 = r;
 
     if (this.held instanceof ControlPoint) {
+      this._accelControlPoint(dt);
 
-      if (!this.lastPos) { return; }
+      // check if holding a body over a box
+      const heldBody = this.sim.findRepresentativeBody(this.held);
+      const box = this.sim.bodies.find((b) => this._mayInsert(heldBody, b));
+      if (box) {
 
-      const fr = [1e-4, 1e-3]; // no force d2, full force d2
+        if (box.innerScreen === this._transferToScreen) {
 
-      // apply force to held control point
-      const cp = this.held;
-      const d = this.lastPos.sub(cp.pos);
-      const d2 = d.getD2();
-      if (d2 >= fr[0]) {
+          // ongoing hold over box
+          // check if held long enough to trigger insert
+          const dur = this.sim.t - this._transferTime;
+          this._transferOnMouseUp = (dur > 1000);
 
-        const angle = d.getAngle();
-        let f = global.poiPlayerF;
-        if (d2 < fr[1]) { f = f * ((d2 - fr[0]) / (fr[1] - fr[0])); }
-        const acc = vp(angle, f).mul(dt);
-        cp.accel(acc);
+        }
+        else {
+
+          // just started holding over new box
+          this._transferToScreen = box.innerScreen;
+          this._transferTime = this.sim.t;
+        }
       }
+      else {
+
+        // still holding but not over box
+        this._transferToScreen = null;
+      }
+    }
+  }
+
+  /**
+   * Return true if held body is near valid box.
+   * @param {Body} heldBody The representative body being dragged.
+   * @param {Body} box The candidate for box.
+   */
+  _mayInsert(heldBody, box) {
+    if (heldBody === box) {
+      return false;
+    }
+    if (box instanceof BoxBuddy) {
+      const d = heldBody.pos.sub(box.pos).getMagnitude();
+      return d < (2 * box.rad);
+    }
+    return false;
+  }
+
+  /**
+   * Called in update() when applicable.
+   * @param {number} dt The time elapsed in millseconds.
+   */
+  _accelControlPoint(dt) {
+    if (!this.lastPos) { return; }
+
+    const fr = [1e-4, 1e-3]; // no force d2, full force d2
+
+    // apply force to held control point
+    const cp = this.held;
+    const d = this.lastPos.sub(cp.pos);
+    const d2 = d.getD2();
+    if (d2 >= fr[0]) {
+
+      const angle = d.getAngle();
+      let f = global.poiPlayerF;
+      if (d2 < fr[1]) { f = f * ((d2 - fr[0]) / (fr[1] - fr[0])); }
+      const acc = vp(angle, f).mul(dt);
+      cp.accel(acc);
     }
   }
 

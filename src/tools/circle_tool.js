@@ -4,22 +4,19 @@
  * Click to spawn a CircleBuddy.
  */
 class CircleTool extends BodyTool {
+  _icon = circleIcon;
+  _tooltipText = 'build circle';
+  _cursorCenter = true;
 
-  /**
-   *
-   * @param {ParticleSim} sim
-   */
-  constructor(sim) {
-    super(sim, circleIcon, 'build circle', true);
-    this.circleRadius = 0.1;
-  }
+  #baseRad = 0.1;
 
   /**
    * Get a new CircleBuddy instance at the given position.
    * @param {Vector} p The position.
    */
   buildBody(p) {
-    return new CircleBuddy(this.sim, p, this.circleRadius);
+    const rad = this.#baseRad * this.iconScale;
+    return new CircleBuddy(this.sim, p, rad);
   }
 
   /**

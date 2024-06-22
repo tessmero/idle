@@ -37,7 +37,7 @@ class GameStateManager {
    * @param {GameScreen} screen The screen that will contain the guis.
    * @param {boolean} resetState
    */
-  rebuildGuis(screen, resetState = true) {
+  rebuildGuis(screen, resetState = false) {
     this._screen = screen;
     if (resetState) {
       this._state = GameStates.startMenu;
@@ -91,6 +91,11 @@ class GameStateManager {
    *
    */
   set screen(_s) { throw new Error('not allowed'); }
+
+  /**
+   *
+   */
+  set state(_s) { throw new Error('not allowed'); }
 
   /**
    *
@@ -156,6 +161,7 @@ class GameStateManager {
    * @param {object} params The extra parameters, used for box transition gui.
    */
   setState(s, params = {}) {
+
     this._state = s;
     this.rebuildGuis(this._screen, false);
 
@@ -187,9 +193,11 @@ class GameStateManager {
       return;
     }
 
-    global.sandboxMode = false;
+    // close context menu
+    this._screen.sim.selectedBody = null;
 
-    // show full start transition
+    // begin full start transition
+    global.sandboxMode = false;
     this.hideWebsiteOverlays();
     this.setState(GameStates.startTransition);
   }
@@ -290,7 +298,6 @@ class GameStateManager {
     }
 
     if (screen === global.rootScreen) {
-
       // quit game
       global.sandboxMode = false;
       this.setState(GameStates.startMenu);
@@ -308,7 +315,7 @@ class GameStateManager {
         screen.gsp.setInnerScreen(outerScreen);
 
         // trigger box animation
-        const boxBuddy = _allScreenBoxes.get(screen);
+        const boxBuddy = screen.containingBoxBuddy;
         outerScreen.stateManager.setState(GameStates.boxTransition, {
           fromSquare: BoxTransitionGui._car(screen.gsp.rect),
           toSquare: BoxTransitionGui._car(boxBuddy.square),

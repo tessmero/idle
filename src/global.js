@@ -91,7 +91,7 @@ class Global {
 
   // mouse
   canvasMousePos = v(0, 0); // pixels
-  mouseGrabRadius = 0.05;
+  mouseGrabRadius = 0.005;
 
   // debug
   debugTileIndices = false;
@@ -101,8 +101,9 @@ const global = new Global();
 
 function resetProgression() {
   let money = 0;
-  const sim = global.mainScreen.sim;
-  sim.setTool(sim.toolList[0]);
+  const screen = global.mainScreen;
+  const sim = screen.sim;
+  screen.setTool(screen.toolList[0]);
   sim.rainGroup.n = 100;
 
   if (global.sandboxMode) {

@@ -78,14 +78,22 @@ class HudGui extends Gui {
           .withDynamicTooltip(() => `${sim.particlesCollected.toFixed(0)} raindrops collected`)
           .withAutoAdjustRect(true),
 
-      // pause button
-      new IconButton(topRight, pauseIcon, () => this.gsm.pause())
-        .withTooltip('pause or quit the game'),
     ];
 
     // remove null placeholders used to
     // conveniently toggle things above
     result = result.filter(Boolean);
+
+    // add an important button to the top right
+    result.push(screen.boxOuterScreen ?
+
+      // exit box button if this screen is inside a box
+      new IconButton(topRight, boxIcon, () => this.gsm.quit())
+        .withTooltip('exit box') :
+
+      // otherwise pause button
+      new IconButton(topRight, pauseIcon, () => this.gsm.pause())
+        .withTooltip('pause or quit the game'));
 
     // append toolbar buttons
     result = result.concat(this._buildToolbarButtons(screen));
@@ -100,14 +108,13 @@ class HudGui extends Gui {
    */
   _buildToolbarButtons(screen) {
     const sr = screen.rect;
-    const sim = screen.sim;
 
     // decide which tools will be available
-    let toolList = sim.toolList;
+    let toolList = screen.toolList;
     if (!global.sandboxMode) {
 
       // remove sandbox-only tools
-      const toRemove = [PiTool, BoxTool];
+      const toRemove = [PiTool, ExpTool];
       toolList = toolList.filter((t) => !toRemove.some((clazz) => t instanceof clazz));
     }
 
@@ -194,6 +201,6 @@ class HudGui extends Gui {
     screen.contextMenu = null;
 
     // switch to default tool
-    sim.setTool(sim.toolList[0]);
+    screen.setTool(screen.toolList[0]);
   }
 }

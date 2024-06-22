@@ -41,6 +41,9 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
       const sim = new TutorialPSim();
       const gsm = new BlankGSM();
       const screen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
+      if (macro instanceof BoxToolTutorial) {
+        screen.prebuiltBoxScreen = BoxBuddy.buildInnerScreen(screen);
+      }
       _allTutorialScreens[titleKey] = screen;
     }
     return _allTutorialScreens[titleKey];

@@ -135,6 +135,6 @@ class PiContextMenu extends ContextMenu {
 
     screen.contextMenu = null;
     sim.selectedParticle = null;
-    sim.setTool(sim.toolList[0]);
+    screen.setTool(screen.toolList[0]);
   }
 }

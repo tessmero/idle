@@ -34,7 +34,8 @@ class BodyTool extends Tool {
       sim.addBody(poi);
 
       // switch back to default tool
-      sim.setTool(sim.toolList[0]);
+      const screen = this.screen;
+      screen.setTool(screen.toolList[0]);
 
     }
   }

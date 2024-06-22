@@ -26,28 +26,6 @@ class Song {
     const cp = [
       ['F3', 'minorChord'],
       ['F3', 'minorChord'],
-      ['D#3', 'majorChord'],
-      ['D#3', 'majorChord'],
-
-      ['F3', 'minorChord'],
-      ['F3', 'minorChord'],
-      ['D#3', 'majorChord'],
-      ['D#3', 'majorChord'],
-
-      ['F4', 'minorChord'],
-      ['A#4', 'majorChord'],
-      ['D#4', 'majorChord'],
-      ['C4', 'minorChord'],
-
-      ['F4', 'minorChord'],
-      ['A#4', 'majorChord'],
-      ['D#4', 'majorChord'],
-      ['C4', 'minorChord'],
-
-      ['F4', 'minorChord'],
-      ['F4', 'minorChord'],
-      ['D#4', 'majorChord'],
-      ['D#4', 'majorChord'],
     ];
     this.#chordProg = cp;
 
@@ -60,13 +38,13 @@ class Song {
     ];
 
     const basody = [
-      new EighthNotes([0], [1], [0], [1], [0], [1], [0], [1]),
-      new EighthNotes([2], [0], [2], [0], [2], [0], [2], [0]),
+      new VoiceMeasure([[0], [1]], [[0], [1]], [[0], [1]], [[0], [1]]),
+      new VoiceMeasure([[2], [0]], [[2], [0]], [[2], [0]], [[2], [0]]),
     ];
 
     const melody = [
-      new Triplets([0], [1], [0], [1], [0], [1], [0], [1], [0], [1], [0], [1]),
-      new Triplets([2], [0], [2], [0], [2], [0], [2], [0], [2], [0], [2], [0]),
+      new VoiceMeasure([[0], [1], [0]], [[1], [0], [1]], [[0], [1], [0]], [[1], [0], [1]]),
+      new VoiceMeasure([[2], [0], [2]], [[0], [2], [0]], [[2], [0], [2]], [[0], [2], [0]]),
     ];
 
     this.#voiceParts =

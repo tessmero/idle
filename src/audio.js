@@ -22,7 +22,7 @@ const step = noteDurationToMs(currentSong.bpm, 1 / 4) / 1000;
 const chordDur = step * 3.5;
 const lookAhead = step / 2;
 
-let id; const timer = () => {
+const timer = () => {
   const diff = ac.currentTime - lastMusicLoop;
   if (diff >= lookAhead) {
     const nextNote = lastMusicLoop + step;
@@ -31,7 +31,7 @@ let id; const timer = () => {
   }
 };
 
-function testSound() {
+function startMusicLoop() {
 
   ac.resume();
   setInterval(timer, 15);

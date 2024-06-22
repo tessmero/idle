@@ -12,7 +12,16 @@ class LineThruBoxTest extends Test {
   }
 
   /**
-   * physics particle friction set to ~0
+   *
+   */
+  buildScreen() {
+    const screen = super.buildScreen();
+    screen.prebuiltBoxScreen = BoxBuddy.buildInnerScreen(screen);
+    return screen;
+  }
+
+  /**
+   * sim starts with
    * emitter at top left
    * line below emitter
    */
@@ -83,13 +92,13 @@ class LineThruBoxTest extends Test {
     // override buildKeyframes()
     return new BoxToolTutorial(() => [
       [0, 'pos', startPos],
-      [1, 'primaryTool'],
+      [1, 'tool', BoxTool],
 
       // place box at center
       [500, 'pos', v(0.5, 0.5)],
       [1000, 'down'],
       [1000, 'up'],
-      [1000, 'defaultTool'],
+      [1000, 'tool', DefaultTool],
       [1500, 'pos', v(0.5, 0.5)],
 
       // expect to catch particles

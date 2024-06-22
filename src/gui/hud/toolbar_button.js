@@ -80,7 +80,7 @@ class ToolbarButton extends CompositeGuiElement {
    */
   isSelected() {
     const screen = this.screen;
-    return screen && (screen.sim.tool === this.tool);
+    return screen && (screen.tool === this.tool);
   }
 
   /**
@@ -90,7 +90,7 @@ class ToolbarButton extends CompositeGuiElement {
     if (this.tool.isUsable()) {
 
       const screen = this.screen;
-      screen.sim.setTool(this.tool);
+      screen.setTool(this.tool);
 
       // close the upgrades menu if it is open
       if (screen.stateManager.state === GameStates.upgradeMenu) {

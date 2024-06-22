@@ -5,7 +5,8 @@
  * eats particles and contributes to player currency
  */
 class CircleBuddy extends Buddy {
-  expMechDesc = 'collect raindrops';
+  expMechLabel = 'consumer';
+  expMechIcon = hungerIcon;
 
   #maxSatiety;
   #maxSatietyCurve = ValueCurve.power(5, 2);
@@ -39,6 +40,22 @@ class CircleBuddy extends Buddy {
 
     this.setChildren([this.circle, cp]);
     this.controlPoints = [cp];
+  }
+
+  /**
+   * Used to build tooltip for exp level indicator.
+   * @abstract
+   * @returns {string} The readable explaination of the bonuses
+   *                      imparted by this buddy's exp level
+   */
+  describeCurrentExpLevel() {
+    const rps = Math.floor(this.#satietyDecay * 1000);
+    const n = Math.floor(this.getExpDeficit());
+
+    return [
+      `collects ${rps} rain / sec`,
+      `${n} more to level up`,
+    ].join('\n');
   }
 
   /**
@@ -97,8 +114,9 @@ class CircleBuddy extends Buddy {
    */
   buildContextMenu(rects) {
     const bcm = new BuddyContextMenu(...rects, this);
-    bcm.addBuddyContextRow((r) => [
-      new StatReadout(r, hungerIcon, () => this._satLabel())
+    bcm.addBuddyContextRow((r, s) => [
+      new DynamicTextLabel(r, () => this._satLabel())
+        .withScale(s)
         .withAutoAdjustRect(false)
         .withDynamicTooltip(() => this._satTooltip()),
       new ProgressIndicator(r, () => this.#satiety / this.#maxSatiety),
