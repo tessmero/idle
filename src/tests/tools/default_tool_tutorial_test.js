@@ -2,13 +2,8 @@
  * @file Test for default tool.
  */
 class DefaultToolTutorialTest extends Test {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Default Tool Test', new DefaultToolTutorial());
-  }
+  title = 'Default Tool Test';
+  macro = new DefaultToolTutorial();
 
   /**
    *

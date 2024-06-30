@@ -5,12 +5,19 @@
 class Buddy extends CompoundBody {
 
   /**
-   * Experience mechanic description,
-   * explains how buddy can gain experience.
+   * Experience mechanic label,
+   * explains how this buddy gains experience.
    * @abstract
    * @type {string}
    */
   expMechLabel;
+
+  /**
+   * Experience mechanic icon,
+   * explains how this buddy gains experience.
+   * @abstract
+   * @type {Icon}
+   */
   expMechIcon;
 
   #expPoints;

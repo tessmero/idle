@@ -115,6 +115,17 @@ class GameScreen {
   get stateManager() { return this.#stateManager; }
 
   /**
+   * Prevent setting state with equals sign.
+   */
+  set state(_s) { throw new Error('should use stateManager.setState()'); }
+
+  /**
+   * Allow accessing state property as shorthand,
+   * @returns {GameState} The current state.
+   */
+  get state() { return this.#stateManager.state; }
+
+  /**
    *
    */
   set titleKey(_t) {
@@ -207,7 +218,7 @@ class GameScreen {
 
     // close previous gui
     const oldGui = this.gui;
-    if (oldGui) {
+    if (oldGui && (oldGui.title !== gui.title)) {
       oldGui.close();
     }
 

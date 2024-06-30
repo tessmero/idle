@@ -4,13 +4,14 @@
  * during transition from start menu to game
  */
 class StartTransitionGui extends Gui {
+  title = 'Start Transition';
+  layoutData = null;
 
   /**
-   *
-   * @param {number[]} rect The rectangle to align elements in.
+   * @param {...any} p
    */
-  constructor(rect,) {
-    super('Start Transition Gui', rect);
+  constructor(...p) {
+    super(...p);
 
     // initiate fade out animation if necessary
     if (!(this._startTransFadeOut || this._startTransMid || this._startTransFadeIn)) {
@@ -22,9 +23,10 @@ class StartTransitionGui extends Gui {
    * Implement Gui, but contain no children gui elements.
    * Instead we extend the Gui draw method in this file.
    * @param {GameScreen} _screen The screen that will display this transition.
+   * @param {object} _layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} An empty array indicating no gui elements.
    */
-  buildElements(_screen) {
+  buildElements(_screen, _layout) {
     return [];
   }
 

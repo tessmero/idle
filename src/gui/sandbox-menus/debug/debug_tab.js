@@ -15,6 +15,21 @@ class DebugTab extends CompositeGuiElement {
 
       [
         // tab title, tooltip
+        'UI', 'User Interface\ntext, buttons, and menus', [
+
+          ['debugCssRects', 'bool', 'show stable base rectangles\ndefined by css rules in data folder'],
+          ['debugUiRects', 'bool', 'show final bounding rectangles\nmay use one-off math in src folder'],
+          ['baseAnimPeriod', 100, 'idle gui animation\nframe duration'],
+          ['textPixelSize', 0.001, 'font size'],
+          ['textLetterSpace', 1, 'space between letters'],
+          ['textLineSpace', 1, 'space between lines'],
+          ['tooltipPadding', 0.001, 'extra space around\ntooltip content'],
+          ['tooltipShadowWidth', 0.001, 'size of shadow effect\nfor tooltip popups'],
+          ['lineWidth', 0.001, 'line thickness'],
+        ],
+      ],
+
+      [
         'SIM', 'Simulation\nbodies and physics particls', [
 
           // variable name in global.js,  increment or 'bool',  description
@@ -41,20 +56,6 @@ class DebugTab extends CompositeGuiElement {
           ['rootScreen.sim.rainGroup.wiggle', 0.01, 'horizontal movement of drops'],
 
           // ['particleStickyForce', 1e-6, 'force holding particles to edges'],
-        ],
-      ],
-
-      [
-        'UI', 'User Interface\ntext, buttons, and menus', [
-
-          ['debugUiRects', 'bool', 'show bounding rectangles\nused for aligning text\nand mouse hovering'],
-          ['baseAnimPeriod', 100, 'idle gui animation\nframe duration'],
-          ['textPixelSize', 0.001, 'font size'],
-          ['textLetterSpace', 1, 'space between letters'],
-          ['textLineSpace', 1, 'space between lines'],
-          ['tooltipPadding', 0.001, 'extra space around\ntooltip content'],
-          ['tooltipShadowWidth', 0.001, 'size of shadow effect\nfor tooltip popups'],
-          ['lineWidth', 0.001, 'line thickness'],
         ],
       ],
     ];

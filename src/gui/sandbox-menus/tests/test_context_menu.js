@@ -52,7 +52,8 @@ class TestContextMenu extends ContextMenu {
 
     const gui = screen.gui;
     if (gui) {
-      gui.setChildren(gui.buildElements(screen));
+      const layout = new GuiLayoutParser(screen.rect, gui.layoutData);
+      gui.setChildren(gui.buildElements(screen, layout));
       gui.setScreen(screen);
     }
 
@@ -80,7 +81,7 @@ class TestContextMenu extends ContextMenu {
 
     const titleRect = [...topRows[0]];
     titleRect[1] = titleRect[1] - 0.03;
-    const titleLabel = new TextLabel(titleRect, test.titleKey)
+    const titleLabel = new TextLabel(titleRect, test.title)
       .withScale(0.3);
 
     this.addChildren([

@@ -31,7 +31,10 @@ function gameLoop(timeStamp) {
  */
 function init() {
 
-  // start keeping track of stats
+  // start keeping track of player progression
+  global.storyManager = new StoryManager();
+
+  // start keeping track of memory/cpu performance stats
   global.logPerformanceStats = new LogPerformanceStats();
 
   const cvs = document.getElementById('gameCanvas');

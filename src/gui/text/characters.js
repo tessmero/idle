@@ -95,7 +95,7 @@ function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
   }
 
   for (const c of s) {
-    drawLayout(g, x, y, charLayouts[c], false, fontSpec);
+    drawLayout(g, x, y, CHAR_LAYOUTS[c], false, fontSpec);
     x = x + dx;
   }
 }
@@ -110,7 +110,7 @@ function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
  *                         otherwise it will extend down and to the right.
  * @param {object} fontSpec The font specifications.
  */
-function drawText(g, x, y, s, center = true, fontSpec) {
+function drawText(g, x, y, s, center, fontSpec) {
   const lines = s.split('\n');
   const dy = fontSpec.scale * global.textPixelSize * (charHeight + global.textLineSpace);
   let yy = y;

@@ -2,13 +2,8 @@
  * @file Test for start menu -> playing transition sequence
  */
 class TransitionTest extends Test {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Transition Test');
-  }
+  title = 'TransitionTest';
+  macro = null;
 
   /**
    * @returns {GameStateManager} with only start transition

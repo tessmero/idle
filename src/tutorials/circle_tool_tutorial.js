@@ -5,20 +5,6 @@
 class CircleToolTutorial extends Macro {
 
   /**
-   * Prepare miniature circle tool.
-   * @param {...any} p
-   */
-  constructor(...p) {
-    super(...p);
-
-    const t = new CircleTool();
-    t.circleRadius = t.circleRadius * global.tutorialScaleFactor;
-
-    this.primaryTool = t;
-    this.tool = t;
-  }
-
-  /**
    * Place a new CircleBuddy in the center of the screen.
    * Click and drag circle to move it.
    */

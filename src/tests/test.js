@@ -10,16 +10,19 @@ const _allTestScreens = {};
  */
 class Test {
 
-  #titleKey;
+  /**
+   * Short unique title that appears in test list gui.
+   * @abstract
+   * @type {string}
+   */
+  title;
 
   /**
-   * @param {string} titleKey The readable and unique title.
-   * @param {Macro} macro The optional cursor animation sequence.
+   * Sript to emulate user input for this test.
+   * @abstract
+   * @type {Macro}
    */
-  constructor(titleKey, macro = null) {
-    this.#titleKey = titleKey;
-    this.macro = macro;
-  }
+  macro;
 
   /**
    *
@@ -36,15 +39,8 @@ class Test {
   /**
    *
    */
-  set titleKey(_tk) {
-    throw new Error('not allowed');
-  }
-
-  /**
-   *
-   */
   get titleKey() {
-    return this.#titleKey;
+    throw new Error('should use title');
   }
 
   /**
@@ -89,7 +85,7 @@ class Test {
     const sim = this.buildSim();
     const gsm = this.getGameStateManager();
     const macro = this.macro;
-    const titleKey = this.titleKey;
+    const titleKey = this.title;
     const screen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);
     return screen;
   }

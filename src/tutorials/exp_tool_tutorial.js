@@ -4,19 +4,6 @@
 class ExpToolTutorial extends Macro {
 
   /**
-   * Prepare miniature exp tool.
-   * @param {...any} p
-   */
-  constructor(...p) {
-    super(...p);
-
-    const t = new ExpTool();
-
-    this.primaryTool = t;
-    this.tool = t;
-  }
-
-  /**
    * Click buddy in the center of the screen.
    */
   buildKeyframes() {

@@ -5,15 +5,6 @@
 class DefaultToolTutorial extends Macro {
 
   /**
-   * Set title for this macro.
-   * Default tool is setup by Macro constructor.
-   * @param {...any} p
-   */
-  constructor(...p) {
-    super(...p);
-  }
-
-  /**
    * Click and drag mouse back and forth across
    * the screen to collect particles.
    */

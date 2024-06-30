@@ -4,13 +4,15 @@
  * Top-level GUI container that appears when the menu button is clicked.
  */
 class UpgradeMenuGui extends Gui {
+  title = 'Upgrade Menu';
+  layoutData = UPGRADE_GUI_LAYOUT;
 
   /**
    *
    * @param {...any} p
    */
   constructor(...p) {
-    super('upgrade menu gui', ...p);
+    super(...p);
 
     // prepare for tiled transition effect
     const sc = rectCorners(...this.rect);
@@ -40,23 +42,19 @@ class UpgradeMenuGui extends Gui {
   /**
    * Construct upgrade menu gui elements for the given game screen.
    * @param {GameScreen} screen The screen in need of gui elements.
+   * @param {object} layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen) {
-    const sr = screen.rect;
-    const sc = rectCorners(...sr);
-    const m = 0.065 * avg(sr[2], sr[3]);
-    let w = sr[2] - 2 * m;
-    const h = sr[3] - 2 * m;
-    const r0 = [sc[0].x + m, sc[0].y + m, w, h];
+  buildElements(screen, layout) {
+    const r0 = layout.r0;
 
     let tabLabels; let tabContent;
     if (global.sandboxMode) {
-      tabLabels = ['tests', 'performance', 'debug', 'skills'];
+      tabLabels = ['debug', 'tests', 'performance', 'skills'];
       tabContent = [
+        (rect) => new DebugTab(rect),
         (rect) => new TestsTab(rect),
         (rect) => new PerformanceTab(rect),
-        (rect) => new DebugTab(rect),
         (rect) => new SkillsTab(rect),
       ];
 
@@ -80,9 +78,7 @@ class UpgradeMenuGui extends Gui {
       global.upgradeMenuTabIndex = i;
     });
 
-    w = 0.05;
-    const topRight = [r0[0] + r0[2] - w - 0.02, r0[1] + 0.05, w, w];
-    const closeButton = new IconButton(topRight, xIcon, () => this.gsm.toggleStats())
+    const closeButton = new IconButton(layout.closeBtn, xIcon, () => this.gsm.toggleStats())
       .withScale(0.5)
       .withTooltip('close upgrades menu');
     tabGroup.addChild(closeButton);

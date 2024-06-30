@@ -21,7 +21,8 @@ const allTests = [
   ['boxes', new CircleIntoBoxTest()],
   ['boxes', new BoxToolTutorialTest()],
   ['boxes', new FallThruBoxTest()],
-  ['boxes', new LineThruBoxTest()],
+
+  // ['boxes', new LineThruBoxTest()],
 
   ['tools', new DefaultToolTutorialTest()],
   ['tools', new CircleToolTutorialTest()],

@@ -14,7 +14,8 @@ class SkillCard extends CompositeGuiElement {
   constructor(rect, tree, entry) {
     super(rect);
     const r = this.rect;
-    const screen = entry.skill.getThumbnailScreen();
+    const skill = Skill[entry.skill];
+    const screen = skill.getThumbnailScreen();
     const gsp = new GuiScreenPanel(rect, screen);
 
     const frac = 0.4;
@@ -25,8 +26,8 @@ class SkillCard extends CompositeGuiElement {
     let tooltip = '';
     if (entry.status === 'locked') {
       icon = lockIcon;
-      const required = tree.state[entry.requires].skill.name;
-      tooltip = `locked\nrequires: ${required}`;
+      const required = tree.state[entry.requires].skill;
+      tooltip = `locked\nrequires: ${Skill[required].name}`;
       rr = padRect(x, y, w, h, -h / 8);
     }
     else if (entry.status === 'available') {
@@ -42,7 +43,7 @@ class SkillCard extends CompositeGuiElement {
       icon = checkedIcon;
       tooltip = 'purchased';
     }
-    tooltip = `skill: ${entry.skill.name}\n${tooltip}`;
+    tooltip = `skill: ${skill.name}}\n${tooltip}`;
     const statusIcon = new IconButton(rr, icon, () => {}).withScale(0.3).withTooltip(tooltip);
     gsp.tooltip = tooltip;
 

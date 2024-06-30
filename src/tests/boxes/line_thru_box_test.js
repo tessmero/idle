@@ -3,13 +3,8 @@
  * that intersects with a box.
  */
 class LineThruBoxTest extends Test {
-
-  /**
-   * Use macro sequence defined in this file.
-   */
-  constructor() {
-    super('Line Thru Box Test', LineThruBoxTest._macro());
-  }
+  title = 'Line Thru Box Test';
+  macro = LineThruBoxTest._macro();
 
   /**
    *

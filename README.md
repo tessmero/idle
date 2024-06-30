@@ -42,6 +42,7 @@ Use `eslint` to check source files for syntax errors and violations of preferred
 
 ```
 npx eslint --fix src
+npx eslint --fix data
 ```
 
 The chosen standards are mostly copied from [elierotenberg/coding-styles](https://github.com/elierotenberg/coding-styles/blob/master/es6.md)

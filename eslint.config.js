@@ -5,7 +5,6 @@ import jsdoc from "eslint-plugin-jsdoc";
 export default [
   {
     files: ['**/*.js'],
-    ignores: ['src/gui/icons/*'],
     languageOptions: {
         ecmaVersion: 6,
         sourceType: "script",

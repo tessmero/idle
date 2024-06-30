@@ -11,7 +11,7 @@
 function _computeBonusVal(e) {
   const readableVal = e.value.f(e.level - 1);
   let realVal = readableVal;
-  if (e.getReadableValue) { realVal = e.getReadableValue(readableVal); }
+  if (e.getRealVal) { realVal = e.getRealVal(readableVal); }
   return [readableVal, realVal];
 }
 

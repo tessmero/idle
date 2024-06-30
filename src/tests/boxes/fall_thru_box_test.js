@@ -2,13 +2,8 @@
  * @file Test dropping particles through box.
  */
 class FallThruBoxTest extends Test {
-
-  /**
-   * Use macro sequence defined in this file.
-   */
-  constructor() {
-    super('Fall Thru Box Test', FallThruBoxTest._macro());
-  }
+  title = 'Fall Thru Box Test';
+  macro = FallThruBoxTest._macro();
 
   /**
    *

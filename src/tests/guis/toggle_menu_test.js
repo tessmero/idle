@@ -2,13 +2,8 @@
  * @file Test toggling upgrade menu.
  */
 class ToggleMenuTest extends GuiTest {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Toggle Menu Test', ToggleMenuTest._macro());
-  }
+  title = 'Toggle Menu Test';
+  macro = ToggleMenuTest._macro();
 
   /**
    * Called in constructor.

@@ -5,13 +5,35 @@
 class Gui extends CompositeGuiElement {
 
   /**
-   *
-   * @param {string} title
-   * @param {...any} p
+   * Unique title to be submitted to performance log
+   * @abstract
+   * @type {string}
    */
-  constructor(title, ...p) {
-    super(...p);
-    this.title = title;
+  title;
+
+  /**
+   * Reference to css in data folder
+   * @abstract
+   * @type {object}
+   */
+  layoutData;
+
+  /**
+   * Construct array of GuiElement instances for the given game screen.
+   * @abstract
+   * @param {GameScreen} _screen The screen in need of gui elements.
+   */
+  buildElements(_screen) {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
+   * Set special one-time parameters, used for
+   * box transition and story intervention.
+   * @param {object} params The object with extra parameters.
+   */
+  setStateParams(params) {
+    this._stateParams = params;
   }
 
   /**
@@ -27,14 +49,6 @@ class Gui extends CompositeGuiElement {
     rect[0] = rect[0] + sideMargin;
     rect[2] = rect[2] - 2 * sideMargin;
     return rect;
-  }
-
-  /**
-   * Construct array of GuiElement instances for the given game screen.
-   * @param {GameScreen} _screen The screen in need of gui elements.
-   */
-  buildElements(_screen) {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 
   /**
@@ -74,10 +88,31 @@ class Gui extends CompositeGuiElement {
 
   /**
    *
-   * @param {...any} p
+   * @param {object} g The graphics context
    */
-  draw(...p) {
+  draw(g) {
     global.livePerformanceStats.flagGui(this, 'drawn');
-    super.draw(...p);
+    super.draw(g);
+
+    if (global.debugCssRects) {
+
+      // use member set in game_state_manage.js
+      const layout = this.parsedCssLayout;
+      if (layout) {
+        const color = 'green';
+        g.strokeStyle = color;
+        g.fillStyle = color;
+        g.lineWidth = global.lineWidth;
+        for (const [key, rect] of Object.entries(layout)) {
+          if (!key.startsWith('_')) {
+            const c = rectCenter(...rect);
+            drawText(g, ...c, key, true, new FontSpec(0, 0.3, false));
+            g.strokeRect(...rect);
+          }
+        }
+        g.fillStyle = global.colorScheme.fg;
+      }
+    }
+
   }
 }

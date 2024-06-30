@@ -1,11 +1,10 @@
 /**
- * @file Pixel layouts for some ascii characters.
- *
- * Used in characters.js to draw text.
+ * @file CHAR_LAYOUTS data for drawing ascii characters
+ * used in src/gui/text
  */
-const charLayouts = {
+const CHAR_LAYOUTS = {
 
-  // apostrophe
+  // apostrophe / single quote
   '\'': [
     '     ',
     '  w  ',
@@ -16,6 +15,8 @@ const charLayouts = {
     '     ',
     '     ',
   ],
+
+  // double quote
   '"': [
     '     ',
     ' w w ',
@@ -36,6 +37,8 @@ const charLayouts = {
     '     ',
     '     ',
   ],
+
+  // degrees symbol
   '°': [
     '  w  ',
     ' w w ',

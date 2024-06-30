@@ -59,8 +59,12 @@ class BoxBuddy extends Buddy {
     const innerRad = this.innerScreen.sim.rect[2] / 2;
     this.scaleFactor = innerRad / rad;
 
-    // override grabbed method
-    // which normally handles particles hitting edge
+    // reassign default solid-body grabbed method to use in special cases
+    // e.g. to have the outer edge act as solid when the internal sim is paused
+    square._grabbedAsSolidBody = square.grabbed;
+
+    // override grabbed method, triggered
+    // when particles pass into the box from outside
     square.grabbed = (...p) => this.grabbed(...p);
 
     // init control points for user to click and drag

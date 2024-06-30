@@ -4,6 +4,8 @@
  * as player enters or exits a box.
  */
 class BoxTransitionGui extends Gui {
+  title = 'Box Transition';
+  layoutData = null;
 
   #t = 0;
   #closeDur = 0;
@@ -13,11 +15,10 @@ class BoxTransitionGui extends Gui {
 
   /**
    *
-   * @param {number[]} rect The rectangle to cover.
+   * @param {...any} p
    */
-  constructor(rect) {
-    super('Box Transition Gui', rect);
-
+  constructor(...p) {
+    super(...p);
     this.#totalDur = this.#closeDur + this.#glideDur + this.#openDur;
   }
 
@@ -47,7 +48,7 @@ class BoxTransitionGui extends Gui {
     super.draw(g);
 
     // skip anim if gui was rebuilt (screen resized partway through)
-    if (!this.setStateParams) {
+    if (!this._stateParams) {
       this.#t = this.#totalDur;
       return;
     }
@@ -95,7 +96,7 @@ class BoxTransitionGui extends Gui {
    * @param {number} anim The animation state in range 0-1.
    */
   drawGliding(g, anim) {
-    const params = this.setStateParams;
+    const params = this._stateParams;
 
     // lookup center,angle,radius of the two terminal squares
     const [c0, a0, r0] = params.fromSquare;
@@ -133,7 +134,7 @@ class BoxTransitionGui extends Gui {
     super.update(dt);
 
     // skip anim if gui was rebuilt (screen resized partway through)
-    if (!this.setStateParams) {
+    if (!this._stateParams) {
       this.#t = this.#totalDur;
       return;
     }
@@ -143,7 +144,7 @@ class BoxTransitionGui extends Gui {
     if (this.#t > (this.#totalDur)) {
 
       // check if screen change is due after animation
-      const toScreen = this.setStateParams.toScreen;
+      const toScreen = this._stateParams.toScreen;
       if (toScreen) {
         this.screen.gsp.setInnerScreen(toScreen);
         toScreen.stateManager.setState(GameStates.playing);

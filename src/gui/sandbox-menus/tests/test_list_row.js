@@ -21,7 +21,7 @@ class TestListRow extends CompositeGuiElement {
     this.#test = test;
 
     const sr = new StatReadout(rect,
-      playIcon, () => test.titleKey)
+      playIcon, () => test.title)
       .withScale(0.4);
 
     sr.isAnimated = () => sr.hovered || this.isActive();

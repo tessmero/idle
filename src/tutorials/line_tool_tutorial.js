@@ -5,20 +5,6 @@
 class LineToolTutorial extends Macro {
 
   /**
-   * Prepare miniature line tool.
-   * @param {...any} p
-   */
-  constructor(...p) {
-    super(...p);
-
-    const t = new LineTool();
-    t.lineLength = t.lineLength * global.tutorialScaleFactor;
-
-    this.primaryTool = t;
-    this.tool = t;
-  }
-
-  /**
    * Place line (ControlledSausageBody) in center.
    * Click and drag control point to rotate line.
    */

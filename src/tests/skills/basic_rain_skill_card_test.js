@@ -1,13 +1,18 @@
 /**
  * @file Test for skill card thumbnail sim.
  */
-class BasicRainSkillCardTest extends SkillCardTest {
+class BasicRainSkillCardTest extends Test {
+  title = 'Basic Rain Skill Card Test';
+  macro = null;
+
+  #skill = Skill.basicRain;
 
   /**
-   *
+   * Use same simulation as thumbnail in skills menu.
+   * @returns {ParticleSim} The simulation to use for this test.
    */
-  constructor() {
-    super('Basic Rain Skill Card Test', Skill.basicRain);
+  buildSim() {
+    return this.#skill.buildThumbnailSim();
   }
 
   /**

@@ -2,13 +2,8 @@
  * @file Test for black box tool.
  */
 class BoxToolTutorialTest extends Test {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Box Tutorial Test', new BoxToolTutorial());
-  }
+  title = 'Box Tutorial Test';
+  macro = new BoxToolTutorial();
 
   /**
    *

@@ -2,13 +2,8 @@
  * @file Test for line tool.
  */
 class LineToolTutorialTest extends Test {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Line Test', new LineToolTutorial());
-  }
+  title = 'Line Test';
+  macro = new LineToolTutorial();
 
   /**
    *

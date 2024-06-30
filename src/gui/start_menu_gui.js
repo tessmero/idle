@@ -22,55 +22,36 @@ const _startMessageSpecs = randChoice([
  *
  */
 class StartMenuGui extends Gui {
-
-  /**
-   *
-   * @param {...any} p
-   */
-  constructor(...p) {
-    super('Start Menu Gui', ...p);
-  }
+  title = 'Start Menu';
+  layoutData = START_GUI_LAYOUT;
 
   /**
    * Construct start menu gui elements for the given game screen.
    * @param {GameScreen} screen The screen in need of gui elements.
+   * @param {object} layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen) {
-    const sr = screen.rect;
+  buildElements(screen, layout) {
     const specs = _startMessageSpecs;
 
-    // layout a column of wide buttons in the middle of the screen
-    const dims = getTextDims('IDLERAINNN');
-    const pad = 0.005;
-    const w = dims[0] + pad * 10;
-    const h = 0.1;
-    const n = 10;
-    const th = h * n + pad * (n - 1);
-    const x = sr[0] + sr[2] / 2 - w / 2;
-    const y = 0.01 + sr[1] + sr[3] / 2 - th / 2;
+    // build title display with large readable text
+    const div = layout.titleDiv;
     const slots = [];
-    for (let i = 0; i < n; i++) { slots.push([x, y + i * (h + pad), w, h]); }
-    this.slots = slots;
-
-    const textPad = 0.01; // padding around letters' pixels
-
+    for (let i = 0; i < 5; i++) { slots.push([div[0], div[1] + i * 0.11, div[2], 0.11]); }
     this.labels = specs.map((s) =>
       new TextLabel(slots[s[0]], s[1])
-        .withLetterPixelPad(textPad)
+        .withLetterPixelPad(0.01)
         .withStyle('hud'));
-
-    // rect to contain start and sandbox buttons
-    const brect = padRect(...slots[7], 0.01);
-    const buttonPad = 0.02; // space between buttons
-    const s = brect[3];
-    const playRect = [brect[0], brect[1], brect[2] - s - buttonPad, brect[3]];
-    const sandboxRect = [brect[0] + brect[2] - s, brect[1], s, s];
 
     return [
       ...this.labels,
-      new TextButton(playRect, 'PLAY', () => this.gsm.playClicked()), // game_state_manager.js
-      new IconButton(sandboxRect, sandboxIcon, () => this.gsm.sandboxClicked()), // game_state_manager.js
+
+      new TextButton(layout.playBtn, 'PLAY',
+        () => this.gsm.playClicked()),
+
+      new IconButton(layout.sandboxBtn, sandboxIcon,
+        () => this.gsm.sandboxClicked()),
+
     ];
   }
 }

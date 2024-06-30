@@ -9,7 +9,12 @@ const GameStates = {
   playing: 2,
   upgradeMenu: 3,
   pauseMenu: 4,
+
+  // animated transition in or out of a black box
   boxTransition: 5,
+
+  // any special state assocated with a story hook
+  storyIntervention: 6,
 };
 
 /**
@@ -47,14 +52,31 @@ class GameStateManager {
     const guis = Object.keys(GameStates)
       .map((state) => this._buildGuiForState(GameStates[state], sr));
     guis.filter(Boolean).forEach((gui) => {
-      gui.gsm = this;
-      gui.setChildren(gui.buildElements(screen));
-      gui.setScreen(screen);
+      this._rebuildGui(gui, screen);
     });
     this._guis = guis;
 
     const currentGui = guis[this._state];
     screen.setGui(currentGui);
+  }
+
+  /**
+   * Update the gui to fit the screen.
+   * @param {Gui} gui
+   * @param {GameScreen} screen
+   */
+  _rebuildGui(gui, screen) {
+
+    // compute rectangles from layout css
+    const layout = new GuiLayoutParser(screen.rect, gui.layoutData);
+
+    gui.gsm = this;
+    gui.setChildren(gui.buildElements(screen, layout));
+    gui.setScreen(screen);
+
+    // we are finished using computed css rectangles
+    // but may be drawn later for debugging
+    gui.parsedCssLayout = layout;
   }
 
   /**
@@ -81,6 +103,9 @@ class GameStateManager {
 
     case GameStates.boxTransition:
       return new BoxTransitionGui(sr);
+
+    case GameStates.storyIntervention:
+      return new StoryGui(sr);
 
     default:
       return null;
@@ -158,7 +183,7 @@ class GameStateManager {
   /**
    *
    * @param {number} s The new state value in GameStates.
-   * @param {object} params The extra parameters, used for box transition gui.
+   * @param {object} params The extra parameters, used for box transition and story intervention.
    */
   setState(s, params = {}) {
 
@@ -166,7 +191,7 @@ class GameStateManager {
     this.rebuildGuis(this._screen, false);
 
     const gui = this.currentGui;
-    if (gui) { gui.setStateParams = params; }
+    if (gui) { gui.setStateParams(params); }
 
     global.shiftHeld = false;
     global.controlHeld = false;
@@ -268,6 +293,9 @@ class GameStateManager {
       setColorScheme(ColorScheme.sandbox);
     }
     this.play();
+    if (this.screen === global.mainScreen) {
+      global.storyManager.triggerStoryHook(STORY_HOOKS.startSequenceFinished);
+    }
   }
 
   /**

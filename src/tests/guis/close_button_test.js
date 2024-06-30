@@ -2,13 +2,8 @@
  * @file Test toggling closing upgrade menu with small x button.
  */
 class CloseButtonTest extends GuiTest {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Close Button Test', CloseButtonTest._macro());
-  }
+  title = 'Close Button Test';
+  macro = CloseButtonTest._macro();
 
   /**
    * Called in constructor.

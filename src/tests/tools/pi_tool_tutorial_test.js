@@ -2,13 +2,8 @@
  * @file Test for particle inpsector tool.
  */
 class PiToolTutorialTest extends Test {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Inspector Test', new PiToolTutorial());
-  }
+  title = 'Inspector Test';
+  macro = new PiToolTutorial();
 
   /**
    *

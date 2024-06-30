@@ -10,7 +10,7 @@ class DynamicTextLabel extends TextLabel {
    * @param {Function} labelFunc The function who's returned string will be display.
    */
   constructor(rect, labelFunc) {
-    super(rect, '');
+    super([...rect], '');
     this.labelFunc = labelFunc;
   }
 

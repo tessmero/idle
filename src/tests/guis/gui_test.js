@@ -37,8 +37,9 @@ class GuiTest extends Test {
       //
       gsm._guis.forEach((k) => {
         if (k === null) { return; }
+        const layout = new GuiLayoutParser(screen.rect, k.layoutData);
         k.gsm = gsm;
-        k.setChildren(k.buildElements(screen));
+        k.setChildren(k.buildElements(screen, layout));
         k.setScreen(screen);
       });
       const gui = gsm.currentGui;
@@ -72,10 +73,10 @@ class GuiTest extends Test {
     // hud_gui.js
     hud._be = hud.buildElements;
 
-    hud.buildElements = (r) => {
+    hud.buildElements = (...r) => {
 
       // omitt all but first element
-      const [menuBtn] = hud._be(r);
+      const [menuBtn] = hud._be(...r);
 
       // shrink and remove tooltip
       this._scaleElems(menuBtn);
@@ -95,8 +96,8 @@ class GuiTest extends Test {
     // upgrade_menu_gui.js
     menu._be = menu.buildElements;
 
-    menu.buildElements = (r) => {
-      const [closeButton, tabGroup] = menu._be(r);
+    menu.buildElements = (...r) => {
+      const [closeButton, tabGroup] = menu._be(...r);
       this._scaleElems(closeButton);
 
       // remove tab group contents

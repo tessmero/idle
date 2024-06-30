@@ -55,6 +55,7 @@ class Global {
 
   // debug
   sandboxMode = false;
+  debugCssRects = true;
   debugUiRects = false;
   debugGrabbers = false;
   colorcodeParticles = false;
@@ -91,7 +92,7 @@ class Global {
 
   // mouse
   canvasMousePos = v(0, 0); // pixels
-  mouseGrabRadius = 0.005;
+  mouseGrabRadius = 0.002;
 
   // debug
   debugTileIndices = false;

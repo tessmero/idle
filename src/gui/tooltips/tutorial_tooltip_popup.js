@@ -33,10 +33,11 @@ class TutorialTooltipPopup extends LabelTooltipPopup {
 
   /**
    *
-   * @param {Macro} macro
-   * @param {string} titleKey
+   * @param {Tool} tool
    */
-  static getTutorialScreen(macro, titleKey) {
+  static getTutorialScreen(tool) {
+    const macro = tool.getTutorial();
+    const titleKey = tool.tooltipText;
     if (!(titleKey in _allTutorialScreens)) {
       const sim = new TutorialPSim();
       const gsm = new BlankGSM();

@@ -6,14 +6,15 @@
 import os
 
 # get all source file paths
-base_folder = 'src'
+all_base_folders = ['src','data']
 all_src_paths = {}
-for foldername, subfolders, filenames in os.walk(base_folder):
-    for filename in filenames:
-        if filename.endswith('.js'):
-            relative_path = os.path.relpath(os.path.join(foldername, filename), base_folder).replace("\\","/")
-            if( '__tests__' not in relative_path ):
-                all_src_paths[filename] = f"{base_folder}/{relative_path}"
+for base_folder in all_base_folders:
+  for foldername, subfolders, filenames in os.walk(base_folder):
+      for filename in filenames:
+          if filename.endswith('.js'):
+              relative_path = os.path.relpath(os.path.join(foldername, filename), base_folder).replace("\\","/")
+              if( '__tests__' not in relative_path ):
+                  all_src_paths[filename] = f"{base_folder}/{relative_path}"
 
 
 # get mapping of classes to filenames
@@ -58,6 +59,10 @@ def toLast(my_list, element_to_move):
 class_files = [filename for filename in order if filename in class_filenames.values()]
 non_class_files = [filename for filename in order if filename not in class_filenames.values()]
 
+# further separate non-class files
+data_files = [filename for filename in non_class_files if all_src_paths[filename].startswith('data')]
+other_files = [filename for filename in non_class_files if not all_src_paths[filename].startswith('data')]
+
 # Define a function to get the depth of a class in the hierarchy
 def get_hierarchy_depth(class_fname):
     depth = 0
@@ -70,7 +75,7 @@ def get_hierarchy_depth(class_fname):
 class_files = sorted(class_files, key=get_hierarchy_depth)
 
 # Concatenate class files and non-class files
-order = class_files + non_class_files
+order = data_files + class_files + other_files
 
 # utils must be first
 order = toFirst(order, 'music_theory.js')

@@ -5,6 +5,7 @@
  * one procedural group, one physics group, and one edge group.
  */
 class ParticleSim {
+  rect;
 
   #grabbers = new Set();
   #bodies = new Set();
@@ -48,6 +49,7 @@ class ParticleSim {
     // prepare extra subgroup for various leftover physics particles
     // e.g. particles emitted by body, then body was deleted
     this.leftoverPPS = this.physicsGroup.newSubgroup();
+
     this.floaters = new FloaterGroup(1000);
     this.poiMaxArea = 1e-2;
     this.poiShrinkRate = 1e-6;// vunits^2 area lost per ms

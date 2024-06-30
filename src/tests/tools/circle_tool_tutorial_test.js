@@ -2,13 +2,8 @@
  * @file Test for circle tool.
  */
 class CircleToolTutorialTest extends Test {
-
-  /**
-   *
-   */
-  constructor() {
-    super('Circle Test', new CircleToolTutorial());
-  }
+  title = 'Circle Test';
+  macro = new CircleToolTutorial();
 
   /**
    *

@@ -2,13 +2,8 @@
  * @file Test transfering a body into a black box inner sim.
  */
 class CircleIntoBoxTest extends Test {
-
-  /**
-   * Use macro sequence defined in this file.
-   */
-  constructor() {
-    super('Circle Into Box Test', CircleIntoBoxTest._macro());
-  }
+  title = 'Circle Into Box Test';
+  macro = CircleIntoBoxTest._macro();
 
   /**
    * use test sim with no particles
@@ -63,9 +58,7 @@ class CircleIntoBoxTest extends Test {
     const box = v(0.5, 0.5);
     const circle = v(0.8, 0.5);
 
-    // use minature box tool from BoxToolTutorial
-    // override buildKeyframes()
-    return new BoxToolTutorial(() => [
+    return new Macro(() => [
       [0, 'pos', start],
       [1, 'tool', BoxTool],
 
