@@ -279,6 +279,12 @@ class GameScreen {
       return;
     }
 
+    if (gui && gui.blockClickThrough) {
+      if (gui.blockClickThrough()) {
+        return;
+      }
+    }
+
     // other gui in background of current gui
     const bgGui = gui ? gui.getBackgroundGui() : null;
     if (bgGui) {
@@ -539,6 +545,19 @@ class GameScreen {
   }
 
   /**
+   * Recursively draw background Guis as necessary. (e.g. hud behind upgrade menu)
+   * @param {object} g The graphics context.
+   * @param {Gui} gui The gui whose foreground was just drawn.
+   */
+  _drawBgGui(g, gui) {
+    const bgGui = gui.getBackgroundGui();
+    if (bgGui) {
+      bgGui.draw(g);
+      this._drawBgGui(g, bgGui);
+    }
+  }
+
+  /**
    * draw gui and cursor
    * @param {object} g The graphics context.
    */
@@ -548,12 +567,7 @@ class GameScreen {
     // start drawing main gui if applicable
     if (gui) {
 
-      // if applicable, draw another gui in background
-      // e.g. hud behind upgrade menu
-      const bgGui = gui.getBackgroundGui();
-      if (bgGui) {
-        bgGui.draw(g);
-      }
+      this._drawBgGui(g, gui);
 
       // draw upgrade menu gui transition effect
       const menuGui = this.stateManager.getGuiForState(GameStates.upgradeMenu);
@@ -564,12 +578,14 @@ class GameScreen {
       gui.draw(g);
     }
 
-    // draw modal gui popups
-    if (this.contextMenu) {
-      this.contextMenu.draw(g);
-    }
-    if (this.tooltipPopup) {
-      this.tooltipPopup.draw(g);
+    if (gui && (!gui.blocksPopups)) {
+      // draw modal gui popups
+      if (this.contextMenu) {
+        this.contextMenu.draw(g);
+      }
+      if (this.tooltipPopup) {
+        this.tooltipPopup.draw(g);
+      }
     }
 
     // draw gui floaters on top of gui

@@ -5,7 +5,6 @@
  */
 class BoxTransitionGui extends Gui {
   title = 'Box Transition';
-  layoutData = null;
 
   #t = 0;
   #closeDur = 0;

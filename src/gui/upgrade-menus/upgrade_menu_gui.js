@@ -5,7 +5,7 @@
  */
 class UpgradeMenuGui extends Gui {
   title = 'Upgrade Menu';
-  layoutData = UPGRADE_GUI_LAYOUT;
+  _layoutData = UPGRADE_MENU_GUI_LAYOUT;
 
   /**
    *
@@ -42,10 +42,10 @@ class UpgradeMenuGui extends Gui {
   /**
    * Construct upgrade menu gui elements for the given game screen.
    * @param {GameScreen} screen The screen in need of gui elements.
-   * @param {object} layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen, layout) {
+  buildElements(screen) {
+    const layout = this.layoutRects(screen);
     const r0 = layout.r0;
 
     let tabLabels; let tabContent;
@@ -64,10 +64,10 @@ class UpgradeMenuGui extends Gui {
       // let tabLabels = ['upgrades','skills','stats','debug']
       tabLabels = ['UPGRADES', 'STATS'];
       tabContent = [
-        (rect) => new UpgradesTab(rect),
+        (rect) => new UpgradesTab(rect, screen),
 
         // rect => new SkillsTab(rect),
-        (rect) => new StatsTab(rect),
+        (rect) => new StatsTab(rect, screen),
 
         // rect => new DebugTab(rect),
       ];

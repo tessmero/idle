@@ -5,7 +5,7 @@
  */
 class PauseMenuGui extends Gui {
   title = 'Pause Menu';
-  layoutData = PAUSE_GUI_LAYOUT;
+  _layoutData = PAUSE_GUI_LAYOUT;
 
   /**
    * Make HUD appear behind the pause menu.
@@ -17,10 +17,10 @@ class PauseMenuGui extends Gui {
   /**
    * Construct pause menu gui elements for the given game screen.
    * @param {GameScreen} screen The screen in need of gui elements.
-   * @param {object} layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen, layout) {
+  buildElements(screen) {
+    const layout = this.layoutRects(screen);
     const quitLabel = screen === global.rootScreen ? 'QUIT' : 'EXIT BOX';
 
     return [

@@ -3,6 +3,7 @@
  * Contents for the "performance" tab in the sandbox menu.
  */
 class PerformanceTab extends CompositeGuiElement {
+  _layoutData = PERFORMANCE_GUI_LAYOUT;
 
   /**
    *
@@ -10,8 +11,7 @@ class PerformanceTab extends CompositeGuiElement {
    */
   constructor(rect) {
     super(rect);
-
-    const rows = this.buildRows(rect, 10);
+    const rows = this.buildRows(10);
 
     const specs = [
       [screenIcon, () => this.rptMemoryScreens(), () => this.rptMemoryScreensDetails()],
@@ -50,6 +50,19 @@ class PerformanceTab extends CompositeGuiElement {
       this.addChild(elem);
       i = i + 1;
     });
+  }
+
+  /**
+   * @param {number} n the desired number of rows.
+   */
+  buildRows(n) {
+    const layout = this.layoutRects(screen);
+    const r = layout.row;
+    const result = [];
+    for (let i = 0; i < n; i++) {
+      result.push([r[0], r[1] + r[3] * i, r[2], r[3]]);
+    }
+    return result;
   }
 
   /**
@@ -129,25 +142,5 @@ class PerformanceTab extends CompositeGuiElement {
 
     const n = screenFlags.size;
     return `${n} active screen${n > 1 ? 's' : ''}`;
-  }
-
-  /**
-   *
-   * @param {number[]} rect The rectangle to align rows in.
-   * @param {number} n the desired number of rows.
-   */
-  buildRows(rect, n) {
-    const sr = rect;
-    const m = 0.03;
-    const w = sr[2] - 2 * m;
-    const h = 0.05;
-    const r0 = [sr[0] + m, sr[1] + m * 2, w, h];
-
-    const result = [];
-    for (let i = 0; i < n; i++) {
-      result.push([...r0]);
-      r0[1] = r0[1] + r0[3];
-    }
-    return result;
   }
 }

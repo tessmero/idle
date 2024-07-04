@@ -41,17 +41,24 @@ class TestsTab extends CompositeGuiElement {
    * @param {string} cat The category key/name.
    */
   buildTabContent(rect, cat) {
-
     const scale = 0.4;
     const maxRows = 10;
-    const rows = this.buildRows(rect, maxRows);
+
+    const result = new CompositeGuiElement(rect);
+    result._layoutData = DEBUG_GUI_LAYOUT;
+    const layout = result.layoutRects(screen);
     let rowIndex = 0;
+    const nextRow = () => {
+      const r = layout.row;
+      const nr = [r[0], r[1] + rowIndex * r[3], r[2], r[3]];
+      rowIndex = rowIndex + 1;
+      return nr;
+    };
 
     // run all button
-    const rab = new Button(rows[rowIndex],
+    const rab = new Button(nextRow(),
       () => this.playAllClicked())
       .withScale(scale);
-    rowIndex = rowIndex + 1;
     this.rab = rab;
 
     // build ui rows, leaveing first slot free
@@ -62,14 +69,12 @@ class TestsTab extends CompositeGuiElement {
         if (rowIndex >= maxRows) {
           throw new Error(`max ${maxRows} rows in test category gui`);
         }
-        const tlr = new TestListRow(rows[rowIndex], testIndex);
+        const tlr = new TestListRow(nextRow(), testIndex);
         innerTlrs.push(tlr);
         this.tlrs.set(testIndex, tlr);
-        rowIndex = rowIndex + 1;
       }
     }
 
-    const result = new CompositeGuiElement(rect);
     result.setChildren([
 
       // play all button in first slot

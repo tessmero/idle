@@ -12,13 +12,6 @@ class Gui extends CompositeGuiElement {
   title;
 
   /**
-   * Reference to css in data folder
-   * @abstract
-   * @type {object}
-   */
-  layoutData;
-
-  /**
    * Construct array of GuiElement instances for the given game screen.
    * @abstract
    * @param {GameScreen} _screen The screen in need of gui elements.
@@ -93,26 +86,5 @@ class Gui extends CompositeGuiElement {
   draw(g) {
     global.livePerformanceStats.flagGui(this, 'drawn');
     super.draw(g);
-
-    if (global.debugCssRects) {
-
-      // use member set in game_state_manage.js
-      const layout = this.parsedCssLayout;
-      if (layout) {
-        const color = 'green';
-        g.strokeStyle = color;
-        g.fillStyle = color;
-        g.lineWidth = global.lineWidth;
-        for (const [key, rect] of Object.entries(layout)) {
-          if (!key.startsWith('_')) {
-            const c = rectCenter(...rect);
-            drawText(g, ...c, key, true, new FontSpec(0, 0.3, false));
-            g.strokeRect(...rect);
-          }
-        }
-        g.fillStyle = global.colorScheme.fg;
-      }
-    }
-
   }
 }

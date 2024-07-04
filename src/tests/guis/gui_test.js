@@ -37,9 +37,8 @@ class GuiTest extends Test {
       //
       gsm._guis.forEach((k) => {
         if (k === null) { return; }
-        const layout = new GuiLayoutParser(screen.rect, k.layoutData);
         k.gsm = gsm;
-        k.setChildren(k.buildElements(screen, layout));
+        k.setChildren(k.buildElements(screen));
         k.setScreen(screen);
       });
       const gui = gsm.currentGui;
@@ -56,9 +55,7 @@ class GuiTest extends Test {
   _scaleElems(...elems) {
     const s = global.tutorialScaleFactor;
     elems.forEach((e) => {
-      e.rect[2] = e.rect[2] * s;
-      e.rect[3] = e.rect[3] * s;
-      e.setScale(e.scale * s);
+      e.setScale(s);
       e.withTooltip(null);
     });
   }

@@ -13,6 +13,7 @@ let _StoryManagerConstructed = false;
  */
 class StoryManager {
 
+  #hooks = STORY_HOOKS;
   #alreadyTriggered = new Set();
 
   /**
@@ -27,18 +28,34 @@ class StoryManager {
 
   /**
    * Called when a hook has been triggered.
-   * @param {object} hook The value in story_hooks_data.js
+   * @param {string} key The key in data/story_hooks_data.js
+   * @returns {boolean} True to attempt to block/consume the triggering user action
    */
-  triggerStoryHook(hook) {
-    if (this.#alreadyTriggered.has(hook)) {
-      return;
+  triggerStoryHook(key) {
+    const hook = this.#hooks[key];
+    const done = this.#alreadyTriggered;
+
+    if (done.has(key)) {
+      return false; // checkpoint already completed
     }
+
+    if (hook.after && (!done.has(hook.after))) {
+      return false; // required checkpoint not completed
+    }
+
     const sm = global.mainScreen.stateManager;
+    if (sm.state === GameStates.storyIntervention) {
+      return false; // already in special story state
+    }
+
+    // enter new story state
     sm.setState(GameStates.storyIntervention,
       {
         hook,
         prevState: sm.state,
       }
     );
+    done.add(key);
+    return hook.blocksTriggerAction;
   }
 }

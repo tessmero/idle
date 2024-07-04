@@ -12,13 +12,14 @@ class ToggleMenuTest extends GuiTest {
   static _macro() {
 
     const startPos = v(0.5, 0.9);
-    const toggle = v(0.2, 0.2);
+    const toggle = v(0.1, 0.1);
     const upgrade = GuiTest.upgradeButtonCenter;
 
     return new Macro(() => [
 
       // click menu button
       [0, 'pos', startPos],
+      [1, 'tool', DefaultTool],
       [500, 'pos', toggle],
       [600, 'down'],
       [700, 'up'],

@@ -3,9 +3,8 @@
  */
 const STORY_GUI_LAYOUT = {
 
-  // helper used as parent below
-  _sr: {
-    width: 0.4,
+  _main: {
+    width: 1,
     height: 0.4,
     top: 'auto',
     left: 'auto',
@@ -13,19 +12,27 @@ const STORY_GUI_LAYOUT = {
 
   // text display area
   messageDiv: {
-    parent: '_sr',
+    parent: '_main',
+    height: 0.3,
+  },
+
+  _bottomRow: {
+    parent: '_main',
+    height: 0.1,
+    bottom: 0,
   },
 
   // more button
   moreBtn: {
-    parent: '_sr',
-    height: 0.1,
+    parent: '_bottomRow',
+    width: '20%',
+    left: 0,
   },
 
   // okay button
   okayBtn: {
-    parent: '_sr',
-    height: 0.1,
-    bottom: 0,
+    parent: '_bottomRow',
+    width: '70%',
+    right: 0,
   },
 };

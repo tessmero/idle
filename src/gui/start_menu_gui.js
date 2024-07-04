@@ -5,16 +5,16 @@
  */
 const _startMessageSpecs = randChoice([
   [
-    [2, 'IDLE RAIN'],
-    [3, 'CATCHER'],
+    [0, 'IDLE RAIN'],
+    [1, 'CATCHER'],
   ],
   [
-    [2, 'RAIN CATCHER'],
+    [0, 'RAIN CATCHER'],
   ],
   [
-    [2, 'RAIN'],
-    [3, 'CATCHER'],
-    [4, 'IDLE'],
+    [0, 'RAIN'],
+    [1, 'CATCHER'],
+    [2, 'IDLE'],
   ],
 ]);
 
@@ -23,21 +23,21 @@ const _startMessageSpecs = randChoice([
  */
 class StartMenuGui extends Gui {
   title = 'Start Menu';
-  layoutData = START_GUI_LAYOUT;
+  _layoutData = START_GUI_LAYOUT;
 
   /**
    * Construct start menu gui elements for the given game screen.
    * @param {GameScreen} screen The screen in need of gui elements.
-   * @param {object} layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen, layout) {
+  buildElements(screen) {
+    const layout = this.layoutRects(screen);
     const specs = _startMessageSpecs;
 
     // build title display with large readable text
     const div = layout.titleDiv;
     const slots = [];
-    for (let i = 0; i < 5; i++) { slots.push([div[0], div[1] + i * 0.11, div[2], 0.11]); }
+    for (let i = 0; i < 5; i++) { slots.push([div[0], div[1] + i * div[3], div[2], div[3]]); }
     this.labels = specs.map((s) =>
       new TextLabel(slots[s[0]], s[1])
         .withLetterPixelPad(0.01)

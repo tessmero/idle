@@ -5,15 +5,15 @@
  */
 class HudGui extends Gui {
   title = 'hud gui';
-  layoutData = HUD_GUI_LAYOUT;
+  _layoutData = HUD_GUI_LAYOUT;
 
   /**
    * Construct HUD elements for the given game screen.
    * @param {GameScreen} screen The screen in need of gui elements.
-   * @param {object} layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen, layout) {
+  buildElements(screen) {
+    const layout = this.layoutRects(screen);
     const sim = screen.sim;
     this.sim = sim;
 
@@ -84,7 +84,7 @@ class HudGui extends Gui {
    * @returns {GuiElement[]} The toolbar elements for the screen.
    */
   _buildToolbarButtons(screen) {
-    const sr = screen.rect;
+    const layout = this.layoutRects(screen);
 
     // decide which tools will be available
     let toolList = screen.toolList;
@@ -96,13 +96,12 @@ class HudGui extends Gui {
     }
 
     // layout toolbar at bottom of screen
-    const m = 0.1;
+    const tr = layout.toolbar;
     const nbuttons = toolList.length;
     const padding = 0.005;
-    const buttonWidth = m - padding * 2;
-    const rowHeight = buttonWidth + padding * 2;
+    const buttonWidth = tr[3] - padding * 2;
     const rowWidth = buttonWidth * nbuttons + padding * (nbuttons + 1);
-    const brow = [sr[0] + sr[2] / 2 - rowWidth / 2, sr[1] + sr[3] - rowHeight, rowWidth, rowHeight];
+    const brow = [tr[0] + tr[2] / 2 - rowWidth / 2, tr[1], rowWidth, tr[3]];
     const slots = [];
     const sloty = brow[1] + padding;
     for (let i = 0; i < nbuttons; i++) {

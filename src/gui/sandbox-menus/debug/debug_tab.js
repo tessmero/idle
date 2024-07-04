@@ -17,8 +17,8 @@ class DebugTab extends CompositeGuiElement {
         // tab title, tooltip
         'UI', 'User Interface\ntext, buttons, and menus', [
 
-          ['debugCssRects', 'bool', 'show stable base rectangles\ndefined by css rules in data folder'],
-          ['debugUiRects', 'bool', 'show final bounding rectangles\nmay use one-off math in src folder'],
+          ['debugCssRects', 'bool', 'show bounding rectangles\ndefined by css rules in data folder'],
+          ['debugUiRects', 'bool', 'show bounding rectangles\nmay involve one-off math in src folder'],
           ['baseAnimPeriod', 100, 'idle gui animation\nframe duration'],
           ['textPixelSize', 0.001, 'font size'],
           ['textLetterSpace', 1, 'space between letters'],
@@ -64,7 +64,7 @@ class DebugTab extends CompositeGuiElement {
     const tabLabels = specs.map((r) => r[0]);
     const tabTooltips = specs.map((r) => r[1]);
     const tabContents = specs.map((r) => (
-      (rect) => this.buildTabContent(rect, r[2])
+      (rect) => this.buildTabContent(rect, r[2], screen)
     ));
     const rect = padRect(...sr, -0.05);
     const tabGroup = new TabPaneGroup(rect, tabLabels, tabContents, tabTooltips);
@@ -80,28 +80,24 @@ class DebugTab extends CompositeGuiElement {
    * Build content for a tab within the debug tab.
    * @param {number[]} rect The rectangle to align elements in.
    * @param {object} tabSpecs Specifications for the tab.
+   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    */
-  buildTabContent(rect, tabSpecs) {
-
-    const sr = rect;
-    const m = 0.03;
-    const w = sr[2] - 2 * m;
-    const h = 0.05;
-    let r0 = [sr[0] + m, sr[1] + m * 2, w, h];
-
+  buildTabContent(rect, tabSpecs, screen) {
     const result = new CompositeGuiElement(rect);
+    result._layoutData = DEBUG_GUI_LAYOUT;
+    const layout = result.layoutRects(screen);
+    let r = layout.row;
+
     result.setChildren(tabSpecs.map((row) => {
       const varname = row[0];
       const inc = row[1];
       const tooltip = row[2];
-      const agvRect = r0;
-      r0 = [...r0];
-      r0[1] = r0[1] + r0[3];
+      const rr = [...r];
+      r = [r[0], r[1] + r[3], r[2], r[3]];
       if (inc === 'bool') {
-        return new BooleanDebugVar(agvRect, varname, tooltip);
+        return new BooleanDebugVar(rr, varname, tooltip);
       }
-
-      return new ScalarDebugVar(agvRect, varname, inc, tooltip);
+      return new ScalarDebugVar(rr, varname, inc, tooltip);
 
     }));
     return result;

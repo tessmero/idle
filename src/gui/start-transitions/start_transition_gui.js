@@ -5,7 +5,6 @@
  */
 class StartTransitionGui extends Gui {
   title = 'Start Transition';
-  layoutData = null;
 
   /**
    * @param {...any} p
@@ -23,10 +22,9 @@ class StartTransitionGui extends Gui {
    * Implement Gui, but contain no children gui elements.
    * Instead we extend the Gui draw method in this file.
    * @param {GameScreen} _screen The screen that will display this transition.
-   * @param {object} _layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} An empty array indicating no gui elements.
    */
-  buildElements(_screen, _layout) {
+  buildElements(_screen) {
     return [];
   }
 

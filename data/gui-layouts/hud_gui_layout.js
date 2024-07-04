@@ -5,7 +5,7 @@ const HUD_GUI_LAYOUT = {
 
   // helper referenced as parent below
   _sr: {
-    pad: 0.02,
+    margin: 0.02,
   },
 
   // button for upgrade menu
@@ -49,5 +49,11 @@ const HUD_GUI_LAYOUT = {
     parent: '_display',
     left: '70%',
     width: '20%',
+  },
+
+  // toolbar row along bottom of screen
+  toolbar: {
+    height: 0.1,
+    bottom: 0,
   },
 };

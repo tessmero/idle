@@ -23,13 +23,14 @@ const STORY_HOOKS = {
    * but they are blocked once by this message.
    */
   attemptedFirstRiu: {
+    blocksTriggerAction: true,
     message: [
       'You must not purchase this upgrade.',
       'It will increase the rain permanently.',
     ],
     extra: [
       'The rain will never stop falling.',
-      'You\'re job is to catch it.',
+      'Your job is to catch it.',
     ],
   },
 
@@ -38,8 +39,10 @@ const STORY_HOOKS = {
    * For the first time, the player successfully purchased a relevant upgrade.
    */
   purchasedFirstRiu: {
+    after: 'attemptedFirstRiu',
     message: [
-      'You have shirked your duties and intentionally increased the rain.',
+      'You have shirked your duties and',
+      'intentionally increased the rain.',
     ],
     extra: [
       'No. Bad.',

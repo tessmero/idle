@@ -52,8 +52,7 @@ class TestContextMenu extends ContextMenu {
 
     const gui = screen.gui;
     if (gui) {
-      const layout = new GuiLayoutParser(screen.rect, gui.layoutData);
-      gui.setChildren(gui.buildElements(screen, layout));
+      gui.setChildren(gui.buildElements(screen));
       gui.setScreen(screen);
     }
 

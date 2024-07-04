@@ -55,7 +55,7 @@ class Global {
 
   // debug
   sandboxMode = false;
-  debugCssRects = true;
+  debugCssRects = false;
   debugUiRects = false;
   debugGrabbers = false;
   colorcodeParticles = false;

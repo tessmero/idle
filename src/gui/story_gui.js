@@ -4,9 +4,15 @@
  */
 class StoryGui extends Gui {
   title = 'story';
-  layoutData = STORY_GUI_LAYOUT;
+  _layoutData = STORY_GUI_LAYOUT;
+
+  // flags checked in game_screen.js
+  blocksPopups = true;
 
   #moreClicked = false;
+  #flashCountdown = 0;
+  #flashDuration = 1000;
+  #flashPeriod = 200;
 
   /**
    *
@@ -19,6 +25,45 @@ class StoryGui extends Gui {
     if (gusp) {
       this.setStateParams(gusp);
     }
+  }
+
+  /**
+   * Extend standard gui update by advancing flashing animation.
+   * @param {number} dt The elapsed time.
+   */
+  update(dt) {
+    super.update(dt);
+
+    const cd = this.#flashCountdown;
+    if (cd > 0) {
+      this.#flashCountdown = cd - dt;
+    }
+  }
+
+  /**
+   * Extend standard gui draw by drawing flashing animation.
+   * @param {object} g The graphics context.
+   */
+  draw(g) {
+    super.draw(g);
+
+    const cd = this.#flashCountdown;
+    if (cd > 0) {
+      const per = this.#flashPeriod;
+      const flashOn = (cd % per) / per;
+      if (flashOn > 0.5) {
+        g.strokeStyle = global.colorScheme.hl;
+        this.children.forEach((c) => g.strokeRect(...c.rect));
+      }
+    }
+  }
+
+  /**
+   *
+   */
+  blockClickThrough() {
+    this.#flashCountdown = this.#flashDuration;
+    return true;
   }
 
   /**
@@ -57,27 +102,19 @@ class StoryGui extends Gui {
   /**
    * Construct story gui elements for the given game screen.
    * @param {GameScreen} screen The screen in need of gui elements.
-   * @param {object} layout The rectangles computed from css layout data.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen, layout) {
+  buildElements(screen) {
+    const layout = this.layoutRects(screen);
 
     // build typical gui elements
-    const result = [
+    return [
       // new IconButton(r, umbrellaIcon, () => this.closeStoryGui()),
+      new CompositeGuiElement(layout.messageDiv).withOpacity(true),
       new DynamicTextLabel(layout.messageDiv, () => this.buildDisplayText()).withScale(0.3),
-      new TextButton(layout.moreBtn, 'more...', () => { this.#moreClicked = true; }).withScale(0.3),
+      new TextButton(layout.moreBtn, '...', () => { this.#moreClicked = !this.#moreClicked; }).withScale(0.3),
       new TextButton(layout.okayBtn, 'Okay', () => this.closeStoryGui()).withScale(0.3),
     ];
-
-    // also show tutorial if a tool should be featured
-    const hk = this._hook;
-    if (hk && hk.tool) {
-      const innerScreen = TutorialTooltipPopup.getTutorialScreen(hk.tool);
-      result.push(new GuiScreenPanel(r, innerScreen, true));
-    }
-
-    return result;
   }
 
   /**

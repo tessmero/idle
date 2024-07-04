@@ -83,6 +83,8 @@ class StatUpgrader extends CompositeGuiElement {
     const budget = sim.particlesCollected;
     const lvl = gutse.level;
     const cost = gutse.cost.f(lvl - 1);
+
+    // check if upgrade can be purchased
     if (cost > budget) {
       this.setTemporaryTooltip('collect more raindrops!');
       return;
@@ -92,6 +94,18 @@ class StatUpgrader extends CompositeGuiElement {
       return;
     }
 
+    // attemot to trigger any related story hooks
+    if (gutse.triggers) {
+      const sm = global.storyManager;
+      const block = gutse.triggers.some((hook) => sm.triggerStoryHook(hook));
+      if (block) {
+
+        // purchase blocked by story hook
+        return;
+      }
+    }
+
+    // purchase upgrade
     sim.particlesCollected = sim.particlesCollected - cost;
     const screen = this.screen;
     screen.floaters.signalChange(screen.mousePos, -cost);

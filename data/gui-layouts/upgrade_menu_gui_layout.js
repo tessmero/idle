@@ -1,11 +1,11 @@
 /**
  * @file layout data for upgrade menu.
  */
-const UPGRADE_GUI_LAYOUT = {
+const UPGRADE_MENU_GUI_LAYOUT = {
 
-  // main rectangle
+  // main rectangle including tab headers
   r0: {
-    pad: '10%',
+    margin: '10%',
   },
 
   // close button on top right

@@ -4,21 +4,17 @@
  * Contents for the "upgrades" tab in the upgrades menu.
  */
 class UpgradesTab extends CompositeGuiElement {
+  _layoutData = UPGRADES_TAB_LAYOUT;
 
   /**
    *
    * @param {number[]} sr The rectange to align elements in.
+   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    */
-  constructor(sr) {
+  constructor(sr, screen) {
     super(sr);
-
-    // let sc = global.screenCorners
-    // let sr = global.screenRect
-    const m = 0.05;
-    const w = sr[2] - 2 * m;
-    const h = 0.05;
-    let r0 = [sr[0] + m, sr[1] + m * 2, w, h];
-
+    const layout = this.layoutRects(screen);
+    let r0 = [...layout.row];
     if (!global.upgradeTracks) { return; }
     const specs = global.upgradeTracks.state;
     const upgraders = Object.keys(specs).map((key) => {

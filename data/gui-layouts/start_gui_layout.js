@@ -7,7 +7,7 @@ const START_GUI_LAYOUT = {
   titleDiv: {
     width: '100%',
     height: 0.1,
-    top: 0.1,
+    top: 0.2,
   },
 
   // helper

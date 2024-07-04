@@ -66,17 +66,9 @@ class GameStateManager {
    * @param {GameScreen} screen
    */
   _rebuildGui(gui, screen) {
-
-    // compute rectangles from layout css
-    const layout = new GuiLayoutParser(screen.rect, gui.layoutData);
-
     gui.gsm = this;
-    gui.setChildren(gui.buildElements(screen, layout));
+    gui.setChildren(gui.buildElements(screen));
     gui.setScreen(screen);
-
-    // we are finished using computed css rectangles
-    // but may be drawn later for debugging
-    gui.parsedCssLayout = layout;
   }
 
   /**
@@ -294,7 +286,7 @@ class GameStateManager {
     }
     this.play();
     if (this.screen === global.mainScreen) {
-      global.storyManager.triggerStoryHook(STORY_HOOKS.startSequenceFinished);
+      global.storyManager.triggerStoryHook('startSequenceFinished');
     }
   }
 

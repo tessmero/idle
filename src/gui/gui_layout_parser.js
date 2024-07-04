@@ -3,19 +3,35 @@
  */
 class GuiLayoutParser {
 
+  /**
+   * Compute x,y,w,h rectangles from css rules.
+   * @param {number[]} screenRect The overall bounding rectangle.
+   * @param {?object} data reference to css in data folder.
+   * @param {number} iconScale The scale factor for raw numeric distances.
+   */
+  static computeRects(screenRect, data, iconScale = 1) {
+    const glp = new GuiLayoutParser(screenRect, data, iconScale);
+    const rects = glp.#computedRects;
+    return rects;
+  }
+
+  #computedRects = [];
   #xKeys = ['left', 'right', 'width'];
   #yKeys = ['top', 'bottom', 'height'];
   #parent = [0, 0, 1, 1];
+  #iconScale;
 
   /**
-   * Compute x,y,w,h rectangles.
+   * Called in computeRects
    * @param {number[]} screenRect The overall bounding rectangle.
    * @param {?object} data The value in GUI_LAYOUTS
+   * @param {number} iconScale The scale factor for raw numeric distances.
    */
-  constructor(screenRect, data) {
+  constructor(screenRect, data, iconScale) {
+    this.#iconScale = iconScale;
     if (data) {
       for (const [key, cssRules] of Object.entries(data)) {
-        this[key] = this._computeRect(screenRect, cssRules);
+        this.#computedRects[key] = this._computeRect(screenRect, cssRules);
       }
     }
   }
@@ -50,7 +66,7 @@ class GuiLayoutParser {
 
       // use previously defined rectabgle
       // as parent rectangle to align within
-      const p = this[cssVal];
+      const p = this.#computedRects[cssVal];
 
       if (!p) {
         throw new Error(`parent css not defined: ${cssVal}`);
@@ -68,18 +84,18 @@ class GuiLayoutParser {
     // apply rule, resulting in a new rectangle
     switch (cssKey) {
     case 'left':
-      return [r[0] + d, r[1], r[2], r[3]];
+      return [p[0] + d, r[1], r[2], r[3]];
     case 'right':
       return [p[0] + p[2] - r[2] - d, r[1], r[2], r[3]];
     case 'top':
-      return [r[0], r[1] + d, r[2], r[3]];
+      return [r[0], p[1] + d, r[2], r[3]];
     case 'bottom':
       return [r[0], p[1] + p[3] - r[3] - d, r[2], r[3]];
     case 'width':
       return [r[0], r[1], d, r[3]];
     case 'height':
       return [r[0], r[1], r[2], d];
-    case 'pad':
+    case 'margin':
       return padRect(...r, -d);
     default:
       return r;
@@ -118,6 +134,6 @@ class GuiLayoutParser {
     }
 
     // not a string
-    return cssVal;
+    return cssVal * this.#iconScale;
   }
 }

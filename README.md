@@ -1,6 +1,6 @@
 # Idle Rain Catcher
 
-Idle game based on procedural/physics particle simulation
+Incremental / physics game used to practice game development.
 
 ## Demo
 

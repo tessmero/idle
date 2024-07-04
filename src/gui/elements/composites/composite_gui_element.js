@@ -4,6 +4,15 @@
  */
 class CompositeGuiElement extends GuiElement {
 
+  /**
+   * Optional reference to css in data folder
+   * @abstract
+   * @type {object}
+   */
+  _layoutData = null;
+
+  #layoutRects = null;
+
   #children = [];
   #opaque = false;
 
@@ -19,6 +28,24 @@ class CompositeGuiElement extends GuiElement {
    */
   constructor(rect) {
     super(rect);
+  }
+
+  /**
+   * Compute css rects if not already cached.
+   * @param {GameScreen} screen The screen needed to pick icon scale.
+   */
+  layoutRects(screen) {
+    if (!screen) {
+      throw new Error('must give screen argument');
+    }
+    const data = this._layoutData;
+    if (!data) { return null; }
+    let lr = this.#layoutRects;
+    if (!lr) {
+      lr = GuiLayoutParser.computeRects(this.rect, this._layoutData, screen.iconScale);
+      this.#layoutRects = lr;
+    }
+    return lr;
   }
 
   /**
@@ -51,6 +78,15 @@ class CompositeGuiElement extends GuiElement {
    */
   addChildren(cs) {
     cs.forEach((c) => this.addChild(c));
+  }
+
+  /**
+   * Chainable helper to add children.
+   * @param {GuiElement[]} cs The new elements to include.
+   */
+  withChildren(cs) {
+    this.addChildren(cs);
+    return this;
   }
 
   /**
@@ -103,7 +139,36 @@ class CompositeGuiElement extends GuiElement {
    */
   draw(g) {
     if (this.#opaque) { Button._draw(g, this.rect); }
+
     this.#children.forEach((e) => e.draw(g));
+
+    const layout = this.layoutRects(this.screen);
+
+    if (global.debugUiRects && (!layout)) {
+
+      // draw debug rectangle
+      g.strokeStyle = 'red';
+      g.lineWidth = global.lineWidth;
+      g.strokeRect(...this.rect);
+    }
+
+    if (global.debugCssRects && layout) {
+      g.strokeStyle = 'orange';
+      g.strokeRect(...this.rect);
+
+      const color = 'green';
+      g.strokeStyle = color;
+      g.fillStyle = color;
+      g.lineWidth = global.lineWidth;
+      for (const [key, rect] of Object.entries(layout)) {
+        if (!key.startsWith('_')) {
+          const c = rectCenter(...rect);
+          drawText(g, ...c, key, true, new FontSpec(0, 0.3 * this.screen.iconScale, false));
+          g.strokeRect(...rect);
+        }
+      }
+      g.fillStyle = global.colorScheme.fg;
+    }
   }
 
   /**

@@ -20,6 +20,7 @@ class CloseButtonTest extends GuiTest {
 
       // click menu button
       [0, 'pos', start],
+      [1, 'tool', DefaultTool],
       [500, 'pos', toggle],
       [500, 'down'],
       [600, 'up'],
