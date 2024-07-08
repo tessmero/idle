@@ -127,7 +127,7 @@ class HudGui extends Gui {
         button.withDynamicTooltip(() => {
           const ttpr = ToolbarTooltipPopup.pickRect(this.screen, tooltip);
           const innerScreen = ToolbarTooltipPopup.getTutorialScreen(tool);
-          return new ToolbarTooltipPopup(ttpr, tooltip, innerScreen, tool);
+          return new ToolbarTooltipPopup(ttpr, tooltip, this.screen, innerScreen, tool);
         });
 
       }

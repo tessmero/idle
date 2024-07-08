@@ -3,7 +3,7 @@
  */
 class GuiTest extends Test {
 
-  static closeButtonCenter = v(0.85, 0.405);
+  static closeButtonCenter = v(0.85, 0.25);
   static upgradeButtonCenter = v(0.5, 0.6);
 
   /**
@@ -93,8 +93,8 @@ class GuiTest extends Test {
     // upgrade_menu_gui.js
     menu._be = menu.buildElements;
 
-    menu.buildElements = (...r) => {
-      const [closeButton, tabGroup] = menu._be(...r);
+    menu.buildElements = (screen) => {
+      const [closeButton, tabGroup] = menu._be(screen);
       this._scaleElems(closeButton);
 
       // remove tab group contents
@@ -108,12 +108,6 @@ class GuiTest extends Test {
       rect[1] = ubPos.y - rect[3] / 2;
       tabGroup.setChildren([new TextButton(rect, label, () => {}).withScale(scale)]);
       tabGroup.tabContent.forEach((tc) => { tc.setChildren([]); });
-
-      // manually position close button
-      const cbPos = GuiTest.closeButtonCenter.mul(simScale);
-      const cbRect = closeButton.rect;
-      cbRect[0] = cbPos.x - cbRect[2] / 2;
-      cbRect[1] = cbPos.y - cbRect[3] / 2;
 
       return [tabGroup, closeButton];
     };

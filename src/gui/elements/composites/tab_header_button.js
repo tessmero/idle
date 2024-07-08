@@ -51,5 +51,13 @@ class TabHeaderButton extends TextButton {
     }
 
     drawText(g, ...rectCenter(...this.rect), this.label, this.center, new FontSpec(0, this.scale, false));
+
+    if (global.debugUiRects) {
+
+      // draw debug rectangle
+      g.strokeStyle = 'red';
+      g.lineWidth = global.lineWidth;
+      g.strokeRect(...this.rect);
+    }
   }
 }

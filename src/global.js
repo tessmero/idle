@@ -42,7 +42,7 @@ class Global {
   textPixelSize = 0.01; // fraction of screen size
   textLetterSpace = 1; // text pixels
   textLineSpace = 2; // text pixels
-  tooltipPadding = 0.05; // fraction of screen size
+  tooltipPadding = 0.05; // has to match css (needs cleanup)
   tooltipShadowWidth = 0.01;
 
   // synchronized gui elements idle animations
@@ -88,11 +88,14 @@ class Global {
   thumbnailSimDims = [0.1, 0.1];
   tutorialSimDims = [0.3, 0.3];
   boxSimDims = [1, 1];
-  tutorialScaleFactor = 0.5;
+  tutorialScaleFactor = 0.3;
 
   // mouse
   canvasMousePos = v(0, 0); // pixels
-  mouseGrabRadius = 0.002;
+
+  // base placeholder rad, effects PiTool tutorial
+  // tweak for player using upgrade_tracks_data.js catch_radius getRealVal
+  mouseGrabRadius = 0.1;
 
   // debug
   debugTileIndices = false;

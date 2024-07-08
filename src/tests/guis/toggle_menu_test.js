@@ -32,7 +32,7 @@ class ToggleMenuTest extends GuiTest {
       [1500, 'pos', upgrade],
 
       // drag in background at top
-      [2300, 'pos', v(0.5, 0.1)],
+      [2300, 'pos', v(0.5, 0.01)],
       [2400, 'down'],
       [2800, 'up'],
       [3000, 'pos', v(0.7, 0.7)],

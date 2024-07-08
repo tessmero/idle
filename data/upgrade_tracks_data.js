@@ -31,7 +31,7 @@ const UPGRADE_TRACKS = () => ({
     level: 1,
     maxLevel: 10,
     cost: ValueCurve.power(50, 2),
-    value: ValueCurve.linear(1, 1),
-    getRealVal: (v) => v * 2.5e-3, // (human readable => internal units)
+    value: ValueCurve.power(10, 1.1),
+    getRealVal: (v) => v * 5e-3, // (human readable => internal units)
   },
 });

@@ -41,7 +41,10 @@ class CompositeGuiElement extends GuiElement {
     const data = this._layoutData;
     if (!data) { return null; }
     let lr = this.#layoutRects;
-    if (!lr) {
+
+    // check if not yet computed, or was computed in
+    // superclass constructor and layout was extended
+    if ((!lr) || (Object.keys(lr).length !== Object.keys(data).length)) {
       lr = GuiLayoutParser.computeRects(this.rect, this._layoutData, screen.iconScale);
       this.#layoutRects = lr;
     }
@@ -154,17 +157,24 @@ class CompositeGuiElement extends GuiElement {
 
     if (global.debugCssRects && layout) {
       g.strokeStyle = 'orange';
+      g.lineWidth = global.lineWidth * 3;
+      g.setLineDash([0.01, 0.01]);
       g.strokeRect(...this.rect);
+      g.lineWidth = global.lineWidth;
+      g.setLineDash([]);
 
       const color = 'green';
       g.strokeStyle = color;
       g.fillStyle = color;
       g.lineWidth = global.lineWidth;
-      for (const [key, rect] of Object.entries(layout)) {
+      for (const [key, rectOrList] of Object.entries(layout)) {
         if (!key.startsWith('_')) {
-          const c = rectCenter(...rect);
-          drawText(g, ...c, key, true, new FontSpec(0, 0.3 * this.screen.iconScale, false));
-          g.strokeRect(...rect);
+          const rlist = ((typeof rectOrList[0] === 'number') ? [rectOrList] : rectOrList);
+          rlist.forEach((rect) => {
+            const c = rectCenter(...rect);
+            drawText(g, ...c, key, true, new FontSpec(0, 0.3 * this.screen.iconScale, false));
+            g.strokeRect(...rect);
+          });
         }
       }
       g.fillStyle = global.colorScheme.fg;

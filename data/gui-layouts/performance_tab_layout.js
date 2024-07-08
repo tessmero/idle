@@ -4,14 +4,15 @@
  */
 const PERFORMANCE_GUI_LAYOUT = {
 
-  // main rectangle including tab headers
-  r0: {
+  // helper
+  _r0: {
     margin: '10%',
   },
 
   // rows for indidividual settings
-  row: {
-    parent: 'r0',
+  rows: {
+    parent: '_r0',
     height: 0.05,
+    repeat: 'down',
   },
 };

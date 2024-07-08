@@ -14,15 +14,10 @@ class UpgradesTab extends CompositeGuiElement {
   constructor(sr, screen) {
     super(sr);
     const layout = this.layoutRects(screen);
-    let r0 = [...layout.row];
     if (!global.upgradeTracks) { return; }
     const specs = global.upgradeTracks.state;
-    const upgraders = Object.keys(specs).map((key) => {
-      const agvRect = r0;
-      r0 = [...r0];
-      r0[1] = r0[1] + r0[3];
-      return new StatUpgrader(agvRect, key);
-    });
+    const upgraders = Object.keys(specs).map((key, i) => new StatUpgrader(layout.rows[i], screen, key));
+
     this.setChildren(upgraders);
   }
 }

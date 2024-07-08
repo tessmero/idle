@@ -14,15 +14,13 @@ class StatsTab extends CompositeGuiElement {
   constructor(sr, screen) {
     super(sr);
     const layout = this.layoutRects(screen);
-    const r = [...layout.row];
 
     // reassign or append to this.children
     if (global.bonusSummary) {
-      global.bonusSummary.forEach((entry) => {
+      global.bonusSummary.forEach((entry, i) => {
         const [icon, summary] = entry;
         this.addChild(new StatReadout(
-          [...r], icon, () => summary).withScale(0.4));
-        r[1] = r[1] + r[3];
+          layout.rows[i], icon, () => summary).withScale(0.4));
       });
     }
   }

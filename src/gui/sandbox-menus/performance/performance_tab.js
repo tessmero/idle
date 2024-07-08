@@ -8,10 +8,12 @@ class PerformanceTab extends CompositeGuiElement {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
+   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    */
-  constructor(rect) {
+  constructor(rect, screen) {
     super(rect);
-    const rows = this.buildRows(10);
+    const layout = this.layoutRects(screen);
+    const rows = layout.rows;
 
     const specs = [
       [screenIcon, () => this.rptMemoryScreens(), () => this.rptMemoryScreensDetails()],

@@ -4,6 +4,7 @@
  * a tooltip with just text
  */
 class LabelTooltipPopup extends TooltipPopup {
+  _layoutData = TOOLTIP_LAYOUT;
 
   /**
    * get rect using LabelTooltipPopup.pickRect
@@ -13,15 +14,15 @@ class LabelTooltipPopup extends TooltipPopup {
    */
   constructor(rect, label, scale = null) {
     super(rect);
+    const layout = this.layoutRects(screen);
     this.label = label;
 
     let s = scale;
     if (!s) { s = this.constructor.scale(); }
     this.setScale(s);
 
-    const rr = padRect(...rect, -global.tooltipPadding);
     this.addChild(
-      new TextLabel(rr, label)
+      new TextLabel(layout.label, label)
         .withScale(s)
         .withCenter(false));
   }
@@ -29,7 +30,7 @@ class LabelTooltipPopup extends TooltipPopup {
   /**
    *
    */
-  static scale() { return 0.4; }
+  static scale() { return 0.3; }
 
   /**
    *

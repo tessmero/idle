@@ -176,7 +176,7 @@ class DefaultTool extends Tool {
 
       // held on background
       const c = p;
-      const r = Math.sqrt(this.grabber.r2);
+      const r = this.rad;
 
       g.strokeStyle = global.colorScheme.bg;
       g.lineWidth = 0.005;
@@ -212,7 +212,7 @@ class DefaultTool extends Tool {
 
     const r = this.rad;
     this.grabber.rad = r;
-    this.grabber.r2 = r;
+    this.grabber.r2 = r * r;
 
     if (this.held instanceof ControlPoint) {
       this._accelControlPoint(dt);

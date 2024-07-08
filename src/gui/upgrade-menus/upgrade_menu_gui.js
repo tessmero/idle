@@ -50,12 +50,14 @@ class UpgradeMenuGui extends Gui {
 
     let tabLabels; let tabContent;
     if (global.sandboxMode) {
-      tabLabels = ['debug', 'tests', 'performance', 'skills'];
+      tabLabels = ['debug', 'tests', 'performance', 'skills', 'UPGRADES', 'STATS'];
       tabContent = [
-        (rect) => new DebugTab(rect),
-        (rect) => new TestsTab(rect),
-        (rect) => new PerformanceTab(rect),
-        (rect) => new SkillsTab(rect),
+        (rect) => new DebugTab(rect, screen),
+        (rect) => new TestsTab(rect, screen),
+        (rect) => new PerformanceTab(rect, screen),
+        (rect) => new SkillsTab(rect, screen),
+        (rect) => new UpgradesTab(rect, screen),
+        (rect) => new StatsTab(rect, screen),
       ];
 
     }
@@ -72,7 +74,7 @@ class UpgradeMenuGui extends Gui {
         // rect => new DebugTab(rect),
       ];
     }
-    const tabGroup = new TabPaneGroup([...r0], tabLabels, tabContent);
+    const tabGroup = new TabPaneGroup([...r0], screen, tabLabels, tabContent);
     if (global.upgradeMenuTabIndex) { tabGroup.setSelectedTabIndex(global.upgradeMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.upgradeMenuTabIndex = i;

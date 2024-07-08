@@ -5,6 +5,7 @@
  * tab header buttons are used to switch.
  */
 class TabPaneGroup extends CompositeGuiElement {
+  _layoutData = TAB_PANE_LAYOUT;
 
   #selectedTabIndex = 0;
   #tabChangeListeners = [];
@@ -12,30 +13,25 @@ class TabPaneGroup extends CompositeGuiElement {
   /**
    * tabContent is list of rect->element callbacks
    * @param {number[]} rect The rectangle to align elements in.
+   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    * @param {string[]} tabLabels The labels fot he tab header buttons.
    * @param {Function[]} tabContents The functions to build each tab's elements.
    * @param {string[]} tabTooltips The tooltips for the tab header buttons.
    */
-  constructor(rect, tabLabels, tabContents, tabTooltips = null) {
+  constructor(rect, screen, tabLabels, tabContents, tabTooltips = null) {
     super(rect);
+    const layout = this.layoutRects(screen);
     this.tabLabels = tabLabels;
-
-    let x = rect[0];
-    let y = rect[1];
-    const pad = 0.02;
-    y = y + pad;
 
     // tab labels at top
     let i = 0;
     const p = 0.05;
-    x = x + p;
     const tabLabelScale = 0.5;
-    let tabHeaderHeight = 0;
+    const [cx, y, _w, _h] = layout.tabsRow;
+    let x = cx + 0.02;
     tabLabels.map((label) => {
       const [w, h] = getTextDims(label, tabLabelScale);
-      const rr = padRect(x, y, w, h, pad);
-      rr[1] = rr[1] + 0.01;
-      tabHeaderHeight = rr[3];
+      const rr = padRect(x, y, w, h, 0.02);
       const ii = i;
       x = x + (w + p);
       const tb = new TabHeaderButton(this, ii, rr, label,
@@ -52,10 +48,8 @@ class TabPaneGroup extends CompositeGuiElement {
     });
 
     // content for each tab
-    const r = [...rect];
-    r[1] = r[1] + tabHeaderHeight;
-    r[3] = r[3] - tabHeaderHeight;
-    this.tabContent = tabContents.map((cons) => cons(r).withOpacity(true));
+    const r = layout.content;
+    this.tabContent = tabContents.map((cons) => cons(r, screen).withOpacity(true));
 
     this.nTabs = tabLabels.length;
     this.#selectedTabIndex = 0;

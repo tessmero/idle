@@ -6,7 +6,7 @@
  */
 class BoxTool extends BodyTool {
   _icon = boxIcon;
-  _tooltipText = 'build black box';
+  _tooltipText = 'build box';
   _cursorCenter = true;
 
   #baseRad = 0.05;

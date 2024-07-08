@@ -12,7 +12,7 @@ class CloseButtonTest extends GuiTest {
   static _macro() {
 
     const start = v(0.5, 0.9);
-    const toggle = v(0.2, 0.2);
+    const toggle = v(0.1, 0.1);
     const upgrade = GuiTest.upgradeButtonCenter;
     const close = GuiTest.closeButtonCenter;
 

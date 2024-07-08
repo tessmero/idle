@@ -10,6 +10,14 @@ class PiTool extends DefaultTool {
 
   /**
    *
+   * @param {...any} p
+   */
+  constructor(...p) {
+    super(...p);
+  }
+
+  /**
+   *
    * @param {ParticleSim} sim
    */
   unregister(sim) {
@@ -125,7 +133,7 @@ class PiTool extends DefaultTool {
 
     // held on background
     const c = p;
-    const r = Math.sqrt(this.grabber.r2);
+    const r = this.rad;
 
     g.strokeStyle = global.colorScheme.bg;
     g.lineWidth = 0.005;

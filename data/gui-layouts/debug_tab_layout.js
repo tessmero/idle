@@ -2,16 +2,17 @@
  * @file layout data for debug settings menu
  * within upgrade menu in sendbox mode.
  */
-const DEBUG_GUI_LAYOUT = {
+const DEBUG_TAB_LAYOUT = {
 
-  // main rectangle including tab headers
-  r0: {
-    margin: '10%',
+  // helper
+  _r0: {
+    margin: .02,
   },
 
   // rows for indidividual settings
-  row: {
-    parent: 'r0',
+  rows: {
+    parent: '_r0',
     height: 0.05,
+    repeat: 'down',
   },
 };

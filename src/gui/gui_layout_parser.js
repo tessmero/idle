@@ -62,26 +62,46 @@ class GuiLayoutParser {
    * @param {number|string} cssVal
    */
   _applyRule(r, cssKey, cssVal) {
+    const p = this.#parent;
+
+    // check for made up key
     if (cssKey === 'parent') {
 
       // use previously defined rectabgle
       // as parent rectangle to align within
-      const p = this.#computedRects[cssVal];
+      const newp = this.#computedRects[cssVal];
 
-      if (!p) {
+      if (!newp) {
         throw new Error(`parent css not defined: ${cssVal}`);
       }
 
       // set as parent and start alligning from parent
-      this.#parent = p;
-      return p;
+      this.#parent = newp;
+      return newp;
     }
 
-    // otherwise the value must represent a distance
-    const p = this.#parent;
-    const d = this._parseDistanceVal(p, r, cssKey, cssVal);
+    // check for made up key
+    if (cssKey === 'repeat') {
+      const down = (cssVal === 'down');
+      const [x, y, w, h] = r;
+      const result = [];
+      for (let i = 0; ; i++) {
+        const ix = x + (down ? 0 : i * w);
+        const iy = y + (down ? i * h : 0);
+        if (down) {
+          if ((iy + h) > (p[1] + p[3])) {
+            return result;
+          }
+        }
+        else if ((ix + w) > (p[0] + p[2])) {
+          return result;
+        }
+        result.push([ix, iy, w, h]);
+      }
+    }
 
-    // apply rule, resulting in a new rectangle
+    // apply css layout rule, resulting in a new rectangle
+    const d = this._parseDistanceVal(p, r, cssKey, cssVal);
     switch (cssKey) {
     case 'left':
       return [p[0] + d, r[1], r[2], r[3]];
@@ -118,6 +138,11 @@ class GuiLayoutParser {
       const ax = this.#xKeys.includes(cssKey) ? 0 : 1;
 
       if (cssVal === 'auto') {
+
+        if ((cssKey === 'width') || (cssKey === 'height')) {
+          // pick new side length to align with bottom or right of parent
+          return p[ax] + p[ax + 2] - r[ax];
+        }
 
         // assume key is 'top' or 'left'
         // pick distance to center inside parent

@@ -3,14 +3,15 @@
  */
 const STATS_TAB_LAYOUT = {
 
-  // main rectangle including tab headers
-  r0: {
+  // helper
+  _r0: {
     margin: '10%',
   },
 
   // rows for indidividual stats
-  row: {
-    parent: 'r0',
+  rows: {
+    parent: '_r0',
     height: 0.15,
+    repeat: 'down',
   },
 };

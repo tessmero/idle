@@ -3,13 +3,16 @@
  * Contents for the "debug" tab in the sandbox menu.
  */
 class DebugTab extends CompositeGuiElement {
+  _layoutData = NESTED_TAB_PANE_LAYOUT;
 
   /**
    *
    * @param {number[]} sr The rectangle to align elements in.
+   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    */
-  constructor(sr) {
+  constructor(sr, screen) {
     super(sr);
+    const layout = this.layoutRects(screen);
 
     const specs = [
 
@@ -23,7 +26,6 @@ class DebugTab extends CompositeGuiElement {
           ['textPixelSize', 0.001, 'font size'],
           ['textLetterSpace', 1, 'space between letters'],
           ['textLineSpace', 1, 'space between lines'],
-          ['tooltipPadding', 0.001, 'extra space around\ntooltip content'],
           ['tooltipShadowWidth', 0.001, 'size of shadow effect\nfor tooltip popups'],
           ['lineWidth', 0.001, 'line thickness'],
         ],
@@ -66,8 +68,7 @@ class DebugTab extends CompositeGuiElement {
     const tabContents = specs.map((r) => (
       (rect) => this.buildTabContent(rect, r[2], screen)
     ));
-    const rect = padRect(...sr, -0.05);
-    const tabGroup = new TabPaneGroup(rect, tabLabels, tabContents, tabTooltips);
+    const tabGroup = new TabPaneGroup(layout.inner, screen, tabLabels, tabContents, tabTooltips);
     if (global.debugMenuTabIndex) { tabGroup.setSelectedTabIndex(global.debugMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.debugMenuTabIndex = i;
@@ -84,20 +85,16 @@ class DebugTab extends CompositeGuiElement {
    */
   buildTabContent(rect, tabSpecs, screen) {
     const result = new CompositeGuiElement(rect);
-    result._layoutData = DEBUG_GUI_LAYOUT;
+    result._layoutData = DEBUG_TAB_LAYOUT;
     const layout = result.layoutRects(screen);
-    let r = layout.row;
 
-    result.setChildren(tabSpecs.map((row) => {
-      const varname = row[0];
-      const inc = row[1];
-      const tooltip = row[2];
-      const rr = [...r];
-      r = [r[0], r[1] + r[3], r[2], r[3]];
+    result.setChildren(tabSpecs.map((rowSpecs, i) => {
+      const [varname, inc, tooltip] = rowSpecs;
+      const r = layout.rows[i];
       if (inc === 'bool') {
-        return new BooleanDebugVar(rr, varname, tooltip);
+        return new BooleanDebugVar(r, varname, tooltip);
       }
-      return new ScalarDebugVar(rr, varname, inc, tooltip);
+      return new ScalarDebugVar(r, varname, inc, tooltip);
 
     }));
     return result;

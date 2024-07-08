@@ -5,7 +5,7 @@ const UPGRADE_MENU_GUI_LAYOUT = {
 
   // main rectangle including tab headers
   r0: {
-    margin: '10%',
+    margin: 0.1,
   },
 
   // close button on top right

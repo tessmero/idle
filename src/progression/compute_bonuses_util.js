@@ -71,7 +71,7 @@ function updateAllBonuses() {
       }],
 
       ['catch_radius', (screen, val) => {
-        screen.toolList[0].rad = val;
+        screen.toolList.forEach((tool) => { tool.rad = val; });
       }],
     ];
     global.bonusSummary = specs.map((entry) => _updateBonus(...entry));

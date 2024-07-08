@@ -5,6 +5,7 @@
  * modifies one entry in global.upgradeTracks.state
  */
 class StatUpgrader extends CompositeGuiElement {
+  _layoutData = STAT_UPGRADER_LAYOUT; // upgrades_tab_layout.js
 
   #key;
   #gutse;
@@ -12,10 +13,13 @@ class StatUpgrader extends CompositeGuiElement {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
+   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    * @param {string} key The key in global.upgradeTracks.state.
    */
-  constructor(rect, key) {
+  constructor(rect, screen, key) {
     super(rect);
+    const layout = this.layoutRects(screen);
+
     this.#key = key;
     const gutse = global.upgradeTracks.state[key];
     this.#gutse = gutse;
@@ -25,28 +29,21 @@ class StatUpgrader extends CompositeGuiElement {
     r = [r[0], r[1], sl, sl];
 
     // upgrade button
-    const buttonWidth = 0.15;
-    const rbutton = padRect(r[0], rect[1], buttonWidth, r[3], -global.lineWidth * 2);
-    const btn = new TextButton(rbutton, 'upgrade', () => this.upgradeButtonClicked()).withScale(0.3);
+    const btn = new TextButton(layout.button, 'upgrade', () => this.upgradeButtonClicked()).withScale(0.3);
 
     // upgrade cost progress indicator
     // overlay on upgrade button
-    const btno = new ProgressIndicator(rbutton, () => {
-      const screen = this.screen;
+    const btno = new ProgressIndicator(layout.button, () => {
       const budget = screen.sim.particlesCollected;
       const cost = gutse.cost.f(gutse.level - 1);
       return budget / cost;
     }).withOutline(false);
 
     // visual progression display
-    const displayWidth = 0.4;
-    const rdisp = padRect(r[0] + buttonWidth, r[1], displayWidth, rect[3], 0);
-    this.progressDisplayRect = rdisp;
+    this.progressDisplayRect = layout.progress;
 
     // text label
-    const dx = 0.02 + buttonWidth + displayWidth;
-    const rlabel = [r[0] + dx, r[1], r[2] - dx, r[3]];
-    const dtl = new StatReadout(rlabel, gutse.icon, () => `${key}`);
+    const dtl = new StatReadout(layout.label, gutse.icon, () => `${key}`);
     dtl.setScale(0.4);
     dtl.tooltipScale = 0.4;
     dtl.setCenter(false);
@@ -62,8 +59,8 @@ class StatUpgrader extends CompositeGuiElement {
     const gutse = this.#gutse;
     const lvl = gutse.level;
     const cost = gutse.cost.f(lvl - 1);
-    const curVal = gutse.value.f(lvl - 1);
-    const nextVal = gutse.value.f(lvl);
+    const curVal = gutse.value.f(lvl - 1).toFixed(0);
+    const nextVal = gutse.value.f(lvl).toFixed(0);
     const subject = gutse.subject;
 
     return [
