@@ -9,7 +9,7 @@ const DEBUG_TAB_LAYOUT = {
     margin: .02,
   },
 
-  // rows for indidividual settings
+  // rows for individual settings
   rows: {
     parent: '_r0',
     height: 0.05,

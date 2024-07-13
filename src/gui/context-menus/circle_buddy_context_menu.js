@@ -1,6 +1,6 @@
 /**
  * @file CircleBuddyContextMenu gui element.
- * buddy context menu with internal screen display
+ * buddy context menu with satiety display.
  */
 class CircleBuddyContextMenu extends BuddyContextMenu {
 

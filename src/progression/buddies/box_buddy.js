@@ -113,10 +113,10 @@ class BoxBuddy extends Buddy {
 
   /**
    * Construct BoxBuddyContextMenu.
-   * @param {number[][]} rects The allignment rectangles for the menu.
+   * @param {number[]} rect The bounding rectangle for the menu.
    */
-  buildContextMenu(rects) {
-    const bcm = new BoxBuddyContextMenu(...rects, this);
+  buildContextMenu(rect) {
+    const bcm = new BoxBuddyContextMenu(rect, this);
     return bcm;
   }
 

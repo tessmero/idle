@@ -10,7 +10,7 @@ class BoxBuddyContextMenu extends BuddyContextMenu {
    */
   _buildElements() {
     const boxBuddy = this._buddy;
-    const s0 = this.square0;
+    const s0 = this._layout.squares[0];
 
     // position gui element to display inner screen
     const [vw, vh] = global.tutorialSimDims;

@@ -4,18 +4,17 @@
  * that appears when a body is clicked
  */
 class BodyContextMenu extends ContextMenu {
+  _layoutData = BODY_CONTEXT_MENU_LAYOUT;
 
   #body;
 
   /**
    *
    * @param {number[]} rect The rectangle enclosing the whole menu.
-   * @param {number[]} s0 The first content square to align elements in.
-   * @param {number[]} s1 The second content square to align elements in.
    * @param {Body} body The body to highlight.
    */
-  constructor(rect, s0, s1, body) {
-    super(rect, s0, s1);
+  constructor(rect, body) {
+    super(rect);
 
     this.#body = body;
   }
@@ -26,24 +25,16 @@ class BodyContextMenu extends ContextMenu {
    */
   _buildElements() {
     const body = this.#body;
-    const rect = this.rect;
-    const s0 = this.square0;
-    const s1 = this.square1;
+    const layout = this._layout;
+    const [s0, _s1] = layout.squares;
     if (!body.title) { body.title = 'body'; }
     if (!body.icon) { body.icon = circleIcon; }
-
-    const w = 0.05;
-    const topRight = [rect[0] + rect[2] - w, rect[1], w, w];
-
-    const brs = 0.02;
-    let bottomRight = [s1[0] + s1[2] - brs, s1[1] + s1[3] - brs, brs, brs];
-    bottomRight = padRect(...bottomRight, 0.03);
 
     const result = [
 
       new StatReadout(s0, body.icon, () => body.title),
 
-      new IconButton(topRight, xIcon, () => this.closeBodyContextMenu())
+      new IconButton(layout.closeBtn, xIcon, () => this.closeBodyContextMenu())
         .withScale(0.5)
         .withTooltip('close menu'),
 
@@ -51,7 +42,7 @@ class BodyContextMenu extends ContextMenu {
 
     if (this.deleteEnabled()) {
       result.push(
-        new IconButton(bottomRight, trashIcon, () => this.deleteBody())
+        new IconButton(layout.trashBtn, trashIcon, () => this.deleteBody())
           .withTooltip(`delete ${body.title}\n(no refunds)`)
           .withScale(0.5),
       );

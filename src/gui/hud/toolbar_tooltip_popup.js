@@ -42,7 +42,7 @@ class ToolbarTooltipPopup extends LabelTooltipPopup {
 
     // add inner screen to this gui
     const gsp = new GuiScreenPanel(layout.sim, innerScreen, true);
-    this.children.unshift(gsp);
+    result.unshift(gsp);
     this.gsp = gsp;
 
     if (tool.getCost()) {

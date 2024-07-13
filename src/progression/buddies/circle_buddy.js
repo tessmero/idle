@@ -110,10 +110,10 @@ class CircleBuddy extends Buddy {
 
   /**
    * Extend BuddyContextMenu with satiety indicator.
-   * @param {number[][]} rects The allignment rectangles for the menu.
+   * @param {number[]} rect The bounding rectangle containing the menu.
    */
-  buildContextMenu(rects) {
-    return new CircleBuddyContextMenu(...rects, this);
+  buildContextMenu(rect) {
+    return new CircleBuddyContextMenu(rect, this);
   }
 
   /**

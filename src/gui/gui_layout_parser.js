@@ -56,20 +56,34 @@ class GuiLayoutParser {
   }
 
   /**
+   * Get integer in square brackets if present.
+   * @param {string} str The raw css value.
+   */
+  _parseIndexFromString(str) {
+    const match = str.match(/\[(\d+)\]/);
+    if (match) {
+      return [str.split('[')[0], parseInt(match[1], 10)];
+    }
+    return null;
+
+  }
+
+  /**
    *
-   * @param {number[]} r
+   * @param {number[]} rect
    * @param {string} cssKey
    * @param {number|string} cssVal
    */
-  _applyRule(r, cssKey, cssVal) {
+  _applyRule(rect, cssKey, cssVal) {
     const p = this.#parent;
 
     // check for made up key
-    if (cssKey === 'parent') {
+    if (cssKey === 'parent') { // refe
 
-      // use previously defined rectabgle
-      // as parent rectangle to align within
-      const newp = this.#computedRects[cssVal];
+      // lookup previously defined rectangle
+      const pi = this._parseIndexFromString(cssVal);
+      const cr = this.#computedRects;
+      const newp = pi ? cr[pi[0]][pi[1]] : cr[cssVal];
 
       if (!newp) {
         throw new Error(`parent css not defined: ${cssVal}`);
@@ -82,8 +96,12 @@ class GuiLayoutParser {
 
     // check for made up key
     if (cssKey === 'repeat') {
-      const down = (cssVal === 'down');
-      const [x, y, w, h] = r;
+
+      // parse value up/down/auto
+      const down = (cssVal === 'down') || ((cssVal === 'auto') && (p[3] > p[2]));
+
+      // return array of rectangles
+      const [x, y, w, h] = rect;
       const result = [];
       for (let i = 0; ; i++) {
         const ix = x + (down ? 0 : i * w);
@@ -101,25 +119,30 @@ class GuiLayoutParser {
     }
 
     // apply css layout rule, resulting in a new rectangle
-    const d = this._parseDistanceVal(p, r, cssKey, cssVal);
-    switch (cssKey) {
-    case 'left':
-      return [p[0] + d, r[1], r[2], r[3]];
-    case 'right':
-      return [p[0] + p[2] - r[2] - d, r[1], r[2], r[3]];
-    case 'top':
-      return [r[0], p[1] + d, r[2], r[3]];
-    case 'bottom':
-      return [r[0], p[1] + p[3] - r[3] - d, r[2], r[3]];
-    case 'width':
-      return [r[0], r[1], d, r[3]];
-    case 'height':
-      return [r[0], r[1], r[2], d];
-    case 'margin':
-      return padRect(...r, -d);
-    default:
-      return r;
-    }
+    const single = (typeof rect[0] === 'number');
+    const rlist = (single ? [rect] : rect);
+    const d = this._parseDistanceVal(p, rlist[0], cssKey, cssVal);
+    const nlist = rlist.map((r) => {
+      switch (cssKey) {
+      case 'left':
+        return [p[0] + d, r[1], r[2], r[3]];
+      case 'right':
+        return [p[0] + p[2] - r[2] - d, r[1], r[2], r[3]];
+      case 'top':
+        return [r[0], p[1] + d, r[2], r[3]];
+      case 'bottom':
+        return [r[0], p[1] + p[3] - r[3] - d, r[2], r[3]];
+      case 'width':
+        return [r[0], r[1], d, r[3]];
+      case 'height':
+        return [r[0], r[1], r[2], d];
+      case 'margin':
+        return padRect(...r, -d);
+      default:
+        return r;
+      }
+    });
+    return single ? nlist[0] : nlist;
   }
 
   /**

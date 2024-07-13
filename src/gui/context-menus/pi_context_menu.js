@@ -10,19 +10,25 @@ class PiContextMenu extends ContextMenu {
   /**
    * A specific particle was selected. Construct a context
    * menu to show its detailed status.
-   * @param {number[]} rect The rectangle enclosing the whole menu.
-   * @param {number[]} s0 The first content square to align elements in.
-   * @param {number[]} s1 The second content square to align elements in.
+   * @param {number[]} rect The rectangle enclosing the whole menu.\
    * @param {GameScreen} screen The screen that will contain this menu.
    * @param {object[]} pData The detailed state of the particle in quetion.
    */
-  constructor(rect, s0, s1, screen, pData) {
-    super(rect, s0, s1);
+  constructor(rect, screen, pData) {
+    super(rect);
     this.#sim = screen.sim;
     this.#pData = pData;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const [s0, s1] = this._layout.squares;
 
     // idenfity particle type
-    const [subgroup, i, _x, _y, _dx, _dy, _hit] = pData;
+    const [subgroup, i, _x, _y, _dx, _dy, _hit] = this.#pData;
     let flavor; let icon;
     if (!subgroup) {
       icon = proceduralParticleIcon;
@@ -37,24 +43,21 @@ class PiContextMenu extends ContextMenu {
       flavor = 'edge';
     }
 
-    const w = 0.05;
-    const topRight = [rect[0] + rect[2] - w, rect[1], w, w];
-
     const statScale = 0.4;
     let stats = this.buildStats(flavor);
 
     stats = stats.map((e) => ((e.length === 1) ? e[0] : this.showCoord(...e)));
     stats = stats.join('\n');
 
-    this.setChildren([
+    return [
 
       new StatReadout(s0, icon, () => `\n${flavor}\nparticle\nno. ${i}`, () => 0.5),
       new TextLabel(s1, stats).withScale(statScale),
 
-      new IconButton(topRight, xIcon, () => this.closePiContextMenu())
+      new IconButton(this._layout.closeBtn, xIcon, () => this.closePiContextMenu())
         .withScale(0.5)
         .withTooltip('close'),
-    ]);
+    ];
   }
 
   /**

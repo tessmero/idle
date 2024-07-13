@@ -67,8 +67,8 @@ class TestListRow extends CompositeGuiElement {
   clicked() {
     // position context menu on bottom/right
     const screen = this.screen;
-    const rects = TestContextMenu.pickRects(screen.rect);
-    screen.contextMenu = new TestContextMenu(...rects, this.#testIndex);
+    const rect = ContextMenu.pickRect(screen);
+    screen.contextMenu = new TestContextMenu(rect, this.#testIndex);
     screen.contextMenu.setScreen(screen);
   }
 }

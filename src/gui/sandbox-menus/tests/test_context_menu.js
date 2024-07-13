@@ -18,12 +18,10 @@ class TestContextMenu extends ContextMenu {
   /**
    *
    * @param {number[]} rect The rectangle enclosing the whole menu.
-   * @param {number[]} s0 The first content square to align elements in.
-   * @param {number[]} s1 The second content square to align elements in.
    * @param {number} testIndex The index of the test in test_list.js
    */
-  constructor(rect, s0, s1, testIndex) {
-    super(rect, s0, s1);
+  constructor(rect, testIndex) {
+    super(rect);
 
     const [testCat, test] = allTests[testIndex];
     this.test = test;
@@ -62,8 +60,7 @@ class TestContextMenu extends ContextMenu {
   _buildElements() {
     const asserts = this.asserts;
     const test = this.test;
-    const s0 = this.square0;
-    const s1 = this.square1;
+    const [s0, s1] = this._layout.squares;
 
     // center simulation in first content square
     const screen = test.screen;
@@ -261,7 +258,7 @@ class TestContextMenu extends ContextMenu {
   playClicked() {
     const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
-      ...TestContextMenu.pickRects(screen.rect),
+      ContextMenu.pickRect(screen),
       this.testIndex);
     screen.contextMenu.setScreen(screen);
   }
@@ -273,7 +270,7 @@ class TestContextMenu extends ContextMenu {
     const prevIndex = nnmod(this.testIndex - 1, allTests.length);
     const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
-      ...TestContextMenu.pickRects(screen.rect),
+      ContextMenu.pickRect(screen),
       prevIndex);
     screen.contextMenu.setScreen(screen);
   }
@@ -285,7 +282,7 @@ class TestContextMenu extends ContextMenu {
     const nextIndex = nnmod(this.testIndex + 1, allTests.length);
     const screen = this.screen;
     screen.contextMenu = new TestContextMenu(
-      ...TestContextMenu.pickRects(screen.rect),
+      ContextMenu.pickRect(screen),
       nextIndex);
     screen.contextMenu.setScreen(screen);
   }
@@ -308,7 +305,8 @@ class TestContextMenu extends ContextMenu {
 
       // finished
       let label;
-      if (this.nChecksPassed === this.nChecks) {
+      const passed = this.checksPassed.filter(Boolean).length;
+      if (passed === this.nChecks) {
         label = 'TEST PASSED';
       }
       else {
@@ -376,15 +374,5 @@ class TestContextMenu extends ContextMenu {
 
     // assertion either passed or failed
     return this.checksPassed[assertIndex] ? checkedIcon : trashIcon;
-  }
-
-  /**
-   * Pick bounding rectangles for test context menu.
-   * @param {number[]} sr The rectangle to align elements in.
-   */
-  static pickRects(sr) {
-
-    // force to right/bottom side of screen
-    return ContextMenu.pickRects(sr, v(sr[0], sr[1]));
   }
 }

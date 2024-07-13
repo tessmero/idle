@@ -1,6 +1,6 @@
 /**
  * @file BuddyContextMenu gui element
- * extended body context menu that also has satiety indicator
+ * extended body context menu that also has buddy title and exp level.
  */
 class BuddyContextMenu extends BodyContextMenu {
 
@@ -8,22 +8,16 @@ class BuddyContextMenu extends BodyContextMenu {
   #scale = 0.3;
 
   _buddy;
-  #rowRects;
   #nextRowIndex = 0;
 
   /**
    *
    * @param {number[]} rect The rectangle enclosing the whole menu.
-   * @param {number[]} s0 The first content square to align elements in.
-   * @param {number[]} s1 The second content square to align elements in.
    * @param {Body} buddy The Buddy instance to highlight.
    */
-  constructor(rect, s0, s1, buddy) {
-    super(rect, s0, s1, buddy.getMainBody()); // draw reticle on main subbody
+  constructor(rect, buddy) {
+    super(rect, buddy.getMainBody()); // draw reticle on main subbody
     this._buddy = buddy;
-
-    // divide second content squares into rows
-    this.#rowRects = divideRect(...s1, 6, true);
   }
 
   /**
@@ -31,9 +25,8 @@ class BuddyContextMenu extends BodyContextMenu {
    * @returns {GuiElement[]} The children.
    */
   _buildElements() {
+    const result = super._buildElements();
     const buddy = this._buddy;
-
-    const result = [];
 
     // first row has exp level with progress overlay
     this.addBuddyContextRow(result, (r, s) => {
@@ -71,12 +64,11 @@ class BuddyContextMenu extends BodyContextMenu {
 
     // pick rectangle for new row
     const ri = this.#nextRowIndex;
-    const rect = this.#rowRects[ri];
-    const innerRect = padRect(...rect, -0.12 * rect[3]);
+    const rect = this._layout.rows[ri];
     this.#nextRowIndex = ri + 1;
 
     // align new elements in rectangle
-    const newElems = elems(innerRect, this.#scale);
+    const newElems = elems(rect, this.#scale);
     newElems.forEach((e) => appendTo.push(e));
   }
 }

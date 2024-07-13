@@ -368,23 +368,21 @@ class GameScreen {
       if (bod instanceof CompoundBody) {
         bodPos = bod.getMainBody().pos;
       }
-      const rect = gui.getScreenEdgesForContextMenu();
-      const cmr = ContextMenu.pickRects(rect, bodPos);
+      const cmr = ContextMenu.pickRect(this, bodPos);
 
       if (bod instanceof Buddy) {
         this.contextMenu = bod.buildContextMenu(cmr);
       }
       else {
-        this.contextMenu = new BodyContextMenu(...cmr, bod);
+        this.contextMenu = new BodyContextMenu(cmr, bod);
       }
 
     }
     else if (gui && sim.selectedParticle) {
       const p = sim.selectedParticle;
       const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
-      const rect = gui.getScreenEdgesForContextMenu();
-      const cmr = ContextMenu.pickRects(rect, v(x, y));
-      this.contextMenu = new PiContextMenu(...cmr, this, p);
+      const cmr = ContextMenu.pickRect(this, v(x, y));
+      this.contextMenu = new PiContextMenu(cmr, this, p);
     }
 
     if (this.contextMenu) { this.contextMenu.buildElements(this); }

@@ -46,6 +46,9 @@ class Button extends GuiElement {
     if (hovered) {
       lineCol = global.colorScheme.hl;
     }
+    if (global.debugUiRects) {
+      lineCol = 'red';
+    }
 
     // g.fillStyle = global.colorScheme.bg
     g.strokeStyle = lineCol;

@@ -26,6 +26,8 @@ class TabPaneGroup extends CompositeGuiElement {
     this.#tabLabels = tabLabels;
     this.#tabContents = tabContents;
     this.#tabTooltips = tabTooltips;
+    this.nTabs = tabLabels.length;
+    this.#selectedTabIndex = 0;
   }
 
   /**
@@ -65,9 +67,6 @@ class TabPaneGroup extends CompositeGuiElement {
     const r = this._layout.content;
     const conts = this.#tabContents.map((cons) => cons(r, screen).withOpacity(true));
     this.tabContent = conts;
-
-    this.nTabs = this.#tabLabels.length;
-    this.#selectedTabIndex = 0;
 
     return result;
   }
