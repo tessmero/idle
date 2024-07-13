@@ -6,13 +6,11 @@ class DebugTab extends CompositeGuiElement {
   _layoutData = NESTED_TAB_PANE_LAYOUT;
 
   /**
-   *
-   * @param {number[]} sr The rectangle to align elements in.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
    */
-  constructor(sr, screen) {
-    super(sr);
-    const layout = this.layoutRects(screen);
+  _buildElements() {
+    const layout = this._layout;
 
     const specs = [
 
@@ -66,37 +64,34 @@ class DebugTab extends CompositeGuiElement {
     const tabLabels = specs.map((r) => r[0]);
     const tabTooltips = specs.map((r) => r[1]);
     const tabContents = specs.map((r) => (
-      (rect) => this.buildTabContent(rect, r[2], screen)
+      (rect) => this.buildTabContent(rect, r[2])
     ));
-    const tabGroup = new TabPaneGroup(layout.inner, screen, tabLabels, tabContents, tabTooltips);
+    const tabGroup = new TabPaneGroup(layout.inner, tabLabels, tabContents, tabTooltips);
     if (global.debugMenuTabIndex) { tabGroup.setSelectedTabIndex(global.debugMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.debugMenuTabIndex = i;
     });
 
-    this.addChild(tabGroup);
+    return [tabGroup];
   }
 
   /**
    * Build content for a tab within the debug tab.
    * @param {number[]} rect The rectangle to align elements in.
    * @param {object} tabSpecs Specifications for the tab.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    */
-  buildTabContent(rect, tabSpecs, screen) {
+  buildTabContent(rect, tabSpecs) {
     const result = new CompositeGuiElement(rect);
     result._layoutData = DEBUG_TAB_LAYOUT;
-    const layout = result.layoutRects(screen);
-
-    result.setChildren(tabSpecs.map((rowSpecs, i) => {
+    result._buildElements = () => tabSpecs.map((rowSpecs, i) => {
       const [varname, inc, tooltip] = rowSpecs;
-      const r = layout.rows[i];
+      const r = result._layout.rows[i];
       if (inc === 'bool') {
         return new BooleanDebugVar(r, varname, tooltip);
       }
       return new ScalarDebugVar(r, varname, inc, tooltip);
 
-    }));
+    });
     return result;
   }
 }

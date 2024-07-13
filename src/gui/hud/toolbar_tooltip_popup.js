@@ -12,18 +12,33 @@ const _allTutorialScreens = {};
 class ToolbarTooltipPopup extends LabelTooltipPopup {
   _layoutData = TOOLBAR_TOOLTIP_LAYOUT;
 
+  #innerScreen;
+  #tool;
+
   /**
    * get rect using ToolbarTooltipPopup.pickRect
    * @param {number[]} rect The rectangle to align elements in.
    * @param {string} label
-   * @param {GameScreen} screen The outer screen for icon scale for css layout (needs cleanup)
    * @param {GameScreen} innerScreen The tutorial screen to display inside the popup.
    * @param {Tool} tool
    * @param {number} scale
    */
-  constructor(rect, label, screen, innerScreen, tool, scale = null) {
+  constructor(rect, label, innerScreen, tool, scale = null) {
     super(rect, label, scale);
-    const layout = this.layoutRects(screen);
+    this.#innerScreen = innerScreen;
+    this.#tool = tool;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const result = super._buildElements();
+    const layout = this._layout;
+    const screen = this.screen;
+    const innerScreen = this.#innerScreen;
+    const tool = this.#tool;
 
     // add inner screen to this gui
     const gsp = new GuiScreenPanel(layout.sim, innerScreen, true);
@@ -40,7 +55,7 @@ class ToolbarTooltipPopup extends LabelTooltipPopup {
       };
 
       // text readout
-      this.addChild(new StatReadout(layout.cost, collectedIcon,
+      result.push(new StatReadout(layout.cost, collectedIcon,
         () => bc((budget, cost) => {
           if (budget > cost) { return `${cost.toFixed(0)}`; }
           return `${budget.toFixed(0)}/${cost.toFixed(0)}`;
@@ -49,9 +64,11 @@ class ToolbarTooltipPopup extends LabelTooltipPopup {
         .withScale(0.35));
 
       // progress bar overlay
-      this.addChild(new ProgressIndicator(layout.cost,
+      result.push(new ProgressIndicator(layout.cost,
         () => bc((budget, cost) => budget / cost)));
     }
+
+    return result;
   }
 
   /**

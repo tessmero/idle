@@ -5,13 +5,18 @@
 class CompositeGuiElement extends GuiElement {
 
   /**
-   * Optional reference to css in data folder
+   * Optional reference to layout css in data folder
    * @abstract
    * @type {object}
    */
-  _layoutData = null;
+  _layoutData;
 
-  #layoutRects = null;
+  /**
+   * Layout rectangles' absolute x,y,w,h
+   * Computed in computeLayoutRects()
+   * @type {object}
+   */
+  _layout = null;
 
   #children = [];
   #opaque = false;
@@ -31,22 +36,45 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   * Compute css rects if not already cached.
+   * Construct direct children for this composite.
+   * @abstract
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    return [];// throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
+   * Recursively compute layout rectangles and construct children.
+   * Called in GameStateManager._rebuildGui()
+   * @param {GameScreen} screen The screen used to pick icon scale and
+   *                            set as screen property for descendants.
+   */
+  buildElements(screen) {
+    this.setScreen(screen);
+    this._computeLayoutRects(screen);
+
+    const elems = this._buildElements();
+    this.#children = elems;
+    this.setScreen(screen); // make sure screen is set for children
+
+    elems.filter((e) => e instanceof CompositeGuiElement).forEach((e) => e.buildElements(screen));
+  }
+
+  /**
+   * Compute css rectangles for direct children.
    * @param {GameScreen} screen The screen needed to pick icon scale.
    */
-  layoutRects(screen) {
-    if (!screen) {
-      throw new Error('must give screen argument');
-    }
+  _computeLayoutRects(screen) {
     const data = this._layoutData;
     if (!data) { return null; }
-    let lr = this.#layoutRects;
+    let lr = this._layout;
 
     // check if not yet computed, or was computed in
     // superclass constructor and layout was extended
     if ((!lr) || (Object.keys(lr).length !== Object.keys(data).length)) {
       lr = GuiLayoutParser.computeRects(this.rect, this._layoutData, screen.iconScale);
-      this.#layoutRects = lr;
+      this._layout = lr;
     }
     return lr;
   }
@@ -60,12 +88,6 @@ class CompositeGuiElement extends GuiElement {
    * Prevent setting children with equals sign.
    */
   set children(_c) { throw new Error('should use setChildren'); }
-
-  /**
-   * Replace children with the given list.
-   * @param {GuiElement[]} c The new list of children this composite should contain.
-   */
-  setChildren(c) { this.#children = c; }
 
   /**
    * Add a child gui element to this composite.
@@ -145,7 +167,7 @@ class CompositeGuiElement extends GuiElement {
 
     this.#children.forEach((e) => e.draw(g));
 
-    const layout = this.layoutRects(this.screen);
+    const layout = this._layout;
 
     if (global.debugUiRects && (!layout)) {
 

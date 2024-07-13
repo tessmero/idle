@@ -1,13 +1,13 @@
 /**
  * @file BuddyContextMenu gui element
- * extended body context menu that also shows particles collected
+ * extended body context menu that also has satiety indicator
  */
 class BuddyContextMenu extends BodyContextMenu {
 
   // fot size
   #scale = 0.3;
 
-  #buddy;
+  _buddy;
   #rowRects;
   #nextRowIndex = 0;
 
@@ -20,13 +20,23 @@ class BuddyContextMenu extends BodyContextMenu {
    */
   constructor(rect, s0, s1, buddy) {
     super(rect, s0, s1, buddy.getMainBody()); // draw reticle on main subbody
-    this.#buddy = buddy;
+    this._buddy = buddy;
 
     // divide second content squares into rows
     this.#rowRects = divideRect(...s1, 6, true);
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const buddy = this._buddy;
+
+    const result = [];
 
     // first row has exp level with progress overlay
-    this.addBuddyContextRow((r, s) => {
+    this.addBuddyContextRow(result, (r, s) => {
       const padLeft = 0;// r[2]/100
       const padr = [r[0] + padLeft, r[1], r[2] - padLeft, r[3]];
       return [
@@ -37,13 +47,15 @@ class BuddyContextMenu extends BodyContextMenu {
         new ProgressIndicator(r, () => buddy.getLevelProgress()),
       ];
     });
+
+    return result;
   }
 
   /**
    * @returns {string} The tooltip text for exp progress indicator.
    */
   _getExpLevelTooltip() {
-    const b = this.#buddy;
+    const b = this._buddy;
     return [
       `Level ${b.expLevel} ${b.expMechLabel}`,
       `${b.describeCurrentExpLevel()}`,
@@ -51,10 +63,11 @@ class BuddyContextMenu extends BodyContextMenu {
   }
 
   /**
-   * Used in constructor. Used in Buddy implementations' buildContextMenu.
+   * Allocate a new row and construct new elements in it.
+   * @param {GuiElement[]} appendTo The list of elements to append to.
    * @param {Function} elems The function that returns elements for one row.
    */
-  addBuddyContextRow(elems) {
+  addBuddyContextRow(appendTo, elems) {
 
     // pick rectangle for new row
     const ri = this.#nextRowIndex;
@@ -64,6 +77,6 @@ class BuddyContextMenu extends BodyContextMenu {
 
     // align new elements in rectangle
     const newElems = elems(innerRect, this.#scale);
-    newElems.forEach((e) => this.addChild(e));
+    newElems.forEach((e) => appendTo.push(e));
   }
 }

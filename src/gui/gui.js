@@ -12,15 +12,6 @@ class Gui extends CompositeGuiElement {
   title;
 
   /**
-   * Construct array of GuiElement instances for the given game screen.
-   * @abstract
-   * @param {GameScreen} _screen The screen in need of gui elements.
-   */
-  buildElements(_screen) {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
-  }
-
-  /**
    * Set special one-time parameters, used for
    * box transition and story intervention.
    * @param {object} params The object with extra parameters.

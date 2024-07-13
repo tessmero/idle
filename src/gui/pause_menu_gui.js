@@ -15,12 +15,11 @@ class PauseMenuGui extends Gui {
   }
 
   /**
-   * Construct pause menu gui elements for the given game screen.
-   * @param {GameScreen} screen The screen in need of gui elements.
-   * @returns {GuiElement[]} The gui elements for the screen.
+   * Construct pause menu gui elements.
+   * @returns {GuiElement[]} The children.
    */
-  buildElements(screen) {
-    const layout = this.layoutRects(screen);
+  _buildElements() {
+    const layout = this._layout;
     const quitLabel = screen === global.rootScreen ? 'QUIT' : 'EXIT BOX';
 
     return [

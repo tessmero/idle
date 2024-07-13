@@ -14,17 +14,24 @@ class LabelTooltipPopup extends TooltipPopup {
    */
   constructor(rect, label, scale = null) {
     super(rect);
-    const layout = this.layoutRects(screen);
     this.label = label;
 
     let s = scale;
     if (!s) { s = this.constructor.scale(); }
     this.setScale(s);
+  }
 
-    this.addChild(
-      new TextLabel(layout.label, label)
-        .withScale(s)
-        .withCenter(false));
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    return [...super._buildElements(),
+
+      new TextLabel(this._layout.label, this.label)
+        .withScale(this.scale)
+        .withCenter(false),
+    ];
   }
 
   /**

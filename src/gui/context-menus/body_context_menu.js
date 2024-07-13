@@ -5,6 +5,8 @@
  */
 class BodyContextMenu extends ContextMenu {
 
+  #body;
+
   /**
    *
    * @param {number[]} rect The rectangle enclosing the whole menu.
@@ -15,7 +17,18 @@ class BodyContextMenu extends ContextMenu {
   constructor(rect, s0, s1, body) {
     super(rect, s0, s1);
 
-    this.body = body; // Body instance to focus
+    this.#body = body;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const body = this.#body;
+    const rect = this.rect;
+    const s0 = this.square0;
+    const s1 = this.square1;
     if (!body.title) { body.title = 'body'; }
     if (!body.icon) { body.icon = circleIcon; }
 
@@ -26,7 +39,7 @@ class BodyContextMenu extends ContextMenu {
     let bottomRight = [s1[0] + s1[2] - brs, s1[1] + s1[3] - brs, brs, brs];
     bottomRight = padRect(...bottomRight, 0.03);
 
-    this.setChildren([
+    const result = [
 
       new StatReadout(s0, body.icon, () => body.title),
 
@@ -34,15 +47,17 @@ class BodyContextMenu extends ContextMenu {
         .withScale(0.5)
         .withTooltip('close menu'),
 
-    ]);
+    ];
 
     if (this.deleteEnabled()) {
-      this.addChild(
+      result.push(
         new IconButton(bottomRight, trashIcon, () => this.deleteBody())
           .withTooltip(`delete ${body.title}\n(no refunds)`)
           .withScale(0.5),
       );
     }
+
+    return result;
   }
 
   /**
@@ -56,7 +71,7 @@ class BodyContextMenu extends ContextMenu {
    *
    */
   deleteBody() {
-    let b = this.body;
+    let b = this.#body;
     while (b.parent) { b = b.parent; }// got top parent
     this.screen.sim.removeBody(b);
     this.closeBodyContextMenu();
@@ -83,7 +98,7 @@ class BodyContextMenu extends ContextMenu {
 
     // draw reticle effect around body
     g.fillStyle = global.colorScheme.hl;
-    const bod = this.body;
+    const bod = this.#body;
     const edge = bod.edge;
     const center = bod.pos;
     const thickness = 1e-2;

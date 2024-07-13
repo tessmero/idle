@@ -13,17 +13,25 @@ class StatUpgrader extends CompositeGuiElement {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    * @param {string} key The key in global.upgradeTracks.state.
    */
-  constructor(rect, screen, key) {
+  constructor(rect, key) {
     super(rect);
-    const layout = this.layoutRects(screen);
 
     this.#key = key;
     const gutse = global.upgradeTracks.state[key];
     this.#gutse = gutse;
+  }
 
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const screen = this.screen;
+    const key = this.#key;
+    const gutse = this.#gutse;
+    const layout = this._layout;
     let r = this.rect;
     const sl = Math.min(r[2], r[3]);
     r = [r[0], r[1], sl, sl];
@@ -48,7 +56,7 @@ class StatUpgrader extends CompositeGuiElement {
     dtl.tooltipScale = 0.4;
     dtl.setCenter(false);
 
-    this.setChildren([btn, btno, dtl]);
+    return [btn, btno, dtl];
   }
 
   /**

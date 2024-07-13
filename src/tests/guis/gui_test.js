@@ -38,8 +38,7 @@ class GuiTest extends Test {
       gsm._guis.forEach((k) => {
         if (k === null) { return; }
         k.gsm = gsm;
-        k.setChildren(k.buildElements(screen));
-        k.setScreen(screen);
+        k.buildElements(screen);
       });
       const gui = gsm.currentGui;
       screen.setGui(gui);
@@ -68,12 +67,12 @@ class GuiTest extends Test {
     const hud = gsm.getGuiForState(GameStates.playing);
 
     // hud_gui.js
-    hud._be = hud.buildElements;
+    hud._be = hud._buildElements;
 
-    hud.buildElements = (...r) => {
+    hud._buildElements = () => {
 
       // omitt all but first element
-      const [menuBtn] = hud._be(...r);
+      const [menuBtn] = hud._be();
 
       // shrink and remove tooltip
       this._scaleElems(menuBtn);
@@ -86,29 +85,22 @@ class GuiTest extends Test {
    * @param {GameStateManager} gsm The state manager to modify
    */
   _simplifyMenu(gsm) {
-
-    const simScale = global.tutorialSimDims[0];
     const menu = gsm.getGuiForState(GameStates.upgradeMenu);
 
     // upgrade_menu_gui.js
-    menu._be = menu.buildElements;
+    menu._be = menu._buildElements;
 
-    menu.buildElements = (screen) => {
-      const [closeButton, tabGroup] = menu._be(screen);
+    menu._buildElements = () => {
+      const [closeButton, tabGroup] = menu._be();
       this._scaleElems(closeButton);
 
       // remove tab group contents
       // add one button that does nothing
       const scale = 0.3;
       const label = 'upgrade';
-      const [w, h] = getTextDims(label, scale);
-      const rect = padRect(0, 0, w, h, h / 2);
-      const ubPos = GuiTest.upgradeButtonCenter.mul(simScale);
-      rect[0] = ubPos.x - rect[2] / 2;
-      rect[1] = ubPos.y - rect[3] / 2;
-      tabGroup.setChildren([new TextButton(rect, label, () => {}).withScale(scale)]);
-      tabGroup.tabContent.forEach((tc) => { tc.setChildren([]); });
-
+      const rect = [0.02, 0.04, 0.26, 0.24];
+      tabGroup._buildElements = () => [new TextButton(rect, label, () => {}).withScale(scale)];
+      tabGroup.tabContent = null;
       return [tabGroup, closeButton];
     };
   }

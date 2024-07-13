@@ -109,19 +109,27 @@ class CircleBuddy extends Buddy {
   }
 
   /**
-   * Extend BuddyContextMenu by adding hunger and total collected.
+   * Extend BuddyContextMenu with satiety indicator.
    * @param {number[][]} rects The allignment rectangles for the menu.
    */
   buildContextMenu(rects) {
-    const bcm = new BuddyContextMenu(...rects, this);
-    bcm.addBuddyContextRow((r, s) => [
+    return new CircleBuddyContextMenu(...rects, this);
+  }
+
+  /**
+   * Called in circle_buddy_context_menu.js.
+   * @param  {number[]} r The rectangle to align elements in.
+   * @param  {number} s The font size.
+   * @returns {GuiElement[]} Satiety indicator elements.
+   */
+  buildSatietyGuiElems(r, s) {
+    return [
       new DynamicTextLabel(r, () => this._satLabel())
         .withScale(s)
         .withAutoAdjustRect(false)
         .withDynamicTooltip(() => this._satTooltip()),
       new ProgressIndicator(r, () => this.#satiety / this.#maxSatiety),
-    ]);
-    return bcm;
+    ];
   }
 
   /**

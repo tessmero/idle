@@ -5,14 +5,12 @@
 class BoxBuddyContextMenu extends BuddyContextMenu {
 
   /**
-   *
-   * @param {number[]} rect The rectangle enclosing the whole menu.
-   * @param {number[]} s0 The first content square to align elements in.
-   * @param {number[]} s1 The second content square to align elements in.
-   * @param {Body} boxBuddy The BoxBuddy instance to look into.
+   * Extend buddy context menu by adding inner simulation display.
+   * @returns {GuiElement[]} The children.
    */
-  constructor(rect, s0, s1, boxBuddy) {
-    super(rect, s0, s1, boxBuddy);
+  _buildElements() {
+    const boxBuddy = this._buddy;
+    const s0 = this.square0;
 
     // position gui element to display inner screen
     const [vw, vh] = global.tutorialSimDims;
@@ -28,7 +26,7 @@ class BoxBuddyContextMenu extends BuddyContextMenu {
     // instead it is updated persistently
     gsp.disableScreenUpdate = true;
 
-    this.addChild(gsp);
+    return [...super._buildElements(), gsp];
   }
 
   /**

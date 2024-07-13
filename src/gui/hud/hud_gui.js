@@ -8,12 +8,12 @@ class HudGui extends Gui {
   _layoutData = HUD_GUI_LAYOUT;
 
   /**
-   * Construct HUD elements for the given game screen.
-   * @param {GameScreen} screen The screen in need of gui elements.
-   * @returns {GuiElement[]} The gui elements for the screen.
+   * Construct HUD elements.
+   * @returns {GuiElement[]} The children.
    */
-  buildElements(screen) {
-    const layout = this.layoutRects(screen);
+  _buildElements() {
+    const layout = this._layout;
+    const screen = this.screen;
     const sim = screen.sim;
     this.sim = sim;
 
@@ -72,7 +72,7 @@ class HudGui extends Gui {
         .withTooltip('pause or quit the game'));
 
     // append toolbar buttons
-    const toolbarButtons = this._buildToolbarButtons(screen, layout);
+    const toolbarButtons = this._buildToolbarButtons();
     result = result.concat(toolbarButtons);
 
     return result;
@@ -80,11 +80,11 @@ class HudGui extends Gui {
 
   /**
    * Construct toolbar elements for the given game screen.
-   * @param {GameScreen} screen The screen in need of toolbar elements.
    * @returns {GuiElement[]} The toolbar elements for the screen.
    */
-  _buildToolbarButtons(screen) {
-    const layout = this.layoutRects(screen);
+  _buildToolbarButtons() {
+    const screen = this.screen;
+    const layout = this._layout;
 
     // decide which tools will be available
     let toolList = screen.toolList;
@@ -127,7 +127,7 @@ class HudGui extends Gui {
         button.withDynamicTooltip(() => {
           const ttpr = ToolbarTooltipPopup.pickRect(this.screen, tooltip);
           const innerScreen = ToolbarTooltipPopup.getTutorialScreen(tool);
-          return new ToolbarTooltipPopup(ttpr, tooltip, this.screen, innerScreen, tool);
+          return new ToolbarTooltipPopup(ttpr, tooltip, innerScreen, tool);
         });
 
       }

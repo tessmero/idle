@@ -4,6 +4,10 @@
  */
 class ScalarDebugVar extends CompositeGuiElement {
 
+  #varname;
+  #inc;
+  #tooltip;
+
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
@@ -13,6 +17,20 @@ class ScalarDebugVar extends CompositeGuiElement {
    */
   constructor(rect, varname, inc, tooltip) {
     super(rect);
+    this.#varname = varname;
+    this.#inc = inc;
+    this.#tooltip = tooltip;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const varname = this.#varname;
+    const inc = this.#inc;
+    const tooltip = this.#tooltip;
+
     const r = this.rect;
     const d = 0.05;
     const p = (r[3] - d) / 2;
@@ -20,7 +38,7 @@ class ScalarDebugVar extends CompositeGuiElement {
     const r1 = [r0[0] + d + p, r[1] + p, d, d];
 
     // text label
-    const dtl = new DynamicTextLabel(rect, () =>
+    const dtl = new DynamicTextLabel(r, () =>
       `     ${ Math.floor(getGlobal(varname) / inc + 0.5).toString().padEnd(5, ' ') }${varname}`)
       .withDynamicTooltip(() => [
         `${Math.floor(getGlobal(varname) / inc + 0.5).toString() } : ${varname} `,
@@ -32,7 +50,7 @@ class ScalarDebugVar extends CompositeGuiElement {
     dtl.tooltipScale = 0.4;
     dtl.setCenter(false);
 
-    this.setChildren([
+    return [
       dtl,
 
       // buttons
@@ -56,8 +74,7 @@ class ScalarDebugVar extends CompositeGuiElement {
         const screen = this.screen;
         screen.stateManager.rebuildGuis(screen, false);
       }),
-    ]);
-
+    ];
   }
 
   /**

@@ -18,8 +18,18 @@ class TestTimelineDisplay extends CompositeGuiElement {
     this.checkTimes = checkTimes;
     this.checkLabels = checkLabels;
     this.t = 0;
+  }
 
-    const innerRect = padRect(...rect, -0.01);
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const duration = this.duration;
+    const checkTimes = this.checkTimes;
+    const checkLabels = this.checkLabels;
+
+    const innerRect = padRect(...this.rect, -0.01);
     this.innerRect = innerRect;
 
     // position icon for each checkpoint in timeline
@@ -37,12 +47,12 @@ class TestTimelineDisplay extends CompositeGuiElement {
     }
     this.checkboxes = boxes;
 
-    this.setChildren([
+    return [
 
       ...this.checkboxes,
       new ProgressIndicator(innerRect, () => this.t / this.duration)
         .withOutline(false),
-    ]);
+    ];
   }
 
   /**

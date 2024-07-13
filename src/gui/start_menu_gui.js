@@ -27,11 +27,10 @@ class StartMenuGui extends Gui {
 
   /**
    * Construct start menu gui elements for the given game screen.
-   * @param {GameScreen} screen The screen in need of gui elements.
    * @returns {GuiElement[]} The gui elements for the screen.
    */
-  buildElements(screen) {
-    const layout = this.layoutRects(screen);
+  _buildElements() {
+    const layout = this._layout;
     const specs = _startMessageSpecs;
 
     // build title display with large readable text

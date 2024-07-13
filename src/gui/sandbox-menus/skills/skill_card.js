@@ -5,6 +5,9 @@
  */
 class SkillCard extends CompositeGuiElement {
 
+  #tree;
+  #entry;
+
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
@@ -13,10 +16,22 @@ class SkillCard extends CompositeGuiElement {
    */
   constructor(rect, tree, entry) {
     super(rect);
+    this.#tree = tree;
+    this.#entry = entry;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+
+    const tree = this.#tree;
+    const entry = this.#entry;
     const r = this.rect;
     const skill = Skill[entry.skill];
     const screen = skill.getThumbnailScreen();
-    const gsp = new GuiScreenPanel(rect, screen);
+    const gsp = new GuiScreenPanel(this.rect, screen);
 
     const frac = 0.4;
     const [x, y, w, h] = r;
@@ -50,10 +65,9 @@ class SkillCard extends CompositeGuiElement {
     this.gsp = gsp;
     this.statusIcon = statusIcon;
 
-    this.setChildren([
+    return [
       gsp,
       statusIcon,
-    ]);
-
+    ];
   }
 }

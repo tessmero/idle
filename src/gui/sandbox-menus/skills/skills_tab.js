@@ -3,28 +3,26 @@
  * Content for the "skills" tab in the sandbox menu.
  */
 class SkillsTab extends CompositeGuiElement {
+
   /**
-   *
-   * @param {number[]} sr The rectangle to align elements in.
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
    */
-  constructor(sr) {
-    super(sr);
-
+  _buildElements() {
     const tree = global.skillTree;
-    if (!tree) { return; }
+    if (!tree) { return []; }
 
-    const result = [new SkillTreeGraph(sr, tree)];
     const w = 0.1;
     const h = 0.1;
 
-    for (const [_key, entry] of Object.entries(tree.state)) {
+    const cards = Object.entries(tree.state).map(([_key, entry]) => {
       const [x, y] = entry.pos;
       const rect = [x - w / 2, y - h / 2, w, h];
       const card = new SkillCard(rect, tree, entry);
       card.status = entry.status;
-      result.push(card);
-    }
+      return card;
+    });
 
-    this.setChildren(result);
+    return [new SkillTreeGraph(this.rect, tree), ...cards];
   }
 }

@@ -34,6 +34,37 @@ class TestContextMenu extends ContextMenu {
     this.loopDelay = 2000;
     this.loopCountdown = this.loopDelay;
 
+    this.asserts = test.getTestAssertions(test.screen);
+    this.duration = test.getDuration(test.screen);
+
+    this.t = 0;
+    this.checksPassed = []; // arr of bools
+  }
+
+  /**
+   * Hack to prevent rebuilding elements in game screen update
+   * @param {GameScreen} s
+   */
+  buildElements(s) {
+    if (this._builtElements) {
+      // do nothing
+    }
+    else {
+      this._builtElements = true;
+      super.buildElements(s);
+    }
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const asserts = this.asserts;
+    const test = this.test;
+    const s0 = this.square0;
+    const s1 = this.square1;
+
     // center simulation in first content square
     const screen = test.screen;
     Test.resetBoxSims(screen);
@@ -52,11 +83,8 @@ class TestContextMenu extends ContextMenu {
 
     const gui = screen.gui;
     if (gui) {
-      gui.setChildren(gui.buildElements(screen));
-      gui.setScreen(screen);
+      gui.buildElements(screen);
     }
-
-    const asserts = test.getTestAssertions(screen);
 
     // divide second content square into rows
     const nRows = 13;
@@ -65,10 +93,6 @@ class TestContextMenu extends ContextMenu {
     if (asserts.length > maxAsserts) {
       throw new Error(`max of ${maxAsserts} asserts per test`);
     }
-
-    const duration = test.getDuration(screen);
-    this.t = 0;
-    this.duration = duration;
 
     // add test criteria to second square
     this._buildCriteriaRows(botRows, asserts);
@@ -83,7 +107,7 @@ class TestContextMenu extends ContextMenu {
     const titleLabel = new TextLabel(titleRect, test.title)
       .withScale(0.3);
 
-    this.addChildren([
+    return [
 
       // title at top of first square
       titleLabel,
@@ -102,8 +126,7 @@ class TestContextMenu extends ContextMenu {
 
       // conclusion in second square
       this.finalDisplay,
-    ]);
-
+    ];
   }
 
   /**
@@ -134,12 +157,10 @@ class TestContextMenu extends ContextMenu {
       );
       i = i + 1;
     });
-    this.asserts = asserts;
     this.checkTimes = checkTimes;
     this.checkTooltips = checkTooltips;
     this.checkReadouts = checkReadouts;
     this.nChecks = checkTimes.length;
-    this.nChecksPassed = 0;
 
     const ttDisplay = new TestTimelineDisplay(rows[1],
       this.duration, checkTimes, checkTooltips);
@@ -194,7 +215,7 @@ class TestContextMenu extends ContextMenu {
     super.draw(g);
 
     // draw overlay on loop button
-    if (_testLoopSetting) {
+    if (_testLoopSetting && this.loopButton) {
       let rect = this.loopButton.rect;
       rect = padRect(...rect, -0.005);
       const prg = this.loopCountdown / this.loopDelay;
@@ -275,10 +296,10 @@ class TestContextMenu extends ContextMenu {
    * @param {boolean} disableHover True if mouse hovering should be disabled.
    */
   update(dt, disableHover) {
-    this.t = this.t + dt;
     const hovered = super.update(dt, disableHover);
     const ttDisplay = this.ttDisplay;
 
+    this.t = this.t + dt;
     const t = this.t;
     ttDisplay.setTime(t);
     if (!this.lastTime) { this.lastTime = -1; }
@@ -329,26 +350,41 @@ class TestContextMenu extends ContextMenu {
           console.error(error);
         }
 
-        if (success) { this.nChecksPassed = this.nChecksPassed + 1; }
-        const icon = success ? checkedIcon : trashIcon;
-        ttDisplay.setCheckboxIcon(i, icon);
-        this.checkReadouts[i].icon = icon;
-
+        this.checksPassed.push(success);
       }
+
+      const icon = this.pickIcon(i);
+      ttDisplay.setCheckboxIcon(i, icon);
+      this.checkReadouts[i].icon = icon;
     }
 
     this.lastTime = t;
-
     return hovered;
   }
 
   /**
-   *
+   * Pick icon to show for the given assertion.
+   * @param  {number} assertIndex The index of the assertion.
+   * @returns {Icon} The pass/fail/blank icon to reflect the status of the assertion.
+   */
+  pickIcon(assertIndex) {
+    if (assertIndex >= this.checksPassed.length) {
+
+      // assertion is in the future
+      return uncheckedIcon;
+    }
+
+    // assertion either passed or failed
+    return this.checksPassed[assertIndex] ? checkedIcon : trashIcon;
+  }
+
+  /**
+   * Pick bounding rectangles for test context menu.
    * @param {number[]} sr The rectangle to align elements in.
    */
   static pickRects(sr) {
 
-    // force to right/bottom isde of screen
+    // force to right/bottom side of screen
     return ContextMenu.pickRects(sr, v(sr[0], sr[1]));
   }
 }

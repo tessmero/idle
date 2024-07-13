@@ -7,21 +7,18 @@ class StatsTab extends CompositeGuiElement {
   _layoutData = STATS_TAB_LAYOUT;
 
   /**
-   *
-   * @param {number[]} sr The rectangle to align elements in.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
    */
-  constructor(sr, screen) {
-    super(sr);
-    const layout = this.layoutRects(screen);
-
-    // reassign or append to this.children
+  _buildElements() {
     if (global.bonusSummary) {
-      global.bonusSummary.forEach((entry, i) => {
+      return global.bonusSummary.map((entry, i) => {
         const [icon, summary] = entry;
-        this.addChild(new StatReadout(
-          layout.rows[i], icon, () => summary).withScale(0.4));
+        return new StatReadout(
+          this._layout.rows[i], icon, () => summary).withScale(0.4);
       });
     }
+    return [];
+
   }
 }

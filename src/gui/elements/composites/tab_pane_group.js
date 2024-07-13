@@ -10,18 +10,31 @@ class TabPaneGroup extends CompositeGuiElement {
   #selectedTabIndex = 0;
   #tabChangeListeners = [];
 
+  #tabLabels;
+  #tabContents;
+  #tabTooltips;
+
   /**
    * tabContent is list of rect->element callbacks
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    * @param {string[]} tabLabels The labels fot he tab header buttons.
    * @param {Function[]} tabContents The functions to build each tab's elements.
    * @param {string[]} tabTooltips The tooltips for the tab header buttons.
    */
-  constructor(rect, screen, tabLabels, tabContents, tabTooltips = null) {
+  constructor(rect, tabLabels, tabContents, tabTooltips = null) {
     super(rect);
-    const layout = this.layoutRects(screen);
-    this.tabLabels = tabLabels;
+    this.#tabLabels = tabLabels;
+    this.#tabContents = tabContents;
+    this.#tabTooltips = tabTooltips;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const layout = this._layout;
+    const result = [];
 
     // tab labels at top
     let i = 0;
@@ -29,7 +42,7 @@ class TabPaneGroup extends CompositeGuiElement {
     const tabLabelScale = 0.5;
     const [cx, y, _w, _h] = layout.tabsRow;
     let x = cx + 0.02;
-    tabLabels.map((label) => {
+    this.#tabLabels.map((label) => {
       const [w, h] = getTextDims(label, tabLabelScale);
       const rr = padRect(x, y, w, h, 0.02);
       const ii = i;
@@ -40,19 +53,23 @@ class TabPaneGroup extends CompositeGuiElement {
           this.#tabChangeListeners.forEach((l) => l(ii));
         }
       );
-      if (tabTooltips) { tb.withTooltip(tabTooltips[i]); }
+      if (this.#tabTooltips) { tb.withTooltip(this.#tabTooltips[i]); }
 
       tb.setScale(tabLabelScale);
-      this.addChild(tb);
+      result.push(tb);
       i = i + 1;
     });
 
-    // content for each tab
-    const r = layout.content;
-    this.tabContent = tabContents.map((cons) => cons(r, screen).withOpacity(true));
+    // contents for each tab are technically not children
+    // so they aren't all drawn automatically
+    const r = this._layout.content;
+    const conts = this.#tabContents.map((cons) => cons(r, screen).withOpacity(true));
+    this.tabContent = conts;
 
-    this.nTabs = tabLabels.length;
+    this.nTabs = this.#tabLabels.length;
     this.#selectedTabIndex = 0;
+
+    return result;
   }
 
   /**
@@ -76,7 +93,7 @@ class TabPaneGroup extends CompositeGuiElement {
    */
   setScreen(s) {
     super.setScreen(s);
-    this.tabContent.forEach((tb) => tb.setScreen(s));
+    if (this.tabContent) { this.tabContent.forEach((tb) => tb.setScreen(s)); }
   }
 
   /**
@@ -94,7 +111,7 @@ class TabPaneGroup extends CompositeGuiElement {
    */
   update(dt, disableHover) {
     super.update(dt, disableHover);
-    this.tabContent[this.#selectedTabIndex].update(dt, disableHover);
+    if (this.tabContent) { this.tabContent[this.#selectedTabIndex].update(dt, disableHover); }
   }
 
   /**
@@ -102,8 +119,17 @@ class TabPaneGroup extends CompositeGuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    this.tabContent[this.#selectedTabIndex].draw(g); // draw tab content
+    if (this.tabContent) { this.tabContent[this.#selectedTabIndex].draw(g); } // draw tab content
     super.draw(g); // draw tab labels
+  }
+
+  /**
+   * Recursively populate #children with gui elements.
+   * @param {GameScreen} screen The screen containing this.
+   */
+  buildElements(screen) {
+    super.buildElements(screen);
+    if (this.tabContent) { this.tabContent.forEach((e) => e.buildElements(screen)); }
   }
 
   /**
@@ -111,6 +137,6 @@ class TabPaneGroup extends CompositeGuiElement {
    */
   click() {
     return super.click() || // click tab label
-            this.tabContent[this.#selectedTabIndex].click(); // click tab content
+            (this.tabContent && this.tabContent[this.#selectedTabIndex].click()); // click tab content
   }
 }

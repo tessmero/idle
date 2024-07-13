@@ -40,12 +40,11 @@ class UpgradeMenuGui extends Gui {
   }
 
   /**
-   * Construct upgrade menu gui elements for the given game screen.
-   * @param {GameScreen} screen The screen in need of gui elements.
-   * @returns {GuiElement[]} The gui elements for the screen.
+   * Construct upgrade menu gui elements.
+   * @returns {GuiElement[]} The children.
    */
-  buildElements(screen) {
-    const layout = this.layoutRects(screen);
+  _buildElements() {
+    const layout = this._layout;
     const r0 = layout.r0;
 
     let tabLabels; let tabContent;
@@ -74,7 +73,7 @@ class UpgradeMenuGui extends Gui {
         // rect => new DebugTab(rect),
       ];
     }
-    const tabGroup = new TabPaneGroup([...r0], screen, tabLabels, tabContent);
+    const tabGroup = new TabPaneGroup([...r0], tabLabels, tabContent);
     if (global.upgradeMenuTabIndex) { tabGroup.setSelectedTabIndex(global.upgradeMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.upgradeMenuTabIndex = i;

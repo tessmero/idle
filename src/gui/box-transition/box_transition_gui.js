@@ -22,12 +22,10 @@ class BoxTransitionGui extends Gui {
   }
 
   /**
-   * Implement Gui, but contain no children gui elements.
-   * Instead we extend the Gui draw method in this file.
-   * @param {GameScreen} _screen The screen that will display this transition.
+   * This has no children, instead we extend draw() method in this file.
    * @returns {GuiElement[]} An empty array indicating no gui elements.
    */
-  buildElements(_screen) {
+  _buildElements() {
     return [];
   }
 

@@ -67,8 +67,10 @@ class GameStateManager {
    */
   _rebuildGui(gui, screen) {
     gui.gsm = this;
-    gui.setChildren(gui.buildElements(screen));
-    gui.setScreen(screen);
+
+    // construct,layout,recurse children
+    gui.buildElements(screen);
+
   }
 
   /**

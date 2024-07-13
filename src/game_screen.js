@@ -387,7 +387,7 @@ class GameScreen {
       this.contextMenu = new PiContextMenu(...cmr, this, p);
     }
 
-    if (this.contextMenu) { this.contextMenu.setScreen(this); }
+    if (this.contextMenu) { this.contextMenu.buildElements(this); }
 
     // update popups just in case they are persistent
     let disableHover = false;
@@ -418,7 +418,7 @@ class GameScreen {
 
     // update popups just in case they are persistent
     if (this.tooltipPopup) {
-      this.tooltipPopup.setScreen(this);
+      this.tooltipPopup.buildElements(this);
       this.tooltipPopup.update(dt);
     }
 

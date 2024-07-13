@@ -4,6 +4,9 @@
  */
 class BooleanDebugVar extends CompositeGuiElement {
 
+  #varname;
+  #tooltip;
+
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
@@ -12,18 +15,27 @@ class BooleanDebugVar extends CompositeGuiElement {
    */
   constructor(rect, varname, tooltip) {
     super(rect);
-    this.varname = varname;
+    this.#varname = varname;
+    this.#tooltip = tooltip;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
 
     const r = this.rect;
+    const varname = this.#varname;
     const d = 0.05;
     const r0 = [r[0], r[1], d, d];
 
     // text label
-    const dtl = new DynamicTextLabel(rect, () =>
+    const dtl = new DynamicTextLabel(r, () =>
       `          ${varname}`)
       .withDynamicTooltip(() => [
         `${getGlobal(varname) ? 'on' : 'off' } : ${varname} `,
-        tooltip,
+        this.#tooltip,
       ].join('\n'));
 
     dtl.setScale(0.4);
@@ -34,18 +46,17 @@ class BooleanDebugVar extends CompositeGuiElement {
     r0[2] = r0[2] + 0.17;
     this.checkbox = new IconButton(r0, icon, () => this.toggle()).withScale(0.5);
 
-    this.setChildren([
+    return [
       this.checkbox,
       dtl,
-    ]);
-
+    ];
   }
 
   /**
    * called when clicked
    */
   toggle() {
-    const varname = this.varname;
+    const varname = this.#varname;
     let val = getGlobal(varname);
     val = !val;
     setGlobal(varname, val);

@@ -9,15 +9,21 @@ class UpgradesTab extends CompositeGuiElement {
   /**
    *
    * @param {number[]} sr The rectange to align elements in.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    */
-  constructor(sr, screen) {
+  constructor(sr) {
     super(sr);
-    const layout = this.layoutRects(screen);
-    if (!global.upgradeTracks) { return; }
-    const specs = global.upgradeTracks.state;
-    const upgraders = Object.keys(specs).map((key, i) => new StatUpgrader(layout.rows[i], screen, key));
-
-    this.setChildren(upgraders);
   }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    if (!global.upgradeTracks) { return []; }
+    const specs = global.upgradeTracks.state;
+    const rows = this._layout.rows;
+    const upgraders = Object.keys(specs).map((key, i) => new StatUpgrader(rows[i], key));
+    return upgraders;
+  }
+
 }

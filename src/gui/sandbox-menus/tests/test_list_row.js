@@ -19,17 +19,24 @@ class TestListRow extends CompositeGuiElement {
 
     const [_testCat, test] = allTests[testIndex];
     this.#test = test;
+  }
 
-    const sr = new StatReadout(rect,
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const test = this.#test;
+
+    const sr = new StatReadout(this.rect,
       playIcon, () => test.title)
       .withScale(0.4);
-
     sr.isAnimated = () => sr.hovered || this.isActive();
 
-    this.setChildren([
-      new Button(rect, () => this.clicked()),
+    return [
+      new Button(this.rect, () => this.clicked()),
       sr,
-    ]);
+    ];
   }
 
   /**

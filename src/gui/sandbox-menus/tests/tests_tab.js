@@ -10,27 +10,25 @@ class TestsTab extends CompositeGuiElement {
   tlrs = new Map();
 
   /**
-   *
-   * @param {number[]} sr The rectangle to align elemnts in.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
    */
-  constructor(sr, screen) {
-    super(sr);
-    const layout = this.layoutRects(screen);
+  _buildElements() {
+    const layout = this._layout;
 
     // get list of unique test categories
     const allCats = [...new Set(allTests.map(([cat, _test]) => cat))];
 
     const tabLabels = allCats;
     const tabTooltips = allCats.map((cat) => `${cat} tests`);
-    const tabContents = allCats.map((cat) => (r) => this.buildTabContent(r, cat, screen));
-    const tabGroup = new TabPaneGroup(layout.inner, screen, tabLabels, tabContents, tabTooltips);
+    const tabContents = allCats.map((cat) => (r) => this.buildTabContent(r, cat));
+    const tabGroup = new TabPaneGroup(layout.inner, tabLabels, tabContents, tabTooltips);
     if (global.testsMenuTabIndex) { tabGroup.setSelectedTabIndex(global.testsMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.testsMenuTabIndex = i;
     });
 
-    this.addChild(tabGroup);
+    return [tabGroup];
   }
 
   /**
@@ -38,50 +36,51 @@ class TestsTab extends CompositeGuiElement {
    * Here we show the tests within one category
    * @param {number[]} rect The rectangle to align elements in.
    * @param {string} cat The category key/name.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
    */
-  buildTabContent(rect, cat, screen) {
+  buildTabContent(rect, cat) {
     const scale = 0.4;
     const maxRows = 10;
 
     const result = new CompositeGuiElement(rect);
     result._layoutData = DEBUG_TAB_LAYOUT;
-    const layout = result.layoutRects(screen);
+    result._buildElements = () => {
+      const layout = result._layout;
 
-    // run all button
-    const rab = new Button(layout.rows[0],
-      () => this.playAllClicked())
-      .withScale(scale);
-    this.rab = rab;
+      // run all button
+      const rab = new Button(layout.rows[0],
+        () => this.playAllClicked())
+        .withScale(scale);
+      this.rab = rab;
 
-    // build ui rows, leaveing first slot free
-    let rowIndex = 1;
-    const innerTlrs = [];
-    for (let testIndex = 0; testIndex < allTests.length; testIndex++) {
-      const [testCat, _test] = allTests[testIndex];
-      if (testCat === cat) {
-        if (rowIndex >= maxRows) {
-          throw new Error(`max ${maxRows} rows in test category gui`);
+      // build ui rows, leaveing first slot free
+      let rowIndex = 1;
+      const innerTlrs = [];
+      for (let testIndex = 0; testIndex < allTests.length; testIndex++) {
+        const [testCat, _test] = allTests[testIndex];
+        if (testCat === cat) {
+          if (rowIndex >= maxRows) {
+            throw new Error(`max ${maxRows} rows in test category gui`);
+          }
+          const tlr = new TestListRow(layout.rows[rowIndex], testIndex);
+          rowIndex = rowIndex + 1;
+          innerTlrs.push(tlr);
+          this.tlrs.set(testIndex, tlr);
         }
-        const tlr = new TestListRow(layout.rows[rowIndex], testIndex);
-        rowIndex = rowIndex + 1;
-        innerTlrs.push(tlr);
-        this.tlrs.set(testIndex, tlr);
       }
-    }
 
-    result.setChildren([
+      return [
 
-      // play all button in first slot
-      rab,
+        // play all button in first slot
+        rab,
 
-      new StatReadout(rab.rect, nextIcon,
-        () => 'run all tests')
-        .withScale(scale),
+        new StatReadout(rab.rect, nextIcon,
+          () => 'run all tests')
+          .withScale(scale),
 
-      // ui rows
-      ...innerTlrs,
-    ]);
+        // ui rows
+        ...innerTlrs,
+      ];
+    };
 
     return result;
   }

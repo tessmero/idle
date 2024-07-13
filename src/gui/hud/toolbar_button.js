@@ -15,6 +15,16 @@ class ToolbarButton extends CompositeGuiElement {
 
     this.tool = tool;
     this.indexInToolbar = indexInToolbar;
+  }
+
+  /**
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const result = [];
+    const tool = this.tool;
+    const rect = this.rect;
 
     const btn = new IconButton(rect, tool.icon, () => this.click());
     btn.isAnimated = (() => // override IconButton
@@ -24,7 +34,7 @@ class ToolbarButton extends CompositeGuiElement {
       )
     );
     this.button = btn;
-    this.addChild(btn);
+    result.push(btn);
 
     if (tool.getCost()) {
       let r = rect;
@@ -34,12 +44,14 @@ class ToolbarButton extends CompositeGuiElement {
       const pi = new ProgressIndicator(r,
         () => this.screen.sim.particlesCollected / tool.getCost())
         .withScale(0.2);
-      this.addChild(pi);
+      result.push(pi);
     }
 
     // prepare to detect when an
     // unusable tool becomes usable
     this.wasUsable = this.tool.isUsable();
+
+    return result;
   }
 
   /**

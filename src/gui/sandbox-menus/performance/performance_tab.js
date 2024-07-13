@@ -6,14 +6,11 @@ class PerformanceTab extends CompositeGuiElement {
   _layoutData = PERFORMANCE_GUI_LAYOUT;
 
   /**
-   *
-   * @param {number[]} rect The rectangle to align elements in.
-   * @param {GameScreen} screen The screen for icon scale for css layout (needs cleanup)
+   * Construct direct children for this composite.
+   * @returns {GuiElement[]} The children.
    */
-  constructor(rect, screen) {
-    super(rect);
-    const layout = this.layoutRects(screen);
-    const rows = layout.rows;
+  _buildElements() {
+    const rows = this._layout.rows;
 
     const specs = [
       [screenIcon, () => this.rptMemoryScreens(), () => this.rptMemoryScreensDetails()],
@@ -41,30 +38,15 @@ class PerformanceTab extends CompositeGuiElement {
 
     ];
 
-    let i = 0;
-    specs.forEach((entry) => {
+    return specs.map((entry, i) => {
       const [icon, labelFunc, tooltipFunc] = entry;
       const elem = new StatReadout(
         rows[i], icon, labelFunc)
         .withScale(0.4)
         .withTooltipScale(0.3)
         .withDynamicTooltip(tooltipFunc);
-      this.addChild(elem);
-      i = i + 1;
+      return elem;
     });
-  }
-
-  /**
-   * @param {number} n the desired number of rows.
-   */
-  buildRows(n) {
-    const layout = this.layoutRects(screen);
-    const r = layout.row;
-    const result = [];
-    for (let i = 0; i < n; i++) {
-      result.push([r[0], r[1] + r[3] * i, r[2], r[3]]);
-    }
-    return result;
   }
 
   /**
