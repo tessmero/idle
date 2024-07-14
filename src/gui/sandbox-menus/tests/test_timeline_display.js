@@ -29,19 +29,19 @@ class TestTimelineDisplay extends CompositeGuiElement {
     const checkTimes = this.checkTimes;
     const checkLabels = this.checkLabels;
 
-    const innerRect = padRect(...this.rect, -0.01);
+    const innerRect = padRect(...this.rect, -0.001);
     this.innerRect = innerRect;
 
     // position icon for each checkpoint in timeline
     const boxes = [];
-    const boxRad = 0.02;
+    const boxRad = 0.01;
     for (let i = 0; i < checkTimes.length; i++) {
       const t = checkTimes[i];
       const label = checkLabels[i];
       const x = innerRect[0] + (t / duration) * innerRect[2];
-      const r = [x - boxRad, innerRect[1] - 0.05, 2 * boxRad, 2 * boxRad];
+      const r = [x - boxRad, innerRect[1] - 0.02, 2 * boxRad, 2 * boxRad];
       boxes.push(new IconButton(r, uncheckedIcon, () => {})
-        .withScale(0.2)
+        .withScale(0.25)
         .withTooltip(label)
         .withTooltipScale(0.25));
     }

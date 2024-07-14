@@ -21,7 +21,7 @@ const STAT_UPGRADER_LAYOUT = {
 
   // helper
   _inner: {
-    margin: .001,
+    margin: 0.001,
   },
 
   button: {

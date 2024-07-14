@@ -3,6 +3,7 @@
  * extended body context menu that also has buddy title and exp level.
  */
 class BuddyContextMenu extends BodyContextMenu {
+  _layoutData = BUDDY_CONTEXT_MENU_LAYOUT;
 
   // fot size
   #scale = 0.3;

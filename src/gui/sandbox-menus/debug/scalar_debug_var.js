@@ -3,6 +3,7 @@
  * a global variable readout with buttons to increase or decrease.
  */
 class ScalarDebugVar extends CompositeGuiElement {
+  _layoutData = DEBUG_SCALAR_LAYOUT;
 
   #varname;
   #inc;
@@ -30,28 +31,23 @@ class ScalarDebugVar extends CompositeGuiElement {
     const varname = this.#varname;
     const inc = this.#inc;
     const tooltip = this.#tooltip;
+    const layout = this._layout;
+    const [r0, r1] = layout.buttons;
 
-    const r = this.rect;
-    const d = 0.05;
-    const p = (r[3] - d) / 2;
-    const r0 = [r[0] + p, r[1] + p, d, d];
-    const r1 = [r0[0] + d + p, r[1] + p, d, d];
+    const fmtVal = () => Math.floor(getGlobal(varname) / inc + 0.5).toString();
 
-    // text label
-    const dtl = new DynamicTextLabel(r, () =>
-      `     ${ Math.floor(getGlobal(varname) / inc + 0.5).toString().padEnd(5, ' ') }${varname}`)
-      .withDynamicTooltip(() => [
-        `${Math.floor(getGlobal(varname) / inc + 0.5).toString() } : ${varname} `,
-        tooltip,
-        'shift-click for 10x',
-        'ctrl-click for 100x',
-      ].join('\n')); // tooltip
-    dtl.setScale(0.4);
-    dtl.tooltipScale = 0.4;
-    dtl.setCenter(false);
+    // text labels
+    const labels = [
+      new DynamicTextLabel(layout.value, () => fmtVal()),
+      new DynamicTextLabel(layout.label, () => varname),
+    ];
+    for (const lbl of labels) {
+      lbl.setScale(0.4);
+      lbl.setCenter(false);
+    }
 
-    return [
-      dtl,
+    const result = [
+      ...labels,
 
       // buttons
       new IconButton(r0, decreaseIcon, () => {
@@ -75,6 +71,19 @@ class ScalarDebugVar extends CompositeGuiElement {
         screen.stateManager.rebuildGuis(screen, false);
       }),
     ];
+
+    // give all elements the same tooltip
+    for (const e of result) {
+      e.withDynamicTooltip(() => [
+        `${fmtVal()} : ${varname} `,
+        tooltip,
+        'shift-click for 10x',
+        'ctrl-click for 100x',
+      ].join('\n'))
+        .withTooltipScale(0.4);
+    }
+
+    return result;
   }
 
   /**

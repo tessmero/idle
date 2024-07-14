@@ -4,12 +4,12 @@
 const TAB_PANE_LAYOUT = {
 
   tabsRow: {
-    height: .04,
-    top: .02,
+    height: 0.04,
+    top: 0.02,
   },
 
   content: {
-    top: .06,
+    top: 0.06,
     height: 'auto',
   },
 };
@@ -18,6 +18,6 @@ const TAB_PANE_LAYOUT = {
 const NESTED_TAB_PANE_LAYOUT = {
 
   inner: {
-    margin: .08,
+    margin: 0.08,
   },
 };

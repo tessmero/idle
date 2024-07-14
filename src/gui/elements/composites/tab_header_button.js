@@ -18,6 +18,7 @@ class TabHeaderButton extends TextButton {
     this.parent = parent;
     this.tabIndex = tabIndex;
     this.debug = true;
+    this.withTooltipScale(0.4);
   }
 
   /**

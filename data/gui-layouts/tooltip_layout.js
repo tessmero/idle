@@ -14,7 +14,7 @@ const TOOLTIP_LAYOUT = {
     height: 0.04,
   },
 
-}
+};
 
 const TOOLBAR_TOOLTIP_LAYOUT = {
   ...TOOLTIP_LAYOUT,

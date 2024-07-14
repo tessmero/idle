@@ -46,8 +46,8 @@ class ContextMenu extends CompositeGuiElement {
     const axis = Number(rect[3] > rect[2]);
     let side = Number(poi[axis] < (rect[axis] + rect[axis + 2] / 2));
 
-    // short axis of context menu
-    const sax = 0.3 + 0.03 * 4; // has to match css (needs cleanup)
+    // length of shorter axis (width or height) of resulting rect
+    const sax = CONTEXT_MENU_SHORT_AXIS;
 
     // initally spawn context menu off screen
     if (true && (_lastContextMenuSide === -1)) {

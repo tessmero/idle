@@ -8,7 +8,7 @@ let _testLoopSetting = null;
  * that appears when a row is clicked in tests menu
  */
 class TestContextMenu extends ContextMenu {
-
+  _layoutData = TEST_CONTEXT_MENU_LAYOUT;
   test;
   testCat;
   testIndex;
@@ -60,7 +60,9 @@ class TestContextMenu extends ContextMenu {
   _buildElements() {
     const asserts = this.asserts;
     const test = this.test;
-    const [s0, s1] = this._layout.squares;
+    const titleRect = this._layout.title;
+    const [s0, _s1] = this._layout.squares;
+    const botRows = this._layout.rows;
 
     // center simulation in first content square
     const screen = test.screen;
@@ -84,9 +86,7 @@ class TestContextMenu extends ContextMenu {
     }
 
     // divide second content square into rows
-    const nRows = 13;
-    const botRows = divideRows(...s1, nRows);
-    const maxAsserts = nRows - 3;
+    const maxAsserts = botRows.length - 3;
     if (asserts.length > maxAsserts) {
       throw new Error(`max of ${maxAsserts} asserts per test`);
     }
@@ -95,22 +95,18 @@ class TestContextMenu extends ContextMenu {
     this._buildCriteriaRows(botRows, asserts);
 
     // play/pause/etc buttons at bottom of first square
-    const topRows = divideRows(...padRect(...s0, 0), 10);
-    const controlRow = divideCols(...topRows.at(-1), 10);
-    const controlButtons = this._buildControlButtons(controlRow);
+    const controlButtons = this._buildControlButtons();
 
-    const titleRect = [...topRows[0]];
-    titleRect[1] = titleRect[1] - 0.03;
     const titleLabel = new TextLabel(titleRect, test.title)
       .withScale(0.3);
 
     return [
 
-      // title at top of first square
-      titleLabel,
-
       // GUi Sim Panel in middle of first square
       gsp,
+
+      // title at top of first square
+      titleLabel,
 
       // play/pause/etc buttons at bottom of first square
       ...controlButtons,
@@ -170,10 +166,10 @@ class TestContextMenu extends ContextMenu {
 
   /**
    * Get elements and set member 'loopButton'
-   * @param  {number[][]} controlRow The rectangles for positioning each button.
    * @returns {GuiElement[]} The new IconButton instances.
    */
-  _buildControlButtons(controlRow) {
+  _buildControlButtons() {
+    const rects = this._layout.buttons;
 
     const specs = [
       // icon, tooltip, action
@@ -184,17 +180,12 @@ class TestContextMenu extends ContextMenu {
       [nextIcon, 'next test', () => this.nextClicked()],
       [loopIcon, 'loop (off)', () => this.loopClicked()],
     ];
-    const xOff = 0.75 * specs.length * controlRow[0][2]; // center buttons
-    let i = 0;
-    const controlButtons = specs.map((entry) => {
+    const controlButtons = specs.map((entry, i) => {
       const [icon, tooltip, action] = entry;
-      const r = [...controlRow[i]];
-      r[0] = r[0] + xOff;
-      const result = new IconButton(r, icon, action)
+      const result = new IconButton(rects[i], icon, action)
         .withScale(0.3)
         .withTooltip(tooltip)
         .withTooltipScale(this.#guiLetterScale);
-      i = i + 1;
       return result;
     });
 

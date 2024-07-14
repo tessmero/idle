@@ -193,8 +193,9 @@ class CompositeGuiElement extends GuiElement {
         if (!key.startsWith('_')) {
           const rlist = ((typeof rectOrList[0] === 'number') ? [rectOrList] : rectOrList);
           rlist.forEach((rect) => {
-            const c = rectCenter(...rect);
-            drawText(g, ...c, key, true, new FontSpec(0, 0.3 * this.screen.iconScale, false));
+
+            // const c = rectCenter(...rect);
+            // drawText(g, ...c, key, true, new FontSpec(0, 0.3 * this.screen.iconScale, false));
             g.strokeRect(...rect);
           });
         }
