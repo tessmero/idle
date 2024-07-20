@@ -107,11 +107,11 @@ class GuiLayoutParser {
         const ix = x + (down ? 0 : i * w);
         const iy = y + (down ? i * h : 0);
         if (down) {
-          if ((iy + h) > (p[1] + p[3])) {
+          if ((iy + h) > (0.001 + p[1] + p[3])) {
             return result;
           }
         }
-        else if ((ix + w) > (p[0] + p[2])) {
+        else if ((ix + w) > (0.001 + p[0] + p[2])) {
           return result;
         }
         result.push([ix, iy, w, h]);

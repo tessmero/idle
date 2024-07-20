@@ -1,13 +1,14 @@
 /**
- * @file layout data for debug settings in sendbox mode.
+ * @file layout data used in buildTabContent() in debug and test tabs.
  *
- * Here we only consider the main content area not including any tab headers.
+ * Here we only consider the content area not including any tab headers.
  */
+
 const DEBUG_TAB_LAYOUT = {
 
   // helper
   _r0: {
-    margin: 0.02,
+    margin: 0.04,
   },
 
   // rows for individual settings

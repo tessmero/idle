@@ -18,6 +18,6 @@ const TAB_PANE_LAYOUT = {
 const NESTED_TAB_PANE_LAYOUT = {
 
   inner: {
-    margin: 0.08,
+    margin: 0.04,
   },
 };

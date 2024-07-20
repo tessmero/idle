@@ -1,5 +1,5 @@
 /**
- * @file ContextMenu gobal position/animation state
+ * @file ContextMenu global sliding animation state
  * and base class for various context menu displays.
  */
 let _lastContextMenuSide = -1;
@@ -38,16 +38,23 @@ class ContextMenu extends CompositeGuiElement {
    * @param {GameScreen[]} screen The screen to align menu in.
    * @param {?Vector} pointOfInterest The position on-screen that should be kept visible.
    */
-  static pickRect(screen, pointOfInterest = v(0, 0)) {
-    const rect = screen.gui ? screen.gui.getScreenEdgesForContextMenu() : screen.rect;
-    const poi = pointOfInterest.xy();
+  static pickRect(screen, pointOfInterest = null) {
+    const rect = screen.rect;
 
-    // pick top/bottom/left/right
+    // load layout data depending on screen orientation
     const axis = Number(rect[3] > rect[2]);
-    let side = Number(poi[axis] < (rect[axis] + rect[axis + 2] / 2));
+    const css = axis ? VS_CONTEXT_MENU_BOUNDS : HS_CONTEXT_MENU_BOUNDS;
+    const layout = GuiLayoutParser.computeRects(rect, css, screen.iconScale);
 
-    // length of shorter axis (width or height) of resulting rect
-    const sax = CONTEXT_MENU_SHORT_AXIS;
+    if (!pointOfInterest) {
+
+      // use bottom/right position
+      return layout[1];
+    }
+
+    // pick target side (0 or 1) of the screen to avoid covering poi
+    const poi = pointOfInterest.xy();
+    let side = Number(poi[axis] < (rect[axis] + rect[axis + 2] / 2));
 
     // initally spawn context menu off screen
     if (true && (_lastContextMenuSide === -1)) {
@@ -55,10 +62,12 @@ class ContextMenu extends CompositeGuiElement {
       _lastContextMenuTime = global.t;
     }
 
-    // check if previously at diffent location
+    // check if previously at different location
     if ((_lastContextMenuSide !== side) && (_lastContextMenuSide !== -1)) {
 
-      const d = 0.1 + Math.abs(poi[axis] - (rect[axis] + 0.5 * rect[axis + 2]));
+      // check if poi is obstructed
+      const d = 0.1 + Math.abs(poi[axis] - (rect[axis] + 0.5 * rect[axis + 2])); // dist from screen center
+      const sax = Math.min(layout[0][2], layout[0][3]);// short axis of context menu
       const maxd = 0.5 * rect[axis + 2] - sax;
       if (d < maxd) {
 
@@ -90,19 +99,22 @@ class ContextMenu extends CompositeGuiElement {
     if (side < 0) { side = 0; }
     if (side > 1) { side = 1; }
 
-    if (axis) {
+    // compute precise bounding rect based on two extremes given in layout
+    const result = ContextMenu._interpolate(layout[0], layout[1], side);
+    return result;
+  }
 
-      // vertical screen
-      const h = sax;
-      const dy = side * (rect[3] - h);
-      return [rect[0], rect[1] + dy, rect[2], h];
-
+  /**
+   * Compute animated bounding rectangle between two extremes.
+   * @param {number[]} r0 The bounds at left/top extreme position.
+   * @param {number[]} r1 The bounds at right/bottom extreme position.
+   * @param {number} side The animated position[0,1]
+   */
+  static _interpolate(r0, r1, side) {
+    const result = [];
+    for (let i = 0; i < 4; i++) {
+      result[i] = avg(r0[i], r1[i], side);
     }
-
-    // horizontal screen
-    const w = sax;
-    const dx = side * (rect[2] - w);
-    return [rect[0] + dx, rect[1], w, rect[3]];
-
+    return result;
   }
 }

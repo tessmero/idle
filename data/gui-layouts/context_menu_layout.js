@@ -1,11 +1,55 @@
 /**
  * @file Layout data for context menu.
+ *
+ * Overall bounds depend on screen orientation.
+ * Overall bounds are given in pairs to be interpolated for sliding animation.
+ * (special handling in context_menu.js)
+ *
+ * Inner contents are flexible with no repetition or special handling.
  */
 
-// side length for overall bounding rectangle
-CONTEXT_MENU_SHORT_AXIS = 0.3 + 0.03 * 4;
+// helpers for aligning bounding rectangle in screen
+_MAR = 0.05; // distance to nearest screen edge
+_SAX = 0.3 + 0.03 * 4; // length of short axis
+_LAX = 1 - 2 * _MAR; // length of long axis
 
-// base layout within context menu
+// bounds in horizontal screen
+_HS = {
+  width: _SAX,
+  height: _LAX,
+  top: 'auto',
+};
+HS_CONTEXT_MENU_BOUNDS = {
+  0: {
+    ..._HS,
+    left: _MAR,
+  },
+
+  1: {
+    ..._HS,
+    right: _MAR,
+  },
+};
+
+// bounds in vertical screen
+_VS = {
+  width: _LAX,
+  height: _SAX,
+  left: 'auto',
+};
+VS_CONTEXT_MENU_BOUNDS = {
+  0: {
+    ..._VS,
+    top: _MAR,
+  },
+
+  1: {
+    ..._VS,
+    bottom: _MAR,
+  },
+};
+
+// base layout in context menu
 CONTEXT_MENU_LAYOUT = {
 
   // close button on top right
@@ -31,7 +75,7 @@ CONTEXT_MENU_LAYOUT = {
   },
 };
 
-// extended layout
+// extended layout for generic bodies
 BODY_CONTEXT_MENU_LAYOUT = {
   ...CONTEXT_MENU_LAYOUT,
 
@@ -44,11 +88,11 @@ BODY_CONTEXT_MENU_LAYOUT = {
   },
 };
 
-// extended layout
+// extended layout with slots for buddy-specific gui elements
 BUDDY_CONTEXT_MENU_LAYOUT = {
   ...BODY_CONTEXT_MENU_LAYOUT,
 
-  // rows within bottom/right content square
+  // rows in bottom/right content square
   rows: {
     parent: 'squares[1]',
     height: 0.05,
@@ -68,7 +112,7 @@ TEST_CONTEXT_MENU_LAYOUT = {
     top: -0.05,
   },
 
-  // rows within bottom/right content square
+  // rows in bottom/right content square
   rows: {
     parent: 'squares[1]',
     height: 0.025,
