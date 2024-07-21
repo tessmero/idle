@@ -3,6 +3,30 @@ import babelParser from '@babel/eslint-parser';
 import jsdoc from "eslint-plugin-jsdoc";
 import eslintPluginIdle from "./eslint-plugin-idle/index.cjs"
 
+// singleton class names and file patterns
+const sglClasses = ['StoryManager', 'ScreenManager', 'ShapeManager']
+const sglSrc = ["src/daemons/*_manager.js"]
+
+// overrides to enforce singleton "implicit constructor" pattern
+const sglConfigs = [
+  {
+    "rules": {
+
+      // warn against using new with singletons
+      'idle/no-new-singleton': ['warn', { restrictedClasses: sglClasses }],
+
+      // allow only these uppercase function names to be called without new
+      'new-cap': ['warn', { 'capIsNewExceptions': sglClasses}], 
+    },
+  },
+
+  // allow singletons' source files to use nonstandard method declaration
+  {
+    "files": sglSrc,
+    "rules": {"func-names": "off"}
+  },
+]
+
 export default [
   {
     files: ['**/*.js'],
@@ -19,15 +43,6 @@ export default [
         "idle": eslintPluginIdle,
     },
     'rules': {
-
-        // eslint-plugin-idle/no-new-singleton.cjs
-        'idle/no-new-singleton': [
-          'warn', [
-
-            // list of singleton classes
-            'StoryManager', 'ScreenManager', 'ShapeManager',
-          ]
-        ],
 
       /* jsdoc */
         "jsdoc/check-access": 1, // Recommended
@@ -243,15 +258,7 @@ export default [
       'linebreak-style': 0, // disallow mixed 'LF' and 'CRLF' as linebreaks
       'lines-around-comment': [1, { 'beforeLineComment': true, 'allowBlockStart': true, 'allowObjectStart': true, 'allowArrayStart': true }], // enforce empty lines around comments
       'max-nested-callbacks': [0, 3], // specify the maximum depth callbacks can be nested
-      'new-cap': ['warn', 
-        { 
-          'capIsNewExceptions': [
-
-            // Allow accessing singletons without new
-            'StoryManager','ShapeManager','ScreenManager',
-          ]
-        }
-      ], // require a capital letter for constructors
+      'new-cap': 1, // require a capital letter for constructors
       'new-parens': 1, // disallow the omission of parentheses when invoking a constructor with no arguments
       'newline-after-var': 0, // require or disallow an empty newline after variable declarations
       'no-array-constructor': 1, // disallow use of the Array constructor
@@ -340,9 +347,5 @@ export default [
     },
   },
 
-  // allow daemon classes to use special singleton pattern
-  {
-    "files": ["src/daemons/*_manager.js"],
-    "rules": {"func-names": "off"}
-  },
+  ...sglConfigs
 ];

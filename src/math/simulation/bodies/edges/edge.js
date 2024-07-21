@@ -60,7 +60,7 @@ class Edge {
 
   /**
    * get precomputed [angle,radius,normal angle,r2]
-   * at given distance along circumerence
+   * at given distance along circumference
    * @param {number} d The 1D position along this edge.
    */
   lookupDist(d) {

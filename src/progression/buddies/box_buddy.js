@@ -53,7 +53,7 @@ class BoxBuddy extends Buddy {
     square.title = 'black box';
     this.square = square;
 
-    // outer/inner square lenght ratio
+    // outer/inner square length ratio
     const rad = SquareBody.rad();
     this.rad = rad;
     const innerRad = this.innerScreen.sim.rect[2] / 2;

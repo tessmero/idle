@@ -3,28 +3,35 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: 'disallow using new keyword with singleton classes',
+      description: `shouldn't use "new" keyword with singleton classes`,
       recommended: true,
     },
     schema: [
       {
-        type: 'array',
-        items: {
-          type: 'string',
+        type: 'object',
+        properties: {
+          restrictedClasses: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+            uniqueItems: true,
+          },
         },
-        uniqueItems: true,
+        additionalProperties: false,
       },
     ],
   },
   create(context) {
-    const restrictedClasses = context.options[0] || [];
+    const options = context.options[0] || {};
+    const restrictedClasses = options.restrictedClasses || [];
 
     return {
       NewExpression(node) {
         if (node.callee.name && restrictedClasses.includes(node.callee.name)) {
           context.report({
             node,
-            message: `'new' is unecessary and misleading because ${node.callee.name} is a singleton.`,
+            message: `should omit "new" because ${node.callee.name} is a singleton.`,
           });
         }
       },
