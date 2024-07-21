@@ -5,15 +5,16 @@ class PolygonEdge extends PathspecEdge {
 
   /**
    *
+   * @param {string} titleKey readable unique title to submit to ShapeManager
    * @param {Vector[]} verts
    */
-  constructor(verts) {
-    super();
+  constructor(titleKey, verts) {
+    super(titleKey);
 
     verts.push(verts[0]);
     this.verts = verts;
 
-    // comput total circumference
+    // compute total circumference
     // and cumulative side lengths
     const csl = [0];
     const n = verts.length;

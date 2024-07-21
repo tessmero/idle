@@ -1,39 +1,29 @@
 /**
- * @file StoryManager object type.
+ * @file StoryManager keeps track of player progression state.
  *
- * Manages the player progression state.
- *
- * constructed once in setup.js
- * instance is global.storyManager
+ * References STORY_HOOKS data object (data/story_hooks_data.js)
  */
-let _StoryManagerConstructed = false;
-
-/**
- *
- */
-class StoryManager {
-
-  #hooks = STORY_HOOKS;
-  #alreadyTriggered = new Set();
-
-  /**
-   * called once in setup.js
-   */
-  constructor() {
-    if (_StoryManagerConstructed) {
-      throw new Error(`${this.constructor} constructed mutiple times`);
-    }
-    _StoryManagerConstructed = true;
+function StoryManager() {
+  if (StoryManager._instance) {
+    return StoryManager._instance;
   }
+  if (!(this instanceof StoryManager)) {
+    // eslint-disable-next-line idle/no-new-singleton
+    return new StoryManager();
+  }
+  StoryManager._instance = this;
+
+  this._hooks = STORY_HOOKS;
+  this._alreadyTriggered = new Set();
 
   /**
    * Called when a hook has been triggered.
    * @param {string} key The key in data/story_hooks_data.js
    * @returns {boolean} True to attempt to block/consume the triggering user action
    */
-  triggerStoryHook(key) {
-    const hook = this.#hooks[key];
-    const done = this.#alreadyTriggered;
+  this.triggerStoryHook = function(key) {
+    const hook = STORY_HOOKS[key];
+    const done = this._alreadyTriggered;
 
     if (done.has(key)) {
       return false; // checkpoint already completed
@@ -57,5 +47,5 @@ class StoryManager {
     );
     done.add(key);
     return hook.blocksTriggerAction;
-  }
+  };
 }

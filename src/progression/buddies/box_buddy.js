@@ -31,12 +31,10 @@ class BoxBuddy extends Buddy {
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
-   * @param {number} rad
    * @param {?GameScreen} prebuiltInnerScreen
    */
-  constructor(sim, pos, rad, prebuiltInnerScreen = null) {
+  constructor(sim, pos, prebuiltInnerScreen = null) {
     super(sim, pos);
-    this.rad = rad;
 
     // setup new inner screen
     const outerScreen = sim.screen;
@@ -51,11 +49,13 @@ class BoxBuddy extends Buddy {
     innerSim.physicsParticlePassedOffscreen = (...p) => this._innerPoob(...p);
 
     // start with base square
-    const square = new SquareBody(sim, pos, rad);
+    const square = new SquareBody(sim, pos);
     square.title = 'black box';
     this.square = square;
 
     // outer/inner square lenght ratio
+    const rad = SquareBody.rad();
+    this.rad = rad;
     const innerRad = this.innerScreen.sim.rect[2] / 2;
     this.scaleFactor = innerRad / rad;
 

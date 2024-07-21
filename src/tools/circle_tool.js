@@ -15,8 +15,7 @@ class CircleTool extends BodyTool {
    * @param {Vector} p The position.
    */
   buildBody(p) {
-    const rad = this.#baseRad * this.iconScale;
-    return new CircleBuddy(this.sim, p, rad);
+    return new CircleBuddy(this.sim, p);
   }
 
   /**

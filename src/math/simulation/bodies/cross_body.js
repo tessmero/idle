@@ -3,6 +3,8 @@
  * @file CrossBody cross shaped body.
  */
 class CrossBody extends Body {
+  _edgeKey = 'cross';
+
   /**
    *
    * @param {ParticleSim} sim
@@ -47,7 +49,7 @@ class CrossBody extends Body {
 
     verts = verts.map((xy) => v(...xy).mul(scale));
 
-    return new PolygonEdge(verts.reverse());
+    return new PolygonEdge('cross', verts.reverse());
   }
 
   /**

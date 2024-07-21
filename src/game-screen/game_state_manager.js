@@ -288,7 +288,7 @@ class GameStateManager {
     }
     this.play();
     if (this.screen === global.mainScreen) {
-      global.storyManager.triggerStoryHook('startSequenceFinished');
+      StoryManager().triggerStoryHook('startSequenceFinished');
     }
   }
 

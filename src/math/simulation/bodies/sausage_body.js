@@ -2,23 +2,22 @@
  * @file SsausageBody thick line segment with round ends.
  */
 class SausageBody extends Body {
+  _edgeKey = 'sausage';
 
   /**
    *
    * @param {ParticleSim} sim
    * @param {Vector} a
    * @param {Vector} b
-   * @param {number} rad
    */
-  constructor(sim, a, b, rad = 2e-2) {
+  constructor(sim, a, b) {
     super(sim, va(a, b));
 
     this.a = a;
     this.b = b;
-    this.rad = rad;
 
     const d = b.sub(a);
-    this.length = d.getMagnitude();
+    this.pos = va(a, b);
     this.angle = d.getAngle();
 
     //
@@ -30,9 +29,7 @@ class SausageBody extends Body {
    *
    */
   buildEdge() {
-    const len = this.a.sub(this.b).getMagnitude();
-    const edge = new SausageEdge(len, this.rad);
-    return edge;
+    return new SausageEdge();
   }
 
   /**
@@ -40,14 +37,14 @@ class SausageBody extends Body {
    */
   buildGrabber() {
     const grabber = new SausageGrabber(
-      this.a, this.b, this.rad,
+      this.a, this.b, SausageEdge.rad(),
       (...p) => this.grabbed(...p));
     return grabber;
   }
 
   /**
    *
-   * @param {number} dt The time elapsed in millseconds.
+   * @param {number} dt The time elapsed in milliseconds.
    * @param {...any} args
    */
   update(dt, ...args) {
@@ -55,12 +52,12 @@ class SausageBody extends Body {
 
     const p = this.pos;
     const a = this.angle;
-    const r = this.length / 2;
+    const r = SausageEdge.length() / 2;
 
     this.a = p.sub(vp(a, r));
     this.b = p.add(vp(a, r));
 
-    // update LineGrabber isntance
+    // update LineGrabber instance
     this.grabber.updateEndpoints(this.a, this.b);
 
     return true;
@@ -74,10 +71,10 @@ class SausageBody extends Body {
     const a = this.a.xy();
     const b = this.b.xy();
 
-    // draw sraight segmetn
+    // draw straight segment
     g.strokeStyle = global.colorScheme.fg;
     g.lineCap = 'round';
-    g.lineWidth = 2 * this.rad;
+    g.lineWidth = 2 * SausageEdge.rad();
     g.beginPath();
     g.moveTo(...a);
     g.lineTo(...b);

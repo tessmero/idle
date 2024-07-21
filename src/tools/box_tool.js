@@ -9,15 +9,12 @@ class BoxTool extends BodyTool {
   _tooltipText = 'build box';
   _cursorCenter = true;
 
-  #baseRad = 0.05;
-
   /**
    * Get a new BoxBuddy instance with the given position.
    * @param {Vector} p The position.
    */
   buildBody(p) {
-    const rad = this.#baseRad * this.iconScale;
-    return new BoxBuddy(this.sim, p, rad,
+    return new BoxBuddy(this.sim, p,
       this.screen.prebuiltBoxScreen);
   }
 

@@ -5,6 +5,13 @@
 class Body {
 
   /**
+   * unique key used to reference distinct Edge instance
+   * @abstract
+   * @type {string}
+   */
+  _edgeKey;
+
+  /**
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
@@ -80,8 +87,21 @@ class Body {
    */
   register(sim) {
     this.sim = sim;
-    const edge = this.buildEdge();
-    this.edge = edge;
+
+    // lookup/build distinct edge shape
+    const mgr = ShapeManager();
+    const key = this._edgeKey;
+    if (!key) {
+      throw new Error('_edgeKey not defined');
+    }
+    if (!mgr.hasEdge(key)) {
+      const ne = this.buildEdge();
+      if (ne.titleKey !== key) {
+        throw new Error('newly constructed edge does not have expected key');
+      }
+      ne.computeEdgeShape();
+    }
+    this.edge = mgr.getEdge(key);
 
     // prepare particle grabber instance
     this.grabber = this.buildGrabber();
@@ -93,9 +113,7 @@ class Body {
 
     // prepare for particles sliding along edge
     // EPS = edge particle subgroup instance
-    edge.computeEdgeShape();
-    edge.pos = this.pos;
-    this.eps = sim.edgeGroup.newSubgroup(edge);
+    this.eps = sim.edgeGroup.newSubgroup(this);
 
     // indicate to grabber
     // not to grab from this edge

@@ -1,7 +1,7 @@
 
 /**
  * @file Edge object type.
- * An edge is a boundary that particles interact with
+ * An edge is a distinct solid shape that particles interact with
  *
  * the shape of the edge is stored in polar coords
  * where the origin is the center of mass of a rotating body
@@ -10,6 +10,23 @@
  * and doesn't care about the specific position/orientation/momentum
  */
 class Edge {
+  #titleKey;
+
+  /**
+   *
+   * @param {string} titleKey readable unique title to submit to ShapeManager
+   */
+  constructor(titleKey) {
+    this.#titleKey = titleKey;
+    ShapeManager().submitNewEdge(this);
+  }
+
+  /**
+   *
+   */
+  get titleKey() {
+    return this.#titleKey;
+  }
 
   /**
    * Compute lookup table members.

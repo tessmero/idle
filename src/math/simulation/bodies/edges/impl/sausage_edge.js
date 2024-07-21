@@ -3,17 +3,30 @@
  * @file SausageEdge thick line segment with circular terminals.
  */
 class SausageEdge extends PathspecEdge {
+  #length;
+  #rad;
 
   /**
    *
-   * @param {number} length
-   * @param {number} rad
    */
-  constructor(length, rad) {
-    super();
+  constructor() {
+    super('sausage');
+    this.#length = SausageEdge.length();
+    this.#rad = SausageEdge.rad();
+  }
 
-    this.length = length;
-    this.rad = rad;
+  /**
+   *
+   */
+  static length() {
+    return 0.1;
+  }
+
+  /**
+   *
+   */
+  static rad() {
+    return 2e-2;
   }
 
   /**
@@ -23,7 +36,7 @@ class SausageEdge extends PathspecEdge {
 
     // wrap around sausage
     // twice length + 2 semicircle caps
-    return 2 * this.length + twopi * this.rad;
+    return 2 * this.#length + twopi * this.#rad;
   }
 
   /**
@@ -34,8 +47,8 @@ class SausageEdge extends PathspecEdge {
   computePoint(d) {
 
     const circ = this.getCircumference(); // complete edge length
-    const len = this.length; // length of straight segment
-    const rad = this.rad; // radius of end caps
+    const len = this.#length; // length of straight segment
+    const rad = this.#rad; // radius of end caps
     const cap = pi * rad; // length of semicircle cap
 
     let p; let norm;

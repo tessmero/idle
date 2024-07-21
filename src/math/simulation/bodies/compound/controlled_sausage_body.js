@@ -8,15 +8,14 @@ class ControlledSausageBody extends CompoundBody {
    * @param {ParticleSim} sim The simulation this will exist in.
    * @param {Vector} a The position of one end.
    * @param {Vector} b The position of the other end.
-   * @param {number} rad Half of the thickness.
    */
-  constructor(sim, a, b, rad = 2e-2) {
+  constructor(sim, a, b) {
     super(sim, va(a, b));
 
     this.a = a;
     this.b = b;
 
-    const sausage = new SausageBody(sim, a, b, rad);
+    const sausage = new SausageBody(sim, a, b);
     this.sausage = sausage;
 
     // init control points for user to click and drag

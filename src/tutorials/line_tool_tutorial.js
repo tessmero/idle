@@ -23,14 +23,14 @@ class LineToolTutorial extends Macro {
       [1200, 'pos', v(0.7, 0.4)],
       [1800, 'pos', v(0.7, 0.4)],
 
-      [2200, 'pos', v(0.4, 0.4)], // on control point
-      [2400, 'pos', v(0.4, 0.4)],
-      [2400, 'down'],
-      [2800, 'pos', v(0.4, 0.8)],
-      [2800, 'up'],
+      [3200, 'pos', v(0.3, 0.3)], // on control point
+      [3400, 'pos', v(0.3, 0.3)],
+      [3400, 'down'],
+      [3800, 'pos', v(0.4, 0.8)],
+      [3800, 'up'],
 
-      [3200, 'pos', startPos],
-      [3600, 'pos', startPos],
+      [4200, 'pos', startPos],
+      [4600, 'pos', startPos],
 
     ];
   }

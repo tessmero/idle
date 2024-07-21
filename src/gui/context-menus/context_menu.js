@@ -108,7 +108,7 @@ class ContextMenu extends CompositeGuiElement {
    * Compute animated bounding rectangle between two extremes.
    * @param {number[]} r0 The bounds at left/top extreme position.
    * @param {number[]} r1 The bounds at right/bottom extreme position.
-   * @param {number} side The animated position[0,1]
+   * @param {number} side The animation state in range [0,1]
    */
   static _interpolate(r0, r1, side) {
     const result = [];

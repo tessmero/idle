@@ -7,9 +7,9 @@
  * e.g. the overall game screen: global.mainScreen
  *
  * instances are persistent and must be registered
- * contructor submits to global.logPerformanceStats
+ * constructor submits to ScreenManager()
  *
- * methods like mouseDown recieve real user input (input.js)
+ * methods like mouseDown receive real user input (input.js)
  * or emulated user input (in this file)
  */
 class GameScreen {
@@ -28,8 +28,7 @@ class GameScreen {
 
   /**
    * Create a new Game Screen
-   * @param {string} titleKey readable title, also used as
-   *                          key for performance log.
+   * @param {string} titleKey readable unique title to submit to ScreenManager
    * @param {number[]} rect
    * @param {ParticleSim} sim
    * @param {GameStateManager} gsm
@@ -39,7 +38,7 @@ class GameScreen {
     this.#titleKey = titleKey;
     this.#rect = rect;
 
-    global.logPerformanceStats.submitNewScreen(this);
+    ScreenManager().submitNewScreen(this);
     console.assert(gsm instanceof GameStateManager);
     console.assert(sim instanceof ParticleSim);
 

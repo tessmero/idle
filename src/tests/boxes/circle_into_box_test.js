@@ -56,7 +56,7 @@ class CircleIntoBoxTest extends Test {
 
     const start = v(0.5, 0.9);
     const box = v(0.5, 0.5);
-    const circle = v(0.6, 0.5);
+    const circle = v(0.7, 0.5);
 
     return new Macro(() => [
       [0, 'pos', start],

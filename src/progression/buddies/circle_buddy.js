@@ -23,19 +23,18 @@ class CircleBuddy extends Buddy {
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
-   * @param {number} rad
    */
-  constructor(sim, pos, rad) {
+  constructor(sim, pos) {
     super(sim, pos);
 
     this.#maxSatiety = this.#maxSatietyCurve.f(this.expLevel);
     this.#satietyDecay = this.#satietyDecayCurve.f(this.expLevel);
     this.#satiety = this.#maxSatiety;
 
-    this.circle = new CircleBody(sim, pos, rad);
+    this.circle = new CircleBody(sim, pos);
     const cp = new ControlPoint(sim, this.circle);
     cp.visible = true;
-    cp.setRad(rad);
+    cp.setRad(CircleEdge.rad());
     this.controlPoint = cp;
 
     this.setChildren([this.circle, cp]);

@@ -2,17 +2,24 @@
  * @file SquareBody square-shaped body
  */
 class SquareBody extends Body {
+  _edgeKey = 'square';
+
+  /**
+   *
+   */
+  static rad() {
+    return 0.05;
+  }
 
   /**
    *
    * @param {ParticleSim} sim The simulation the body will live in.
    * @param {Vector} pos The position of the center of the square.
-   * @param {number} rad Half of the side length of the square.
    */
-  constructor(sim, pos, rad) {
+  constructor(sim, pos) {
     super(sim, pos);
 
-    this.rad = rad;
+    this.rad = SquareBody.rad();
     this.title = 'square';
     this.icon = uncheckedIcon;
   }
@@ -22,7 +29,7 @@ class SquareBody extends Body {
    */
   buildEdge() {
 
-    const r = this.rad;
+    const r = SquareBody.rad();
 
     let verts = [
       [r, r], [-r, r], [-r, -r], [r, -r],
@@ -31,7 +38,7 @@ class SquareBody extends Body {
     verts = verts.map((xy) => v(...xy));
     this.verts = verts;
 
-    return new PolygonEdge(verts);
+    return new PolygonEdge('square', verts);
   }
 
   /**

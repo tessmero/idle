@@ -2,6 +2,7 @@
  * @file CompassBody compass shaped body.
  */
 class CompassBody extends Body {
+  _edgeKey = 'compass';
 
   /**
    *
@@ -44,7 +45,7 @@ class CompassBody extends Body {
 
     verts = verts.map((xy) => v(...xy).mul(scale));
 
-    return new PolygonEdge(verts.reverse());
+    return new PolygonEdge('compass', verts.reverse());
   }
 
   /**

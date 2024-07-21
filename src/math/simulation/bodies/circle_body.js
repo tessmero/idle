@@ -2,17 +2,15 @@
  * @file CircleBody object type, a physics-enabled circle.
  */
 class CircleBody extends Body {
+  _edgeKey = 'circle';
 
   /**
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
-   * @param {number} rad
    */
-  constructor(sim, pos, rad) {
+  constructor(sim, pos) {
     super(sim, pos);
-
-    this.rad = rad;
 
     //
     this.title = 'circle';
@@ -23,7 +21,7 @@ class CircleBody extends Body {
    *
    */
   buildEdge() {
-    return new CircleEdge(this.rad);
+    return new CircleEdge();
   }
 
   /**
@@ -31,7 +29,7 @@ class CircleBody extends Body {
    */
   buildGrabber() {
     return new CircleGrabber(
-      this.pos, this.rad,
+      this.pos, this.edge.rad,
       (...p) => this.grabbed(...p), 0);
   }
 
@@ -43,7 +41,7 @@ class CircleBody extends Body {
     const p = this.pos;
 
     // draw circle
-    const r = this.rad;
+    const r = this.edge.rad;
     const c = p.xy();
     g.fillStyle = global.colorScheme.fg;
     g.beginPath();

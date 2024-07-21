@@ -1,5 +1,8 @@
 /**
  * @file STORY_HOOKS List of player progression checkpoints and resulting interventions.
+ *
+ * Top-level keys may be referenced explicitly in other data structures or in source code.
+ * Top-level keys are ultimately passed as an argument to StoryManager().triggerStoryHook(key)
  */
 const STORY_HOOKS = {
 

@@ -11,8 +11,8 @@ class FloatArray {
     // eslint-disable-next-line no-restricted-syntax
     this.inner = new Float32Array(n);
 
-    // log_performance_stats.js
-    global.logPerformanceStats.submitNewArray(n);
+    // src/daemons/screen_manager.js
+    ScreenManager().submitNewArray(n);
   }
 
   /**

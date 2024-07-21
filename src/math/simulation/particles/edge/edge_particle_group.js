@@ -40,9 +40,9 @@ class EdgeParticleGroup extends ParticleGroup {
    *
    * should be called in [Body subclass]::register(sim):
    *      sim.edgeGroup.newSubgroup(edge)
-   * @param {object} edge
+   * @param {Body} body
    */
-  newSubgroup(edge) {
+  newSubgroup(body) {
 
     if (this.freeSubgroupIndices.size === 0) {
       return null;
@@ -51,7 +51,7 @@ class EdgeParticleGroup extends ParticleGroup {
     const subgroupIndex = this.freeSubgroupIndices.find(true);
     const n = this.nsub;
     const i = subgroupIndex * n;
-    const sg = new EdgeParticleSubgroup(this, subgroupIndex, i, n, edge);
+    const sg = new EdgeParticleSubgroup(this, subgroupIndex, i, n, body.edge);
     this.subgroups.add(sg);
     this.freeSubgroupIndices.delete(subgroupIndex);
     return sg;

@@ -36,6 +36,8 @@ class PerformanceTab extends CompositeGuiElement {
 
       [rainIcon, () => this.rptTotal('sim pdrawCount', 'total particles drawn'), null],
 
+      [edgeParticleIcon, () => this.rptMemoryShapes(), () => this.rptMemoryShapesDetails()],
+
     ];
 
     return specs.map((entry, i) => {
@@ -69,16 +71,35 @@ class PerformanceTab extends CompositeGuiElement {
   }
 
   /**
+   * @returns {string} A one-line summary of all distinct edge
+   *                     shapes that have been constructed.
+   */
+  rptMemoryShapes() {
+    const mgr = ShapeManager();
+    const edges = mgr.constructedEdges.size;
+    return `${edges} distinct edge shapes`;
+  }
+
+  /**
+   *
+   * @returns {string} A listing of distinct edge shapes in memory.
+   */
+  rptMemoryShapesDetails() {
+    const allEdges = ShapeManager().constructedEdges;
+
+    const result = JSON.stringify(Array.from(allEdges.keys()))
+      .replaceAll(',', '\n')
+      .replaceAll('[', '');
+    return result;
+  }
+
+  /**
    * @returns {string} A one-line summary of all screens
    *                   that have been constructed.
    */
   rptMemoryScreens() {
-
-    // log_performance_stats.js
-    const lps = global.logPerformanceStats;
-
-    // report counts
-    const screens = lps.constructedScreens.size;
+    const mgr = ScreenManager();
+    const screens = mgr.constructedScreens.size;
     return `${screens} total screens`;
   }
 
@@ -90,7 +111,7 @@ class PerformanceTab extends CompositeGuiElement {
 
     // setup.js
     // log_performance_stats.js
-    const allScreens = global.logPerformanceStats.constructedScreens;
+    const allScreens = ScreenManager().constructedScreens;
 
     const result = JSON.stringify(Array.from(allScreens.keys()))
       .replaceAll(',', '\n')

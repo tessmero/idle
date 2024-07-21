@@ -3,18 +3,15 @@
  * defined by number of petals and radii.
  */
 class StarEdge extends RadspecEdge {
+  #n = 5;
+  #minRad = 0.05;
+  #maxRad = 0.1;
 
   /**
    *
-   * @param {number} n
-   * @param {number} minRad
-   * @param {number} maxRad
    */
-  constructor(n, minRad, maxRad) {
-    super();
-    this.n = n;
-    this.minRad = minRad;
-    this.maxRad = maxRad;
+  constructor() {
+    super('star');
   }
 
   /**
@@ -22,9 +19,9 @@ class StarEdge extends RadspecEdge {
    * @param {number} angle
    */
   computeRadius(angle) {
-    const mi = this.minRad;
-    const ma = this.maxRad;
-    const n = this.n;
+    const mi = this.#minRad;
+    const ma = this.#maxRad;
+    const n = this.#n;
 
     return mi + (ma - mi) * (1 + 0.5 * Math.sin(angle * n));
   }

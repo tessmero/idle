@@ -2,21 +2,15 @@
  * @file StarBody wavey star/flower shaped body.
  */
 class StarBody extends Body {
+  _edgeKey = 'star';
 
   /**
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
-   * @param {number} n
-   * @param {number} minRad
-   * @param {number} maxRad
    */
-  constructor(sim, pos, n, minRad, maxRad) {
+  constructor(sim, pos) {
     super(sim, pos);
-
-    this.n = n;
-    this.minRad = minRad;
-    this.maxRad = maxRad;
 
     //
     this.title = 'star';
@@ -37,7 +31,7 @@ class StarBody extends Body {
    *
    */
   buildEdge() {
-    return new StarEdge(this.n, this.minRad, this.maxRad);
+    return new StarEdge();
   }
 
   /**

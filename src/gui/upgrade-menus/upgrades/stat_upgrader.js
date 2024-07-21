@@ -101,7 +101,7 @@ class StatUpgrader extends CompositeGuiElement {
 
     // attemot to trigger any related story hooks
     if (gutse.triggers) {
-      const sm = global.storyManager;
+      const sm = StoryManager();
       const block = gutse.triggers.some((hook) => sm.triggerStoryHook(hook));
       if (block) {
 
