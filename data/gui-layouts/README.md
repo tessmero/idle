@@ -1,11 +1,11 @@
 # GUI Layouts
 
-Layout data format is inspired by CSS 
-  Each ruleset represents a rectangle or set of rectangles with x,y,w,h 
-  no margin/padding box model
-  The order of rules matters
-  You always have an absolute parent rectangle before parsing a ruleset
-  Rules `parent` and `repeat` act like mini DOM within one layout object
+Layout data format is like CSS but one-way and very limited.
+  - Each ruleset represents a rectangle or set of rectangles with x,y,w,h 
+  - no margin/padding box model
+  - The order of rules matters
+  - You always have an absolute parent rectangle before parsing a ruleset
+  - Rules `parent` and `repeat` act like mini DOM within one layout object
 
 
 ## GUI Disambiguation 
