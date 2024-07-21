@@ -20,28 +20,28 @@ In the source code, "gui" refers to objects of type `Gui`, a full-screen contain
 
 Layout object in data folder:
 ```js
-  MY_LAYOUT_OBJECT = {
-    myRectangle:{
-      width: '20%',
-    },
+MY_LAYOUT_OBJECT = {
+  myRectangle:{
+    width: '20%',
+  },
 
-    ...
-  }
+  ...
+}
 ```
 
 Class in source code:
 ```js
-  class MyCompositeElement extends CompositeGuiElement {
-    _layoutData = MY_LAYOUT_OBJECT
+class MyCompositeElement extends CompositeGuiElement {
+  _layoutData = MY_LAYOUT_OBJECT
 
-    _buildElements() {
+  _buildElements() {
 
-      // access computed rectangle x,y,w,h
-      const myRectangle = this._layout['myRectangle']
+    // access computed rectangle x,y,w,h
+    const myRectangle = this._layout['myRectangle']
 
-      ...
-    }
+    ...
   }
+}
 ```
 
 
@@ -61,21 +61,21 @@ However, often we just want to nest rectangles for purposes of alignment, we can
   CSS rulesets with plural names result in multiple [x,y,w,h] instead of individual rectangles. They invoke the `repeat` rule.
 
 ```js
-  LAYOUT_OBJECT = {
+LAYOUT_OBJECT = {
 
-    // outer rectangle
-    parent_ruleset:{
-      margin: .05,
-    },
+  // outer rectangle
+  parent_ruleset:{
+    margin: .05,
+  },
 
-    // array of four inner rectangles
-    four_rows_ruleset:{
-      parent: 'parent_ruleset',
-      height: '25%',
-      repeat: 'down',
-      margin: .005,
-    }
+  // array of four inner rectangles
+  four_rows_ruleset:{
+    parent: 'parent_ruleset',
+    height: '25%',
+    repeat: 'down',
+    margin: .005,
   }
+}
 ````
 
 Using `margin` after `repeat` creates space between inner rectangles.
