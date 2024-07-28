@@ -13,5 +13,6 @@ const STATS_TAB_LAYOUT = {
     parent: '_r0',
     height: 0.15,
     repeat: 'down',
+    margin: 0.01,
   },
 };

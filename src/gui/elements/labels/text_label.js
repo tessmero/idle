@@ -112,6 +112,7 @@ class TextLabel extends GuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
+    super.draw(g);
     const rect = this.rect;
     const scale = this.scale;
 
@@ -151,14 +152,6 @@ class TextLabel extends GuiElement {
 
       // draw simple black text
       drawText(g, ...p, label, center, new FontSpec(0, scale, false));
-    }
-
-    if (global.debugUiRects) {
-
-      // draw debug rectangle
-      g.strokeStyle = 'red';
-      g.lineWidth = global.lineWidth;
-      g.strokeRect(...rect);
     }
   }
 

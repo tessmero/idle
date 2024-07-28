@@ -7,6 +7,7 @@ class GuiElement {
   #screen;
   #rect;
   #scale = 1;
+  #border = null;
 
   #tempTooltip;
   #tempTooltipEndTime;
@@ -50,6 +51,35 @@ class GuiElement {
   }
 
   /**
+   * Set border style for this element.
+   * @param {object} b The border instance.
+   */
+  setBorder(b) {
+    this.#border = b;
+  }
+
+  /**
+   * Chain-able helper to set border style.
+   * @param {object} b The border instance.
+   */
+  withBorder(b) {
+    this.setBorder(b);
+    return this;
+  }
+
+  /**
+   *
+   */
+  set border(_b) {
+    throw new Error('should use setBorder');
+  }
+
+  /**
+   *
+   */
+  get border() { return this.#border; }
+
+  /**
    *
    */
   set screen(_s) {
@@ -72,7 +102,7 @@ class GuiElement {
   }
 
   /**
-   * Chainable helper to set font size.
+   * Chain-able helper to set font size.
    * @param {number} s The new font size.
    */
   withScale(s) {
@@ -81,7 +111,7 @@ class GuiElement {
   }
 
   /**
-   * Chainable helper to set tooltip fontsize.
+   * Chain-able helper to set tooltip fontsize.
    * @param {number} s The new font size.
    */
   withTooltipScale(s) {
@@ -90,7 +120,7 @@ class GuiElement {
   }
 
   /**
-   * Chainable helper to set text that appears when hovering.
+   * Chain-able helper to set text that appears when hovering.
    * @param {string} s The tooltip text to display.
    */
   withTooltip(s) {
@@ -99,7 +129,7 @@ class GuiElement {
   }
 
   /**
-   * Chainable helper to set callback to determine text to appear when hovering.
+   * Chain-able helper to set callback to determine text to appear when hovering.
    * @param {Function} f The function who's return value will be displayed.
    */
   withDynamicTooltip(f) {
@@ -176,10 +206,16 @@ class GuiElement {
 
   /**
    *
-   * @param {object} _g The graphics context
+   * @param {object} g The graphics context
    */
-  draw(_g) {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  draw(g) {
+    if (this.border) {
+      Border._draw(g, this.rect, {
+        hovered: false,
+        fill: true,
+        border: this.border,
+      });
+    }
   }
 
   /**

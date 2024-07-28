@@ -21,6 +21,7 @@ class ScalarDebugVar extends CompositeGuiElement {
     this.#varname = varname;
     this.#inc = inc;
     this.#tooltip = tooltip;
+    this.setBorder(Border.default);
   }
 
   /**
@@ -84,14 +85,5 @@ class ScalarDebugVar extends CompositeGuiElement {
     }
 
     return result;
-  }
-
-  /**
-   *
-   * @param {object} g The graphics context.
-   */
-  draw(g) {
-    Button._draw(g, this.rect);
-    super.draw(g);
   }
 }

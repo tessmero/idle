@@ -17,6 +17,7 @@ class BooleanDebugVar extends CompositeGuiElement {
     super(rect);
     this.#varname = varname;
     this.#tooltip = tooltip;
+    this.setBorder(Border.default);
   }
 
   /**
@@ -64,14 +65,5 @@ class BooleanDebugVar extends CompositeGuiElement {
     this.checkbox.icon = val ? checkedIcon : uncheckedIcon;
     const screen = this.screen;
     screen.stateManager.rebuildGuis(screen, false);
-  }
-
-  /**
-   *
-   * @param {object} g The graphics context.
-   */
-  draw(g) {
-    Button._draw(g, this.rect);
-    super.draw(g);
   }
 }

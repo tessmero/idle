@@ -130,7 +130,7 @@ class ToolbarButton extends CompositeGuiElement {
       const outer = this.rect;
       const m = 0.005;
       const inner = [outer[0] + m, outer[1] + m, outer[2] - 2 * m, outer[3] - 2 * m];
-      Button._draw(g, inner, false, false);
+      Border._draw(g, inner, { hovered: false, fill: false });
     }
   }
 }

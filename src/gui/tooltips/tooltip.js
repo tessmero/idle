@@ -11,6 +11,9 @@ class Tooltip extends CompositeGuiElement {
    */
   constructor(rect) {
     super(rect);
+
+    this.setBorder(Border.default);
+    this.withOpacity(true);
   }
 
   /**
@@ -36,9 +39,6 @@ class Tooltip extends CompositeGuiElement {
     g.clearRect(x, y + r[3], r[2], tt);
     g.clearRect(x, y, r[2], tt);
     g.clearRect(x + r[2], y, tt, r[3]);
-
-    // draw rectangle
-    Button._draw(g, r);
 
     // draw children
     super.draw(g);

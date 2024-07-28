@@ -27,7 +27,7 @@ class ContextMenu extends CompositeGuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    Button._draw(g, this.rect);
+    Border._draw(g, this.rect);
     super.draw(g);
   }
 

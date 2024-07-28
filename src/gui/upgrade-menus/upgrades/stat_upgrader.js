@@ -21,6 +21,8 @@ class StatUpgrader extends CompositeGuiElement {
   constructor(rect, key) {
     super(rect);
 
+    this.setBorder(Border.default);
+
     this.#key = key;
     const gutse = global.upgradeTracks.state[key];
     this.#gutse = gutse;
@@ -38,9 +40,8 @@ class StatUpgrader extends CompositeGuiElement {
 
     // upgrade button
     const btn = new TextButton(layout.button, 'upgrade',
-      () => this.upgradeButtonClicked()).withScale(0.3);
+      () => this.upgradeButtonClicked()).withScale(0.3).withBorder(new SlantBorder());
     this.btn = btn;
-    btn.borderless = true;
 
     // upgrade cost progress indicator
     // overlay on upgrade button
@@ -161,14 +162,8 @@ class StatUpgrader extends CompositeGuiElement {
    */
   draw(g) {
 
-    // draw outline around this whole
-    Button._draw(g, this.rect);
-
     // draw children button and label
     super.draw(g);
-
-    // draw more on button
-    this._styleButton(g);
 
     // draw visual upgrade level indicator
     this._drawProgressBoxes(g);
@@ -199,38 +194,5 @@ class StatUpgrader extends CompositeGuiElement {
       }
       g.strokeRect(...r);
     }
-  }
-
-  /**
-   * Draw background triangles over button to create a slanted shape.
-   * @param {object} g The graphics context.
-   */
-  _styleButton(g) {
-    const rect = this._layout.button;
-    const [a, b, c, d] = rectCorners(...rect);
-    const r = 0.04; // amount to cut / amount of slant
-    const ab = va(a, b, r);
-    const cd = va(c, d, r);
-    const tris = [[a, ab, d], [c, cd, b]];
-    const cs = global.colorScheme;
-
-    // cutoff two corners
-    g.strokeStyle = cs.bg;
-    g.strokeRect(...rect);
-    g.fillStyle = cs.bg;
-    tris.forEach((triangle) => {
-      g.beginPath();
-      triangle.forEach((p) => g.lineTo(...p.xy()));
-      g.closePath();
-      g.fill();
-    });
-
-    // draw outline, needs cleanup
-    g.strokeStyle = this.btn.hovered ? global.colorScheme.hl : global.colorScheme.fg;
-    g.beginPath();
-    const path = [d, ab, b, cd];
-    path.forEach((p) => g.lineTo(...p.xy()));
-    g.closePath();
-    g.stroke();
   }
 }

@@ -15,7 +15,7 @@ class StatsTab extends CompositeGuiElement {
       return global.bonusSummary.map((entry, i) => {
         const [icon, summary] = entry;
         return new StatReadout(
-          this._layout.rows[i], icon, () => summary).withScale(0.4);
+          this._layout.rows[i], icon, () => summary).withScale(0.4).withBorder(new OctBorder());
       });
     }
     return [];

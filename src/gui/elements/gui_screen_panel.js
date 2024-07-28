@@ -117,7 +117,7 @@ class GuiScreenPanel extends GuiElement {
     g.strokeStyle = global.colorScheme.fg;
     g.lineWidth = global.lineWidth;
 
-    Button._draw(g, this.rect, this.hovered, false);
+    Border._draw(g, this.rect, { hovered: this.hovered, fill: false });
   }
 
   /**
