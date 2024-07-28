@@ -61,7 +61,7 @@ class GameScreen {
 
     // modal gui elements
     this.contextMenu = null;
-    this.tooltipPopup = null;
+    this.tooltip = null;
 
     // start animating mouse cursor if idle
     this.idleCountdown = 2000; // state
@@ -355,7 +355,7 @@ class GameScreen {
     if (!(this.contextMenu instanceof TestContextMenu)) {
       this.contextMenu = null;
     }
-    this.tooltipPopup = null;
+    this.tooltip = null;
 
     // update context menu
     // if (global.gameState !== GameStates.playing) {
@@ -414,9 +414,9 @@ class GameScreen {
     if (tool) { tool.update(dt); }
 
     // update popups just in case they are persistent
-    if (this.tooltipPopup) {
-      this.tooltipPopup.buildElements(this);
-      this.tooltipPopup.update(dt);
+    if (this.tooltip) {
+      this.tooltip.buildElements(this);
+      this.tooltip.update(dt);
     }
 
     // update menu gui transition effect
@@ -549,8 +549,8 @@ class GameScreen {
   _drawBgGui(g, gui) {
     const bgGui = gui.getBackgroundGui();
     if (bgGui) {
-      bgGui.draw(g);
       this._drawBgGui(g, bgGui);
+      bgGui.draw(g);
     }
   }
 
@@ -564,11 +564,8 @@ class GameScreen {
     // start drawing main gui if applicable
     if (gui) {
 
+      // draw
       this._drawBgGui(g, gui);
-
-      // draw upgrade menu gui transition effect
-      const menuGui = this.stateManager.getGuiForState(GameStates.upgradeMenu);
-      if (menuGui) { menuGui.drawTransitionEffect(g); } // upgrade_menu.js
 
       // draw current gui
       g.lineWidth = global.lineWidth;
@@ -580,8 +577,8 @@ class GameScreen {
       if (this.contextMenu) {
         this.contextMenu.draw(g);
       }
-      if (this.tooltipPopup) {
-        this.tooltipPopup.draw(g);
+      if (this.tooltip) {
+        this.tooltip.draw(g);
       }
     }
 

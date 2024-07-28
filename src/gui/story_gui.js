@@ -28,6 +28,26 @@ class StoryGui extends Gui {
   }
 
   /**
+   * Construct story gui elements.
+   * @returns {GuiElement[]} The children.
+   */
+  _buildElements() {
+    const layout = this._layout;
+    const fontSize = 0.39;
+
+    // build typical gui elements
+    return [
+      // new IconButton(r, umbrellaIcon, () => this.closeStoryGui()),
+      new CompositeGuiElement(layout.messageDiv).withOpacity(true),
+      new DynamicTextLabel(layout.messageDiv, () => this.buildDisplayText()).withScale(fontSize),
+      new TextButton(layout.moreBtn, '...',
+        () => { this.#moreClicked = !this.#moreClicked; })
+        .withScale(fontSize),
+      new TextButton(layout.okayBtn, 'Okay', () => this.closeStoryGui()).withScale(fontSize),
+    ];
+  }
+
+  /**
    * Extend standard gui update by advancing flashing animation.
    * @param {number} dt The elapsed time.
    */
@@ -97,23 +117,6 @@ class StoryGui extends Gui {
   getBackgroundGui() {
     const p = this._stateParams;
     return this.screen.stateManager.getGuiForState(p.prevState);
-  }
-
-  /**
-   * Construct story gui elements.
-   * @returns {GuiElement[]} The children.
-   */
-  _buildElements() {
-    const layout = this._layout;
-
-    // build typical gui elements
-    return [
-      // new IconButton(r, umbrellaIcon, () => this.closeStoryGui()),
-      new CompositeGuiElement(layout.messageDiv).withOpacity(true),
-      new DynamicTextLabel(layout.messageDiv, () => this.buildDisplayText()).withScale(0.3),
-      new TextButton(layout.moreBtn, '...', () => { this.#moreClicked = !this.#moreClicked; }).withScale(0.3),
-      new TextButton(layout.okayBtn, 'Okay', () => this.closeStoryGui()).withScale(0.3),
-    ];
   }
 
   /**

@@ -33,6 +33,12 @@ class BodyTool extends Tool {
       const poi = this.buildBody(p);
       sim.addBody(poi);
 
+      if (poi instanceof BoxBuddy) {
+        // make sure box's inner sim
+        // is up to date with any applicable bonuses
+        updateAllBonuses();
+      }
+
       // switch back to default tool
       const screen = this.screen;
       screen.setTool(screen.toolList[0]);

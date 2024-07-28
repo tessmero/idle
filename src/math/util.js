@@ -5,6 +5,7 @@
 // shorthands
 const pi = Math.PI;
 const pio2 = Math.PI / 2;
+const pio4 = Math.PI / 4;
 const twopi = 2 * Math.PI;
 const sqrt2 = Math.sqrt(2);
 const phi = 1.618033988749894;
@@ -55,58 +56,6 @@ function rectCenter(x, y, w, h) {
 function rectCorners(x, y, w, h) {
   const result = [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   return result.map((xy) => v(...xy));
-}
-
-/**
- * Divide a rectangle into smaller rectangles along a specified axis.
- * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
- * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
- * @param {number} w - The width of the rectangle.
- * @param {number} h - The height of the rectangle.
- * @param {number} n - The number of divisions.
- * @param {boolean} axis - The axis to divide along (true for horizontal, false for vertical).
- * @returns {number[][]} An array of rectangles represented by [x, y, w, h].
- */
-function divideRect(x, y, w, h, n, axis) {
-  const [start, len] = axis ? [y, h] : [x, w];
-  const divLen = len / n;
-
-  const result = [];
-  for (let i = 0; i < n; i++) {
-    const divStart = start + i * len / n;
-    result.push(
-      axis ? [x, divStart, w, divLen] :
-        [divStart, y, divLen, h]
-    );
-  }
-
-  return result;
-}
-
-/**
- * Divide a rectangle into rows.
- * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
- * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
- * @param {number} w - The width of the rectangle.
- * @param {number} h - The height of the rectangle.
- * @param {number} n - The number of rows.
- * @returns {number[][]} An array of rectangles represented by [x, y, w, h].
- */
-function divideRows(x, y, w, h, n) {
-  return divideRect(x, y, w, h, n, true);
-}
-
-/**
- * Divide a rectangle into columns.
- * @param {number} x - The x-coordinate of the top-left corner of the rectangle.
- * @param {number} y - The y-coordinate of the top-left corner of the rectangle.
- * @param {number} w - The width of the rectangle.
- * @param {number} h - The height of the rectangle.
- * @param {number} n - The number of columns.
- * @returns {number[][]} An array of rectangles represented by [x, y, w, h].
- */
-function divideCols(x, y, w, h, n) {
-  return divideRect(x, y, w, h, n, false);
 }
 
 /**

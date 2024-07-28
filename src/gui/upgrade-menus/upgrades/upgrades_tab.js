@@ -22,7 +22,13 @@ class UpgradesTab extends CompositeGuiElement {
     if (!global.upgradeTracks) { return []; }
     const specs = global.upgradeTracks.state;
     const rows = this._layout.rows;
-    const upgraders = Object.keys(specs).map((key, i) => new StatUpgrader(rows[i], key));
+    const upgraders = Object.keys(specs).map((key, i) =>
+      new StatUpgrader(rows[i], key)
+        .withDynamicTooltip(() => {
+          const ttpr = UpgradeTooltip.pickRect(this.screen);
+          return new UpgradeTooltip(ttpr, key);
+        })
+    );
     return upgraders;
   }
 

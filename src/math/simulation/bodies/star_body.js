@@ -31,7 +31,7 @@ class StarBody extends Body {
    *
    */
   buildEdge() {
-    return new StarEdge();
+    return new StarEdge(this.isMiniature);
   }
 
   /**

@@ -29,8 +29,8 @@ class ThumbnailPSim extends ParticleSim {
     super.reset();
 
     // add stable poi in center
-    const p = v(...rectCenter(...this.rect));
-    const poi = new CircleBody(this, p, 2e-2);
-    this.addBody(poi);
+    // const p = v(...rectCenter(...this.rect));
+    // const poi = new CircleBody(this, p, 2e-2);
+    // this.addBody(poi);
   }
 }

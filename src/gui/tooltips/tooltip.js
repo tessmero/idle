@@ -1,12 +1,12 @@
 /**
- * @file TooltipPopup gui element.
+ * @file Tooltip base class.
  *
  * a rectangle that appears on top of all other elements
  */
-class TooltipPopup extends CompositeGuiElement {
+class Tooltip extends CompositeGuiElement {
 
   /**
-   * get rect using TooltipPopup.pickTooltipRect
+   * get rect using Tooltip.pickTooltipRect
    * @param {number[]} rect The rectangle to display on-screen.
    */
   constructor(rect) {

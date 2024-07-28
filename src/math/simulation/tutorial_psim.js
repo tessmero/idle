@@ -3,6 +3,7 @@
  * a small particle simulation that appears in the gui
  */
 class TutorialPSim extends ParticleSim {
+  isMiniature = true;
 
   /**
    *

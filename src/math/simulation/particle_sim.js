@@ -193,6 +193,10 @@ class ParticleSim {
     }
 
     this.#bodies.add(b);
+
+    //
+    b.isMiniature = this.isMiniature;
+
     b.register(this);
   }
 

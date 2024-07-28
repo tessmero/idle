@@ -86,9 +86,13 @@ class Global {
 
   //
   thumbnailSimDims = [0.1, 0.1];
+
+  // tutorial sims with "mini" bodies
   tutorialSimDims = [0.3, 0.3];
+  tutorialScaleFactor = 0.5; // scale for bodies, icons, guis
+
+  // full size inner box sim
   boxSimDims = [1, 1];
-  tutorialScaleFactor = 0.3;
 
   // mouse
   canvasMousePos = v(0, 0); // pixels

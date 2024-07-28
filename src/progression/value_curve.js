@@ -13,24 +13,25 @@ class ValueCurve {
   }
 
   /**
-   * Convenience function to construct linear ValueCurve.
-   * @param {number} m The slope.
-   * @param {number} b The intercept.
+   * Construct value curve based on type/params
+   * 'linear',slope,intercept or 'power',start,scale
+   * @param {string} type
+   * @param {...number} params
    */
-  static linear(m, b) {
-    return new ValueCurve(
-      (i) => m * i + b
-    );
-  }
+  static fromParams(type, ...params) {
+    switch (type) {
+    case 'linear':
+      const [m, b] = params;
+      return new ValueCurve(
+        (i) => m * i + b
+      );
 
-  /**
-   * Convenience function to construct power ValueCurve.
-   * @param {number} start
-   * @param {number} scale
-   */
-  static power(start, scale) {
-    return new ValueCurve(
-      (i) => start * Math.pow(scale, i)
-    );
+    default:
+    case 'power':
+      const [start, scale] = params;
+      return new ValueCurve(
+        (i) => start * Math.pow(scale, i)
+      );
+    }
   }
 }

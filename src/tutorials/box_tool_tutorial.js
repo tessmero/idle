@@ -20,8 +20,8 @@ class BoxToolTutorial extends Macro {
       [400, 'up'],
       [400, 'tool', DefaultTool],
 
-      [1000, 'pos', v(0.5, 0.2)], // on control point
-      [1200, 'pos', v(0.5, 0.2)],
+      [1000, 'pos', v(0.5, 0.3)], // on control point
+      [1200, 'pos', v(0.5, 0.3)],
       [1200, 'down'],
       [2000, 'pos', v(0.4, 0.5)],
       [2500, 'pos', v(0.4, 0.5)],

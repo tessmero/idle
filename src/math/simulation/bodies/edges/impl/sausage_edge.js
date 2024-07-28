@@ -8,18 +8,36 @@ class SausageEdge extends PathspecEdge {
 
   /**
    *
+   * @param {boolean} isMini
    */
-  constructor() {
-    super('sausage');
-    this.#length = SausageEdge.length();
-    this.#rad = SausageEdge.rad();
+  constructor(isMini) {
+    super(`${isMini ? 'mini ' : '' }sausage`);
+    const s = isMini ? global.tutorialScaleFactor : 1;
+    this.#length = s * SausageEdge.length();
+
+    // prevent bugs caused by thin shape
+    this.#rad = Math.max(0.8, s) * SausageEdge.rad();
+  }
+
+  /**
+   *
+   */
+  get length() {
+    return this.#length;
+  }
+
+  /**
+   *
+   */
+  get rad() {
+    return this.#rad;
   }
 
   /**
    *
    */
   static length() {
-    return 0.1;
+    return 2e-1;
   }
 
   /**

@@ -14,8 +14,10 @@ class BoxTool extends BodyTool {
    * @param {Vector} p The position.
    */
   buildBody(p) {
-    return new BoxBuddy(this.sim, p,
+    const result = new BoxBuddy(this.sim, p,
       this.screen.prebuiltBoxScreen);
+    updateAllBonuses();
+    return result;
   }
 
   /**
@@ -28,7 +30,7 @@ class BoxTool extends BodyTool {
     const boxes = [...bods].filter((b) => b instanceof BoxBuddy);
     const count = boxes.length;
 
-    return ValueCurve.power(10000, 2.5).f(count);
+    return ValueCurve.fromParams('power', 10000, 2.5).f(count);
   }
 
   /**

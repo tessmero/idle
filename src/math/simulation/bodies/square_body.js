@@ -19,7 +19,6 @@ class SquareBody extends Body {
   constructor(sim, pos) {
     super(sim, pos);
 
-    this.rad = SquareBody.rad();
     this.title = 'square';
     this.icon = uncheckedIcon;
   }
@@ -27,9 +26,15 @@ class SquareBody extends Body {
   /**
    *
    */
-  buildEdge() {
+  get rad() {
+    return SquareBody.rad() * (this.isMiniature ? global.tutorialScaleFactor : 1);
+  }
 
-    const r = SquareBody.rad();
+  /**
+   *
+   */
+  buildEdge() {
+    const r = this.rad;
 
     let verts = [
       [r, r], [-r, r], [-r, -r], [r, -r],
@@ -38,7 +43,11 @@ class SquareBody extends Body {
     verts = verts.map((xy) => v(...xy));
     this.verts = verts;
 
-    return new PolygonEdge('square', verts);
+    let key = 'square';
+    if (this.isMiniature) {
+      key = `mini ${key}`;
+    }
+    return new PolygonEdge(key, verts);
   }
 
   /**
@@ -48,7 +57,7 @@ class SquareBody extends Body {
   draw(g) {
     const c = this.pos;
     const a = this.angle;
-    const r = this.rad;
+    const r = this.rad * (this.isMiniature ? global.tutorialScaleFactor : 1);
     SquareBody.drawSquare(g, c, a, r);
   }
 

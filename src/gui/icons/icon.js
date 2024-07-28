@@ -23,7 +23,10 @@ class Icon {
 }
 
 // load data/icon_layouts.js
+const ICONS = {};
 for (const [key, frames] of Object.entries(ICON_LAYOUTS)) {
-  window[`${key}Icon`] = new Icon(frames);
+  const icn = new Icon(frames);
+  window[`${key}Icon`] = icn;
+  ICONS[key] = icn;
 }
 

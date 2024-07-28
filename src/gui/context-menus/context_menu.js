@@ -39,7 +39,7 @@ class ContextMenu extends CompositeGuiElement {
    * @param {?Vector} pointOfInterest The position on-screen that should be kept visible.
    */
   static pickRect(screen, pointOfInterest = null) {
-    const rect = screen.rect;
+    const rect = global.screenRect;// screen.rect;
 
     // load layout data depending on screen orientation
     const axis = Number(rect[3] > rect[2]);

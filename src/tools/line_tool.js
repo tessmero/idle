@@ -14,13 +14,7 @@ class LineTool extends BodyTool {
    * @param {Vector} p The position to center the new body at.
    */
   buildBody(p) {
-    const len = SausageEdge.length();
-
-    const d = sqrt2 * len / 2;
-    const dd = v(d, d);
-
-    return new ControlledSausageBody(this.sim,
-      p.add(dd), p.sub(dd));
+    return new ControlledSausageBody(this.sim, p);
   }
 
   /**
@@ -33,7 +27,7 @@ class LineTool extends BodyTool {
     const lineBods = [...bods].filter((b) => b instanceof ControlledSausageBody);
     const count = lineBods.length;
 
-    return ValueCurve.power(50, 10).f(count);
+    return ValueCurve.fromParams('power', 50, 10).f(count);
   }
 
   /**

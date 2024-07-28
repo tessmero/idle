@@ -21,7 +21,7 @@ class CircleBody extends Body {
    *
    */
   buildEdge() {
-    return new CircleEdge();
+    return new CircleEdge(this.isMiniature);
   }
 
   /**

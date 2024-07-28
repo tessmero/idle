@@ -72,6 +72,9 @@ class TransitionTest extends Test {
    *  - {Function} condition - A function that returns a boolean indicating if the condition is met.
    */
   getTestAssertions(_screen) {
+
+    // fractions of samples in watch areas
+    const msgThreshold = 0.9;
     const scr = () => this.screenWatcher.getFgRate();
     const msg = () => this.msgWatcher.getFgRate();
 
@@ -83,13 +86,13 @@ class TransitionTest extends Test {
       [1100, 'no message', () => msg() === 1],
 
       // 1500-1700 message materializes
-      [1600, 'partial message', () => (msg() > 0.85) && (msg() < 1)],
+      [1600, 'partial message', () => (msg() > msgThreshold) && (msg() < 1)],
 
       // 1700-3700 message readable
-      [3500, 'message fully visible', () => msg() < 0.85],
+      [3500, 'message fully visible', () => msg() < msgThreshold],
 
       // 3700-4200 message dissolves
-      [4000, 'partial message', () => (msg() > 0.85) && (msg() < 1)],
+      [4000, 'partial message', () => (msg() > msgThreshold) && (msg() < 1)],
 
       // 4200-5200 dark fade in
       [4200, '100% covered', () => scr() === 1],

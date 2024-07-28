@@ -1,30 +1,28 @@
 
 /**
- * @file ToolbarTooltipPopup gui element.
- * a tooltip with some text and a simulation
- * also shows tool cost with progress indicator
+ * @file ToolbarTooltip tooltip with tutorial sim
+ * and a budget/cost indicator
  */
 const _allTutorialScreens = {};
 
 /**
  *
  */
-class ToolbarTooltipPopup extends LabelTooltipPopup {
+class ToolbarTooltip extends LabelTooltip {
   _layoutData = TOOLBAR_TOOLTIP_LAYOUT;
 
   #innerScreen;
   #tool;
 
   /**
-   * get rect using ToolbarTooltipPopup.pickRect
+   * get rect using ToolbarTooltip.pickRect
    * @param {number[]} rect The rectangle to align elements in.
    * @param {string} label
    * @param {GameScreen} innerScreen The tutorial screen to display inside the popup.
    * @param {Tool} tool
-   * @param {number} scale
    */
-  constructor(rect, label, innerScreen, tool, scale = null) {
-    super(rect, label, scale);
+  constructor(rect, label, innerScreen, tool) {
+    super(rect, label);
     this.#innerScreen = innerScreen;
     this.#tool = tool;
   }
@@ -106,8 +104,8 @@ class ToolbarTooltipPopup extends LabelTooltipPopup {
     const w = 0.4;
     const h = w / (phi / 2);
 
-    const p = TooltipPopup.pickMouseAnchorPoint(screen);
-    const r = TooltipPopup.pickTooltipRect(p, w, h);
+    const p = Tooltip.pickMouseAnchorPoint(screen);
+    const r = Tooltip.pickTooltipRect(p, w, h);
 
     return r;
   }

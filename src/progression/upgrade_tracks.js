@@ -8,10 +8,25 @@
  */
 class UpgradeTracks {
 
+  #vcKeys = ['cost', 'value'];
+
   /**
    *
    */
   constructor() {
-    this.state = UPGRADE_TRACKS();
+
+    this.state = UPGRADE_TRACKS;
+
+    // make sure data is parsed
+    for (const [_key, entry] of Object.entries(this.state)) {
+      if (!(entry.icon instanceof Icon)) {
+        entry.icon = ICONS[entry.icon];
+      }
+      this.#vcKeys.forEach((vc) => {
+        if (!(entry[vc] instanceof ValueCurve)) {
+          entry[vc] = ValueCurve.fromParams(...entry[vc]);
+        }
+      });
+    }
   }
 }

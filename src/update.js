@@ -41,6 +41,7 @@ function fitToContainer() {
     const sc = [v(xr, yr), v(1 - xr, yr), v(1 - xr, 1 - yr), v(xr, 1 - yr)];
     global.screenCorners = sc;
     const sr = [sc[0].x, sc[0].y, (sc[2].x - sc[0].x), (sc[2].y - sc[0].y)];
+    global.screenRect = sr;
     screen.setMainScreenRect(sr);
     screen.stateManager.rebuildGuis(screen, false);
   }

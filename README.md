@@ -8,43 +8,50 @@ https://tessmero.github.io/raincatcher.html
 
 ## Usage with web browser
 
+This repository can be used locally like the small demos on tessmero.github.io. The source code uses ES6 (ECMAScript 2015) `class` definitions and lacks require/import/export statements. It can be developed with just a text editor and a web browser.
+
 clone this repository to your computer
 
-open `test.html` in your web browser to test locally, loading source files in `src`
+open `test.html` in your web browser to run locally, loading from `src` and `data`.
 
 `test.html` contains a list of source files. It must be updated if the folder structure changes.
 
+
 ## Basic build with python
+run `python build/link.py` to update `test.html` so that it include all the files in `src` and `data`. It scans for `class A extends B` statements to decide the order to load source files.
 
-run `python build/link.py` to update `test.html` so that it include all the files in `src`.
-
-The source code is organized into ES6 classes without `require`/`import`/`export` statements. Instead the python script scans for `class A extends B` statements, then decides the order to link the files. 
-
-run `python build/concat.py` to concatenate the source code into `dist/production.js`
+run `python build/concat.py` to concatenate all the source and data into `dist/production.js`
 
 open `production.html` in your web browser to run `dist/production.js`
 
 ## Build with npm
 
-The non-standard ES6 linking system described above keeps this repository accessible. One downside is that the code is not directly compatible with nodejs development tools. Node Package Manager is used to bridge this gap and form a standard build pipeline. It wraps the python scripts above and performs transpilation with Babel.
+Node Package Manager is used to access more advanced development tools. The `npm` build runs the python build, then compiles the concatenated source with [Babel](https://babeljs.io/) so it can finally be rewritten in minified form.
 
 ```
 npm install
 npm run build:prod
 ```
 
-This performs the basic build and also outputs the minified distributable `dist/production.min.js` which can be run by opening `production.min.html`.
+`build:prod` outputs the minified `dist/production.min.js` which can be run by opening `production.min.html`.
 
 
 ## Enforce coding standards
 
-Use `eslint` to check source files for syntax errors and violations of preferred coding style. `eslint.config.js` contains the list of chosen standards.
+Coding standards can be enforced using [ESLint](https://eslint.org/). `eslint.config.js` contains the project-specific standards.
+
+Run eslint in the command line to find and fix issues. It can rewrite code and generate boilerplate such as jsdoc comments. 
 
 ```
 npx eslint --fix src
 npx eslint --fix data
 ```
 
-The chosen standards are mostly copied from [elierotenberg/coding-styles](https://github.com/elierotenberg/coding-styles/blob/master/es6.md)
 
-Works with [Sublime Text](https://www.sublimetext.com/) [ESlint-Formatter plugin](https://github.com/TheSavior/ESLint-Formatter) to automatically highlight and fix violations.
+## Usage with Sublime Text
+
+in [Sublime Text](https://www.sublimetext.com/), install the `ESLint` package and open one of the source files. I also ended up installing packages `npm`, `npm-install`, and `Babel`.
+
+Now violations are highlighted in the editor when saving a file. Install `ESLint-Formatter` to add a hotkey (ctrl-shift-h) to auto-fix the current file.
+
+I found Sublime has pretty good built-in behavior when hovering over code to find references across this repo.

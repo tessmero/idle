@@ -9,9 +9,11 @@
  */
 
 // helpers for aligning bounding rectangle in screen
-_MAR = 0.05; // distance to nearest screen edge
-_SAX = 0.3 + 0.03 * 4; // length of short axis
-_LAX = 1 - 2 * _MAR; // length of long axis
+_MAR = 0.05; // distance from outer bounds to nearest screen edge
+_SQR = 0.3; // side length of the two content squares
+_PAD = 0.05; // padding around content squares
+_SAX = _SQR + 2 * _PAD; // length of short axis
+_LAX = 2 * _SQR + 4 * _PAD; // length of long axis
 
 // bounds in horizontal screen
 _HS = {
@@ -60,18 +62,12 @@ CONTEXT_MENU_LAYOUT = {
     right: 0.025,
   },
 
-  // helper
-  _r0: {
-    margin: 0.03,
-  },
-
   // two content squares
   squares: {
-    parent: '_r0',
-    width: 0.3 + 0.03 * 2,
-    height: 0.3 + 0.03 * 2,
+    width: _SQR + 2 * _PAD,
+    height: _SQR + 2 * _PAD,
     repeat: 'auto',
-    margin: 0.03,
+    margin: _PAD,
   },
 };
 
@@ -102,6 +98,7 @@ BUDDY_CONTEXT_MENU_LAYOUT = {
 };
 
 // extended layout for test runner in sandbox mode
+_BTN = 0.04;
 TEST_CONTEXT_MENU_LAYOUT = {
   ...CONTEXT_MENU_LAYOUT,
 
@@ -122,16 +119,16 @@ TEST_CONTEXT_MENU_LAYOUT = {
   // helper
   _btns: {
     parent: 'squares[0]',
+    height: _BTN,
+    width: 4 * _BTN,
     top: '100%',
-    height: 0.03,
-    width: 0.12,
     left: 'auto',
   },
 
   // four test control buttons
   buttons: {
     parent: '_btns',
-    width: 0.03,
+    width: _BTN,
     repeat: 'right',
   },
 };

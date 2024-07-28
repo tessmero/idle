@@ -1,13 +1,11 @@
 /**
- * @file LabelTooltipPopup gui element.
- *
- * a tooltip with just text
+ * @file LabelTooltip a tooltip with only text
  */
-class LabelTooltipPopup extends TooltipPopup {
+class LabelTooltip extends Tooltip {
   _layoutData = TOOLTIP_LAYOUT;
 
   /**
-   * get rect using LabelTooltipPopup.pickRect
+   * get rect using LabelTooltip.pickRect
    * @param {number[]} rect The rectangle to align text in.
    * @param {string} label The text content to display.
    * @param {number} scale The font size to display.
@@ -48,11 +46,11 @@ class LabelTooltipPopup extends TooltipPopup {
   static pickRect(screen, label, scale = null) {
 
     let s = scale;
-    if (!s) { s = LabelTooltipPopup.scale(); }
+    if (!s) { s = LabelTooltip.scale(); }
     let [w, h] = getTextDims(label, s);
     w = w + 2 * global.tooltipPadding;
     h = h + 2 * global.tooltipPadding;
-    const p = TooltipPopup.pickMouseAnchorPoint(screen);
-    return TooltipPopup.pickTooltipRect(p, w, h);
+    const p = Tooltip.pickMouseAnchorPoint(screen);
+    return Tooltip.pickTooltipRect(p, w, h);
   }
 }

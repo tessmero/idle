@@ -7,18 +7,12 @@ class SausageBody extends Body {
   /**
    *
    * @param {ParticleSim} sim
-   * @param {Vector} a
-   * @param {Vector} b
+   * @param {Vector} pos
    */
-  constructor(sim, a, b) {
-    super(sim, va(a, b));
+  constructor(sim, pos) {
+    super(sim, pos);
 
-    this.a = a;
-    this.b = b;
-
-    const d = b.sub(a);
-    this.pos = va(a, b);
-    this.angle = d.getAngle();
+    this.angle = pio4;
 
     //
     this.title = 'line';
@@ -29,7 +23,7 @@ class SausageBody extends Body {
    *
    */
   buildEdge() {
-    return new SausageEdge();
+    return new SausageEdge(this.isMiniature);
   }
 
   /**
@@ -37,7 +31,7 @@ class SausageBody extends Body {
    */
   buildGrabber() {
     const grabber = new SausageGrabber(
-      this.a, this.b, SausageEdge.rad(),
+      ...this.getEpr(),
       (...p) => this.grabbed(...p));
     return grabber;
   }
@@ -50,17 +44,21 @@ class SausageBody extends Body {
   update(dt, ...args) {
     super.update(dt, ...args);
 
-    const p = this.pos;
-    const a = this.angle;
-    const r = SausageEdge.length() / 2;
-
-    this.a = p.sub(vp(a, r));
-    this.b = p.add(vp(a, r));
-
     // update LineGrabber instance
-    this.grabber.updateEndpoints(this.a, this.b);
+    this.grabber.updateEpr(...this.getEpr());
 
     return true;
+  }
+
+  /**
+   * get endpoints and radius parameters for drawing or to pass to grabber
+   */
+  getEpr() {
+    const p = this.pos;
+    const a = this.angle;
+    const m = this.edge.length / 2;
+
+    return [p.sub(vp(a, m)), p.add(vp(a, m)), this.edge.rad];
   }
 
   /**
@@ -68,16 +66,15 @@ class SausageBody extends Body {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    const a = this.a.xy();
-    const b = this.b.xy();
+    const [a, b, r] = this.getEpr();
 
     // draw straight segment
     g.strokeStyle = global.colorScheme.fg;
     g.lineCap = 'round';
-    g.lineWidth = 2 * SausageEdge.rad();
+    g.lineWidth = 2 * r;
     g.beginPath();
-    g.moveTo(...a);
-    g.lineTo(...b);
+    g.moveTo(...a.xy());
+    g.lineTo(...b.xy());
     g.stroke();
     g.lineWidth = global.lineWidth;
   }

@@ -6,11 +6,12 @@ class CircleEdge extends RadspecEdge {
 
   /**
    *
+   * @param {boolean} isMini
    */
-  constructor() {
-    super('circle');
+  constructor(isMini) {
+    super(`${isMini ? 'mini ' : '' }circle`);
 
-    this.#rad = CircleEdge.rad();
+    this.#rad = (isMini ? global.tutorialScaleFactor : 1) * CircleEdge.rad();
   }
 
   /**

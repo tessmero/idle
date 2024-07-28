@@ -11,20 +11,25 @@
 function _computeBonusVal(e) {
   const readableVal = e.value.f(e.level - 1);
   let realVal = readableVal;
-  if (e.getRealVal) { realVal = e.getRealVal(readableVal); }
+  if (e.internalValueMultiplier) {
+    realVal = readableVal * e.internalValueMultiplier;
+  }
   return [readableVal, realVal];
 }
 
 // helper to apply bonus to all relevant screens
-function _enactBonus(f, screen, value) {
+function _enactBonus(f, screen, value, recurse = true) {
 
   // enact bonus on given screen
   f(screen, value);
 
-  // enact bonus on descendant black boxes
-  screen.sim.bodies.filter((b) => b instanceof BoxBuddy)
-    .forEach((box) =>
-      _enactBonus(f, box.innerScreen, value));
+  if (recurse) {
+
+    // enact bonus on descendant black boxes
+    screen.sim.bodies.filter((b) => b instanceof BoxBuddy)
+      .forEach((box) =>
+        _enactBonus(f, box.innerScreen, value));
+  }
 }
 
 /**
@@ -43,8 +48,9 @@ function _updateBonus(key, f) {
   // explain in words
   const summary = `base ${readableVal}${e.subject}\n  (upgrade level ${e.level})`;
 
-  // enact bonux effect
-  _enactBonus(f, global.rootScreen, realVal);
+  // enact bonus effect
+  const recurse = !e.rootScreenOnly;
+  _enactBonus(f, global.rootScreen, realVal, recurse);
 
   return [e.icon, summary];
 }

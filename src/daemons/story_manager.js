@@ -17,11 +17,18 @@ function StoryManager() {
   this._alreadyTriggered = new Set();
 
   /**
+   * Check if the given hook has been triggered.
+   * @param {string} key
+   * @returns {boolean} True if the player has seen this message.
+   */
+  this.isCompleted = (key) => this._alreadyTriggered.has(key);
+
+  /**
    * Called when a hook has been triggered.
    * @param {string} key The key in data/story_hooks_data.js
    * @returns {boolean} True to attempt to block/consume the triggering user action
    */
-  this.triggerStoryHook = function(key) {
+  this.triggerStoryHook = (key) => {
     const hook = STORY_HOOKS[key];
     const done = this._alreadyTriggered;
 

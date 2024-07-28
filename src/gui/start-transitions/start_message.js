@@ -37,7 +37,7 @@ class StartMessage extends StartAnimStage {
     this.duration = total;
 
     this.text = randChoice([
-      'you are the raincatcher',
+      'you are the rain catcher',
     ]);
 
   }

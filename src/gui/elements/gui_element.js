@@ -16,6 +16,8 @@ class GuiElement {
    * @param {number[]} rect The rectangle for this element.
    */
   constructor(rect) {
+    console.assert((typeof rect[0] === 'number'));
+
     this.#rect = rect;
     this.hoverable = true;
   }
@@ -144,24 +146,32 @@ class GuiElement {
         this.tooltip = this.tooltipFunc();
       }
 
-      if (this.tooltip instanceof TooltipPopup) {
-        if (this.#screen) {
-          this.#screen.tooltipPopup = this.tooltip;
+      if (this.tooltip instanceof Tooltip) {
+        if (screen) {
+          screen.tooltip = this.tooltip;
         }
 
       }
       else if ((typeof this.tooltip === 'string' || this.tooltip instanceof String)) {
 
         // build standard tooltip gui element
-        let rect = LabelTooltipPopup.pickRect(screen, this.tooltip, this.tooltipScale);
+        let rect = this.pickTooltipRect(screen, this.tooltip, this.tooltipScale);
         rect = padRect(...rect, TextLabel.pad());
-        if (this.#screen) {
-          this.#screen.tooltipPopup = new LabelTooltipPopup(rect, this.tooltip, this.tooltipScale);
+        if (screen) {
+          screen.tooltip = new LabelTooltip(rect, this.tooltip, this.tooltipScale);
         }
       }
     }
 
     return this.hovered;
+  }
+
+  /**
+   *
+   * @param {GameScreen} screen
+   */
+  pickTooltipRect(screen) {
+    return LabelTooltip.pickRect(screen, this.tooltip, this.tooltipScale);
   }
 
   /**

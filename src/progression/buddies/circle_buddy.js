@@ -9,7 +9,7 @@ class CircleBuddy extends Buddy {
   expMechIcon = hungerIcon;
 
   #maxSatiety;
-  #maxSatietyCurve = ValueCurve.power(5, 2);
+  #maxSatietyCurve = ValueCurve.fromParams('power', 5, 2);
   #satiety;
 
   /**
@@ -17,7 +17,7 @@ class CircleBuddy extends Buddy {
    * @type {number}
    */
   #satietyDecay;
-  #satietyDecayCurve = ValueCurve.power(5e-3, 1.5);
+  #satietyDecayCurve = ValueCurve.fromParams('power', 5e-3, 1.5);
 
   /**
    *
@@ -63,7 +63,7 @@ class CircleBuddy extends Buddy {
    * @returns {object} The ValueCurve instance.
    */
   getExpLevelCostCurve() {
-    return ValueCurve.power(100, 2);
+    return ValueCurve.fromParams('power', 100, 2);
   }
 
   /**

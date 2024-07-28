@@ -1,7 +1,6 @@
 
 /**
- * @file StateUpgrader gui element.
- * a stat readout with button to upgrade
+ * @file StatUpgrader one row in the upgrade menu
  * modifies one entry in global.upgradeTracks.state
  */
 class StatUpgrader extends CompositeGuiElement {
@@ -9,6 +8,10 @@ class StatUpgrader extends CompositeGuiElement {
 
   #key;
   #gutse;
+
+  // animation for progress indicator boxes
+  #boxAnimStates;
+  #baDuration = 200;
 
   /**
    *
@@ -21,6 +24,7 @@ class StatUpgrader extends CompositeGuiElement {
     this.#key = key;
     const gutse = global.upgradeTracks.state[key];
     this.#gutse = gutse;
+    this.#boxAnimStates = new Array(gutse.maxLevel).fill(-1);
   }
 
   /**
@@ -29,15 +33,14 @@ class StatUpgrader extends CompositeGuiElement {
    */
   _buildElements() {
     const screen = this.screen;
-    const key = this.#key;
     const gutse = this.#gutse;
     const layout = this._layout;
-    let r = this.rect;
-    const sl = Math.min(r[2], r[3]);
-    r = [r[0], r[1], sl, sl];
 
     // upgrade button
-    const btn = new TextButton(layout.button, 'upgrade', () => this.upgradeButtonClicked()).withScale(0.3);
+    const btn = new TextButton(layout.button, 'upgrade',
+      () => this.upgradeButtonClicked()).withScale(0.3);
+    this.btn = btn;
+    btn.borderless = true;
 
     // upgrade cost progress indicator
     // overlay on upgrade button
@@ -49,38 +52,51 @@ class StatUpgrader extends CompositeGuiElement {
 
     // visual progression display
     this.progressDisplayRect = layout.progress;
+    const progLabel = new DynamicTextLabel(layout.progressLabel,
+      () => `LEVEL ${gutse.level}`).withCenter(false);
+    progLabel.setScale(0.3);
 
-    // text label
-    const dtl = new StatReadout(layout.label, gutse.icon, () => `${key}`);
+    // main label
+    const dtl = new StatReadout(layout.mainLabel,
+      gutse.icon, () => `${gutse.label}`);
     dtl.setScale(0.4);
     dtl.tooltipScale = 0.4;
     dtl.setCenter(false);
 
-    return [btn, btno, dtl];
+    return [btn, btno, dtl, progLabel];
   }
 
   /**
-   *
+   * Extend composite component update by advancing progress box animations.
+   * @param {number} dt The time elapsed in milliseconds.
+   * @param {boolean} disableHover
    */
-  tooltipFunc() {
-    const key = this.#key;
-    const gutse = this.#gutse;
-    const lvl = gutse.level;
-    const cost = gutse.cost.f(lvl - 1);
-    const curVal = gutse.value.f(lvl - 1).toFixed(0);
-    const nextVal = gutse.value.f(lvl).toFixed(0);
-    const subject = gutse.subject;
+  update(dt, disableHover = false) {
 
-    return [
-      key,
-      `level ${lvl}: ${curVal}${subject}`,
-      `upgrade costs ${cost} raindrops`,
-      `-> level ${lvl + 1}: ${nextVal}${subject}`,
-    ].join('\n');
+    // update children
+    const hovered = super.update(dt, disableHover);
+
+    // advance progress box animations
+    const bas = this.#boxAnimStates;
+    const gutse = this.#gutse;
+    for (let i = 0; i < gutse.maxLevel; i++) {
+      let t = bas[i];
+      if (t >= 0) {
+        t = t + dt;
+        if (t > this.#baDuration) {
+          bas[i] = -1; // animation finished
+        }
+        else {
+          bas[i] = t; // animation ongoing
+        }
+      }
+    }
+
+    return hovered;
   }
 
   /**
-   * Called when our button is clicked.
+   * Called when our child button is clicked.
    */
   upgradeButtonClicked() {
     const gutse = this.#gutse;
@@ -99,7 +115,7 @@ class StatUpgrader extends CompositeGuiElement {
       return;
     }
 
-    // attemot to trigger any related story hooks
+    // attempt to trigger any related story hooks
     if (gutse.triggers) {
       const sm = StoryManager();
       const block = gutse.triggers.some((hook) => sm.triggerStoryHook(hook));
@@ -117,37 +133,104 @@ class StatUpgrader extends CompositeGuiElement {
     gutse.level = gutse.level + 1;
     updateAllBonuses();
     this.setTemporaryTooltip('upgrade purchased!');
+
+    // start animation for one box
+    this.#boxAnimStates[gutse.level - 1] = 0;
   }
 
   /**
-   * Draw this stat upgrader.
+   * force temporary tooltip below cursor like UpgradeTooltip
+   * @param {GameScreen} screen
+   * @param {string} tooltip
+   * @param {number} scale
+   */
+  pickTooltipRect(screen, tooltip, scale) {
+
+    let s = scale;
+    if (!s) { s = LabelTooltip.scale(); }
+    let [w, h] = getTextDims(tooltip, s);
+    w = w + 2 * global.tooltipPadding;
+    h = h + 2 * global.tooltipPadding;
+    const p = Tooltip.pickMouseAnchorPoint(screen);
+    return [p.x, p.y, w, h];
+  }
+
+  /**
+   * Extend standard composite draw by adding outline and progress display boxes
    * @param {object} g the Graphics context.
    */
   draw(g) {
+
+    // draw outline around this whole
     Button._draw(g, this.rect);
+
+    // draw children button and label
     super.draw(g);
 
+    // draw more on button
+    this._styleButton(g);
+
+    // draw visual upgrade level indicator
+    this._drawProgressBoxes(g);
+  }
+
+  /**
+   * @param {object} g the Graphics context.
+   */
+  _drawProgressBoxes(g) {
     const gutse = this.#gutse;
-    const r = this.progressDisplayRect;
-    const pad = 0.01;
-    const sl = r[3] - pad * 2;// box size
-
-    const x = r[0] + pad;
-    const y = r[1] + pad;
-    const dx = sl + pad;
-
-    // draw progression display boxes
+    const anims = this.#boxAnimStates;
+    const boxRects = this._layout.progressBoxes;
     g.strokeStyle = global.colorScheme.fg;
     g.fillStyle = global.colorScheme.fg;
     g.lineWidth = global.lineWidth;
     for (let i = 0; i < gutse.maxLevel; i++) {
-      const box = [x + i * dx, y, sl, sl];
-      if (i < gutse.level) {
-        g.fillRect(...box);
+      const r = boxRects[i];
+
+      const as = anims[i];
+      if (as >= 0) {
+
+        // box is animated
+        const h = r[3] * (1 - as / this.#baDuration);
+        g.fillRect(r[0], r[1] + h, r[2], r[3] - h);
       }
-      else {
-        g.strokeRect(...box);
+      else if (i < gutse.level) {
+        g.fillRect(...r);
       }
+      g.strokeRect(...r);
     }
+  }
+
+  /**
+   * Draw background triangles over button to create a slanted shape.
+   * @param {object} g The graphics context.
+   */
+  _styleButton(g) {
+    const rect = this._layout.button;
+    const [a, b, c, d] = rectCorners(...rect);
+    const r = 0.04; // amount to cut / amount of slant
+    const ab = va(a, b, r);
+    const cd = va(c, d, r);
+    const tris = [[a, ab, d], [c, cd, b]];
+    const cs = global.colorScheme;
+
+    // cutoff two corners
+    g.strokeStyle = cs.bg;
+    g.strokeRect(...rect);
+    g.fillStyle = cs.bg;
+    tris.forEach((triangle) => {
+      g.beginPath();
+      triangle.forEach((p) => g.lineTo(...p.xy()));
+      g.closePath();
+      g.fill();
+    });
+
+    // draw outline, needs cleanup
+    g.strokeStyle = this.btn.hovered ? global.colorScheme.hl : global.colorScheme.fg;
+    g.beginPath();
+    const path = [d, ab, b, cd];
+    path.forEach((p) => g.lineTo(...p.xy()));
+    g.closePath();
+    g.stroke();
   }
 }

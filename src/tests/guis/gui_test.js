@@ -3,7 +3,7 @@
  */
 class GuiTest extends Test {
 
-  static closeButtonCenter = v(0.85, 0.25);
+  static closeButtonCenter = v(0.75, 0.25);
   static upgradeButtonCenter = v(0.5, 0.6);
 
   /**
@@ -91,15 +91,16 @@ class GuiTest extends Test {
     menu._be = menu._buildElements;
 
     menu._buildElements = () => {
-      const [closeButton, tabGroup] = menu._be();
+      const [tabGroup, closeButton] = menu._be();
       this._scaleElems(closeButton);
+      const cbc = Test.simPos(gsm.screen.sim, GuiTest.closeButtonCenter);
+      closeButton.rect[0] = cbc.x - closeButton.rect[2] / 2;
+      closeButton.rect[1] = cbc.y - closeButton.rect[3] / 2;
 
       // remove tab group contents
-      // add one button that does nothing
-      const scale = 0.3;
-      const label = 'upgrade';
-      const rect = [0.02, 0.04, 0.26, 0.24];
-      tabGroup._buildElements = () => [new TextButton(rect, label, () => {}).withScale(scale)];
+      tabGroup._buildElements = () => [
+        new CompositeGuiElement(tabGroup.rect).withOpacity(true),
+      ];
       tabGroup.tabContent = null;
       return [tabGroup, closeButton];
     };

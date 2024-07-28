@@ -32,18 +32,22 @@ class SausageGrabber extends CompoundGrabber {
   }
 
   /**
-   * Called periodically. set member vars
-   * for objects in this.children
-   * do not add or remove children
+   * Called periodically in SausageBody
    * @param {Vector} a
    * @param {Vector} b
+   * @param {number} rad
    */
-  updateEndpoints(a, b) {
+  updateEpr(a, b, rad) {
     const line = this.#line;
     line.a = a;
     line.b = b;
+    line.rad = rad;
 
     this.#circle0.pos = b;
+    this.#circle0.rad = rad;
+
     this.#circle1.pos = a;
+    this.#circle1.rad = rad;
+
   }
 }

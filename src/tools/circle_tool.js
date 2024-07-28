@@ -28,7 +28,7 @@ class CircleTool extends BodyTool {
     const circles = [...bods].filter((b) => b instanceof CircleBuddy);
     const count = circles.length;
 
-    return ValueCurve.power(100, 2.5).f(count);
+    return ValueCurve.fromParams('power', 100, 2.5).f(count);
   }
 
   /**

@@ -6,21 +6,17 @@ class ControlledSausageBody extends CompoundBody {
   /**
    *
    * @param {ParticleSim} sim The simulation this will exist in.
-   * @param {Vector} a The position of one end.
-   * @param {Vector} b The position of the other end.
+   * @param {Vector} pos The position of the center of the sausage.
    */
-  constructor(sim, a, b) {
-    super(sim, va(a, b));
+  constructor(sim, pos) {
+    super(sim, pos);
 
-    this.a = a;
-    this.b = b;
-
-    const sausage = new SausageBody(sim, a, b);
+    const sausage = new SausageBody(sim, pos);
     this.sausage = sausage;
 
     // init control points for user to click and drag
     this.movCp = new ControlPoint(sim, sausage);
-    const r = a.sub(b).getMagnitude() / 2;
+    const r = SausageEdge.length() / 2;
     this.rotCp0 = new RotationControlPoint(sim, sausage, 0, r);
     this.rotCp1 = new RotationControlPoint(sim, sausage, pi, r);
     this.controlPoints = [this.movCp, this.rotCp0, this.rotCp1];

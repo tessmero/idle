@@ -15,16 +15,15 @@ class Body {
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
-   * @param {number} angle
    */
-  constructor(sim, pos, angle = 0) {
+  constructor(sim, pos) {
     this.sim = sim;
     this.controlPoints = [];
 
     this.pos = pos;
     this.vel = v(0, 0);
 
-    this.angle = angle;
+    this.angle = 0;
     this.avel = 0;
 
     // increment to signal physics engine
@@ -82,6 +81,17 @@ class Body {
   clicked() {}
 
   /**
+   * used in register
+   */
+  _pickEdgeKey() {
+    const key = this._edgeKey;
+    if (this.isMiniature) {
+      return `mini ${key}`;
+    }
+    return key;
+  }
+
+  /**
    * called in particle_sim.js addBody()
    * @param {ParticleSim} sim
    */
@@ -90,7 +100,7 @@ class Body {
 
     // lookup/build distinct edge shape
     const mgr = ShapeManager();
-    const key = this._edgeKey;
+    const key = this._pickEdgeKey();
     if (!key) {
       throw new Error('_edgeKey not defined');
     }
@@ -181,7 +191,7 @@ class Body {
     const stopForce = global.bodyFriction;
     const angleStopForce = global.bodyAngleFriction;
 
-    // advance physics for poi
+    // advance physics
 
     // translation
     const frictionAcc = this.vel.mul(-dt * stopForce);

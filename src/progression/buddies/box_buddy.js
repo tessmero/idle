@@ -53,12 +53,6 @@ class BoxBuddy extends Buddy {
     square.title = 'black box';
     this.square = square;
 
-    // outer/inner square length ratio
-    const rad = SquareBody.rad();
-    this.rad = rad;
-    const innerRad = this.innerScreen.sim.rect[2] / 2;
-    this.scaleFactor = innerRad / rad;
-
     // reassign default solid-body grabbed method to use in special cases
     // e.g. to have the outer edge act as solid when the internal sim is paused
     square._grabbedAsSolidBody = square.grabbed;
@@ -69,7 +63,7 @@ class BoxBuddy extends Buddy {
 
     // init control points for user to click and drag
     this.movCp = new ControlPoint(sim, square);
-    this.rotCp0 = new RotationControlPoint(sim, square, -pio2, rad * 2);
+    this.rotCp0 = new RotationControlPoint(sim, square, -pio2, this.rad * 2);
     this.controlPoints = [this.movCp, this.rotCp0];
     this.rotCp0.fscale = 6;
 
@@ -87,6 +81,21 @@ class BoxBuddy extends Buddy {
     // this.constraints = [new Spring(this.rotCp0,this.rotCp1)]
     this.setChildren([square, ...this.controlPoints]);
 
+  }
+
+  /**
+   *get outer/inner square length ratio
+   */
+  get scaleFactor() {
+    const innerRad = this.innerScreen.sim.rect[2] / 2;
+    return innerRad / this.rad;
+  }
+
+  /**
+   *
+   */
+  get rad() {
+    return this.square.rad;
   }
 
   /**
@@ -108,7 +117,7 @@ class BoxBuddy extends Buddy {
    * @returns {object} The ValueCurve instance.
    */
   getExpLevelCostCurve() {
-    return ValueCurve.power(100, 10);
+    return ValueCurve.fromParams('power', 100, 10);
   }
 
   /**
@@ -213,7 +222,6 @@ class BoxBuddy extends Buddy {
    * @param {Vector} innerVel
    */
   _innerPoob(innerPos, innerVel) {
-
     if (this.#wasUnregistered) {
 
       // box is not in active sim
@@ -318,9 +326,6 @@ class BoxBuddy extends Buddy {
     sim.usesGlobalCurrency = outerScreen.sim.usesGlobalCurrency;
     const gsm = new GameStateManager();// new BlankGSM();
     const macro = null;
-
-    // set terminal velocity for physics particles
-    sim.fallSpeed = outerScreen.sim.fallSpeed;
 
     const titleKey = `box ${_allInnerScreens.size}`;
     const innerScreen = new GameScreen(titleKey, sim.rect, sim, gsm, macro);

@@ -7,26 +7,29 @@ import eslintPluginIdle from "./eslint-plugin-idle/index.cjs"
 const sglClasses = ['StoryManager', 'ScreenManager', 'ShapeManager']
 const sglSrc = ["src/daemons/*_manager.js"]
 
-// overrides to enforce singleton "implicit constructor" pattern
+// overrides to enforce singleton "implicit constructor" style pattern
 const sglConfigs = [
   {
     "rules": {
 
-      // warn against using new with singletons
+      // warn against using "new" keyword singletons
       'idle/no-new-singleton': ['warn', { restrictedClasses: sglClasses }],
 
-      // allow only these uppercase function names to be called without new
+      // these PascalCase functions are allowed to called without new
       'new-cap': ['warn', { 'capIsNewExceptions': sglClasses}], 
     },
   },
 
-  // allow singletons' source files to use nonstandard method declaration
+  // singletons' source can use nonstandard method declaration
   {
     "files": sglSrc,
     "rules": {"func-names": "off"}
   },
 ]
 
+// start standard config
+// + list of types for jsdoc
+// + restrict Float32Array
 export default [
   {
     files: ['**/*.js'],

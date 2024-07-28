@@ -30,6 +30,9 @@ class Button extends GuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
+    if (this.borderless) {
+      return;
+    }
     this.constructor._draw(g, this.rect, this.hovered);
   }
 

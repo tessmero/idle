@@ -4,14 +4,19 @@
  */
 class StarEdge extends RadspecEdge {
   #n = 5;
-  #minRad = 0.05;
-  #maxRad = 0.1;
+  #minRad;
+  #maxRad;
 
   /**
    *
+   * @param {boolean} isMini
    */
-  constructor() {
-    super('star');
+  constructor(isMini) {
+    super(`${isMini ? 'mini ' : '' }star`);
+
+    const s = isMini ? global.tutorialScaleFactor : 1;
+    this.#minRad = 0.05 * s;
+    this.#maxRad = 0.1 * s;
   }
 
   /**

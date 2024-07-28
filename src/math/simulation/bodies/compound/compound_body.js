@@ -3,16 +3,31 @@
  * base class for bodies with children bodies
  */
 class CompoundBody extends Body {
-
   #constraints = [];
   #children = [];
   #controlPoints = [];
+  #isMiniature;
 
   /**
    * return Body instance in this.children
    */
   getMainBody() {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
+   *
+   */
+  set isMiniature(m) {
+    this.#isMiniature = m;
+    this.#children.forEach((c) => { c.isMiniature = m; });
+  }
+
+  /**
+   *
+   */
+  get isMiniature() {
+    return this.#isMiniature;
   }
 
   /**
@@ -30,6 +45,20 @@ class CompoundBody extends Body {
    * @param {GuiElement[]} c The new list of children this composite should contain.
    */
   setChildren(c) { this.#children = c; }
+
+  /**
+   *
+   * @param {Body} c The child to add
+   */
+  addChild(c) { this.#children.push(c); }
+
+  /**
+   *
+   * @param {Body[]} c The children to add
+   */
+  addChildren(c) {
+    c.forEach((cc) => this.addChild(cc));
+  }
 
   /**
    *
@@ -71,6 +100,18 @@ class CompoundBody extends Body {
       c.parent = this;
       c.register(sim);
     });
+
+    if (this.isMiniature) {
+      const scale = global.tutorialScaleFactor;
+      this.#children
+        .filter((c) => c instanceof ControlPoint)
+        .forEach((cp) => {
+          cp.setRad(cp.rad * scale);
+          if (cp instanceof RotationControlPoint) {
+            cp.distance = cp.distance * scale;
+          }
+        });
+    }
   }
 
   /**

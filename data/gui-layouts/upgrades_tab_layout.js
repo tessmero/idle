@@ -11,7 +11,7 @@ const UPGRADES_TAB_LAYOUT = {
   // rows for individual upgrades
   rows: {
     parent: '_inner',
-    height: 0.05,
+    height: 0.08,
     repeat: 'down',
   },
 };
@@ -21,24 +21,47 @@ const STAT_UPGRADER_LAYOUT = {
 
   // helper
   _inner: {
-    margin: 0.001,
+    margin: 0.02,
   },
 
   button: {
     parent: '_inner',
-    width: 0.15,
+    width: 0.2,
   },
 
-  progress: {
+  // helper for progress display
+  // area in middle
+  _progress: {
     parent: '_inner',
+    left: 0.23,
     width: 0.4,
-    left: 0.15,
+    height: 0.064,
+    top: 'auto',
   },
 
-  label: {
+  mainLabel: {
     parent: '_inner',
-    left: 0.15 + 0.4,
+    left: 0.23 + 0.4,
     width: 'auto',
+  },
+
+  // two rows in progress display area
+  _rows: {
+    parent: '_progress',
+    height: '50%',
+    repeat: 'down',
+  },
+
+  progressLabel: {
+    parent: '_rows[0]',
+  },
+
+  // empty/filled/animated boxes
+  progressBoxes: {
+    parent: '_rows[1]',
+    width: 0.032,
+    repeat: 'right',
+    margin: 0.003,
   },
 };
 

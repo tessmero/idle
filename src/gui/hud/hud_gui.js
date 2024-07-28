@@ -79,6 +79,18 @@ class HudGui extends Gui {
   }
 
   /**
+   *
+   * @param {object} g The graphics context
+   */
+  draw(g) {
+    super.draw(g);
+
+    // draw upgrade menu gui transition effect
+    const menuGui = this.screen.stateManager.getGuiForState(GameStates.upgradeMenu);
+    if (menuGui) { menuGui.drawTransitionEffect(g); } // upgrade_menu.js
+  }
+
+  /**
    * Construct toolbar elements for the given game screen.
    * @returns {GuiElement[]} The toolbar elements for the screen.
    */
@@ -125,9 +137,9 @@ class HudGui extends Gui {
 
         // build tooltip with string label and tutorial sim
         button.withDynamicTooltip(() => {
-          const ttpr = ToolbarTooltipPopup.pickRect(this.screen, tooltip);
-          const innerScreen = ToolbarTooltipPopup.getTutorialScreen(tool);
-          return new ToolbarTooltipPopup(ttpr, tooltip, innerScreen, tool);
+          const ttpr = ToolbarTooltip.pickRect(this.screen, tooltip);
+          const innerScreen = ToolbarTooltip.getTutorialScreen(tool);
+          return new ToolbarTooltip(ttpr, tooltip, innerScreen, tool);
         });
 
       }

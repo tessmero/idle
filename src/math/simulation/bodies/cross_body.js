@@ -32,13 +32,14 @@ class CrossBody extends Body {
    *
    */
   buildEdge() {
+    const mini = this.isMiniature;
 
     const a = 1;
     const b = 5;
 
     const aa = 1 / 2;
     const c = 6;
-    const scale = 2e-2;
+    const scale = 2e-2 * (mini ? global.tutorialScaleFactor : 1);
 
     let verts = [
       [-a, b], [-aa, c], [aa, c], [a, b], [a, a],
@@ -49,7 +50,11 @@ class CrossBody extends Body {
 
     verts = verts.map((xy) => v(...xy).mul(scale));
 
-    return new PolygonEdge('cross', verts.reverse());
+    let key = 'cross';
+    if (mini) {
+      key = `mini ${key}`;
+    }
+    return new PolygonEdge(key, verts.reverse());
   }
 
   /**

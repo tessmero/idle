@@ -31,10 +31,10 @@ class CompassBody extends Body {
    *
    */
   buildEdge() {
-
+    const mini = this.isMiniature;
     const a = 1;
     const b = 5;
-    const scale = 3e-2;
+    const scale = 3e-2 * (mini ? global.tutorialScaleFactor : 1);
 
     let verts = [
       [0, b], [a, a],
@@ -45,7 +45,11 @@ class CompassBody extends Body {
 
     verts = verts.map((xy) => v(...xy).mul(scale));
 
-    return new PolygonEdge('compass', verts.reverse());
+    let key = 'compass';
+    if (mini) {
+      key = `mini ${key}`;
+    }
+    return new PolygonEdge(key, verts.reverse());
   }
 
   /**

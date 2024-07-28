@@ -84,7 +84,7 @@ class UpgradeMenuGui extends Gui {
       .withTooltip('close upgrades menu');
     tabGroup.addChild(closeButton);
 
-    return [closeButton, tabGroup];
+    return [tabGroup, closeButton];
 
   }
 
@@ -108,6 +108,21 @@ class UpgradeMenuGui extends Gui {
   }
 
   /**
+   * Used in updateTransitionEffect
+   * @returns {boolean} True if this gui is visible (even if not technically active)
+   */
+  _isVisible() {
+    let gui = this.gsm.screen.gui;
+    while (gui) {
+      if (gui === this) {
+        return true;
+      }
+      gui = gui.getBackgroundGui();
+    }
+    return false;
+  }
+
+  /**
    *
    * @param {number} dt The time elapsed in millseconds.
    */
@@ -124,8 +139,8 @@ class UpgradeMenuGui extends Gui {
     if (this.transitionRadius < this.maxTransitionRadius) {
       this.transitionRadius = this.transitionRadius + dt * this.transitionSpeed;
 
-      // check if the upgrade menu is open
-      const tval = (this.gsm.state === GameStates.upgradeMenu);
+      // check if the upgrade menu is visible
+      const tval = this._isVisible();
 
       // set transition effect within radius
       const md2 = Math.pow(this.transitionRadius, 2);

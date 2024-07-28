@@ -10,12 +10,12 @@ class RotationControlPoint extends ControlPoint {
    * @param {ParticleSim} sim
    * @param {Body} anchoredTo
    * @param {number} angle
-   * @param {number} radius
+   * @param {number} distance
    */
-  constructor(sim, anchoredTo, angle, radius) {
+  constructor(sim, anchoredTo, angle, distance) {
     super(sim, anchoredTo);
     this.angle = angle;
-    this.radius = radius;
+    this.distance = distance;
   }
 
   /**
@@ -39,7 +39,7 @@ class RotationControlPoint extends ControlPoint {
   update(_dt) {
     const par = this.anchoredTo;
     const a = this.angle + par.angle;
-    this.pos = par.pos.add(vp(a, this.radius));
+    this.pos = par.pos.add(vp(a, this.distance));
   }
 
 }
