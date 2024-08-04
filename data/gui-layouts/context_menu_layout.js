@@ -13,7 +13,7 @@ _MAR = 0.05; // distance from outer bounds to nearest screen edge
 _SQR = 0.3; // side length of the two content squares
 _PAD = 0.05; // padding around content squares
 _SAX = _SQR + 2 * _PAD; // length of short axis
-_LAX = 2 * _SQR + 4 * _PAD; // length of long axis
+_LAX = 2 * _SQR + 3 * _PAD; // length of long axis
 
 // bounds in horizontal screen
 _HS = {
@@ -51,6 +51,9 @@ VS_CONTEXT_MENU_BOUNDS = {
   },
 };
 
+// helpers for positioning common buttons
+_BTN_MARGIN = 0.015;
+
 // base layout in context menu
 CONTEXT_MENU_LAYOUT = {
 
@@ -58,16 +61,18 @@ CONTEXT_MENU_LAYOUT = {
   closeBtn: {
     width: 0.04,
     height: 0.04,
-    top: 0.025,
-    right: 0.025,
+    top: _BTN_MARGIN,
+    right: _BTN_MARGIN,
   },
 
   // two content squares
   squares: {
-    width: _SQR + 2 * _PAD,
-    height: _SQR + 2 * _PAD,
+    top: _PAD / 2,
+    left: _PAD / 2,
+    width: _SQR + _PAD,
+    height: _SQR + _PAD,
     repeat: 'auto',
-    margin: _PAD,
+    margin: _PAD / 2,
   },
 };
 
@@ -75,12 +80,32 @@ CONTEXT_MENU_LAYOUT = {
 BODY_CONTEXT_MENU_LAYOUT = {
   ...CONTEXT_MENU_LAYOUT,
 
+  // main label
+  title: {
+    parent: 'squares[0]',
+    height: 0.05,
+  },
+
+  // art area
+  artArea: {
+    parent: 'squares[0]',
+    top: 0.05,
+    height: 'auto',
+  },
+
+  // small category label on top
+  miniTitle: {
+    parent: 'title',
+    height: 0.01,
+    top: -0.015,
+  },
+
   // delete button on bottom right
   trashBtn: {
     width: 0.07,
     height: 0.07,
-    bottom: 0.025,
-    right: 0.025,
+    bottom: _BTN_MARGIN,
+    right: _BTN_MARGIN,
   },
 };
 

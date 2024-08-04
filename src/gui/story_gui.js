@@ -101,7 +101,7 @@ class StoryGui extends Gui {
         g.strokeStyle = global.colorScheme.hl;
 
         this._flashElems.forEach((c) => {
-          c.border.path(g, c.rect);
+          c.border.path(g, c.border.verts(c.rect));
           g.stroke();
         });
       }

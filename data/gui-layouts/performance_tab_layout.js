@@ -6,7 +6,7 @@ const PERFORMANCE_GUI_LAYOUT = {
 
   // helper
   _r0: {
-    margin: '10%',
+    margin: 0.05,
   },
 
   // rows for individual readouts

@@ -5,18 +5,20 @@
 class BoxBuddyContextMenu extends BuddyContextMenu {
 
   /**
-   * Extend buddy context menu by adding inner simulation display.
-   * @returns {GuiElement[]} The children.
+   *
    */
-  _buildElements() {
-    const boxBuddy = this._buddy;
-    const s0 = this._layout.squares[0];
+  deleteEnabled() {
+    return false;
+  }
 
-    // position gui element to display inner screen
-    const [vw, vh] = global.tutorialSimDims;
-    const [cx, cy] = rectCenter(...s0);
-    const r = [cx - vw / 2, cy - vh / 2, vw, vh];
-    const gsp = new GuiScreenPanel(r, {
+  /**
+   * Replace default art element with inner screen display.
+   */
+  _buildArtElem() {
+    const boxBuddy = this._buddy;
+    const rect = this._layout.artArea;
+
+    const gsp = new GuiScreenPanel(rect, {
       innerScreen: boxBuddy.innerScreen,
       allowScaling: true,
       tooltip: 'Click to enter',
@@ -29,13 +31,7 @@ class BoxBuddyContextMenu extends BuddyContextMenu {
     // instead it is updated persistently
     gsp.disableScreenUpdate = true;
 
-    return [...super._buildElements(), gsp];
+    return gsp;
   }
 
-  /**
-   *
-   */
-  deleteEnabled() {
-    return false;
-  }
 }

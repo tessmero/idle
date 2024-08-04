@@ -64,7 +64,7 @@ class PiContextMenu extends ContextMenu {
       new IconButton(this._layout.closeBtn, {
         icon: xIcon,
         action: () => this.closePiContextMenu(),
-        scale: 0.5,
+        scale: 0.4,
         tooltip: 'close',
       }),
     ];

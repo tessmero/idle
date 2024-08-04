@@ -76,12 +76,13 @@ class Edge {
    * @param {object} g The graphics context.
    * @param {Vector} pos The position to draw at.
    * @param {number} angle The orientation to draw the edge with.
+   * @param {?number} scale The scale factor used for BodyPreviewElement
    */
-  trace(g, pos, angle) {
+  trace(g, pos, angle, scale = 1) {
     g.beginPath();
     for (let a = 0; a < twopi; a = a + 1e-2) {
       const [r, _r2, _dist] = this.lookupAngle(a);
-      const p = pos.add(vp(a + angle, r));
+      const p = pos.add(vp(a + angle, r * scale));
       g.lineTo(...p.xy());
     }
     g.closePath();

@@ -31,8 +31,6 @@ class ProgressButton extends TextButton {
       g, this.rect, this.#valueFunc());
 
     // trim progress indicator
-    g.strokeStyle = global.colorScheme.bg;
-    g.fillStyle = global.colorScheme.bg;
     this.border.cleanup(g, this.rect);
 
     // draw border

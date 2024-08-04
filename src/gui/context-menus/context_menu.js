@@ -19,7 +19,11 @@ class ContextMenu extends CompositeGuiElement {
    * @param {object} params The parameters.
    */
   constructor(rect, params = {}) {
-    super(rect, { opaque: true, ...params });
+    super(rect, {
+      border: new CardBorder(0.02),
+      opaque: true,
+      ...params,
+    });
   }
 
   /**

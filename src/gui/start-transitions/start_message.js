@@ -60,7 +60,7 @@ class StartMessage extends StartAnimStage {
       const label = this.text;
       const center = true;
       resetRand(this.rngSeed);
-      const scale = 0.3 * rect[2];
+      const scale = 0.3 * Math.max(rect[2], rect[3]);
       const fontSpec = new DissolvingFontSpec(0, scale, true).withSolidity(sld);
       drawText(g, ...rectCenter(...rect), label, center, fontSpec);
     }

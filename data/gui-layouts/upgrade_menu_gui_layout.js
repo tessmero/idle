@@ -13,7 +13,7 @@ const UPGRADE_MENU_GUI_LAYOUT = {
     parent: 'r0',
     width: 0.05,
     height: 0.05,
-    top: 0.1,
-    right: 0.05,
+    top: 0.08,
+    right: 0.02,
   },
 };

@@ -29,7 +29,7 @@ class ProgressIndicator extends GuiElement {
     ProgressIndicator.draw(
       g, this.rect, this.valueFunc());
     if (this.border) {
-      this.border.path(g, this.rect);
+      this.border.path(g, this.border.verts(this.rect));
       g.stroke();
     }
   }

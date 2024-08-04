@@ -28,7 +28,7 @@ class IconElement extends GuiElement {
    * @param {Icon} i The icon to display.
    */
   set icon(i) {
-    throw new Error('should use constructor');
+    this.#icon = i;
   }
 
   /**

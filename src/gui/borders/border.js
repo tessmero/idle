@@ -16,6 +16,16 @@ class Border {
   }
 
   /**
+   * trace additional shapes to draw on top of border.
+   * @param {number[]} _rect The rectangle to align in.
+   * @param {Vector[]} _verts The computed border shape.
+   * @returns {Vector[][]} The vertices to loop over.
+   */
+  _decorations(_rect, _verts) {
+    return [];
+  }
+
+  /**
    * Helper to get current animation frame from verts
    * @param {number[]} rect The rectangle to align in.
    * @returns {Vector[]} The vertices to loop over.
@@ -38,12 +48,27 @@ class Border {
   /**
    * Helper to trace in graphics context.
    * @param {object} g The graphics context.
-   * @param {number[]} rect The rectangle to align with.
+   * @param {Vector[]} verts The computed border shape.
    */
-  path(g, rect) {
+  path(g, verts) {
     g.beginPath();
-    this.verts(rect).forEach((v) => g.lineTo(v.x + this.offsetX, v.y + this.offsetY));
+    verts.forEach((v) => g.lineTo(v.x + this.offsetX, v.y + this.offsetY));
     g.closePath();
+  }
+
+  /**
+   * Helper to draw decorations
+   * @param {object} g The graphics context.
+   * @param {number[]} rect The rectangle to align with.
+   * @param {Vector[]} verts The computed border shape.
+   */
+  fillDecorations(g, rect, verts) {
+    this._decorations(rect, verts).forEach((decVerts) => {
+      g.beginPath();
+      decVerts.forEach((v) => g.lineTo(v.x + this.offsetX, v.y + this.offsetY));
+      g.closePath();
+      g.fill();
+    });
   }
 
   /**
@@ -54,9 +79,6 @@ class Border {
    */
   cleanup(g, rect) {
     const corners = rectCorners(...rect);
-
-    // trace rectangle with thick line
-    g.strokeRect(...rect);
 
     // compute cutoffs shape
     const verts = this.verts(rect);
@@ -70,11 +92,18 @@ class Border {
 
     ];
 
+    g.globalCompositeOperation = 'destination-out';
+
+    // trace rectangle with thick line
+    g.strokeRect(...rect);
+
     // fill cutoffs
     g.beginPath();
     cutoff.forEach((v) => g.lineTo(v.x, v.y));
     g.closePath();
     g.fill();
+
+    g.globalCompositeOperation = 'source-over';
   }
 
   /**
@@ -96,26 +125,27 @@ class Border {
       lineCol = 'red';
     }
     const bord = (options.border ? options.border : new DefaultBorder());
+    const verts = bord.verts(rect);
 
+    // clear interior if necessary
     const fill = options.hasOwnProperty('fill') ? options.fill : true;
     if (fill) {
-      if (bord instanceof DefaultBorder) {
-        g.clearRect(...rect);
-      }
-      else {
-        g.fillStyle = global.colorScheme.bg;
-        bord.path(g, rect);
-        g.fill();
-      }
+      g.globalCompositeOperation = 'destination-out';
+      bord.path(g, verts);
+      g.fill();
+      g.globalCompositeOperation = 'source-over';
     }
 
-    // g.strokeRect(...rect);
+    // draw optional decorations in gray
+    g.fillStyle = global.colorScheme.mid;
+    bord.fillDecorations(g, rect, verts);
+    g.fillStyle = global.colorScheme.fg;
 
+    // trace border
     g.strokeStyle = lineCol;
     g.lineWidth = global.lineWidth;
-    bord.path(g, rect);
+    bord.path(g, verts);
     g.stroke();
-
     g.strokeStyle = global.colorScheme.fg;
   }
 }

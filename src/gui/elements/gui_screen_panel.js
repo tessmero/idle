@@ -135,8 +135,6 @@ class GuiScreenPanel extends GuiElement {
 
     // trim inner screen within rectangle as necessary
     if (this.border) {
-      g.strokeStyle = global.colorScheme.bg;
-      g.fillStyle = global.colorScheme.bg;
       this.border.cleanup(g, this.rect);
     }
 

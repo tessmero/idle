@@ -41,7 +41,7 @@ class TestTimelineDisplay extends CompositeGuiElement {
       const label = checkLabels[i];
       const x = innerRect[0] + (t / duration) * innerRect[2];
       const r = [x - boxRad, innerRect[1] - 0.02, 2 * boxRad, 2 * boxRad];
-      boxes.push(new IconButton(r, {
+      boxes.push(new IconElement(r, {
         icon: uncheckedIcon,
         scale: 0.25,
         tooltip: label,

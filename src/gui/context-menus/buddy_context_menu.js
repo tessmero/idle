@@ -22,6 +22,14 @@ class BuddyContextMenu extends BodyContextMenu {
   }
 
   /**
+   * Pick categorical title to show in small font at top of context menu.
+   */
+  _miniTitle() {
+    const b = this._buddy;
+    return `lvl ${b.expLevel}`;
+  }
+
+  /**
    * Construct direct children for this composite.
    * @returns {GuiElement[]} The children.
    */

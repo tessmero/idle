@@ -20,27 +20,53 @@ class BodyContextMenu extends ContextMenu {
   }
 
   /**
+   * Pick categorical title to show in small font at top of context menu.
+   */
+  _miniTitle() {
+    return 'Basic Shape';
+  }
+
+  /**
+   * Construct gui element aligned with artArea
+   */
+  _buildArtElem() {
+    return new BodyPreviewElement(this._layout.artArea, {
+      body: this.#body,
+      border: new RoundedBorder(),
+    });
+  }
+
+  /**
    * Construct direct children for this composite.
    * @returns {GuiElement[]} The children.
    */
   _buildElements() {
     const body = this.#body;
     const layout = this._layout;
-    const [s0, _s1] = layout.squares;
+    const [_s0, _s1] = layout.squares;
     if (!body.title) { body.title = 'body'; }
     if (!body.icon) { body.icon = circleIcon; }
 
     const result = [
 
-      new StatReadout(s0, {
-        icon: body.icon,
-        labelFunc: () => body.title,
+      this._buildArtElem(),
+
+      new TextLabel(layout.miniTitle, {
+        label: this._miniTitle(),
+        scale: 0.15,
+        center: false,
+      }),
+
+      new TextLabel(layout.title, {
+        label: body.title,
+        scale: 0.4,
+        center: false,
       }),
 
       new IconButton(layout.closeBtn, {
         icon: xIcon,
         action: () => this.closeBodyContextMenu(),
-        scale: 0.5,
+        scale: 0.4,
         tooltip: 'close menu',
       }),
 

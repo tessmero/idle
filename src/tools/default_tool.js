@@ -178,13 +178,6 @@ class DefaultTool extends Tool {
       const c = p;
       const r = this.rad;
 
-      g.strokeStyle = global.colorScheme.bg;
-      g.lineWidth = 0.005;
-      g.beginPath();
-      g.moveTo(c.x + r, c.y);
-      g.arc(c.x, c.y, r, 0, twopi);
-      g.stroke();
-
       g.strokeStyle = global.colorScheme.fg;
       g.lineWidth = 0.0025;
       g.beginPath();

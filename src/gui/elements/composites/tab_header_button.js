@@ -32,7 +32,6 @@ class TabHeaderButton extends TextButton {
       lineCol = global.colorScheme.hl;
     }
 
-    // g.fillStyle = global.colorScheme.bg
     g.strokeStyle = lineCol;
     g.clearRect(...rect);
 

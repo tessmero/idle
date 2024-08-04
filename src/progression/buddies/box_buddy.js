@@ -28,6 +28,13 @@ class BoxBuddy extends Buddy {
   #totalTrans = 0;
 
   /**
+   * Pick categorical title to show in small font at top of context menu.
+   */
+  _miniTitle() {
+    return 'Basic Shape';
+  }
+
+  /**
    *
    * @param {ParticleSim} sim
    * @param {Vector} pos
@@ -189,7 +196,7 @@ class BoxBuddy extends Buddy {
     const offset = v(0, 1.2);
     const s = rad * 0.4;
 
-    g.fillStyle = global.colorScheme.bg;
+    g.globalCompositeOperation = 'destination-out';
     g.beginPath();
     arrowShape.forEach(([x, y]) => {
       const p = center.add(v(x, y).add(offset).rotate(angle + pi).mul(s));
@@ -197,7 +204,7 @@ class BoxBuddy extends Buddy {
     });
     g.closePath();
     g.fill();
-    g.fillStyle = global.colorScheme.fg;
+    g.globalCompositeOperation = 'source-over';
   }
 
   /**
