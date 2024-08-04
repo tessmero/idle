@@ -14,11 +14,11 @@ class Edge {
 
   /**
    *
-   * @param {string} titleKey readable unique title to submit to ShapeManager
+   * @param {string} titleKey readable unique title to submit to EdgeManager
    */
   constructor(titleKey) {
     this.#titleKey = titleKey;
-    ShapeManager().submitNewEdge(this);
+    EdgeManager().submitNewEdge(this);
   }
 
   /**

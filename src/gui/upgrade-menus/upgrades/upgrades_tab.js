@@ -7,14 +7,6 @@ class UpgradesTab extends CompositeGuiElement {
   _layoutData = UPGRADES_TAB_LAYOUT;
 
   /**
-   *
-   * @param {number[]} sr The rectange to align elements in.
-   */
-  constructor(sr) {
-    super(sr);
-  }
-
-  /**
    * Construct direct children for this composite.
    * @returns {GuiElement[]} The children.
    */
@@ -23,11 +15,13 @@ class UpgradesTab extends CompositeGuiElement {
     const specs = global.upgradeTracks.state;
     const rows = this._layout.rows;
     const upgraders = Object.keys(specs).map((key, i) =>
-      new StatUpgrader(rows[i], key)
-        .withDynamicTooltip(() => {
+      new StatUpgrader(rows[i], {
+        gutse: specs[key],
+        tooltipFunc: () => {
           const ttpr = UpgradeTooltip.pickRect(this.screen);
           return new UpgradeTooltip(ttpr, key);
-        })
+        },
+      })
     );
     return upgraders;
   }

@@ -42,12 +42,11 @@ class PerformanceTab extends CompositeGuiElement {
 
     return specs.map((entry, i) => {
       const [icon, labelFunc, tooltipFunc] = entry;
-      const elem = new StatReadout(
-        rows[i], icon, labelFunc)
-        .withScale(0.4)
-        .withTooltipScale(0.3)
-        .withDynamicTooltip(tooltipFunc);
-      return elem;
+      return new StatReadout(rows[i], {
+        icon, labelFunc, tooltipFunc,
+        scale: 0.4,
+        tooltipScale: 0.3,
+      });
     });
   }
 
@@ -75,7 +74,7 @@ class PerformanceTab extends CompositeGuiElement {
    *                     shapes that have been constructed.
    */
   rptMemoryShapes() {
-    const mgr = ShapeManager();
+    const mgr = EdgeManager();
     const edges = mgr.constructedEdges.size;
     return `${edges} distinct edge shapes`;
   }
@@ -85,7 +84,7 @@ class PerformanceTab extends CompositeGuiElement {
    * @returns {string} A listing of distinct edge shapes in memory.
    */
   rptMemoryShapesDetails() {
-    const allEdges = ShapeManager().constructedEdges;
+    const allEdges = EdgeManager().constructedEdges;
 
     const result = JSON.stringify(Array.from(allEdges.keys()))
       .replaceAll(',', '\n')

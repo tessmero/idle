@@ -14,21 +14,29 @@ class TextLabel extends GuiElement {
   /**
    *
    * @param {number[]} rect
-   * @param {string} label
+   * @param {object} params The parameters.
+   * @param {string} params.label The text to display.
+   * @param {Function} params.pad Padding around outside of text.
+   * @param {Function} params.letterPixelPad Padding around each character pixel.
+   * @param {Function} params.center True if text should be centered in rect.
+   * @param {Function} params.style Special style flag like 'hud'
    */
-  constructor(rect, label) {
-    super(rect);
+  constructor(rect, params = {}) {
+    super(rect, params);
+    const {
+      label = '',
+      pad = 0.005,
+      letterPixelPad = 0.005,
+      center = true,
+      style = null,
+    } = params;
 
     this.#label = label;
-    this.#pad = this.constructor.pad();
-    this.#letterPixelPad = this.constructor.letterPixelPad();
-    this.#center = true;
+    this.#pad = pad;
+    this.#letterPixelPad = letterPixelPad;
+    this.#center = center;
+    this.#style = style;
   }
-
-  /**
-   * Assigning label with equal sign is not allowed.
-   */
-  set label(_l) { throw new Error('should use setLabel'); }
 
   /**
    * Set display text after construction. Used in dynamic_text_label.js.
@@ -39,15 +47,18 @@ class TextLabel extends GuiElement {
   }
 
   /**
-   * Assigning center with equal sign is not allowed.
+   * Assigning label with equal sign is not allowed.
    */
-  set center(_c) { throw new Error('should use setCenter or withCenter'); }
+  set label(_l) {
+    throw new Error('should use constructor');
+  }
 
   /**
-   * default padding space around text
-   * @returns {number} Default padding distance.
+   * Assigning center with equal sign is not allowed.
    */
-  static pad() { return 0.005; }
+  set center(_c) {
+    throw new Error('should use constructor');
+  }
 
   /**
    * Get actual padding for this label.
@@ -56,55 +67,45 @@ class TextLabel extends GuiElement {
   get pad() { return this.#pad; }
 
   /**
-   * default padding around each pixel
-   * for drawing with extra-readable 'hud' style
-   */
-  static letterPixelPad() { return 0.005; }
-
-  /**
    * Chainable helper to apply special drawing style 'hud' or 'tiny'.
-   * @param {string} s The new drawing style.
+   * @param {string} _s The new drawing style.
    */
-  withStyle(s) {
-    this.#style = s;
-    return this;
+  withStyle(_s) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Set whether the text in this label should be centered.
-   * @param {boolean} c True if the text should be centered.
+   * @param {boolean} _c True if the text should be centered.
    */
-  setCenter(c) {
-    this.#center = c;
+  setCenter(_c) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Chainable helper to set whether the text in this label should be centered.
-   * @param {boolean} c True if the text should be centered.
+   * @param {boolean} _c True if the text should be centered.
    */
-  withCenter(c) {
-    this.setCenter(c);
-    return this;
+  withCenter(_c) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Chainable helper to set character pixel padding for 'hud' style text.
    * Used to add extra padding for big text in start menu.
-   * @param {number} p The distance to clear around each pixel.
+   * @param {number} _p The distance to clear around each pixel.
    */
-  withLetterPixelPad(p) {
-    this.#letterPixelPad = p;
-    return this;
+  withLetterPixelPad(_p) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Chainable helper to set padding distance between the text
    * and this elements bounding rectangle.
-   * @param {number} p The new padding distance.
+   * @param {number} _p The new padding distance.
    */
-  withPad(p) {
-    this.#pad = p;
-    return this;
+  withPad(_p) {
+    throw new Error('should use constructor');
   }
 
   /**

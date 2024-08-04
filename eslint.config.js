@@ -4,7 +4,7 @@ import jsdoc from "eslint-plugin-jsdoc";
 import eslintPluginIdle from "./eslint-plugin-idle/index.cjs"
 
 // singleton class names and file patterns
-const sglClasses = ['StoryManager', 'ScreenManager', 'ShapeManager']
+const sglClasses = ['StoryManager', 'ScreenManager', 'EdgeManager', 'BorderManager']
 const sglSrc = ["src/daemons/*_manager.js"]
 
 // overrides to enforce singleton "implicit constructor" style pattern

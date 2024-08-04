@@ -5,18 +5,21 @@ class LabelTooltip extends Tooltip {
   _layoutData = TOOLTIP_LAYOUT;
 
   /**
+   *
+   */
+  static defaultScale = 0.3;
+
+  #label;
+
+  /**
    * get rect using LabelTooltip.pickRect
    * @param {number[]} rect The rectangle to align text in.
-   * @param {string} label The text content to display.
-   * @param {number} scale The font size to display.
+   * @param {object} params The parameters.
+   * @param {string} params.label The text content to display.
    */
-  constructor(rect, label, scale = null) {
-    super(rect);
-    this.label = label;
-
-    let s = scale;
-    if (!s) { s = this.constructor.scale(); }
-    this.setScale(s);
+  constructor(rect, params) {
+    super(rect, params);
+    this.#label = params.label;
   }
 
   /**
@@ -24,18 +27,16 @@ class LabelTooltip extends Tooltip {
    * @returns {GuiElement[]} The children.
    */
   _buildElements() {
-    return [...super._buildElements(),
+    return [
+      ...super._buildElements(),
 
-      new TextLabel(this._layout.label, this.label)
-        .withScale(this.scale)
-        .withCenter(false),
+      new TextLabel(this._layout.label, {
+        label: this.#label,
+        scale: this.scale,
+        center: false,
+      }),
     ];
   }
-
-  /**
-   *
-   */
-  static scale() { return 0.3; }
 
   /**
    *
@@ -46,7 +47,7 @@ class LabelTooltip extends Tooltip {
   static pickRect(screen, label, scale = null) {
 
     let s = scale;
-    if (!s) { s = LabelTooltip.scale(); }
+    if (!s) { s = LabelTooltip.defaultScale; }
     let [w, h] = getTextDims(label, s);
     w = w + 2 * global.tooltipPadding;
     h = h + 2 * global.tooltipPadding;

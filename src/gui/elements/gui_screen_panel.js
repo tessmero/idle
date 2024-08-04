@@ -6,28 +6,46 @@ class GuiScreenPanel extends GuiElement {
 
   #innerScreen;
   #allowScaling;
-  hideInnerGui = false;
+  #hideInnerGui;
 
   /**
    * Normally we assume rect and innerScreen have the same size.
    * If allowScaling is set to true, then they only
    * need to have the same aspect ratio.
    * @param {number[]} rect The rectangle for this gui element.
-   * @param {GameScreen} innerScreen The inner screen to display.
-   * @param {boolean} allowScaling False by default.
+   * @param {object} params The parameters.
+   * @param {GameScreen} params.innerScreen The inner screen to display.
+   * @param {boolean} params.allowScaling False by default, so assume screen
+   *                                      and rect have matching dims.
+   * @param {boolean} params.hideInnerGui False by default, set to true to
+   *                                      skip drawing inner screen's gui
    */
-  constructor(rect, innerScreen, allowScaling = false) {
-    super(rect);
+  constructor(rect, params) {
+    super(rect, { border: new RoundedBorder(), ...params });
+
+    const {
+      allowScaling = false,
+      hideInnerGui = false,
+    } = params;
+
     this.#allowScaling = allowScaling;
-    this.setInnerScreen(innerScreen);
-    innerScreen.loop = true;
+    this.#hideInnerGui = hideInnerGui;
+    this._setInnerScreen(params.innerScreen);
+    params.innerScreen.loop = true;
     this.hoverable = false;
   }
 
   /**
    * Prevent assigning inner screen with equals sign.
    */
-  set innerScreen(_s) { throw new Error('should use setInnerScreen'); }
+  set innerScreen(_s) { throw new Error('should use constructor'); }
+
+  /**
+   * Allow setting inner screen after construction.
+   * Used for box transition.
+   * @param {GameScreen} s
+   */
+  setInnerScreen(s) { this._setInnerScreen(s); }
 
   /**
    * Get the screen being displayed.
@@ -39,7 +57,7 @@ class GuiScreenPanel extends GuiElement {
    * Set the screen to display. Used to enter and exit boxes.
    * @param {GameScreen} s The screen to display.
    */
-  setInnerScreen(s) {
+  _setInnerScreen(s) {
     const oldScreen = this.#innerScreen;
 
     if (oldScreen) { s.mousePos = oldScreen.mousePos; }
@@ -98,13 +116,14 @@ class GuiScreenPanel extends GuiElement {
       g.setTransform(mx, 0, 0, my, bx, by);
     }
 
-    this.#innerScreen.draw(g, this.hideInnerGui);
+    // draw inner screen
+    this.#innerScreen.draw(g, this.#hideInnerGui);
 
     if (this.#allowScaling) {
       global.ctx.setTransform(...global.canvasTransform);
     }
 
-    // trim sides
+    // trim a thick margin outside of rectangle
     const [rx, ry, rw, rh] = this.rect;
     const m = rw * 0.1;
     const h = rh + 0.002;
@@ -114,10 +133,17 @@ class GuiScreenPanel extends GuiElement {
     g.clearRect(rx - m / 2, y - m, rw + m, m);
     g.clearRect(rx - m / 2, y + h, rw + m, m);
 
+    // trim inner screen within rectangle as necessary
+    if (this.border) {
+      g.strokeStyle = global.colorScheme.bg;
+      g.fillStyle = global.colorScheme.bg;
+      this.border.cleanup(g, this.rect);
+    }
+
+    // draw border
     g.strokeStyle = global.colorScheme.fg;
     g.lineWidth = global.lineWidth;
-
-    Border._draw(g, this.rect, { hovered: this.hovered, fill: false });
+    Border.draw(g, this.rect, { border: this.border, hovered: this.hovered, fill: false });
   }
 
   /**

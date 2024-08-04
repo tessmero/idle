@@ -1,8 +1,39 @@
 /**
- * @file Border default border style
+ * @file Border base class for gui border style/shape
  */
 class Border {
-  static default = new Border();
+  offsetX = 0;
+  offsetY = 0;
+
+  /**
+   * trace the outline of this border clockwise from top-left corner.
+   * @param {number[]} _rect The rectangle to align in.
+   * @returns {Vector[]} The vertices to loop over.
+   * @abstract
+   */
+  _verts(_rect) {
+    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
+   * Helper to get current animation frame from verts
+   * @param {number[]} rect The rectangle to align in.
+   * @returns {Vector[]} The vertices to loop over.
+   */
+  verts(rect) {
+    const verts = this._verts(rect);
+
+    if (verts[0] instanceof Vector) {
+
+      // not animated
+      return verts;
+    }
+
+    // return current animation frame
+    const frameDur = 20;
+    const i = Math.floor(global.t / frameDur) % verts.length;
+    return verts[i];
+  }
 
   /**
    * Helper to trace in graphics context.
@@ -11,48 +42,43 @@ class Border {
    */
   path(g, rect) {
     g.beginPath();
-    this.verts(rect).forEach((v) => g.lineTo(v.x, v.y));
+    this.verts(rect).forEach((v) => g.lineTo(v.x + this.offsetX, v.y + this.offsetY));
     g.closePath();
   }
 
   /**
-   * Helper to fill cutoffs in graphics context.
+   * Helper to stroke outer rectangle and fill cut-off regions.
+   * Used to trim indicators and simulations.
    * @param {object} g The graphics context.
-   * @param {number[]} rect The rectangle to fill inside of.
+   * @param {number[]} rect The rectangle to clean up.
    */
-  fillCutoffs(g, rect) {
-    const tris = this.cutoffs(rect);
+  cleanup(g, rect) {
+    const corners = rectCorners(...rect);
 
-    tris.forEach((triangle) => {
-      g.beginPath();
-      triangle.forEach((p) => g.lineTo(...p.xy()));
-      g.closePath();
-      g.fill();
-    });
+    // trace rectangle with thick line
+    g.strokeRect(...rect);
+
+    // compute cutoffs shape
+    const verts = this.verts(rect);
+    const cutoff = [
+
+      // trace inner shape clockwise
+      ...verts, verts[0],
+
+      // trace outer rectangle counter-clockwise
+      corners[0], ...corners.reverse(),
+
+    ];
+
+    // fill cutoffs
+    g.beginPath();
+    cutoff.forEach((v) => g.lineTo(v.x, v.y));
+    g.closePath();
+    g.fill();
   }
 
   /**
-   * trace the outline of this border.
-   * @param {number[]} rect The rectangle to align with.
-   * @returns {Vector[]} The vertices to loop over.
-   */
-  verts(rect) {
-    return rectCorners(...rect);
-  }
-
-  /**
-   * Get vertices enclosing regions within rect not enclosed by verts.
-   * Used to trim progress indicator overlay.
-   * @param {number[]} _rect The rectangle to align with.
-   * @returns {Vector[][]} The lists of polygon vertices to fill in.
-   */
-  cutoffs(_rect) {
-    // none, this encloses the whole rectangle with verts
-    return [];
-  }
-
-  /**
-   * Draw standard border rectangle.
+   * Draw standard border rectangle or styled border.
    * @param {object} g The graphics context.
    * @param {number[]} rect The x,y,w,h of the rectangle.
    * @param {object} options
@@ -60,7 +86,7 @@ class Border {
    * @param {boolean} options.fill True if the interior of the button should be filled.
    * @param {object} options.border optional Border style instance.
    */
-  static _draw(g, rect, options = {}) {
+  static draw(g, rect, options = {}) {
     let lineCol = global.colorScheme.fg;
 
     if (options.hovered) {
@@ -69,19 +95,21 @@ class Border {
     if (global.debugUiRects) {
       lineCol = 'red';
     }
-
-    // g.fillStyle = global.colorScheme.bg
+    const bord = (options.border ? options.border : new DefaultBorder());
 
     const fill = options.hasOwnProperty('fill') ? options.fill : true;
     if (fill) {
-      g.clearRect(...rect);
+      if (bord instanceof DefaultBorder) {
+        g.clearRect(...rect);
+      }
+      else {
+        g.fillStyle = global.colorScheme.bg;
+        bord.path(g, rect);
+        g.fill();
+      }
     }
 
     // g.strokeRect(...rect);
-    const bord = (options.border ? options.border : Border.default);
-    g.fillStyle = global.colorScheme.bg;
-    bord.fillCutoffs(g, rect);
-    g.fillStyle = global.colorScheme.fg;
 
     g.strokeStyle = lineCol;
     g.lineWidth = global.lineWidth;

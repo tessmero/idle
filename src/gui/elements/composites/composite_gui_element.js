@@ -19,7 +19,7 @@ class CompositeGuiElement extends GuiElement {
   _layout = null;
 
   #children = [];
-  #opaque = false;
+  #opaque;
 
   /**
    * Construct a new empty composite element with the given rectangle.
@@ -30,9 +30,14 @@ class CompositeGuiElement extends GuiElement {
    * For opaque composites, the rectangle is
    * visible and may absorb mouse clicks.
    * @param {number[]} rect The rectangle for this composite.
+   * @param {object} params The parameters.
+   * @param {string} params.opaque true if this should have a solid background
    */
-  constructor(rect) {
-    super(rect);
+  constructor(rect, params = {}) {
+    super(rect, params);
+
+    const { opaque = false } = params;
+    this.#opaque = opaque;
   }
 
   /**
@@ -87,40 +92,39 @@ class CompositeGuiElement extends GuiElement {
   /**
    * Prevent setting children with equals sign.
    */
-  set children(_c) { throw new Error('should use setChildren'); }
+  set children(_c) {
+    throw new Error('not allowed');
+  }
 
   /**
    * Add a child gui element to this composite.
-   * @param {GuiElement} c The new gui element to include.
+   * @param {GuiElement} _c The new gui element to include.
    */
-  addChild(c) {
-    this.#children.push(c);
+  addChild(_c) {
+    throw new Error('not allowed');
   }
 
   /**
    * Add children gui elements to this composite.
-   * @param {GuiElement[]} cs The new elements to include.
+   * @param {GuiElement[]} _cs The new elements to include.
    */
-  addChildren(cs) {
-    cs.forEach((c) => this.addChild(c));
+  addChildren(_cs) {
+    throw new Error('not allowed');
   }
 
   /**
    * Chainable helper to add children.
-   * @param {GuiElement[]} cs The new elements to include.
+   * @param {GuiElement[]} _cs The new elements to include.
    */
-  withChildren(cs) {
-    this.addChildren(cs);
-    return this;
+  withChildren(_cs) {
+    throw new Error('not allowed');
   }
 
   /**
-   * Set the font size for this element and descendants.
-   * @param {number} s The font size.
+   * @param {number} _s The font size.
    */
-  setScale(s) {
-    super.setScale(s);
-    this.#children.forEach((c) => c.setScale(s));
+  setScale(_s) {
+    throw new Error('should use constructor');
   }
 
   /**
@@ -134,14 +138,10 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   * Chainable helper to set opacity.
-   * If opaque is set to true, this element's rectangle will
-   * be filled, may cover sims or guis, and will absorb clicks.
-   * @param {boolean} o The opacity flag.
+   * @param {boolean} _o The opacity flag.
    */
-  withOpacity(o) {
-    this.#opaque = o;
-    return this;
+  withOpacity(_o) {
+    throw new Error('should use constructor');
   }
 
   /**
@@ -164,7 +164,7 @@ class CompositeGuiElement extends GuiElement {
    */
   draw(g) {
     if (this.#opaque || this.border) {
-      Border._draw(g, this.rect, { fill: this.#opaque, border: this.border });
+      Border.draw(g, this.rect, { fill: this.#opaque, border: this.border });
     }
 
     this.#children.forEach((e) => e.draw(g));

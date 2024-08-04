@@ -43,6 +43,7 @@ class GameStateManager {
    * @param {boolean} resetState
    */
   rebuildGuis(screen, resetState = false) {
+
     this._screen = screen;
     if (resetState) {
       this._state = GameStates.startMenu;

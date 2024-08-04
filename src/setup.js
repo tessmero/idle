@@ -30,6 +30,12 @@ function gameLoop(timeStamp) {
  * Initialize the game
  */
 function init() {
+  resetRand();
+
+  // make sure animated story border is computed
+  // to avoid lag later (needs cleanup)
+  const dims = STORY_GUI_LAYOUT.borderDiv;
+  new StoryBorder().verts([0, 0, dims.width, dims.height]);
 
   const cvs = document.getElementById('gameCanvas');
 
@@ -83,7 +89,7 @@ function init() {
   const gsm = new GameStateManager();
   const screen = new GameScreen('root screen', [0, 0, 1, 1], sim, gsm);
   global.rootScreen = screen;
-  global.gsp = new GuiScreenPanel(screen.rect, screen);
+  global.gsp = new GuiScreenPanel(screen.rect, { innerScreen: screen });
   global.gsp.setScreen = () => {
     throw new Error('can only use global.gsp.setInnerScreen()');
   };
@@ -119,6 +125,7 @@ function setColorScheme(cs) {
  *
  */
 function resetGame() {
+
   setColorScheme(ColorScheme.default);
 
   // init start menu background sim

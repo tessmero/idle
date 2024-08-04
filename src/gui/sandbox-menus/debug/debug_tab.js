@@ -61,12 +61,13 @@ class DebugTab extends CompositeGuiElement {
     ];
 
     // let tabLabels = ['upgrades','skills','debug']
-    const tabLabels = specs.map((r) => r[0]);
-    const tabTooltips = specs.map((r) => r[1]);
-    const tabContents = specs.map((r) => (
-      (rect) => this.buildTabContent(rect, r[2])
-    ));
-    const tabGroup = new TabPaneGroup(layout.inner, tabLabels, tabContents, tabTooltips);
+    const tabGroup = new TabPaneGroup(layout.inner, {
+      tabLabels: specs.map((spec) => spec[0]),
+      tabTooltips: specs.map((spec) => spec[1]),
+      tabContents: specs.map((spec) => (
+        (rect, params) => this.buildTabContent(rect, params, spec[2])
+      )),
+    });
     if (global.debugMenuTabIndex) { tabGroup.setSelectedTabIndex(global.debugMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.debugMenuTabIndex = i;
@@ -78,18 +79,18 @@ class DebugTab extends CompositeGuiElement {
   /**
    * Build content for a tab within the debug tab.
    * @param {number[]} rect The rectangle to align elements in.
+   * @param {object} params The parameters to pass to element constructor
    * @param {object} tabSpecs Specifications for the tab.
    */
-  buildTabContent(rect, tabSpecs) {
-    const result = new CompositeGuiElement(rect);
+  buildTabContent(rect, params, tabSpecs) {
+    const result = new CompositeGuiElement(rect, params);
     result._layoutData = DEBUG_TAB_LAYOUT;
-    result._buildElements = () => tabSpecs.map((rowSpecs, i) => {
-      const [varname, inc, tooltip] = rowSpecs;
+    result._buildElements = () => tabSpecs.map((spec, i) => {
       const r = result._layout.rows[i];
-      if (inc === 'bool') {
-        return new BooleanDebugVar(r, varname, tooltip);
+      if (spec[1] === 'bool') {
+        return new BooleanDebugVar(r, { varname: spec[0], tooltip: spec[2] });
       }
-      return new ScalarDebugVar(r, varname, inc, tooltip);
+      return new ScalarDebugVar(r, { varname: spec[0], inc: spec[1], desc: spec[2] });
 
     });
     return result;

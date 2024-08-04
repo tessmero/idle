@@ -9,12 +9,13 @@ class IconButton extends Button {
   /**
    *
    * @param {number[]} rect
-   * @param {Icon} icon
-   * @param {Function} action
+   * @param {object} params The parameters.
+   * @param {Icon} params.icon The text to display.
+   * @param {Function} params.action The function to call when clicked.
    */
-  constructor(rect, icon, action) {
-    super(rect, action);
-    this.#icon = icon;
+  constructor(rect, params = {}) {
+    super(rect, params);
+    this.#icon = params.icon;
   }
 
   /**
@@ -25,7 +26,7 @@ class IconButton extends Button {
   }
 
   /**
-   * Allow assigning icon with equal sign.
+   * Allow assigning icon after construction.
    * @param {Icon} i The icon to display.
    */
   set icon(i) {
@@ -39,6 +40,7 @@ class IconButton extends Button {
   draw(g) {
     super.draw(g);
 
+    g.fillStyle = global.colorScheme.fg;
     const icon = this.#icon;
     const layout = this.isAnimated() ?
       icon.getCurrentAnimatedLayout() : icon.frames[0];

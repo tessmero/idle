@@ -12,12 +12,21 @@ class Gui extends CompositeGuiElement {
   title;
 
   /**
+   * Construct Gui with given rectangle.
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param  {?object} guiElemParams The parameters which may be omitted.
+   */
+  constructor(rect, guiElemParams = {}) {
+    super(rect, guiElemParams);
+  }
+
+  /**
    * Set special one-time parameters, used for
    * box transition and story intervention.
-   * @param {object} params The object with extra parameters.
+   * @param {object} stateParams The object with extra parameters.
    */
-  setStateParams(params) {
-    this._stateParams = params;
+  setStateParams(stateParams) {
+    this._stateParams = stateParams;
   }
 
   /**

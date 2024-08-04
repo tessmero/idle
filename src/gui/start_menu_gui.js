@@ -34,22 +34,29 @@ class StartMenuGui extends Gui {
     const specs = _startMessageSpecs;
 
     // build title display with large readable text
-    const div = layout.titleDiv;
-    const slots = [];
-    for (let i = 0; i < 5; i++) { slots.push([div[0], div[1] + i * div[3], div[2], div[3]]); }
+    const slots = layout.titleRows;
     this.labels = specs.map((s) =>
-      new TextLabel(slots[s[0]], s[1])
-        .withLetterPixelPad(0.01)
-        .withStyle('hud'));
+      new TextLabel(slots[s[0]], {
+        label: s[1],
+        letterPixelPad: 0.01,
+        style: 'hud',
+      })
+    );
 
     return [
       ...this.labels,
 
-      new TextButton(layout.playBtn, 'PLAY',
-        () => this.gsm.playClicked()),
+      new TextButton(layout.playBtn, {
+        label: 'PLAY',
+        action: () => this.gsm.playClicked(),
+        border: new SlantBorder(),
+      }),
 
-      new IconButton(layout.sandboxBtn, sandboxIcon,
-        () => this.gsm.sandboxClicked()),
+      new IconButton(layout.sandboxBtn, {
+        icon: sandboxIcon,
+        action: () => this.gsm.sandboxClicked(),
+        border: new SlantBorder(),
+      }),
 
     ];
   }

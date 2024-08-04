@@ -32,19 +32,28 @@ class BodyContextMenu extends ContextMenu {
 
     const result = [
 
-      new StatReadout(s0, body.icon, () => body.title),
+      new StatReadout(s0, {
+        icon: body.icon,
+        labelFunc: () => body.title,
+      }),
 
-      new IconButton(layout.closeBtn, xIcon, () => this.closeBodyContextMenu())
-        .withScale(0.5)
-        .withTooltip('close menu'),
+      new IconButton(layout.closeBtn, {
+        icon: xIcon,
+        action: () => this.closeBodyContextMenu(),
+        scale: 0.5,
+        tooltip: 'close menu',
+      }),
 
     ];
 
     if (this.deleteEnabled()) {
       result.push(
-        new IconButton(layout.trashBtn, trashIcon, () => this.deleteBody())
-          .withTooltip(`delete ${body.title}\n(no refunds)`)
-          .withScale(0.5),
+        new IconButton(layout.trashBtn, {
+          icon: trashIcon,
+          action: () => this.deleteBody(),
+          tooltip: `delete ${body.title}\n(no refunds)`,
+          scale: 0.5,
+        })
       );
     }
 

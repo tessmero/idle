@@ -48,18 +48,6 @@ class GuiTest extends Test {
   }
 
   /**
-   *
-   * @param {...any} elems
-   */
-  _scaleElems(...elems) {
-    const s = global.tutorialScaleFactor;
-    elems.forEach((e) => {
-      e.setScale(s);
-      e.withTooltip(null);
-    });
-  }
-
-  /**
    * leave only upgrade menu button in HUD
    * @param {GameStateManager} gsm The state manager to modify
    */
@@ -74,8 +62,6 @@ class GuiTest extends Test {
       // omitt all but first element
       const [menuBtn] = hud._be();
 
-      // shrink and remove tooltip
-      this._scaleElems(menuBtn);
       return [menuBtn];
     };
   }
@@ -92,14 +78,13 @@ class GuiTest extends Test {
 
     menu._buildElements = () => {
       const [tabGroup, closeButton] = menu._be();
-      this._scaleElems(closeButton);
       const cbc = Test.simPos(gsm.screen.sim, GuiTest.closeButtonCenter);
       closeButton.rect[0] = cbc.x - closeButton.rect[2] / 2;
       closeButton.rect[1] = cbc.y - closeButton.rect[3] / 2;
 
       // remove tab group contents
       tabGroup._buildElements = () => [
-        new CompositeGuiElement(tabGroup.rect).withOpacity(true),
+        new CompositeGuiElement(tabGroup.rect, { opaque: true }),
       ];
       tabGroup.tabContent = null;
       return [tabGroup, closeButton];

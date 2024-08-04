@@ -6,22 +6,43 @@ class ScalarDebugVar extends CompositeGuiElement {
   _layoutData = DEBUG_SCALAR_LAYOUT;
 
   #varname;
+  #desc;
   #inc;
-  #tooltip;
 
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {string} varname The variable name/path in global.
-   * @param {number} inc The change increment value.
-   * @param {string} tooltip The description of the variable.
+   * @param {object} params The parameters.
+   * @param {string} params.varname The variable name/path in global.
+   * @param {number} params.inc The change increment value.
    */
-  constructor(rect, varname, inc, tooltip) {
-    super(rect);
-    this.#varname = varname;
-    this.#inc = inc;
-    this.#tooltip = tooltip;
-    this.setBorder(Border.default);
+  constructor(rect, params = {}) {
+    super(rect, { ...params,
+      tooltipFunc: () => this._sdTooltip(),
+      opaque: true,
+    });
+    this.#varname = params.varname;
+    this.#inc = params.inc;
+    this.#desc = params.desc;
+  }
+
+  /**
+   *
+   */
+  _fmtVal() {
+    return Math.floor(getGlobal(this.#varname) / this.#inc + 0.5).toString();
+  }
+
+  /**
+   *
+   */
+  _sdTooltip() {
+    return [
+      `${this._fmtVal()} : ${this.#varname} `,
+      this.#desc,
+      'shift-click for 10x',
+      'ctrl-click for 100x',
+    ].join('\n');
   }
 
   /**
@@ -31,58 +52,49 @@ class ScalarDebugVar extends CompositeGuiElement {
   _buildElements() {
     const varname = this.#varname;
     const inc = this.#inc;
-    const tooltip = this.#tooltip;
     const layout = this._layout;
-    const [r0, r1] = layout.buttons;
-
-    const fmtVal = () => Math.floor(getGlobal(varname) / inc + 0.5).toString();
-
-    // text labels
-    const labels = [
-      new DynamicTextLabel(layout.value, () => fmtVal()),
-      new DynamicTextLabel(layout.label, () => varname),
-    ];
-    for (const lbl of labels) {
-      lbl.setScale(0.4);
-      lbl.setCenter(false);
-    }
 
     const result = [
-      ...labels,
+      new DynamicTextLabel(layout.value, {
+        labelFunc: () => this._fmtVal(),
+        scale: 0.4,
+        center: false,
+      }),
+
+      new DynamicTextLabel(layout.label, {
+        labelFunc: () => varname,
+        scale: 0.4,
+        center: false,
+      }),
 
       // buttons
-      new IconButton(r0, decreaseIcon, () => {
-        let m = 1;
-        if (global.shiftHeld) { m = 10; }
-        if (global.controlHeld) { m = 100; }
-        let val = getGlobal(varname);
-        val = val - m * inc;
-        setGlobal(varname, val);
-        const screen = this.screen;
-        screen.stateManager.rebuildGuis(screen, false);
+      new IconButton(layout.buttons[0], {
+        icon: decreaseIcon,
+        action: () => {
+          let m = 1;
+          if (global.shiftHeld) { m = 10; }
+          if (global.controlHeld) { m = 100; }
+          let val = getGlobal(varname);
+          val = val - m * inc;
+          setGlobal(varname, val);
+          const screen = this.screen;
+          screen.stateManager.rebuildGuis(screen, false);
+        },
       }),
-      new IconButton(r1, increaseIcon, () => {
-        let m = 1;
-        if (global.shiftHeld) { m = 10; }
-        if (global.controlHeld) { m = 100; }
-        let val = getGlobal(varname);
-        val = val + m * inc;
-        setGlobal(varname, val);
-        const screen = this.screen;
-        screen.stateManager.rebuildGuis(screen, false);
+      new IconButton(layout.buttons[1], {
+        icon: increaseIcon,
+        action: () => {
+          let m = 1;
+          if (global.shiftHeld) { m = 10; }
+          if (global.controlHeld) { m = 100; }
+          let val = getGlobal(varname);
+          val = val + m * inc;
+          setGlobal(varname, val);
+          const screen = this.screen;
+          screen.stateManager.rebuildGuis(screen, false);
+        },
       }),
     ];
-
-    // give all elements the same tooltip
-    for (const e of result) {
-      e.withDynamicTooltip(() => [
-        `${fmtVal()} : ${varname} `,
-        tooltip,
-        'shift-click for 10x',
-        'ctrl-click for 100x',
-      ].join('\n'))
-        .withTooltipScale(0.4);
-    }
 
     return result;
   }

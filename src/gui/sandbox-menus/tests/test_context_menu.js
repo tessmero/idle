@@ -2,6 +2,7 @@
  * @file TestContextMenu test runner / gui element.
  */
 let _testLoopSetting = null;
+let _testLoopTooltip = '';
 
 /**
  * persistent context menu with gui sim
@@ -74,7 +75,7 @@ class TestContextMenu extends ContextMenu {
     const c = rectCenter(...s0);
     const gspRect = [c[0] - sdims[0] / 2, c[1] - sdims[1] / 2, ...sdims];
     screen.setRect(gspRect);
-    const gsp = new GuiScreenPanel(gspRect, screen, true);
+    const gsp = new GuiScreenPanel(gspRect, { innerScreen: screen, allowScaling: true });
     screen.loop = false; // disable loop flag set in gsp constructor
     gsp.tut = tut;
     gsp.reset();
@@ -97,8 +98,10 @@ class TestContextMenu extends ContextMenu {
     // play/pause/etc buttons at bottom of first square
     const controlButtons = this._buildControlButtons();
 
-    const titleLabel = new TextLabel(titleRect, test.title)
-      .withScale(0.3);
+    const titleLabel = new TextLabel(titleRect, {
+      label: test.title,
+      scale: 0.3,
+    });
 
     return [
 
@@ -142,11 +145,13 @@ class TestContextMenu extends ContextMenu {
       checkTimes.push(time);
       checkTooltips.push(tooltip);
       checkReadouts.push(
-        new StatReadout(rows[i], uncheckedIcon,
-          () => label)
-          .withScale(this.#guiLetterScale)
-          .withTooltipScale(this.#guiLetterScale)
-          .withTooltip(tooltip)
+        new StatReadout(rows[i], {
+          icons: uncheckedIcon,
+          labelFunc: () => label,
+          tooltip,
+          scale: this.#guiLetterScale,
+          tooltiScale: this.#guiLetterScale,
+        })
       );
       i = i + 1;
     });
@@ -155,11 +160,17 @@ class TestContextMenu extends ContextMenu {
     this.checkReadouts = checkReadouts;
     this.nChecks = checkTimes.length;
 
-    const ttDisplay = new TestTimelineDisplay(rows[1],
-      this.duration, checkTimes, checkTooltips);
+    const ttDisplay = new TestTimelineDisplay(rows[1], {
+      duration: this.duration,
+      checkTimes,
+      checkLabels: checkTooltips,
+    });
     this.ttDisplay = ttDisplay;
 
-    const finalDisplay = new TextLabel(rows.at(-1), '').withScale(0.3);
+    const finalDisplay = new TextLabel(rows.at(-1), {
+      label: '',
+      scale: 0.3,
+    });
     this.finalDisplay = finalDisplay;
 
   }
@@ -172,22 +183,35 @@ class TestContextMenu extends ContextMenu {
     const rects = this._layout.buttons;
 
     const specs = [
-      // icon, tooltip, action
-      [prevIcon, 'previous test', () => this.prevClicked()],
-      [playIcon, 'reset', () => this.playClicked()],
-
-      // [pauseIcon, 'pause',        ()=>{}],
-      [nextIcon, 'next test', () => this.nextClicked()],
-      [loopIcon, 'loop (off)', () => this.loopClicked()],
+      {
+        icon: prevIcon,
+        tooltip: 'previous test',
+        action: () => this.prevClicked(),
+      },
+      {
+        icon: playIcon,
+        tooltip: 'reset',
+        action: () => this.playClicked(),
+      },
+      {
+        icon: nextIcon,
+        tooltip: 'next test',
+        action: () => this.nextClicked(),
+      },
+      {
+        icon: loopIcon,
+        tooltipFunc: () => _testLoopTooltip,
+        action: () => this.loopClicked(),
+      },
     ];
-    const controlButtons = specs.map((entry, i) => {
-      const [icon, tooltip, action] = entry;
-      const result = new IconButton(rects[i], icon, action)
-        .withScale(0.3)
-        .withTooltip(tooltip)
-        .withTooltipScale(this.#guiLetterScale);
-      return result;
-    });
+
+    const controlButtons = specs.map((params, i) =>
+      new IconButton(rects[i], {
+        ...params,
+        scale: 0.3,
+        tooltipScale: this.#guiLetterScale,
+      })
+    );
 
     this.loopButton = controlButtons.at(-1);
     this.updateLoopButton();
@@ -207,7 +231,7 @@ class TestContextMenu extends ContextMenu {
       let rect = this.loopButton.rect;
       rect = padRect(...rect, -0.005);
       const prg = this.loopCountdown / this.loopDelay;
-      ProgressIndicator._draw(g, rect, prg, false);
+      ProgressIndicator.draw(g, rect, prg);
     }
   }
 
@@ -223,7 +247,7 @@ class TestContextMenu extends ContextMenu {
     else if (tls === 'all') {
       tt = 'loop (all tests)';
     }
-    this.loopButton.withTooltip(tt);
+    _testLoopTooltip = tt;
   }
 
   /**

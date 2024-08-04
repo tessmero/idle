@@ -8,11 +8,12 @@ class IconElement extends GuiElement {
   /**
    *
    * @param {number[]} rect
-   * @param {Icon} icon
+   * @param {object} params The parameters.
+   * @param {Icon} params.icon
    */
-  constructor(rect, icon) {
-    super(rect);
-    this.#icon = icon;
+  constructor(rect, params = {}) {
+    super(rect, params);
+    this.#icon = params.icon;
   }
 
   /**
@@ -27,7 +28,7 @@ class IconElement extends GuiElement {
    * @param {Icon} i The icon to display.
    */
   set icon(i) {
-    this.#icon = i;
+    throw new Error('should use constructor');
   }
 
   /**

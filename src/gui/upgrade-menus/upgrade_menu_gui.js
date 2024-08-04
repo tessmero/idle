@@ -47,45 +47,43 @@ class UpgradeMenuGui extends Gui {
     const layout = this._layout;
     const r0 = layout.r0;
 
-    let tabLabels; let tabContent;
+    let tabLabels; let tabContents;
     if (global.sandboxMode) {
       tabLabels = ['debug', 'tests', 'performance', 'skills', 'UPGRADES', 'STATS'];
-      tabContent = [
-        (rect) => new DebugTab(rect, screen),
-        (rect) => new TestsTab(rect, screen),
-        (rect) => new PerformanceTab(rect, screen),
-        (rect) => new SkillsTab(rect, screen),
-        (rect) => new UpgradesTab(rect, screen),
-        (rect) => new StatsTab(rect, screen),
+      tabContents = [
+        (rect, params) => new DebugTab(rect, params),
+        (rect, params) => new TestsTab(rect, params),
+        (rect, params) => new PerformanceTab(rect, params),
+        (rect, params) => new SkillsTab(rect, params),
+        (rect, params) => new UpgradesTab(rect, params),
+        (rect, params) => new StatsTab(rect, params),
       ];
 
     }
     else {
-
-      // let tabLabels = ['upgrades','skills','stats','debug']
       tabLabels = ['UPGRADES', 'STATS'];
-      tabContent = [
-        (rect) => new UpgradesTab(rect, screen),
-
-        // rect => new SkillsTab(rect),
-        (rect) => new StatsTab(rect, screen),
-
-        // rect => new DebugTab(rect),
+      tabContents = [
+        (rect, params) => new UpgradesTab(rect, params),
+        (rect, params) => new StatsTab(rect, params),
       ];
     }
-    const tabGroup = new TabPaneGroup([...r0], tabLabels, tabContent);
+    const tabGroup = new TabPaneGroup([...r0], {
+      tabLabels,
+      tabContents,
+    });
     if (global.upgradeMenuTabIndex) { tabGroup.setSelectedTabIndex(global.upgradeMenuTabIndex); }
     tabGroup.addTabChangeListener((i) => {
       global.upgradeMenuTabIndex = i;
     });
 
-    const closeButton = new IconButton(layout.closeBtn, xIcon, () => this.gsm.toggleStats())
-      .withScale(0.5)
-      .withTooltip('close upgrades menu');
-    tabGroup.addChild(closeButton);
+    const closeButton = new IconButton(layout.closeBtn, {
+      icon: xIcon,
+      action: () => this.gsm.toggleStats(),
+      scale: 0.5,
+      tooltip: 'close upgrades menu',
+    });
 
     return [tabGroup, closeButton];
-
   }
 
   /**

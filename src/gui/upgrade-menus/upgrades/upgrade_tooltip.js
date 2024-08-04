@@ -40,23 +40,40 @@ class UpgradeTooltip extends Tooltip {
     };
 
     return [
-      new GuiScreenPanel(layout.before, bef),
-      new GuiScreenPanel(layout.after, aft),
-      new IconElement(layout.arrow, playIcon).withScale(0.4),
-      new TextLabel(layout.label, gutse.label).withScale(0.4),
+      new GuiScreenPanel(layout.before, {
+        innerScreen: bef,
+      }),
+
+      new GuiScreenPanel(layout.after, {
+        innerScreen: aft,
+      }),
+
+      new TextLabel(layout.label, {
+        label: gutse.label,
+        scale: 0.4,
+      }),
 
       // text readout
-      new StatReadout(layout.cost, collectedIcon,
-        () => bc((budget, cost) => {
+      new StatReadout(layout.cost, {
+        icon: collectedIcon,
+        labelFunc: () => bc((budget, cost) => {
           if (budget > cost) { return `${cost.toFixed(0)}`; }
           return `${budget.toFixed(0)}/${cost.toFixed(0)}`;
-        }))
-        .withCenter(true)
-        .withScale(0.35),
+        }),
+        center: true,
+        scale: 0.35,
+      }),
 
       // progress bar overlay
-      new ProgressIndicator(layout.cost,
-        () => bc((budget, cost) => budget / cost)),
+      new ProgressIndicator(layout.cost, {
+        valueFunc: () => bc((budget, cost) => budget / cost),
+      }),
+
+      new IconElement(layout.arrow, {
+        icon: playIcon,
+        scale: 0.4,
+      }),
+
     ];
   }
 

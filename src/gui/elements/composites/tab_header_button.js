@@ -9,16 +9,15 @@ class TabHeaderButton extends TextButton {
    * @param {GuiElement} parent The enclosing TabPaneGroup instance.
    * @param {number} tabIndex The index of this tab in the parent group.
    * @param {number[]} rect The x,y,w,h of this button.
-   * @param {string} label The tab title to display.
-   * @param {Function} action The functon to be triggered when clicked.
+   * @param {object} params The parameters.
+   * @param {string} params.label The text to display.
+   * @param {Function} params.action The function to call when clicked.
    */
-  constructor(parent, tabIndex, rect, label, action) {
-    super(rect, label, action);
+  constructor(parent, tabIndex, rect, params = {}) {
+    super(rect, { tooltipScale: 0.4, ...params });
 
     this.parent = parent;
     this.tabIndex = tabIndex;
-    this.debug = true;
-    this.withTooltipScale(0.4);
   }
 
   /**

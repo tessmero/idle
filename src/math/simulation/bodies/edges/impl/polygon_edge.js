@@ -5,7 +5,7 @@ class PolygonEdge extends PathspecEdge {
 
   /**
    *
-   * @param {string} titleKey readable unique title to submit to ShapeManager
+   * @param {string} titleKey readable unique title to submit to EdgeManager
    * @param {Vector[]} verts
    */
   constructor(titleKey, verts) {

@@ -8,13 +8,17 @@ class Button extends GuiElement {
   /**
    *
    * @param {number[]} rect The x,y,w,h of this button.
-   * @param {Function} action The function to call when clicked.
+   * @param {object} params The parameters.
+   * @param {Function} params.action The function to call when clicked.
    */
-  constructor(rect, action) {
-    super(rect);
+  constructor(rect, params = {}) {
+    super(rect, params);
+
+    const {
+      action = () => {}, // default action is to do nothing
+    } = params;
 
     this.#action = action;
-    this.setBorder(Border.default);
   }
 
   /**
@@ -30,7 +34,7 @@ class Button extends GuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    Border._draw(g, this.rect, {
+    Border.draw(g, this.rect, {
       hovered: this.hovered,
       fill: true,
       border: this.border,

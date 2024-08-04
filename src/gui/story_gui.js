@@ -35,15 +35,41 @@ class StoryGui extends Gui {
     const layout = this._layout;
     const fontSize = 0.39;
 
+    this._borderElem = new CompositeGuiElement(
+      layout.borderDiv, {
+        opaque: true,
+        border: new StoryBorder(),
+      });
+
+    this._okayBtn = new TextButton(layout.moreBtn, {
+      label: '...',
+      action: () => { this.#moreClicked = !this.#moreClicked; },
+      scale: fontSize,
+      border: new RoundedBorder(),
+    });
+
+    this._extraBtn = new TextButton(layout.okayBtn, {
+      label: 'Okay',
+      action: () => this.closeStoryGui(),
+      scale: fontSize,
+      border: new RoundedBorder(),
+    });
+
+    // these elements will have flashing border animation
+    this._flashElems = [this._borderElem, this._okayBtn, this._extraBtn];
+
     // build typical gui elements
     return [
-      // new IconButton(r, umbrellaIcon, () => this.closeStoryGui()),
-      new CompositeGuiElement(layout.messageDiv).withOpacity(true),
-      new DynamicTextLabel(layout.messageDiv, () => this.buildDisplayText()).withScale(fontSize),
-      new TextButton(layout.moreBtn, '...',
-        () => { this.#moreClicked = !this.#moreClicked; })
-        .withScale(fontSize),
-      new TextButton(layout.okayBtn, 'Okay', () => this.closeStoryGui()).withScale(fontSize),
+
+      this._borderElem,
+
+      new DynamicTextLabel(layout.messageDiv, {
+        labelFunc: () => this.buildDisplayText(),
+        scale: fontSize,
+      }),
+
+      this._okayBtn,
+      this._extraBtn,
     ];
   }
 
@@ -73,7 +99,11 @@ class StoryGui extends Gui {
       const flashOn = (cd % per) / per;
       if (flashOn > 0.5) {
         g.strokeStyle = global.colorScheme.hl;
-        this.children.forEach((c) => g.strokeRect(...c.rect));
+
+        this._flashElems.forEach((c) => {
+          c.border.path(g, c.rect);
+          g.stroke();
+        });
       }
     }
   }

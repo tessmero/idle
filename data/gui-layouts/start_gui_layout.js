@@ -11,11 +11,17 @@ const START_GUI_LAYOUT = {
   },
 
   // title
-  titleDiv: {
+  _titleDiv: {
     parent: '_main',
     width: '100%',
-    height: 0.1,
+    height: 0.5,
     top: 0.2,
+  },
+
+  titleRows: {
+    parent: '_titleDiv',
+    height: 0.1,
+    repeat: 'down',
   },
 
   // helper
@@ -30,13 +36,13 @@ const START_GUI_LAYOUT = {
   // play button
   playBtn: {
     parent: '_bdiv',
-    width: 0.5 - 0.1 - 0.02,
+    width: 0.5 - 0.15,
   },
 
   // sandbox button
   sandboxBtn: {
     parent: '_bdiv',
-    width: 0.1,
+    width: 0.15,
     right: 0,
   },
 };

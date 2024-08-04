@@ -21,7 +21,7 @@ class OctBorder extends Border {
    * @param {number[]} rect The rectangle to align with.
    * @returns {Vector[]} The vertices to loop over.
    */
-  verts(rect) {
+  _verts(rect) {
     const [a, b, c, d] = rectCorners(...rect);
     const dx = this.#dx;
     const dy = this.#dy;
@@ -30,23 +30,6 @@ class OctBorder extends Border {
       b.sub(dx), b.add(dy),
       c.sub(dy), c.sub(dx),
       d.add(dx), d.sub(dy),
-    ];
-  }
-
-  /**
-   * fill the four corners not enclosed in verts
-   * @param {number[]} rect The rectangle to align with.
-   * @returns {Vector[]} The vertices to loop over.
-   */
-  cutoffs(rect) {
-    const [a, b, c, d] = rectCorners(...rect);
-    const dx = this.#dx;
-    const dy = this.#dy;
-    return [
-      [a, a.add(dy), a.add(dx)],
-      [b, b.sub(dx), b.add(dy)],
-      [c, c.sub(dy), c.sub(dx)],
-      [d, d.add(dx), d.sub(dy)],
     ];
   }
 

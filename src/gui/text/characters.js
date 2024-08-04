@@ -111,6 +111,7 @@ function _drawTextLine(g, xpos, ypos, s, center, fontSpec) {
  * @param {object} fontSpec The font specifications.
  */
 function drawText(g, x, y, s, center, fontSpec) {
+  g.fillStyle = global.colorScheme.fg;
   const lines = s.split('\n');
   const dy = fontSpec.scale * global.textPixelSize * (charHeight + global.textLineSpace);
   let yy = y;

@@ -9,18 +9,23 @@ class StatReadout extends DynamicTextLabel {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {Icon} icon The pixel art icon to display.
-   * @param {string} labelFunc The funciton who's string return value will be displayed.
+   * @param {object} params The parameters.
+   * @param {Icon} params.icon The pixel art icon to display.
+   * @param {string} params.labelFunc The funciton who's string return value will be displayed.
    */
-  constructor(rect, icon, labelFunc) {
+  constructor(rect, params = {}) {
 
-    // make room for icon by displaying
-    // 2 blank spaces to the left of the label
-    super(rect, () => `  ${labelFunc()}`);
+    super(rect, {
+      center: false, scale: 0.5,
 
-    this.#icon = icon;
-    this.setScale(this.constructor.scale());
-    this.setCenter(false);
+      ...params,
+
+      // make room for icon by displaying
+      // 2 blank spaces to the left of the label
+      labelFunc: () => `  ${params.labelFunc()}`,
+    });
+
+    this.#icon = params.icon;
   }
 
   /**
@@ -31,7 +36,7 @@ class StatReadout extends DynamicTextLabel {
   }
 
   /**
-   * Allow assigning icon with equal sign.
+   * allow assigning icon with equals sign
    * @param  {Icon} i The icon to display.
    */
   set icon(i) {
@@ -45,11 +50,6 @@ class StatReadout extends DynamicTextLabel {
   isAnimated() {
     return true;
   }
-
-  /**
-   * Default scale (font size) for stat readouts.
-   */
-  static scale() { return 0.5; }
 
   /**
    * Draw this stat readout.

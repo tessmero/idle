@@ -99,7 +99,7 @@ class Body {
     this.sim = sim;
 
     // lookup/build distinct edge shape
-    const mgr = ShapeManager();
+    const mgr = EdgeManager();
     const key = this._pickEdgeKey();
     if (!key) {
       throw new Error('_edgeKey not defined');

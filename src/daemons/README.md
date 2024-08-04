@@ -24,6 +24,15 @@ Managers oversee the construction of expensive objects such as `GameScreen` inst
 
 Classes like `GameScreen` make a call to the relevant daemon like `ScreenManager` in their constructors.
 
+## Gui Element Borders
+
+`BorderManager` is used to cache detailed shapes for gui elements with fixed dimensions. 
+
+Special `Border` implementations may cache multiple shapes
+  - for different-sized rectangles
+  - for different params submitted in the `Border` implementation's constructor
+  - requires unique key for every shape
+
 ## Story
 
-`StoryManager` also uses this pattern used to track player progression. It looks at `data/story_hooks_data.js`.
+`StoryManager` tracks player progression. It looks at `data/story_hooks_data.js`.

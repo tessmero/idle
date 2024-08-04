@@ -4,20 +4,20 @@
  */
 class BooleanDebugVar extends CompositeGuiElement {
   _layoutData = DEBUG_BOOL_LAYOUT;
+
   #varname;
-  #tooltip;
 
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {string} varname The variable name/path in global.
-   * @param {string} tooltip The description of the variable.
+   * @param {object} params The parameters.
+   * @param {string} params.varname The variable name/path in global.
    */
-  constructor(rect, varname, tooltip) {
-    super(rect);
-    this.#varname = varname;
-    this.#tooltip = tooltip;
-    this.setBorder(Border.default);
+  constructor(rect, params = {}) {
+    super(rect, { ...params,
+      opaque: true,
+    });
+    this.#varname = params.varname;
   }
 
   /**
@@ -29,27 +29,23 @@ class BooleanDebugVar extends CompositeGuiElement {
     const layout = this._layout;
 
     // text label
-    const dtl = new DynamicTextLabel(layout.label, () => varname);
-
-    dtl.setScale(0.4);
-    dtl.tooltipScale = 0.4;
-    dtl.setCenter(false);
+    const dtl = new DynamicTextLabel(layout.label, {
+      labelFunc: () => varname,
+      scale: 0.4,
+      center: false,
+    });
 
     const icon = getGlobal(varname) ? checkedIcon : uncheckedIcon;
-    this.checkbox = new IconButton(layout.toggle, icon, () => this.toggle()).withScale(0.5);
+    this.checkbox = new IconButton(layout.toggle, {
+      icon,
+      action: () => this.toggle(),
+      scale: 0.5,
+    });
 
     const result = [
       this.checkbox,
       dtl,
     ];
-
-    // give all elements the same tooltip
-    for (const e of result) {
-      e.withDynamicTooltip(() => [
-        `${getGlobal(varname) ? 'on' : 'off' } : ${varname} `,
-        this.#tooltip,
-      ].join('\n')).withTooltipScale(0.4);
-    }
 
     return result;
   }

@@ -17,14 +17,15 @@ class ToolbarTooltip extends LabelTooltip {
   /**
    * get rect using ToolbarTooltip.pickRect
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {string} label
-   * @param {GameScreen} innerScreen The tutorial screen to display inside the popup.
-   * @param {Tool} tool
+   * @param {object} params The parameters.
+   * @param {string} params.label
+   * @param {GameScreen} params.innerScreen The tutorial screen to display inside the popup.
+   * @param {Tool} params.tool
    */
-  constructor(rect, label, innerScreen, tool) {
-    super(rect, label);
-    this.#innerScreen = innerScreen;
-    this.#tool = tool;
+  constructor(rect, params) {
+    super(rect, { ...params, scale: 0.4 });
+    this.#innerScreen = params.innerScreen;
+    this.#tool = params.tool;
   }
 
   /**
@@ -39,7 +40,7 @@ class ToolbarTooltip extends LabelTooltip {
     const tool = this.#tool;
 
     // add inner screen to this gui
-    const gsp = new GuiScreenPanel(layout.sim, innerScreen, true);
+    const gsp = new GuiScreenPanel(layout.sim, { innerScreen, allowScaling: true });
     result.unshift(gsp);
     this.gsp = gsp;
 
@@ -53,17 +54,20 @@ class ToolbarTooltip extends LabelTooltip {
       };
 
       // text readout
-      result.push(new StatReadout(layout.cost, collectedIcon,
-        () => bc((budget, cost) => {
+      result.push(new StatReadout(layout.cost, {
+        icon: collectedIcon,
+        labelFunc: () => bc((budget, cost) => {
           if (budget > cost) { return `${cost.toFixed(0)}`; }
           return `${budget.toFixed(0)}/${cost.toFixed(0)}`;
-        }))
-        .withCenter(true)
-        .withScale(0.35));
+        }),
+        center: true,
+        scale: 0.35,
+      }));
 
       // progress bar overlay
-      result.push(new ProgressIndicator(layout.cost,
-        () => bc((budget, cost) => budget / cost)));
+      result.push(new ProgressIndicator(layout.cost, {
+        valueFunc: () => bc((budget, cost) => budget / cost),
+      }));
     }
 
     return result;

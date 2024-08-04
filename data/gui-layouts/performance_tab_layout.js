@@ -9,7 +9,7 @@ const PERFORMANCE_GUI_LAYOUT = {
     margin: '10%',
   },
 
-  // rows for indidividual settings
+  // rows for individual readouts
   rows: {
     parent: '_r0',
     height: 0.05,

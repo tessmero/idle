@@ -7,16 +7,17 @@ class TestTimelineDisplay extends CompositeGuiElement {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {number} duration The total milliseconds in the timeline.
-   * @param {number[]} checkTimes The times when checks are performed,
-   *                              in milliseconds from start of test.
-   * @param {string[]} checkLabels The labels for the checks.
+   * @param {object} params The parameters.
+   * @param {number} params.duration The total milliseconds in the timeline.
+   * @param {number[]} params.checkTimes The times when checks are performed,
+   *                                     in milliseconds from start of test.
+   * @param {string[]} params.checkLabels The labels for the checks.
    */
-  constructor(rect, duration, checkTimes, checkLabels) {
-    super(rect);
-    this.duration = duration;
-    this.checkTimes = checkTimes;
-    this.checkLabels = checkLabels;
+  constructor(rect, params = {}) {
+    super(rect, params);
+    this.duration = params.duration;
+    this.checkTimes = params.checkTimes;
+    this.checkLabels = params.checkLabels;
     this.t = 0;
   }
 
@@ -40,18 +41,22 @@ class TestTimelineDisplay extends CompositeGuiElement {
       const label = checkLabels[i];
       const x = innerRect[0] + (t / duration) * innerRect[2];
       const r = [x - boxRad, innerRect[1] - 0.02, 2 * boxRad, 2 * boxRad];
-      boxes.push(new IconButton(r, uncheckedIcon, () => {})
-        .withScale(0.25)
-        .withTooltip(label)
-        .withTooltipScale(0.25));
+      boxes.push(new IconButton(r, {
+        icon: uncheckedIcon,
+        scale: 0.25,
+        tooltip: label,
+        tooltipScale: 0.25,
+      }));
     }
     this.checkboxes = boxes;
 
     return [
 
       ...this.checkboxes,
-      new ProgressIndicator(innerRect, () => this.t / this.duration)
-        .withOutline(false),
+      new ProgressIndicator(innerRect, {
+        valueFunc: () => this.t / this.duration,
+        border: null,
+      }),
     ];
   }
 

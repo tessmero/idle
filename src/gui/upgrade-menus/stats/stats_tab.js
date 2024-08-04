@@ -11,14 +11,15 @@ class StatsTab extends CompositeGuiElement {
    * @returns {GuiElement[]} The children.
    */
   _buildElements() {
-    if (global.bonusSummary) {
-      return global.bonusSummary.map((entry, i) => {
-        const [icon, summary] = entry;
-        return new StatReadout(
-          this._layout.rows[i], icon, () => summary).withScale(0.4).withBorder(new OctBorder());
-      });
-    }
-    return [];
+    const bsum = global.bonusSummary;
+    if (!bsum) { return []; }
 
+    return bsum.map((sumEntry, i) =>
+      new StatReadout(this._layout.rows[i], {
+        icon: sumEntry[0],
+        labelFunc: () => sumEntry[1],
+        scale: 0.4,
+      })
+    );
   }
 }

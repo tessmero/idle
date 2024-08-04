@@ -28,13 +28,15 @@ class TestListRow extends CompositeGuiElement {
   _buildElements() {
     const test = this.#test;
 
-    const sr = new StatReadout(this.rect,
-      playIcon, () => test.title)
-      .withScale(0.4);
+    const sr = new StatReadout(this.rect, {
+      icon: playIcon,
+      labelFunc: () => test.title,
+      scale: 0.4,
+    });
     sr.isAnimated = () => sr.hovered || this.isActive();
 
     return [
-      new Button(this.rect, () => this.clicked()),
+      new Button(this.rect, { action: () => this.clicked() }),
       sr,
     ];
   }
@@ -48,7 +50,7 @@ class TestListRow extends CompositeGuiElement {
     super.draw(g);
 
     if (this.isActive()) {
-      ProgressIndicator._draw(g, this.rect, 1);
+      ProgressIndicator.draw(g, this.rect, 1);
     }
   }
 

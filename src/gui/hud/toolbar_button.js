@@ -7,14 +7,15 @@ class ToolbarButton extends CompositeGuiElement {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {Tool} tool The tool instance.
-   * @param {number} indexInToolbar The index of this button in the toolbar.
+   * @param {object} params The parameters.
+   * @param {Tool} params.tool The tool instance.
+   * @param {number} params.indexInToolbar The index of this button in the toolbar.
    */
-  constructor(rect, tool, indexInToolbar) {
-    super(rect);
+  constructor(rect, params = {}) {
+    super(rect, params);
 
-    this.tool = tool;
-    this.indexInToolbar = indexInToolbar;
+    this.tool = params.tool;
+    this.indexInToolbar = params.indexInToolbar;
   }
 
   /**
@@ -26,7 +27,10 @@ class ToolbarButton extends CompositeGuiElement {
     const tool = this.tool;
     const rect = this.rect;
 
-    const btn = new IconButton(rect, tool.icon, () => this.click());
+    const btn = new IconButton(rect, {
+      icon: tool.icon,
+      action: () => this.click(),
+    });
     btn.isAnimated = (() => // override IconButton
       btn.hovered || (
         this.isSelected() &&
@@ -41,9 +45,10 @@ class ToolbarButton extends CompositeGuiElement {
       const h = r[3] / 4;
       r = [r[0], r[1] + r[3] - h, r[2], h];
       r = padRect(...r, -0.004);
-      const pi = new ProgressIndicator(r,
-        () => this.screen.sim.particlesCollected / tool.getCost())
-        .withScale(0.2);
+      const pi = new ProgressIndicator(r, {
+        valueFunc: () => this.screen.sim.particlesCollected / tool.getCost(),
+        scale: 0.2,
+      });
       result.push(pi);
     }
 
@@ -130,7 +135,7 @@ class ToolbarButton extends CompositeGuiElement {
       const outer = this.rect;
       const m = 0.005;
       const inner = [outer[0] + m, outer[1] + m, outer[2] - 2 * m, outer[3] - 2 * m];
-      Border._draw(g, inner, { hovered: false, fill: false });
+      Border.draw(g, inner, { hovered: false, fill: false });
     }
   }
 }

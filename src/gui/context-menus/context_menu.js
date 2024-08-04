@@ -16,19 +16,10 @@ class ContextMenu extends CompositeGuiElement {
   /**
    * get params using ContextMenu.pickRects
    * @param {number[]} rect The rectangle enclosing the whole menu.
+   * @param {object} params The parameters.
    */
-  constructor(rect) {
-    super(rect);
-    this.withOpacity(true);
-  }
-
-  /**
-   *
-   * @param {object} g The graphics context.
-   */
-  draw(g) {
-    Border._draw(g, this.rect);
-    super.draw(g);
+  constructor(rect, params = {}) {
+    super(rect, { opaque: true, ...params });
   }
 
   /**

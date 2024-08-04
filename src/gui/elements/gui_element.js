@@ -6,8 +6,12 @@ class GuiElement {
 
   #screen;
   #rect;
-  #scale = 1;
-  #border = null;
+  #border;
+  #scale; // font size
+
+  // hoverable bool
+  // tooltip string
+  // tooltipFunc
 
   #tempTooltip;
   #tempTooltipEndTime;
@@ -15,12 +19,32 @@ class GuiElement {
   /**
    *
    * @param {number[]} rect The rectangle for this element.
+   * @param {object} params The parameters.
+   * @param {object} params.border
+   * @param {boolean} params.hoverable
+   * @param {number} params.scale
+   * @param {string} params.tooltip
+   * @param {Function} params.tooltipFunc
    */
-  constructor(rect) {
+  constructor(rect, params = {}) {
     console.assert((typeof rect[0] === 'number'));
 
+    const {
+      border = null, // new DefaultBorder(),
+      hoverable = true,
+      scale = 1,
+      tooltipScale = LabelTooltip.defaultScale,
+      tooltip = null,
+      tooltipFunc = null,
+    } = params;
+
     this.#rect = rect;
-    this.hoverable = true;
+    this.#border = border;
+    this.#scale = scale;
+    this.tooltip = tooltip;
+    this.tooltipScale = tooltipScale;
+    this.tooltipFunc = tooltipFunc;
+    this.hoverable = hoverable;
   }
 
   /**
@@ -33,8 +57,8 @@ class GuiElement {
   /**
    *
    */
-  set scale(s) {
-    throw new Error('should use setScale');
+  set scale(_s) {
+    throw new Error('should use constructor');
   }
 
   /**
@@ -44,27 +68,26 @@ class GuiElement {
 
   /**
    * Set font size for thie gui element.
-   * @param {number} s The new font size.
+   * @param {number} _s The new font size.
    */
-  setScale(s) {
-    this.#scale = s;
+  setScale(_s) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Set border style for this element.
-   * @param {object} b The border instance.
+   * @param {object} _b The border instance.
    */
-  setBorder(b) {
-    this.#border = b;
+  setBorder(_b) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Chain-able helper to set border style.
-   * @param {object} b The border instance.
+   * @param {object} _b The border instance.
    */
-  withBorder(b) {
-    this.setBorder(b);
-    return this;
+  withBorder(_b) {
+    throw new Error('should use constructor');
   }
 
   /**
@@ -103,38 +126,34 @@ class GuiElement {
 
   /**
    * Chain-able helper to set font size.
-   * @param {number} s The new font size.
+   * @param {number} _s The new font size.
    */
-  withScale(s) {
-    this.setScale(s);
-    return this;
+  withScale(_s) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Chain-able helper to set tooltip fontsize.
-   * @param {number} s The new font size.
+   * @param {number} _s The new font size.
    */
-  withTooltipScale(s) {
-    this.tooltipScale = s;
-    return this;
+  withTooltipScale(_s) {
+    throw new Error('should use constructor');
   }
 
   /**
-   * Chain-able helper to set text that appears when hovering.
-   * @param {string} s The tooltip text to display.
+   * Chain-able helper to set text
+   * @param {string} _s The tooltip text to display.
    */
-  withTooltip(s) {
-    this.tooltip = s;
-    return this;
+  withTooltip(_s) {
+    throw new Error('should use constructor');
   }
 
   /**
    * Chain-able helper to set callback to determine text to appear when hovering.
-   * @param {Function} f The function who's return value will be displayed.
+   * @param {Function} _f The function who's return value will be displayed.
    */
-  withDynamicTooltip(f) {
-    this.tooltipFunc = f;
-    return this;
+  withDynamicTooltip(_f) {
+    throw new Error('should use constructor');
   }
 
   /**
@@ -186,9 +205,12 @@ class GuiElement {
 
         // build standard tooltip gui element
         let rect = this.pickTooltipRect(screen, this.tooltip, this.tooltipScale);
-        rect = padRect(...rect, TextLabel.pad());
+        rect = padRect(...rect, 0.005);
         if (screen) {
-          screen.tooltip = new LabelTooltip(rect, this.tooltip, this.tooltipScale);
+          screen.tooltip = new LabelTooltip(rect, {
+            label: this.tooltip,
+            scale: this.tooltipScale,
+          });
         }
       }
     }
@@ -210,9 +232,9 @@ class GuiElement {
    */
   draw(g) {
     if (this.border) {
-      Border._draw(g, this.rect, {
+      Border.draw(g, this.rect, {
         hovered: false,
-        fill: true,
+        fill: false,
         border: this.border,
       });
     }

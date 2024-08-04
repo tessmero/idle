@@ -1,18 +1,18 @@
 /**
- * @file ShapeManager manages distinct edge shapes
+ * @file EdgeManager manages distinct edge shapes
  * that may interact with particles.
  */
-function ShapeManager() {
-  if (ShapeManager._instance) {
-    return ShapeManager._instance;
+function EdgeManager() {
+  if (EdgeManager._instance) {
+    return EdgeManager._instance;
   }
-  if (!(this instanceof ShapeManager)) {
+  if (!(this instanceof EdgeManager)) {
     // eslint-disable-next-line idle/no-new-singleton
-    return new ShapeManager();
+    return new EdgeManager();
   }
-  ShapeManager._instance = this;
+  EdgeManager._instance = this;
 
-  // start ShapeManager constructor
+  // start EdgeManager constructor
   this.constructedEdges = new Map();
   this.allowedPrefixes = [
     'mini', // shapes in tutorials with Global.tutorialScaleFactor

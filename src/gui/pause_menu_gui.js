@@ -23,8 +23,15 @@ class PauseMenuGui extends Gui {
     const quitLabel = this.screen === global.rootScreen ? 'QUIT' : 'EXIT BOX';
 
     return [
-      new TextButton(layout.resumeBtn, 'RESUME', () => this.gsm.resume()),
-      new TextButton(layout.quitBtn, quitLabel, () => window.location.reload()), // this.gsm.quit()),
+      new TextButton(layout.resumeBtn, {
+        label: 'RESUME',
+        action: () => this.gsm.resume(),
+      }),
+
+      new TextButton(layout.quitBtn, {
+        label: quitLabel,
+        action: () => window.location.reload(), // this.gsm.quit()),
+      }),
     ];
   }
 }

@@ -117,17 +117,21 @@ class CircleBuddy extends Buddy {
 
   /**
    * Called in circle_buddy_context_menu.js.
-   * @param  {number[]} r The rectangle to align elements in.
-   * @param  {number} s The font size.
+   * @param  {number[]} rect The rectangle to align elements in.
+   * @param  {number} scale The font size.
    * @returns {GuiElement[]} Satiety indicator elements.
    */
-  buildSatietyGuiElems(r, s) {
+  buildSatietyGuiElems(rect, scale) {
     return [
-      new DynamicTextLabel(r, () => this._satLabel())
-        .withScale(s)
-        .withAutoAdjustRect(false)
-        .withDynamicTooltip(() => this._satTooltip()),
-      new ProgressIndicator(r, () => this.#satiety / this.#maxSatiety),
+      new DynamicTextLabel(rect, {
+        labelFunc: () => this._satLabel(),
+        scale,
+        autoAdjustRect: false,
+        tooltipFunc: () => this._satTooltip(),
+      }),
+      new ProgressIndicator(rect, {
+        valueFunc: () => this.#satiety / this.#maxSatiety,
+      }),
     ];
   }
 

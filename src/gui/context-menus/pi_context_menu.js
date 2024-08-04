@@ -51,12 +51,22 @@ class PiContextMenu extends ContextMenu {
 
     return [
 
-      new StatReadout(s0, icon, () => `\n${flavor}\nparticle\nno. ${i}`, () => 0.5),
-      new TextLabel(s1, stats).withScale(statScale),
+      new StatReadout(s0, {
+        icon,
+        labelFunc: () => `\n${flavor}\nparticle\nno. ${i}`,
+      }),
 
-      new IconButton(this._layout.closeBtn, xIcon, () => this.closePiContextMenu())
-        .withScale(0.5)
-        .withTooltip('close'),
+      new TextLabel(s1, {
+        label: stats,
+        scale: statScale,
+      }),
+
+      new IconButton(this._layout.closeBtn, {
+        icon: xIcon,
+        action: () => this.closePiContextMenu(),
+        scale: 0.5,
+        tooltip: 'close',
+      }),
     ];
   }
 

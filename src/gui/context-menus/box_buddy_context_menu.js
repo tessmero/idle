@@ -16,10 +16,13 @@ class BoxBuddyContextMenu extends BuddyContextMenu {
     const [vw, vh] = global.tutorialSimDims;
     const [cx, cy] = rectCenter(...s0);
     const r = [cx - vw / 2, cy - vh / 2, vw, vh];
-    const gsp = new GuiScreenPanel(r, boxBuddy.innerScreen, true)
-      .withTooltip('Click to enter');
-    gsp.hoverable = true;
-    gsp.hideInnerGui = true;
+    const gsp = new GuiScreenPanel(r, {
+      innerScreen: boxBuddy.innerScreen,
+      allowScaling: true,
+      tooltip: 'Click to enter',
+      hoverable: true,
+      hideInnerGui: true,
+    });
     gsp.click = () => boxBuddy.enter();
 
     // exempt inner screen from standard update-on-draw

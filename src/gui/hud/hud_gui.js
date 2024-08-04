@@ -21,38 +21,48 @@ class HudGui extends Gui {
     let result = [
 
       // upgrade menu button
-      new IconButton(layout.topLeftBtn,
-        statsIcon, () => { this.gsm.toggleStats(); }
-      ).withTooltip('toggle upgrades menu'),
+      new IconButton(layout.topLeftBtn, {
+        icon: statsIcon,
+        action: () => { this.gsm.toggleStats(); },
+        tooltip: 'toggle upgrades menu',
+      }),
 
       // particles on screen
-      new StatReadout(layout.leftDiv, rainIcon, () =>
-        sim.rainGroup.n.toString())
-        .withStyle('hud')
-        .withDynamicTooltip(() => `max ${sim.rainGroup.n} raindrops on screen`)
-        .withAutoAdjustRect(true),
+      new StatReadout(layout.leftDiv, {
+        icon: rainIcon,
+        labelFunc: () => sim.rainGroup.n.toString(),
+        style: 'hud',
+        tooltipFunc: () => `max ${sim.rainGroup.n} raindrops on screen`,
+        autoAdjustRect: true,
+      }),
 
       // sandbox banner
       global.sandboxMode ?
-        new DynamicTextLabel(layout.midDiv, () => 'SANDBOX MODE')
-          .withAutoAdjustRect(true)
-          .withScale(0.5) :
-        null,
+        new DynamicTextLabel(layout.midDiv, {
+          labelFunc: () => 'SANDBOX MODE',
+          autoAdjustRect: true,
+          scale: 0.5,
+        }) : null,
 
       // catch rate %
       global.sandboxMode ? null :
-        new StatReadout(layout.midDiv, catchIcon, () => this.getPct())
-          .withStyle('hud')
-          .withDynamicTooltip(() => this.getPctTooltip())
-          .withAutoAdjustRect(true),
+        new StatReadout(layout.midDiv, {
+          icons: catchIcon,
+          labelFunc: () => this.getPct(),
+          style: 'hud',
+          tooltipFunc: () => this.getPctTooltip(),
+          autoAdjustRect: true,
+        }),
 
       // total caught
       global.sandboxMode ? null :
-        new StatReadout(layout.rightDiv, collectedIcon, () =>
-          sim.particlesCollected.toFixed(0))
-          .withStyle('hud')
-          .withDynamicTooltip(() => `${sim.particlesCollected.toFixed(0)} raindrops collected`)
-          .withAutoAdjustRect(true),
+        new StatReadout(layout.rightDiv, {
+          icon: collectedIcon,
+          labelFunc: () => sim.particlesCollected.toFixed(0),
+          style: 'hud',
+          tooltipFunc: () => `${sim.particlesCollected.toFixed(0)} raindrops collected`,
+          autoAdjustRect: true,
+        }),
 
     ];
 
@@ -64,12 +74,19 @@ class HudGui extends Gui {
     result.push(screen.boxOuterScreen ?
 
       // exit box button if this screen is inside a box
-      new IconButton(layout.topRightBtn, boxIcon, () => this.gsm.quit())
-        .withTooltip('exit box') :
+      new IconButton(layout.topRightBtn, {
+        icon: boxIcon,
+        action: () => this.gsm.quit(),
+        tooltip: 'exit box',
+      }) :
 
       // otherwise pause button
-      new IconButton(layout.topRightBtn, pauseIcon, () => this.gsm.pause())
-        .withTooltip('pause or quit the game'));
+      new IconButton(layout.topRightBtn, {
+        icon: pauseIcon,
+        action: () => this.gsm.pause(),
+        tooltip: 'pause or quit the game',
+      })
+    );
 
     // append toolbar buttons
     const toolbarButtons = this._buildToolbarButtons();
@@ -126,29 +143,18 @@ class HudGui extends Gui {
     // iterate over tools in toolbar
     for (let i = 0; i < toolList.length; i++) {
       const tool = toolList[i];
+      const tooltip = tool.tooltipText;
 
       // build button
-      const button = new ToolbarButton(slots[i], tool, i);
-      const tooltip = tool.tooltipText; // tooltip string
-
-      // check if tutorial available
-      const tut = tool.getTutorial();
-      if (tut) {
-
-        // build tooltip with string label and tutorial sim
-        button.withDynamicTooltip(() => {
+      const button = new ToolbarButton(slots[i], {
+        tool,
+        indexInToolbar: i,
+        tooltipFunc: () => {
           const ttpr = ToolbarTooltip.pickRect(this.screen, tooltip);
           const innerScreen = ToolbarTooltip.getTutorialScreen(tool);
-          return new ToolbarTooltip(ttpr, tooltip, innerScreen, tool);
-        });
-
-      }
-      else {
-
-        // set tooltip string
-        // standard text tooltip (gui_element.js)
-        button.withTooltip(tooltip);
-      }
+          return new ToolbarTooltip(ttpr, { label: tooltip, innerScreen, tool });
+        },
+      });
 
       result.push(button);
     }

@@ -7,24 +7,18 @@
 class ProgressIndicator extends GuiElement {
 
   /**
-   * valueFunc returns a number
-   * will be truncated to range [0,1]
+   * Show progress according to valueFunc.
    * @param {number[]} rect The rectangle that will be fully covered at value=1
-   * @param {Function} valueFunc The function who's return value will be used.
+   * @param {object} params The parameters.
+   * @param {Function} params.valueFunc The function to pick progress, 0 is empty, 1 is full.
    */
-  constructor(rect, valueFunc) {
-    super(rect);
-    this.valueFunc = valueFunc;
-    this.outline = true;
-  }
+  constructor(rect, params) {
+    super(rect, { border: new DefaultBorder(), ...params });
+    this.valueFunc = params.valueFunc;
 
-  /**
-   * Chainable helper to set outline.
-   * @param {boolean} o True if an outline should be drawn.
-   */
-  withOutline(o) {
-    this.outline = o;
-    return this;
+    if (params.border && (!(params.border instanceof DefaultBorder))) {
+      throw new Error('Styled border not supported. Use ProgressButton instead.');
+    }
   }
 
   /**
@@ -32,8 +26,12 @@ class ProgressIndicator extends GuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    ProgressIndicator._draw(
-      g, this.rect, this.valueFunc(), this.outline);
+    ProgressIndicator.draw(
+      g, this.rect, this.valueFunc());
+    if (this.border) {
+      this.border.path(g, this.rect);
+      g.stroke();
+    }
   }
 
   /**
@@ -48,9 +46,8 @@ class ProgressIndicator extends GuiElement {
    * @param {object} g The graphics context.
    * @param {number[]} rect The rectangle to align elements in.
    * @param {number} progress The value to display, 0 is empty, 1 is full.
-   * @param {boolean} outline True if the outline should also be drawn.
    */
-  static _draw(g, rect, progress, outline = false) {
+  static draw(g, rect, progress) {
 
     let prg = progress;
 
@@ -58,18 +55,10 @@ class ProgressIndicator extends GuiElement {
     if ((!prg) || (prg < 0)) { prg = 0; }
     if (prg > 1) { prg = 1; }
 
-    // draw outline
-    const r = rect;
-    if (outline) {
-      g.lineWidth = global.lineWidth;
-      g.fillStyle = global.colorScheme.fg;
-      g.strokeRect(...r);
-    }
-
     // draw progress bar
     g.globalCompositeOperation = 'xor';
     g.fillStyle = global.colorScheme.fg;
-    g.fillRect(r[0], r[1], r[2] * prg, r[3]);
+    g.fillRect(rect[0], rect[1], rect[2] * prg, rect[3]);
     g.globalCompositeOperation = 'source-over';
   }
 }

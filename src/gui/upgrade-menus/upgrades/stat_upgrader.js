@@ -6,7 +6,6 @@
 class StatUpgrader extends CompositeGuiElement {
   _layoutData = STAT_UPGRADER_LAYOUT; // upgrades_tab_layout.js
 
-  #key;
   #gutse;
 
   // animation for progress indicator boxes
@@ -16,17 +15,15 @@ class StatUpgrader extends CompositeGuiElement {
   /**
    *
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {string} key The key in global.upgradeTracks.state.
+   * @param {object} params The parameters.
+   * @param {object} params.gutse The value in global.upgradeTracks.state.
    */
-  constructor(rect, key) {
-    super(rect);
+  constructor(rect, params = {}) {
+    super(rect, { ...params, opaque: true });
 
-    this.setBorder(Border.default);
-
-    this.#key = key;
-    const gutse = global.upgradeTracks.state[key];
-    this.#gutse = gutse;
-    this.#boxAnimStates = new Array(gutse.maxLevel).fill(-1);
+    this.#gutse = params.gutse;
+    const lvls = params.gutse.maxLevel;
+    this.#boxAnimStates = new Array(lvls).fill(-1);
   }
 
   /**
@@ -39,32 +36,37 @@ class StatUpgrader extends CompositeGuiElement {
     const layout = this._layout;
 
     // upgrade button
-    const btn = new TextButton(layout.button, 'upgrade',
-      () => this.upgradeButtonClicked()).withScale(0.3).withBorder(new SlantBorder());
+    const btn = new ProgressButton(layout.button, {
+      label: 'upgrade',
+      action: () => this.upgradeButtonClicked(),
+      scale: 0.3,
+      border: new SlantBorder(),
+      valueFunc: () => {
+        const budget = screen.sim.particlesCollected;
+        const cost = gutse.cost.f(gutse.level - 1);
+        return budget / cost;
+      },
+    });
     this.btn = btn;
-
-    // upgrade cost progress indicator
-    // overlay on upgrade button
-    const btno = new ProgressIndicator(layout.button, () => {
-      const budget = screen.sim.particlesCollected;
-      const cost = gutse.cost.f(gutse.level - 1);
-      return budget / cost;
-    }).withOutline(false);
 
     // visual progression display
     this.progressDisplayRect = layout.progress;
-    const progLabel = new DynamicTextLabel(layout.progressLabel,
-      () => `LEVEL ${gutse.level}`).withCenter(false);
-    progLabel.setScale(0.3);
+    const progLabel = new DynamicTextLabel(layout.progressLabel, {
+      labelFunc: () => `LEVEL ${gutse.level}`,
+      center: false,
+      scale: 0.3,
+    });
 
     // main label
-    const dtl = new StatReadout(layout.mainLabel,
-      gutse.icon, () => `${gutse.label}`);
-    dtl.setScale(0.4);
-    dtl.tooltipScale = 0.4;
-    dtl.setCenter(false);
+    const dtl = new StatReadout(layout.mainLabel, {
+      icon: gutse.icon,
+      labelFunc: () => `${gutse.label}`,
+      scale: 0.4,
+      tooltipScale: 0.4,
+      center: false,
+    });
 
-    return [btn, btno, dtl, progLabel];
+    return [btn, dtl, progLabel];
   }
 
   /**

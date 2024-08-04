@@ -31,7 +31,10 @@ class SkillCard extends CompositeGuiElement {
     const r = this.rect;
     const skill = Skill[entry.skill];
     const screen = skill.getThumbnailScreen();
-    const gsp = new GuiScreenPanel(this.rect, screen);
+    const gsp = new GuiScreenPanel(this.rect, {
+      innerScreen: screen,
+      border: new SnowglobeBorder(),
+    });
 
     const frac = 0.4;
     const [x, y, w, h] = r;
@@ -59,7 +62,7 @@ class SkillCard extends CompositeGuiElement {
       tooltip = 'purchased';
     }
     tooltip = `skill: ${skill.name}}\n${tooltip}`;
-    const statusIcon = new IconButton(rr, icon, () => {}).withScale(0.3).withTooltip(tooltip);
+    const statusIcon = new IconButton(rr, { icon, tooltip, scale: 0.3 });
     gsp.tooltip = tooltip;
 
     this.gsp = gsp;

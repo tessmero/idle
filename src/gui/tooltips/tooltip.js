@@ -8,12 +8,10 @@ class Tooltip extends CompositeGuiElement {
   /**
    * get rect using Tooltip.pickTooltipRect
    * @param {number[]} rect The rectangle to display on-screen.
+   * @param {object} params The parameters.
    */
-  constructor(rect) {
-    super(rect);
-
-    this.setBorder(Border.default);
-    this.withOpacity(true);
+  constructor(rect, params = {}) {
+    super(rect, { opaque: true, ...params });
   }
 
   /**

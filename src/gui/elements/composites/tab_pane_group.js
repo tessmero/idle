@@ -17,16 +17,20 @@ class TabPaneGroup extends CompositeGuiElement {
   /**
    * tabContent is list of rect->element callbacks
    * @param {number[]} rect The rectangle to align elements in.
-   * @param {string[]} tabLabels The labels fot he tab header buttons.
-   * @param {Function[]} tabContents The functions to build each tab's elements.
-   * @param {string[]} tabTooltips The tooltips for the tab header buttons.
+   * @param {object} params The parameters.
+   * @param {string[]} params.tabLabels The labels fot he tab header buttons.
+   * @param {Function[]} params.tabContents The functions to build each tab's elements.
+   * @param {string[]} params.tabTooltips The tooltips for the tab header buttons.
    */
-  constructor(rect, tabLabels, tabContents, tabTooltips = null) {
-    super(rect);
-    this.#tabLabels = tabLabels;
-    this.#tabContents = tabContents;
+  constructor(rect, params = {}) {
+    super(rect, params);
+
+    const { tabTooltips = null } = params;
+
+    this.#tabLabels = params.tabLabels;
+    this.#tabContents = params.tabContents;
     this.#tabTooltips = tabTooltips;
-    this.nTabs = tabLabels.length;
+    this.nTabs = params.tabLabels.length;
     this.#selectedTabIndex = 0;
   }
 
@@ -49,15 +53,16 @@ class TabPaneGroup extends CompositeGuiElement {
       const rr = padRect(x, y, w, h, 0.02);
       const ii = i;
       x = x + (w + p);
-      const tb = new TabHeaderButton(this, ii, rr, label,
-        () => {
+      const tb = new TabHeaderButton(this, ii, rr, {
+        label,
+        action: () => {
           this.#selectedTabIndex = ii;
           this.#tabChangeListeners.forEach((l) => l(ii));
-        }
-      );
-      if (this.#tabTooltips) { tb.withTooltip(this.#tabTooltips[i]); }
+        },
+        tooltip: this.#tabTooltips ? this.#tabTooltips[i] : null,
+        scale: tabLabelScale,
+      });
 
-      tb.setScale(tabLabelScale);
       result.push(tb);
       i = i + 1;
     });
@@ -65,7 +70,7 @@ class TabPaneGroup extends CompositeGuiElement {
     // contents for each tab are technically not children
     // so they aren't all drawn automatically
     const r = this._layout.content;
-    const conts = this.#tabContents.map((cons) => cons(r, screen).withOpacity(true));
+    const conts = this.#tabContents.map((cons) => cons(r, { opaque: true }));
     this.tabContent = conts;
 
     return result;
