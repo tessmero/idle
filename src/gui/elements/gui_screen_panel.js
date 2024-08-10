@@ -20,18 +20,19 @@ class GuiScreenPanel extends GuiElement {
    * @param {boolean} params.hideInnerGui False by default, set to true to
    *                                      skip drawing inner screen's gui
    */
-  constructor(rect, params) {
+  constructor(rect, params = {}) {
     super(rect, { border: new RoundedBorder(), ...params });
 
     const {
       allowScaling = false,
       hideInnerGui = false,
+      innerScreen,
     } = params;
 
     this.#allowScaling = allowScaling;
     this.#hideInnerGui = hideInnerGui;
-    this._setInnerScreen(params.innerScreen);
-    params.innerScreen.loop = true;
+    this._setInnerScreen(innerScreen);
+    innerScreen.loop = true;
     this.hoverable = false;
   }
 

@@ -112,7 +112,7 @@ class CircleBuddy extends Buddy {
    * @param {number[]} rect The bounding rectangle containing the menu.
    */
   buildContextMenu(rect) {
-    return new CircleBuddyContextMenu(rect, this);
+    return new CircleBuddyContextMenu(rect, { buddy: this });
   }
 
   /**

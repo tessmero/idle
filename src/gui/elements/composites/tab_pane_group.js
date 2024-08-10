@@ -25,12 +25,16 @@ class TabPaneGroup extends CompositeGuiElement {
   constructor(rect, params = {}) {
     super(rect, params);
 
-    const { tabTooltips = null } = params;
+    const {
+      tabTooltips = null,
+      tabLabels,
+      tabContents,
+    } = params;
 
-    this.#tabLabels = params.tabLabels;
-    this.#tabContents = params.tabContents;
+    this.#tabLabels = tabLabels;
+    this.#tabContents = tabContents;
     this.#tabTooltips = tabTooltips;
-    this.nTabs = params.tabLabels.length;
+    this.nTabs = tabLabels.length;
     this.#selectedTabIndex = 0;
   }
 
@@ -45,7 +49,7 @@ class TabPaneGroup extends CompositeGuiElement {
     // tab labels at top
     let i = 0;
     const p = 0.05;
-    const tabLabelScale = 0.5;
+    const tabLabelScale = 0.4;
     const [cx, y, _w, _h] = layout.tabsRow;
     let x = cx + 0.02;
     this.#tabLabels.map((label) => {
@@ -53,7 +57,9 @@ class TabPaneGroup extends CompositeGuiElement {
       const rr = padRect(x, y, w, h, 0.02);
       const ii = i;
       x = x + (w + p);
-      const tb = new TabHeaderButton(this, ii, rr, {
+      const tb = new TabHeaderButton(rr, {
+        parent: this,
+        tabIndex: ii,
         label,
         action: () => {
           this.#selectedTabIndex = ii;

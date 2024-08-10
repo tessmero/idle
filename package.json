@@ -10,6 +10,7 @@
     "@babel/eslint-parser": "^7.24.5",
     "eslint": "^9.2.0",
     "eslint-plugin-jsdoc": "^48.2.5",
+    "mocha": "^10.7.0",
     "python-shell": "^5.0.0",
     "uglify-js": "^3.17.4"
   },
@@ -17,7 +18,9 @@
     "link": "node build/link.js",
     "concat": "node build/concat.js",
     "uglify": "uglifyjs dist/production.js --mangle toplevel -o dist/production.min.js",
-    "build:test": "npm run link",
-    "build:prod": "npm run link && npm run concat && npm run uglify"
+    "lint:test": "mocha eslint-plugin-idle/tests/*.test.cjs",
+    "lint": "npm run lint:test && eslint src && eslint data",
+    "build:test": "npm run lint && npm run link",
+    "build:prod": "npm run build:test && npm run concat && npm run uglify"
   }
 }

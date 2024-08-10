@@ -15,11 +15,13 @@ class DynamicTextLabel extends TextLabel {
    *                                        Used to make HUD displays precisely
    *                                        hoverable as their values change.
    */
-  constructor(rect, params) {
-    super([...rect], { ...params, label: '' });
+  constructor(rect, params = {}) {
+    super(rect, { ...params, label: '' });
 
-    this.#labelFunc = params.labelFunc;
-    this.#autoAdjustRect = params.autoAdjustRect;
+    const { labelFunc, autoAdjustRect } = params;
+
+    this.#labelFunc = labelFunc;
+    this.#autoAdjustRect = autoAdjustRect;
   }
 
   /**

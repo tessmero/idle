@@ -3,11 +3,36 @@ import babelParser from '@babel/eslint-parser';
 import jsdoc from "eslint-plugin-jsdoc";
 import eslintPluginIdle from "./eslint-plugin-idle/index.cjs"
 
-// singleton class names and file patterns
+// restrict gui element constructors to patterns in src/gui/README.md
+const guiConfigs = [
+  {
+    "files": ["src/gui/elements/**/*.js"],
+    "rules": {
+
+      // constructors must have last parameter 'params={}'
+      "idle/ctor-last-param-default": "error",
+
+      // constructors must pass parameters to super
+      // but last argument may be ObjectExpression
+      "idle/ctor-params-super-args": "error",
+
+      // ObjectExpression in super must include '...params'
+      "idle/super-params-spread": "error",
+
+      // constructors must use destructuring if they access 'params'
+      "idle/ctor-params-destructure": "error",
+
+      // rule just for idle gui elements
+      // constructors have two parameters, and the first (rectangle) has no default
+      "idle/gui-elem-ctor-params": "error",
+
+    }
+  },
+]
+
+// enforce singleton "implicit constructor" style pattern
 const sglClasses = ['StoryManager', 'ScreenManager', 'EdgeManager', 'BorderManager']
 const sglSrc = ["src/daemons/*_manager.js"]
-
-// overrides to enforce singleton "implicit constructor" style pattern
 const sglConfigs = [
   {
     "rules": {
@@ -350,5 +375,6 @@ export default [
     },
   },
 
-  ...sglConfigs
+  ...sglConfigs,
+  ...guiConfigs,
 ];

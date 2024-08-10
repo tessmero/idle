@@ -3,8 +3,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: `shouldn't use "new" keyword with singleton classes`,
-      recommended: true,
+      description: `Disallow using "new" keyword with singleton classes`,
+      recommended: false,
     },
     schema: [
       {

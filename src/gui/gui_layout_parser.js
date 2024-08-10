@@ -12,12 +12,30 @@ class GuiLayoutParser {
   static computeRects(screenRect, data, iconScale = 1) {
     const glp = new GuiLayoutParser(screenRect, data, iconScale);
     const rects = glp.#computedRects;
+
+    // wrap repeating rects
+    // to access OOB index safely
+    for (const [key, rlist] of Object.entries(rects)) {
+      if (typeof rlist[0] !== 'number') {
+        const proxy = new Proxy({}, {
+          get(_target, prop) {
+            let p = prop;
+            if ((typeof p === 'number') && (p >= rlist.length)) {
+              p = rlist.length - 1;
+            }
+            return rlist[p];
+          },
+        });
+        rects[key] = proxy;
+      }
+    }
+
     return rects;
   }
 
   #computedRects = [];
-  #xKeys = ['left', 'right', 'width'];
-  #yKeys = ['top', 'bottom', 'height'];
+  #xKeys = ['left', 'right', 'width', 'max-width'];
+  #yKeys = ['top', 'bottom', 'height', 'max-height'];
   #parent = [0, 0, 1, 1];
   #iconScale;
 
@@ -134,8 +152,12 @@ class GuiLayoutParser {
         return [r[0], p[1] + p[3] - r[3] - d, r[2], r[3]];
       case 'width':
         return [r[0], r[1], d, r[3]];
+      case 'max-width':
+        return [r[0], r[1], Math.min(d, r[2]), r[3]];
       case 'height':
         return [r[0], r[1], r[2], d];
+      case 'max-height':
+        return [r[0], r[1], r[2], Math.min(d, r[3])];
       case 'margin':
         return padRect(...r, -d);
       default:
@@ -169,11 +191,19 @@ class GuiLayoutParser {
 
         // assume key is 'top' or 'left'
         // pick distance to center inside parent
-        return p[ax] + p[ax + 2] / 2 - r[ax + 2] / 2 - r[ax];
+        return p[ax + 2] / 2 - r[ax + 2] / 2;
+
+      }
+
+      if (cssVal.startsWith('gold-')) {
+
+        // pick new side length to form golden rectangle
+        const long = (cssVal === 'gold-lax');
+        return r[3 - ax] * (long ? 2 / phi : phi / 2);
       }
 
       if (!cssVal.endsWith('%')) {
-        throw new Error('css value must be number, percentage, or \'auto\'');
+        throw new Error('css value must be number, percentage, \'auto\', \'gold-sax\', or \'gold-lax\'');
       }
 
       // compute percentage of parent width or height

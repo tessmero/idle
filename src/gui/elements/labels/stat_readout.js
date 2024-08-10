@@ -25,7 +25,8 @@ class StatReadout extends DynamicTextLabel {
       labelFunc: () => `  ${params.labelFunc()}`,
     });
 
-    this.#icon = params.icon;
+    const { icon } = params;
+    this.#icon = icon;
   }
 
   /**

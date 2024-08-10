@@ -18,9 +18,10 @@ class TextButton extends Button {
     const {
       label = '',
       center = true,
+      text,
     } = params;
 
-    if (params.text) {
+    if (text) {
       throw new Error('parameter \'text\' is invalid, should use \'label\'');
     }
 

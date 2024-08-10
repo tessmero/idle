@@ -5,6 +5,7 @@
  * Displays progress bar overlay with color-inversion effect.
  */
 class ProgressIndicator extends GuiElement {
+  #valueFunc;
 
   /**
    * Show progress according to valueFunc.
@@ -12,13 +13,16 @@ class ProgressIndicator extends GuiElement {
    * @param {object} params The parameters.
    * @param {Function} params.valueFunc The function to pick progress, 0 is empty, 1 is full.
    */
-  constructor(rect, params) {
+  constructor(rect, params = {}) {
     super(rect, { border: new DefaultBorder(), ...params });
-    this.valueFunc = params.valueFunc;
 
-    if (params.border && (!(params.border instanceof DefaultBorder))) {
+    const { valueFunc, border } = params;
+
+    if (border && (!(border instanceof DefaultBorder))) {
       throw new Error('Styled border not supported. Use ProgressButton instead.');
     }
+
+    this.#valueFunc = valueFunc;
   }
 
   /**
@@ -27,7 +31,7 @@ class ProgressIndicator extends GuiElement {
    */
   draw(g) {
     ProgressIndicator.draw(
-      g, this.rect, this.valueFunc());
+      g, this.rect, this.#valueFunc());
     if (this.border) {
       this.border.path(g, this.border.verts(this.rect));
       g.stroke();

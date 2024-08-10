@@ -9,7 +9,7 @@ class CardBorder extends RoundedBorder {
    * @param {number} radius
    * @param {number} thickness
    */
-  constructor(radius = 0.02, thickness = 0.02) {
+  constructor(radius = 0.01, thickness = 0.01) {
     super(radius);
     this.#thickness = thickness;
   }

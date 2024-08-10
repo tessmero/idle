@@ -14,7 +14,8 @@ class ProgressButton extends TextButton {
    */
   constructor(rect, params = {}) {
     super(rect, { border: new DefaultBorder(), ...params });
-    this.#valueFunc = params.valueFunc;
+    const { valueFunc } = params;
+    this.#valueFunc = valueFunc;
   }
 
   /**

@@ -361,7 +361,8 @@ class GameScreen {
     // if (global.gameState !== GameStates.playing) {
     //   sim.selectedBody = null;
     // }
-    if (gui && sim.selectedBody && (this === global.mainScreen)) {
+    if (gui && sim.selectedBody && (this === global.mainScreen) &&
+        (this.state !== GameStates.startMenu) && (this.state !== GameStates.startTransition)) {
       const bod = sim.selectedBody;
       let bodPos = bod.pos;
       if (bod instanceof CompoundBody) {
@@ -373,7 +374,7 @@ class GameScreen {
         this.contextMenu = bod.buildContextMenu(cmr);
       }
       else {
-        this.contextMenu = new BodyContextMenu(cmr, bod);
+        this.contextMenu = new BodyContextMenu(cmr, { body: bod });
       }
 
     }
@@ -381,7 +382,7 @@ class GameScreen {
       const p = sim.selectedParticle;
       const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
       const cmr = ContextMenu.pickRect(this, v(x, y));
-      this.contextMenu = new PiContextMenu(cmr, this, p);
+      this.contextMenu = new PiContextMenu(cmr, { sim: this.sim, pData: p });
     }
 
     if (this.contextMenu) { this.contextMenu.buildElements(this); }

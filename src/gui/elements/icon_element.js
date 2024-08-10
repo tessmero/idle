@@ -13,7 +13,8 @@ class IconElement extends GuiElement {
    */
   constructor(rect, params = {}) {
     super(rect, params);
-    this.#icon = params.icon;
+    const { icon } = params;
+    this.#icon = icon;
   }
 
   /**

@@ -12,7 +12,8 @@ class BodyPreviewElement extends GuiElement {
    */
   constructor(rect, params = {}) {
     super(rect, params);
-    this.#body = params.body;
+    const { body } = params;
+    this.#body = body;
   }
 
   /**

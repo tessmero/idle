@@ -12,7 +12,10 @@ class Button extends GuiElement {
    * @param {Function} params.action The function to call when clicked.
    */
   constructor(rect, params = {}) {
-    super(rect, { border: new RoundedBorder(), ...params });
+    super(rect, {
+      border: new RoundedBorder(), // default border is rounded
+      ...params,
+    });
 
     const {
       action = () => {}, // default action is to do nothing

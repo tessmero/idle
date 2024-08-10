@@ -1,12 +1,8 @@
 /**
  * @file layout data for upgrade menu.
  */
-const UPGRADE_MENU_GUI_LAYOUT = {
 
-  // main rectangle including tab headers
-  r0: {
-    margin: 0.1,
-  },
+_COMMON = {
 
   // close button on top right
   closeBtn: {
@@ -16,4 +12,31 @@ const UPGRADE_MENU_GUI_LAYOUT = {
     top: 0.08,
     right: 0.02,
   },
+
+};
+
+// layout on horizontal screen
+HS_UPGRADE_MENU_GUI_LAYOUT = {
+
+  // main rectangle including tab headers
+  r0: {
+    margin: 0.1,
+    'max-width': 1.2,
+    left: 'auto',
+  },
+
+  ..._COMMON,
+};
+
+// layout on vertical screen
+VS_UPGRADE_MENU_GUI_LAYOUT = {
+
+  // main rectangle including tab headers
+  r0: {
+    margin: 0.1,
+    'max-height': 1,
+    top: 'auto',
+  },
+
+  ..._COMMON,
 };

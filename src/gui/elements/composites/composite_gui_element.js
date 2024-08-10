@@ -60,6 +60,11 @@ class CompositeGuiElement extends GuiElement {
     this._computeLayoutRects(screen);
 
     const elems = this._buildElements();
+
+    if (!elems.every(Boolean)) {
+      throw new Error('falsey child element(s)');
+    }
+
     this.#children = elems;
     this.setScreen(screen); // make sure screen is set for children
 

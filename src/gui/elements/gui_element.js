@@ -246,6 +246,6 @@ class GuiElement {
    * Return false to indicate that the click event as not consumed by this element.
    */
   click() {
-    throw new Error(`Method not implemented in ${this.constructor.name}.`);
+    return false;// throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 }

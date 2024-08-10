@@ -27,6 +27,11 @@ class Global {
    */
   get mainScreen() { return this.gsp ? this.gsp.innerScreen : null; }
 
+  /**
+   *
+   */
+  get verticalDisplay() { return this.gsp && (this.gsp.innerScreen.rect[3] > this.gsp.innerScreen.rect[2]); }
+
   //
   colorScheme = ColorScheme.default;
   lineWidth = 0.003;

@@ -9,7 +9,7 @@
  */
 
 // helpers for aligning bounding rectangle in screen
-_MAR = 0.05; // distance from outer bounds to nearest screen edge
+_MAR = 0.02; // distance from outer bounds to nearest screen edge or button
 _SQR = 0.3; // side length of the two content squares
 _PAD = 0.05; // padding around content squares
 _SAX = _SQR + 2 * _PAD; // length of short axis
@@ -19,7 +19,7 @@ _LAX = 2 * _SQR + 3 * _PAD; // length of long axis
 _HS = {
   width: _SAX,
   height: _LAX,
-  top: 'auto',
+  top: 0.14, // align under menu/pause button
 };
 HS_CONTEXT_MENU_BOUNDS = {
   0: {
@@ -34,6 +34,7 @@ HS_CONTEXT_MENU_BOUNDS = {
 };
 
 // bounds in vertical screen
+// long axis is set to fill screen width
 _VS = {
   width: _LAX,
   height: _SAX,
@@ -47,7 +48,7 @@ VS_CONTEXT_MENU_BOUNDS = {
 
   1: {
     ..._VS,
-    bottom: _MAR,
+    bottom: 0.11, // align above toolbar
   },
 };
 
