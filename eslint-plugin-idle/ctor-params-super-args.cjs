@@ -18,14 +18,16 @@ module.exports = {
         const constructorParams = node.value.params.map(param => param.left ? param.left.name : param.name );
         const lastIndex = constructorParams.length - 1;
         let superCalled = false;
-        let superCallArgs = []; // name strings (or true to indicate object expression)
+        let superCallArgs = []; // name strings 
+        let superCallObj = []; // true to indicate object expression
 
         node.value.body.body.forEach(bodyNode => {
           if (bodyNode.type === "ExpressionStatement" && bodyNode.expression.type === "CallExpression") {
             const callee = bodyNode.expression.callee;
             if (callee.type === "Super") {
               superCalled = true;
-              superCallArgs = bodyNode.expression.arguments.map(arg => arg.name || arg.type==="ObjectExpression");
+              superCallArgs = bodyNode.expression.arguments.map(arg => arg.name);
+              superCallObj = bodyNode.expression.arguments.map(arg => arg.type==="ObjectExpression");
             }
           }
         });
@@ -33,7 +35,7 @@ module.exports = {
         if( !superCalled ){ return; }
 
         if (constructorParams.length !== superCallArgs.length || !constructorParams.every(
-            (param, index) => param === superCallArgs[index] || (index===lastIndex && superCallArgs[index])
+            (param, index) => param === superCallArgs[index] || (index===lastIndex && superCallObj[index])
           )) {
             context.report({
               node,

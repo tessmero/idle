@@ -49,6 +49,15 @@ ruleTester.run(
       code: `
         class MyClass extends SuperClass {
           constructor( r, p ){
+            super(r,q)
+          }
+        }
+      `,
+      errors: 1,
+    },{
+      code: `
+        class MyClass extends SuperClass {
+          constructor( r, p ){
             super( r )
           }
         }
