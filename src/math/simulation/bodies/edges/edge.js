@@ -80,12 +80,26 @@ class Edge {
    */
   trace(g, pos, angle, scale = 1) {
     g.beginPath();
-    for (let a = 0; a < twopi; a = a + 1e-2) {
-      const [r, _r2, _dist] = this.lookupAngle(a);
-      const p = pos.add(vp(a + angle, r * scale));
+    for (const p of this.vTrace(pos, angle, scale)) {
       g.lineTo(...p.xy());
     }
     g.closePath();
+  }
+
+  /**
+   * Trace the shape of the edge with the given pos,angle offsets.
+   * @param {Vector} pos The position to draw at.
+   * @param {number} angle The orientation to draw the edge with.
+   * @param {?number} scale The scale factor used for BodyPreviewElement
+   * @param {?number} angleStep The angle increment
+   */
+  * vTrace(pos, angle, scale = 1, angleStep = 5e-2) {
+    const a0 = 5 * pio4; // start from top-left
+    for (let a = 0; a < twopi; a = a + angleStep) {
+      const [r, _r2, _dist] = this.lookupAngle(a0 + a);
+      const p = pos.add(vp(a0 + a + angle, r * scale));
+      yield p;
+    }
   }
 
 }

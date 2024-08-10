@@ -51,7 +51,7 @@ class UpgradeMenuGui extends Gui {
     let tabLabels; let tabContents;
     if (global.sandboxMode) {
       tabLabels = ['debug', 'tests', 'performance',
-        // 'skills',
+        'skills',
         'UPGRADES',
 
         // 'STATS'
@@ -61,7 +61,7 @@ class UpgradeMenuGui extends Gui {
         (rect, params) => new TestsTab(rect, params),
         (rect, params) => new PerformanceTab(rect, params),
 
-        // (rect, params) => new SkillsTab(rect, params),
+        (rect, params) => new SkillsTab(rect, params),
         (rect, params) => new UpgradesTab(rect, params),
 
         // (rect, params) => new StatsTab(rect, params),

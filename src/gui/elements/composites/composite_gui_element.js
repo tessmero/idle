@@ -18,6 +18,12 @@ class CompositeGuiElement extends GuiElement {
    */
   _layout = null;
 
+  /**
+   * Rectangle to leave open even if opaque
+   * @type {number[]}
+   */
+  #hole;
+
   #children = [];
   #opaque;
 
@@ -41,6 +47,17 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
+   *
+   * @param {number[]} rect
+   */
+  setHole(rect) {
+    this.#hole = rect;
+    if (this._parentCge) {
+      this._parentCge.setHole(rect);
+    }
+  }
+
+  /**
    * Construct direct children for this composite.
    * @abstract
    * @returns {GuiElement[]} The children.
@@ -60,6 +77,14 @@ class CompositeGuiElement extends GuiElement {
     this._computeLayoutRects(screen);
 
     const elems = this._buildElements();
+    elems.forEach((e) => {
+      if (e instanceof CompositeGuiElement) {
+        e._parentCge = this; // used in setHole()
+      }
+      if (e instanceof HoleElement) {
+        this.setHole(e.rect);
+      }
+    });
 
     if (!elems.every(Boolean)) {
       throw new Error('falsey child element(s)');
@@ -168,8 +193,23 @@ class CompositeGuiElement extends GuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    if (this.#opaque || this.border) {
-      Border.draw(g, this.rect, { fill: this.#opaque, border: this.border });
+    const opaque = this.#opaque; // true if should be filled
+    const hole = this.#hole; // region requested to show through anyways
+
+    if (opaque && hole) {
+      // fill around hole rectangle
+      const border = new WindowBorder(padRect(...hole, -0.01));
+      g.globalCompositeOperation = 'destination-out';
+      border.path(g, border.verts(this.rect));
+      g.fill();
+      g.globalCompositeOperation = 'source-over';
+    }
+
+    if (opaque || this.border) {
+      Border.draw(g, this.rect, {
+        fill: opaque && (!hole),
+        border: this.border || new DefaultBorder(),
+      });
     }
 
     this.#children.forEach((e) => e.draw(g));

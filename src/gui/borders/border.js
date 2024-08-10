@@ -116,35 +116,41 @@ class Border {
    * @param {object} options.border optional Border style instance.
    */
   static draw(g, rect, options = {}) {
+
+    const {
+      border = new DefaultBorder(),
+      fill = true,
+      hovered,
+    } = options;
+
     let lineCol = global.colorScheme.fg;
 
-    if (options.hovered) {
+    if (hovered) {
       lineCol = global.colorScheme.hl;
     }
     if (global.debugUiRects) {
       lineCol = 'red';
     }
-    const bord = (options.border ? options.border : new DefaultBorder());
-    const verts = bord.verts(rect);
+
+    const verts = border.verts(rect);
 
     // clear interior if necessary
-    const fill = options.hasOwnProperty('fill') ? options.fill : true;
     if (fill) {
       g.globalCompositeOperation = 'destination-out';
-      bord.path(g, verts);
+      border.path(g, verts);
       g.fill();
       g.globalCompositeOperation = 'source-over';
     }
 
     // draw optional decorations in gray
     g.fillStyle = global.colorScheme.mid;
-    bord.fillDecorations(g, rect, verts);
+    border.fillDecorations(g, rect, verts);
     g.fillStyle = global.colorScheme.fg;
 
     // trace border
     g.strokeStyle = lineCol;
     g.lineWidth = global.lineWidth;
-    bord.path(g, verts);
+    border.path(g, verts);
     g.stroke();
     g.strokeStyle = global.colorScheme.fg;
   }
