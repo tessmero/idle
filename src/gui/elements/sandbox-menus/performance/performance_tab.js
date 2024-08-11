@@ -38,9 +38,11 @@ class PerformanceTab extends CompositeGuiElement {
 
       [edgeParticleIcon, () => this.rptMemoryShapes(), () => this.rptMemoryShapesDetails()],
 
+      // [screenIcon, () => `${this.rptCounts()}`, null],
+
     ];
 
-    return specs.map((entry, i) => {
+    const result = specs.map((entry, i) => {
       const [icon, labelFunc, tooltipFunc] = entry;
       return new StatReadout(rows[i], {
         icon, labelFunc, tooltipFunc,
@@ -48,6 +50,24 @@ class PerformanceTab extends CompositeGuiElement {
         tooltipScale: 0.3,
       });
     });
+
+    return result;
+  }
+
+  /**
+   * Report counts based on running totals in Vector and FloatArray.
+   * @returns {object} The counts
+   */
+  rptCounts() {
+    const lup = global.lupStats;
+    const result = {
+      nVectorsConstructed: Vector.nConstructed - lup.totalVectorsConstructed,
+      nFloatArraysConstructed: FloatArray.nConstructed - lup.totalFloatArraysConstructed,
+      nFloat32Alloc: FloatArray.totalFloat32Alloc - lup.totalFloat32Alloc,
+    };
+    return JSON.stringify(result)
+      .replaceAll(',', '\n')
+      .replaceAll('[', '');
   }
 
   /**

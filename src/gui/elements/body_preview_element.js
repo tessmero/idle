@@ -21,6 +21,8 @@ class BodyPreviewElement extends GuiElement {
    */
   draw(g) {
     const bod = this.#body;
+    if (!bod.edge) { return; }
+
     const pos = v(...rectCenter(...this.rect));
     bod.edge.trace(g, pos, bod.angle, 0.5);
     g.fillStyle = global.colorScheme.fg;

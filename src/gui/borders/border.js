@@ -2,8 +2,7 @@
  * @file Border base class for gui border style/shape
  */
 class Border {
-  offsetX = 0;
-  offsetY = 0;
+  _offset = v(0, 0);
 
   /**
    * trace the outline of this border clockwise from top-left corner.
@@ -52,7 +51,7 @@ class Border {
    */
   path(g, verts) {
     g.beginPath();
-    verts.forEach((v) => g.lineTo(v.x + this.offsetX, v.y + this.offsetY));
+    verts.forEach((v) => g.lineTo(...v.add(this._offset).xy()));
     g.closePath();
   }
 
@@ -65,7 +64,7 @@ class Border {
   fillDecorations(g, rect, verts) {
     this._decorations(rect, verts).forEach((decVerts) => {
       g.beginPath();
-      decVerts.forEach((v) => g.lineTo(v.x + this.offsetX, v.y + this.offsetY));
+      decVerts.forEach((v) => g.lineTo(...v.add(this._offset).xy()));
       g.closePath();
       g.fill();
     });
@@ -75,7 +74,7 @@ class Border {
    * Helper to stroke outer rectangle and fill cut-off regions.
    * Used to trim indicators and simulations.
    * @param {object} g The graphics context.
-   * @param {number[]} rect The rectangle to clean up.
+   * @param {number[]} rect The rectangle to align with and clean up.
    */
   cleanup(g, rect) {
     const corners = rectCorners(...rect);

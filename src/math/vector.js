@@ -2,6 +2,7 @@
  * @file Vector immutable 2D point.
  */
 class Vector {
+  static nConstructed = 0;
 
   #x;
   #y;
@@ -12,6 +13,8 @@ class Vector {
    * @param {number} y The y coordinate.
    */
   constructor(x, y) {
+    Vector.nConstructed = Vector.nConstructed + 1;
+
     this.#x = x;
     this.#y = y;
   }

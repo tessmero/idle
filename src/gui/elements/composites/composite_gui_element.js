@@ -19,7 +19,7 @@ class CompositeGuiElement extends GuiElement {
   _layout = null;
 
   /**
-   * Rectangle to leave open even if opaque
+   * Rectangle to avoid drawing over even if opaque
    * @type {number[]}
    */
   #hole;
@@ -47,23 +47,23 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   *
-   * @param {number[]} rect
-   */
-  setHole(rect) {
-    this.#hole = rect;
-    if (this._parentCge) {
-      this._parentCge.setHole(rect);
-    }
-  }
-
-  /**
    * Construct direct children for this composite.
    * @abstract
    * @returns {GuiElement[]} The children.
    */
   _buildElements() {
     return [];// throw new Error(`Method not implemented in ${this.constructor.name}.`);
+  }
+
+  /**
+   * Called in buildElements after a HoleElement is constructed.
+   * @param {number[]} rect
+   */
+  _setHole(rect) {
+    this.#hole = rect;
+    if (this._parentCge) {
+      this._parentCge._setHole(rect);
+    }
   }
 
   /**
@@ -79,10 +79,10 @@ class CompositeGuiElement extends GuiElement {
     const elems = this._buildElements();
     elems.forEach((e) => {
       if (e instanceof CompositeGuiElement) {
-        e._parentCge = this; // used in setHole()
+        e._parentCge = this; // used in _setHole()
       }
       if (e instanceof HoleElement) {
-        this.setHole(e.rect);
+        this._setHole(e.rect);
       }
     });
 
@@ -198,7 +198,7 @@ class CompositeGuiElement extends GuiElement {
 
     if (opaque && hole) {
       // fill around hole rectangle
-      const border = new WindowBorder(padRect(...hole, -0.01));
+      const border = new WindowBorder({ hole: padRect(...hole, -0.01) });
       g.globalCompositeOperation = 'destination-out';
       border.path(g, border.verts(this.rect));
       g.fill();

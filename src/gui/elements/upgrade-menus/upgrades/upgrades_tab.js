@@ -7,6 +7,18 @@ class UpgradesTab extends CompositeGuiElement {
   _layoutData = UPGRADES_TAB_LAYOUT;
 
   /**
+   *
+   * @param {number[]} rect The rectangle to align elements in.
+   * @param  {object} params The parameters.
+   */
+  constructor(rect, params = {}) {
+    super(rect, {
+      // border: new RoundedBorder(), // doesn't work with hole
+      ...params,
+    });
+  }
+
+  /**
    * Construct direct children for this composite.
    * @returns {GuiElement[]} The children.
    */

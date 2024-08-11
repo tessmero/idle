@@ -11,6 +11,11 @@
  */
 class LivePerformanceStats {
 
+  // keep track of previous state of running totals
+  totalVectorsConstructed = 0; // vector.js
+  totalFloatArraysConstructed = 0; // float_array.js
+  totalFloat32Alloc = 0; // float_array.js
+
   /**
    * called in update.js at start of game loop
    */

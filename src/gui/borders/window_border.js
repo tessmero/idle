@@ -6,10 +6,12 @@ class WindowBorder extends Border {
 
   /**
    *
-   * @param {number[]} hole The inner rectangle to leave unfilled.
+   * @param {object} params
+   * @param {number[]} params.hole The inner rectangle to leave unfilled.
    */
-  constructor(hole) {
-    super();
+  constructor(params = {}) {
+    super(params);
+    const { hole } = params;
     this.#hole = hole;
   }
 

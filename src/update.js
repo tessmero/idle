@@ -57,7 +57,11 @@ function update(dt) {
   global.lupStats = global.livePerformanceStats;
 
   // start logging performance for this coming update
-  global.livePerformanceStats = new LivePerformanceStats();
+  const lps = new LivePerformanceStats();
+  lps.totalVectorsConstructed = Vector.nConstructed;
+  lps.totalFloatArraysConstructed = FloatArray.nConstructed;
+  lps.totalFloat32Alloc = FloatArray.totalFloat32Alloc;
+  global.livePerformanceStats = lps;
 
   global.t = global.t + dt;
 

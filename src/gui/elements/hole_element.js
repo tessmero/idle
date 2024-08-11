@@ -1,6 +1,6 @@
 /**
  * @file HoleElement signals a request
- * to show rectangle through opaque ancestors
+ * for opaque ancestors to not draw over this rectangle
  * (composite_gui_element.js)
  */
 class HoleElement extends GuiElement {

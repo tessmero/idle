@@ -3,31 +3,50 @@ import babelParser from '@babel/eslint-parser';
 import jsdoc from "eslint-plugin-jsdoc";
 import eslintPluginIdle from "./eslint-plugin-idle/index.cjs"
 
-// restrict gui element constructors to patterns in src/gui/README.md
+// common rules for constructor 'params' object pattern
+const ctorParamsRules = {
+
+  // constructors must have last parameter 'params={}'
+  "idle/ctor-last-param-default": "error",
+
+  // constructors must pass parameters to super
+  // but last argument may be ObjectExpression
+  "idle/ctor-params-super-args": "error",
+
+  // ObjectExpression in super must include '...params'
+  "idle/super-params-spread": "error",
+
+  // constructors must use destructuring if they access 'params'
+  "idle/ctor-params-destructure": "error",
+
+  // constructors can only have one param
+  // (and only the last param may have a default value)
+  "idle/ctor-param-count": ["error", { "count": 1 }],
+}
+
 const guiConfigs = [
   {
+    // restrict gui Border constructors
+    "files": ["src/gui/borders/**/*.js"],
+    "rules": ctorParamsRules,
+
+  },{
+
+    // restrict gui element constructors
     "files": ["src/gui/elements/**/*.js"],
-    "rules": {
+    "rules": { 
 
-      // constructors must have last parameter 'params={}'
-      "idle/ctor-last-param-default": "error",
+      ...ctorParamsRules,
 
-      // constructors must pass parameters to super
-      // but last argument may be ObjectExpression
-      "idle/ctor-params-super-args": "error",
-
-      // ObjectExpression in super must include '...params'
-      "idle/super-params-spread": "error",
-
-      // constructors must use destructuring if they access 'params'
-      "idle/ctor-params-destructure": "error",
-
-      // rule just for idle gui elements
-      // constructors have two parameters, and the first (rectangle) has no default
-      "idle/gui-elem-ctor-params": "error",
+      // two parameters, and the first (rectangle) has no default
+      "idle/ctor-param-count": ["error", { "count": 2 }],
 
     }
   },
+]
+
+const borderConfigs = [
+
 ]
 
 // enforce singleton "implicit constructor" style pattern

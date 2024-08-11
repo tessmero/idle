@@ -128,6 +128,7 @@ class BodyContextMenu extends ContextMenu {
     g.fillStyle = global.colorScheme.hl;
     const bod = this.#body;
     const edge = bod.edge;
+    if (!edge) { return; }
     const center = bod.pos;
     const thickness = 1e-2;
 

@@ -12,15 +12,6 @@ function ScreenManager() {
   ScreenManager._instance = this;
 
   this.constructedScreens = new Map();
-  this.totalFloat32Alloc = 0;
-
-  /**
-   * Called in FloatArray constructor.
-   * @param {number} n Size of Float32Array allocated.
-   */
-  this.submitNewArray = function(n) {
-    this.totalFloat32Alloc = this.totalFloat32Alloc + n;
-  };
 
   /**
    * Called in GameScreen constructor.

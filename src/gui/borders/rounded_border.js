@@ -7,10 +7,12 @@ class RoundedBorder extends Border {
 
   /**
    *
-   * @param  {number} radius Circle radius for corners.
+   * @param {object} params The parameters
+   * @param {number} params.radius Circle radius for rounded corners.
    */
-  constructor(radius = 0.01) {
-    super();
+  constructor(params = {}) {
+    super(params);
+    const { radius = 0.01 } = params;
     this.#radius = radius;
   }
 

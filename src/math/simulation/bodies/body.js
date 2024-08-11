@@ -155,8 +155,15 @@ class Body {
    * @param {Vector} acc
    */
   accel(acc) {
+
     this.vel = this.vel.add(acc); // move this body
-    this.eps.acc = this.eps.acc.add(acc);// pass momentum to particles on edge
+
+    if (this.eps) {
+
+      // edge particle subgroup
+      // pass momentum to particles on edge
+      this.eps.acc = this.eps.acc.add(acc);
+    }
   }
 
   /**
@@ -165,7 +172,13 @@ class Body {
    */
   spin(spn) {
     this.avel = this.avel + spn; // rotate this body
-    this.eps.spn = this.eps.spn + spn; // pass momentum to particles on edge
+
+    if (this.eps) {
+
+      // edge particle subgroup
+      // pass momentum to particles on edge
+      this.eps.spn = this.eps.spn + spn;
+    }
   }
 
   /**

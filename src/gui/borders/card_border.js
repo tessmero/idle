@@ -6,11 +6,13 @@ class CardBorder extends RoundedBorder {
 
   /**
    *
-   * @param {number} radius
-   * @param {number} thickness
+   * @param {object} params The parameters.
+   * @param {number} params.radius
+   * @param {number} params.thickness
    */
-  constructor(radius = 0.01, thickness = 0.01) {
-    super(radius);
+  constructor(params = {}) {
+    super({ radius: 0.01, ...params });
+    const { thickness = 0.01 } = params;
     this.#thickness = thickness;
   }
 

@@ -6,10 +6,12 @@ class SlantBorder extends Border {
 
   /**
    *
-   * @param  {number} slant Distance along width to cut off
+   * @param {object} params
+   * @param {number} params.slant Distance along width to cut off
    */
-  constructor(slant = 0.02) {
-    super();
+  constructor(params = {}) {
+    super(params);
+    const { slant = 0.02 } = params;
     this.#dx = v(slant, 0);
   }
 

@@ -26,8 +26,7 @@ class StarWindowBorder extends WindowBorder {
     const mgr = BorderManager();
     if (mgr.hasBorder(titleKey)) {
       const cached = mgr.getBorder(titleKey);
-      this.offsetX = rect[0] - cached.rect[0];
-      this.offsetY = rect[1] - cached.rect[1];
+      this._offset = v(rect[0] - cached.rect[0], rect[1] - cached.rect[1]);
       return cached.verts;
     }
 

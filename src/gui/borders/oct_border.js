@@ -8,10 +8,12 @@ class OctBorder extends Border {
 
   /**
    *
-   * @param  {number} cut Length along edge to cut off
+   * @param {object} params
+   * @param  {number} params.cut Length along edge to cut off
    */
-  constructor(cut = 0.02) {
-    super();
+  constructor(params = {}) {
+    super(params);
+    const { cut = 0.02 } = params;
     this.#dx = v(cut, 0);
     this.#dy = v(0, cut);
   }

@@ -52,6 +52,8 @@ class GameScreen {
       new CircleTool(this),
       new LineTool(this),
       new BoxTool(this),
+
+      // new EmitterTool(this),
       new PiTool(this, grabRad),
       new ExpTool(this),
     ];

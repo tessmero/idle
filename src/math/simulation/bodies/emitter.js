@@ -1,7 +1,5 @@
 /**
- * @file Emitter pseudo-body used for box tests.
- *
- * Spawns physics particles.
+ * @file Emitter pseudo-body that spawns physics particles.
  * Otherwise this has no interaction similar to ControlPoint.
  */
 class Emitter extends Body {
@@ -12,6 +10,9 @@ class Emitter extends Body {
 
   // speed of spawned particles
   #speed = 0;
+
+  // physics particle subgroup instance
+  #pps;
 
   /**
    *
@@ -31,7 +32,7 @@ class Emitter extends Body {
     this.#countdown = this.#countdown - dt;
     if (this.#countdown < 0) {
       const vel = vp(this.angle, this.#speed);
-      this.sim.leftoverPPS.spawnParticle(this.pos, vel);
+      this.#pps.spawnParticle(this.pos, vel);
       this.#countdown = this.#countdown + this.#delay;
     }
 
@@ -39,14 +40,20 @@ class Emitter extends Body {
   }
 
   /**
-   * no direct interaction with particles
-   * @param {ParticleSim} _sim
+   * Override body. Just reserve a group for the emitted particles.
+   * @param {ParticleSim} sim
    */
-  register(_sim) {}
+  register(sim) {
+
+    // prepare to emit particles
+    // PPS = physics particle subgroup instance
+    this.#pps = sim.physicsGroup.newSubgroup();
+  }
 
   /**
-   * no direct interaction with particles
-   * @param {ParticleSim} _sim
+   * @param {ParticleSim} sim
    */
-  unregister(_sim) {}
+  unregister(sim) {
+    sim.physicsGroup.deleteSubgroup(this.#pps);
+  }
 }
