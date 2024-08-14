@@ -1,13 +1,16 @@
+/**
+ * @file ctor-params-destructure.test.cjs
+ */
 
-const {RuleTester} = require("eslint");
+const { RuleTester } = require('eslint');
 const ruleTester = new RuleTester();
 
 ruleTester.run(
-  "ctor-params-destructure", 
-  require("../ctor-params-destructure.cjs"),
+  'ctor-params-destructure',
+  require('../rules/ctor-params-destructure.cjs'),
 
   // constructors must use destructuring if they access params
-  { 
+  {
     valid: [{
 
       // private variable assignment pattern
@@ -20,13 +23,13 @@ ruleTester.run(
             this.#prop = prop;
           }
         }`,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( params={} ){}
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( params={} ){
@@ -34,7 +37,7 @@ ruleTester.run(
           }
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass{
           constructor( params={} ){
@@ -42,7 +45,7 @@ ruleTester.run(
           }
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass{
           constructor( params={} ){
@@ -53,13 +56,12 @@ ruleTester.run(
       `,
     }],
 
-
     invalid: [
 
-    {
+      {
 
-      // incorrect private variable pattern
-      code:`
+        // incorrect private variable pattern
+        code: `
         class MyClass extends SuperClass{
           #prop
           constructor(rect, params = {}) {
@@ -67,12 +69,12 @@ ruleTester.run(
             this.#prop = params.prop;
           }
         }`,
-      errors: 1,
-    },
-    {
+        errors: 1,
+      },
+      {
 
-      // destructured, but then accessed incorrectly
-      code:`
+        // destructured, but then accessed incorrectly
+        code: `
         class MyClass extends SuperClass{
           #prop
           constructor(rect, params = {}) {
@@ -81,38 +83,38 @@ ruleTester.run(
             this.#prop = params.prop;
           }
         }`,
-      errors: 1,
-    },
-    {
-      code: `
+        errors: 1,
+      },
+      {
+        code: `
         class MyClass {
           constructor( params={} ){
             if( params.prop || (true && params.prop) ){}
           }
         }
       `,
-      errors: 2,
-    },
-    {
-      code: `
+        errors: 2,
+      },
+      {
+        code: `
         class MyClass {
           constructor( params={} ){
             const prop = params.prop
           }
         }
       `,
-      errors: 1,
-    },{
-      code: `
+        errors: 1,
+      }, {
+        code: `
         class MyClass {
           constructor( params={} ){
             const myParams = params;
           }
         }
       `,
-      errors: 1,
-    },{
-      code: `
+        errors: 1,
+      }, {
+        code: `
         class MyClass extends SuperClass{
           constructor( params={} ){
             super(params)
@@ -120,7 +122,7 @@ ruleTester.run(
           }
         }
       `,
-      errors: 1,
-    }],
-  }
+        errors: 1,
+      }],
+  },
 );

@@ -1,18 +1,23 @@
+/**
+ * @file ctor-param-count.cjs
+ */
+
 module.exports = {
   meta: {
-    type: "problem", // This can be "problem", "suggestion", or "layout"
+    type: 'problem', // This can be "problem", "suggestion", or "layout"
     docs: {
       description:
-        "Enforce that constructors have a specific number of parameters and only the last parameter can have a default value",
-      category: "Best Practices",
+        `Enforce that constructors have a specific number of parameters,
+           and only the last parameter can have a default value`,
+      category: 'Best Practices',
       recommended: false,
     },
     schema: [
       {
-        type: "object",
+        type: 'object',
         properties: {
           count: {
-            type: "integer",
+            type: 'integer',
             minimum: 0,
             default: 1,
           },
@@ -22,14 +27,15 @@ module.exports = {
     ],
     messages: {
       incorrectParameterCount:
-        "Constructor should have exactly {{ count }} parameter(s).",
+        'Constructor should have exactly {{ count }} parameter(s).',
       defaultValueNotLast:
-        "Only the last parameter in the constructor can have a default value.",
+        'Only the last parameter in the constructor can have a default value.',
     },
   },
   create(context) {
     const options = context.options[0] || {};
-    const expectedParamCount = options.count !== undefined ? options.count : 1;
+    const { count = 1 } = options;
+    const expectedParamCount = count;
 
     return {
       'MethodDefinition[kind="constructor"]'(node) {
@@ -39,7 +45,7 @@ module.exports = {
         if (params.length !== expectedParamCount) {
           context.report({
             node,
-            messageId: "incorrectParameterCount",
+            messageId: 'incorrectParameterCount',
             data: {
               count: expectedParamCount,
             },
@@ -49,12 +55,12 @@ module.exports = {
         // Check if only the last parameter has a default value
         params.forEach((param, index) => {
           if (
-            param.type === "AssignmentPattern" &&
+            param.type === 'AssignmentPattern' &&
             index !== params.length - 1
           ) {
             context.report({
               node: param,
-              messageId: "defaultValueNotLast",
+              messageId: 'defaultValueNotLast',
             });
           }
         });

@@ -1,12 +1,17 @@
+/**
+ * @file ctor-params-destructure.cjs
+ */
+
 module.exports = {
+
   meta: {
     type: 'problem',
     docs: {
-      description: "Disallow accessing 'params' in constructors without using destructuring",
-      category: "Best Practices",
-      recommended: false
+      description: 'Disallow accessing \'params\' in constructors without using destructuring',
+      category: 'Best Practices',
+      recommended: false,
     },
-    schema: [] // No options
+    schema: [], // No options
   },
   create(context) {
     return {
@@ -21,7 +26,6 @@ module.exports = {
           currentNode = currentNode.parent;
         }
 
-
         // Allow destructuring, e.g., `const { prop } = params;`
         const parent = node.parent;
         if (
@@ -34,9 +38,9 @@ module.exports = {
 
         context.report({
           node,
-          message: "Constructors should only access 'params' using destructuring."
+          message: 'Constructors should only access \'params\' using destructuring.',
         });
-      }
+      },
     };
-  }
+  },
 };

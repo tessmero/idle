@@ -1,7 +1,7 @@
 /**
  * @file layout data for panels where you can switch between tabs
  */
-const TAB_PANE_LAYOUT = {
+TAB_PANE_LAYOUT = {
 
   tabsRow: {
     height: 0.04,
@@ -15,7 +15,7 @@ const TAB_PANE_LAYOUT = {
 };
 
 // used for test and debug menus in sandbox mode.
-const NESTED_TAB_PANE_LAYOUT = {
+NESTED_TAB_PANE_LAYOUT = {
 
   inner: {
     margin: 0.04,

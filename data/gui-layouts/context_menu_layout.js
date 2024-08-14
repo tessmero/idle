@@ -1,11 +1,8 @@
 /**
  * @file Layout data for context menu.
  *
- * Overall bounds depend on screen orientation.
- * Overall bounds are given in pairs to be interpolated for sliding animation.
- * (special handling in context_menu.js)
- *
- * Inner contents are flexible with no repetition or special handling.
+ * parameters 'orientation' and 'side'
+ * are used to pick overall bounds in context_menu.js
  */
 
 // helpers for aligning bounding rectangle in screen
@@ -15,40 +12,24 @@ _PAD = 0.05; // padding around content squares
 _SAX = _SQR + 2 * _PAD; // length of short axis
 _LAX = 2 * _SQR + 3 * _PAD; // length of long axis
 
-// bounds in horizontal screen
-_HS = {
-  width: _SAX,
-  height: _LAX,
-  top: 0.14, // align under menu/pause button
-};
-HS_CONTEXT_MENU_BOUNDS = {
-  0: {
-    ..._HS,
-    left: _MAR,
+CONTEXT_MENU_BOUNDS = {
+
+  // horizontal screen
+  'bounds@orientation=0': {
+    width: _SAX,
+    height: _LAX,
+    top: 0.14, // align under menu/pause button
+    'left@side=0': _MAR,
+    'right@side=1': _MAR,
   },
 
-  1: {
-    ..._HS,
-    right: _MAR,
-  },
-};
-
-// bounds in vertical screen
-// long axis is set to fill screen width
-_VS = {
-  width: _LAX,
-  height: _SAX,
-  left: 'auto',
-};
-VS_CONTEXT_MENU_BOUNDS = {
-  0: {
-    ..._VS,
-    top: _MAR,
-  },
-
-  1: {
-    ..._VS,
-    bottom: 0.11, // align above toolbar
+  // vertical screen
+  'bounds@orientation=1': {
+    width: _LAX,
+    height: _SAX,
+    left: 'auto',
+    'top@side=0': _MAR,
+    'bottom@side=1': 0.11, // align above toolbar
   },
 };
 

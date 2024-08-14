@@ -1,13 +1,16 @@
+/**
+ * @file no-new-singleton.test.cjs
+ */
 
-const {RuleTester} = require("eslint");
+const { RuleTester } = require('eslint');
 const ruleTester = new RuleTester();
 
 ruleTester.run(
-  "no-new-singleton", 
-  require("../no-new-singleton.cjs"),
+  'no-new-singleton',
+  require('../rules/no-new-singleton.cjs'),
 
-  //Disallow using "new" keyword with restricted classes
-  { 
+  // Disallow using "new" keyword with restricted classes
+  {
     valid: [{
       options: [{ restrictedClasses: ['MySingletonClass'] }],
       code: `
@@ -22,5 +25,5 @@ ruleTester.run(
       `,
       errors: 1,
     }],
-  }
+  },
 );

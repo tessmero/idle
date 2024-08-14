@@ -1,7 +1,7 @@
 /**
  * @file layout data for stats tab in upgrades menu.
  */
-const STATS_TAB_LAYOUT = {
+STATS_TAB_LAYOUT = {
 
   // helper
   _r0: {

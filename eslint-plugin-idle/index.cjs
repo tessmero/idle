@@ -1,12 +1,26 @@
-const plugin = { 
-  rules: { 
+/**
+ * @file index.cjs eslint plugin definition
+ *
+ * imports all the .cjs files in the rules folder
+ */
+const fs = require('fs');
+const path = require('path');
 
-    "no-new-singleton": require("./no-new-singleton.cjs"),
-    "ctor-last-param-default": require("./ctor-last-param-default.cjs"),
-    "ctor-params-destructure": require("./ctor-params-destructure.cjs"),
-    "ctor-params-super-args": require("./ctor-params-super-args.cjs"),
-    "ctor-param-count": require("./ctor-param-count.cjs"),
-    "super-params-spread": require("./super-params-spread.cjs"),
-  } 
+const rulesDir = path.join(__dirname, 'rules');
+
+// eslint-disable-next-line no-sync
+const ruleFiles = fs.readdirSync(rulesDir).filter((file) => file.endsWith('.cjs'));
+
+const plugin = {
+  rules: Object.fromEntries(
+    ruleFiles.map((file) => [
+      path.basename(file, '.cjs'), // rule name
+
+      // eslint-disable-next-line global-require
+      require(path.join(rulesDir, file)), // rule
+
+    ]),
+  ),
 };
+
 module.exports = plugin;

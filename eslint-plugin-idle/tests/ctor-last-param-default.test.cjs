@@ -1,20 +1,23 @@
+/**
+ * @file ctor-last-param-default.test.cjs
+ */
 
-const {RuleTester} = require("eslint");
+const { RuleTester } = require('eslint');
 const ruleTester = new RuleTester();
 
 ruleTester.run(
-  "ctor-last-param-default", 
-  require("../ctor-last-param-default.cjs"),
+  'ctor-last-param-default',
+  require('../rules/ctor-last-param-default.cjs'),
 
-  //constructors must have last param 'params={}'
-  { 
+  // constructors must have last param 'params={}'
+  {
     valid: [{
       code: `
         class MyClass {
           constructor( params={} ){}
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( a,b,c, params={} ){}
@@ -29,28 +32,28 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( params ){}
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( param={} ){}
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( ...p ){}
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( r={}, p={} ){}
@@ -58,5 +61,5 @@ ruleTester.run(
       `,
       errors: 1,
     }],
-  }
+  },
 );

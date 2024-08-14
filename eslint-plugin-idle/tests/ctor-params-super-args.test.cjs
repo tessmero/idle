@@ -1,23 +1,24 @@
+/**
+ * @file ctor-params-super-args.test.cjs
+ */
 
-
-const {RuleTester} = require("eslint");
+const { RuleTester } = require('eslint');
 const ruleTester = new RuleTester();
 
 ruleTester.run(
-  "ctor-params-super-args", 
-  require("../ctor-params-super-args.cjs"),
+  'ctor-params-super-args',
+  require('../rules/ctor-params-super-args.cjs'),
 
-//Constructor parameters must be passed to super in the same order, 
-//except the last super arg may be replaced with ObjectExpression in curly brackets`,
-//
-  { 
+  // Constructor parameters must be passed to super in the same order,
+  // except the last super arg may be replaced with ObjectExpression in curly brackets`,
+  {
     valid: [{
       code: `
         class MyClass {
           constructor( r, p ){}
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( r, p ){
@@ -25,7 +26,7 @@ ruleTester.run(
           }
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( r, p ){
@@ -45,7 +46,7 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( r, p ){
@@ -54,7 +55,7 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( r, p ){
@@ -63,7 +64,7 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( r, p ){
@@ -74,5 +75,5 @@ ruleTester.run(
       errors: 1,
     },
     ],
-  }
+  },
 );

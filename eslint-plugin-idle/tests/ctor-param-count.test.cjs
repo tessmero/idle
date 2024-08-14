@@ -1,13 +1,16 @@
+/**
+ * @file ctor-param-count.test.cjs
+ */
 
-const {RuleTester} = require("eslint");
+const { RuleTester } = require('eslint');
 const ruleTester = new RuleTester();
 
 ruleTester.run(
-  "ctor-param-count", 
-  require("../ctor-param-count.cjs"),
+  'ctor-param-count',
+  require('../rules/ctor-param-count.cjs'),
 
-  //Require constructors to have exactly {count=1} parameters with the first not having a default value
-  { 
+  // Require constructors to have exactly {count=1} parameters with the first not having a default value
+  {
     valid: [{
 
       // default count is 1
@@ -16,21 +19,21 @@ ruleTester.run(
           constructor( r ){}
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( r ){}
         }
       `,
       options: [{ count: 1 }],
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( r, p ){}
         }
       `,
       options: [{ count: 2 }],
-    },{
+    }, {
       // 2 params and last has default
       code: `
         class MyClass {
@@ -48,8 +51,8 @@ ruleTester.run(
           constructor( r,p ){}
         }
       `,
-      errors:1
-    },{
+      errors: 1,
+    }, {
       code: `
         class MyClass {
           constructor( r ){}
@@ -57,7 +60,7 @@ ruleTester.run(
       `,
       options: [{ count: 2 }],
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass {
           constructor( ...p ){}
@@ -65,7 +68,7 @@ ruleTester.run(
       `,
       options: [{ count: 2 }],
       errors: 1,
-    },{
+    }, {
 
       // first param of two has a default value
       code: `
@@ -76,5 +79,5 @@ ruleTester.run(
       options: [{ count: 2 }],
       errors: 1,
     }],
-  }
+  },
 );

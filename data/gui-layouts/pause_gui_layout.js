@@ -1,7 +1,7 @@
 /**
  * @file layout data for pause menu.
  */
-const PAUSE_GUI_LAYOUT = {
+PAUSE_GUI_LAYOUT = {
 
   // helper used as parent below
   _sr: {

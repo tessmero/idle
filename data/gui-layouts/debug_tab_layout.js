@@ -4,7 +4,7 @@
  * Here we only consider the content area not including any tab headers.
  */
 
-const DEBUG_TAB_LAYOUT = {
+DEBUG_TAB_LAYOUT = {
 
   // helper
   _r0: {
@@ -21,7 +21,7 @@ const DEBUG_TAB_LAYOUT = {
 };
 
 // base layout within one row
-const DEBUG_ROW_LAYOUT = {
+DEBUG_ROW_LAYOUT = {
   label: {
     left: 0.25,
     width: 'auto',
@@ -29,7 +29,7 @@ const DEBUG_ROW_LAYOUT = {
 };
 
 // layout within one row
-const DEBUG_SCALAR_LAYOUT = {
+DEBUG_SCALAR_LAYOUT = {
   ...DEBUG_ROW_LAYOUT,
 
   // helper
@@ -52,7 +52,7 @@ const DEBUG_SCALAR_LAYOUT = {
 };
 
 // layout within one row
-const DEBUG_BOOL_LAYOUT = {
+DEBUG_BOOL_LAYOUT = {
   ...DEBUG_ROW_LAYOUT,
 
   toggle: {

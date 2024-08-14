@@ -1,7 +1,7 @@
 /**
  * @file layout data for start menu.
  */
-const START_GUI_LAYOUT = {
+START_GUI_LAYOUT = {
 
   _main: {
     width: 1,

@@ -1,5 +1,5 @@
 
-# build production.js
+# outputs dist/production.js
 # by combining all the script tags in test.html
 
 

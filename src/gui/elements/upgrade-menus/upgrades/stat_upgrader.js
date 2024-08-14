@@ -25,14 +25,17 @@ class StatUpgrader extends CompositeGuiElement {
 
     const { gutse, useThickLayout } = params;
 
-    if (useThickLayout) {
-      this._layoutData = THICK_STAT_UPGRADER_LAYOUT;
-    }
-
     this.#useThickLayout = useThickLayout;
     this.#gutse = gutse;
     const lvls = gutse.maxLevel;
     this.#boxAnimStates = new Array(lvls).fill(-1);
+  }
+
+  /**
+   * @returns {object} The animation parameters matching KEYFRAME parameters in layout data
+   */
+  _getLayoutAnimState() {
+    return { thick: this.#useThickLayout ? 1 : 0 };
   }
 
   /**

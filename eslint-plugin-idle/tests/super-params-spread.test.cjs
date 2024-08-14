@@ -1,14 +1,16 @@
+/**
+ * @file super-params-spread.test.cjs
+ */
 
-
-const {RuleTester} = require("eslint");
+const { RuleTester } = require('eslint');
 const ruleTester = new RuleTester();
 
 ruleTester.run(
-  "super-params-spread", 
-  require("../super-params-spread.cjs"),
+  'super-params-spread',
+  require('../rules/super-params-spread.cjs'),
 
   // ObjectExpressions in super arguments must include '...params'
-  { 
+  {
     valid: [{
       code: `
         class MyClass extends SuperClass {
@@ -17,7 +19,7 @@ ruleTester.run(
           }
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( params ){
@@ -25,7 +27,7 @@ ruleTester.run(
           }
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( params ){
@@ -33,7 +35,7 @@ ruleTester.run(
           }
         }
       `,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( params ){
@@ -43,7 +45,6 @@ ruleTester.run(
       `,
     },
     ],
-    
 
     invalid: [{
       code: `
@@ -54,7 +55,7 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( params ){
@@ -63,7 +64,7 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( params ){
@@ -72,7 +73,7 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( params ){
@@ -81,7 +82,7 @@ ruleTester.run(
         }
       `,
       errors: 1,
-    },{
+    }, {
       code: `
         class MyClass extends SuperClass {
           constructor( params ){
@@ -92,5 +93,5 @@ ruleTester.run(
       errors: 1,
     },
     ],
-  }
+  },
 );

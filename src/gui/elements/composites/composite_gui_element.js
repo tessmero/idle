@@ -56,6 +56,15 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
+   * Get parameters for layout animation.
+   * Used for when _layoutData is a list of layout objects with KEYFRAME properties.
+   * @returns {object} The animation parameters matching or lying between keyframe parameters
+   */
+  _getLayoutAnimState() {
+    return {};
+  }
+
+  /**
    * Called in buildElements after a HoleElement is constructed.
    * @param {number[]} rect
    */
@@ -105,12 +114,20 @@ class CompositeGuiElement extends GuiElement {
     if (!data) { return null; }
     let lr = this._layout;
 
+    // get one representative if multiple layouts given
+    const dataRep = data[0] ? data[0] : data;
+
     // check if not yet computed, or was computed in
     // superclass constructor and layout was extended
-    if ((!lr) || (Object.keys(lr).length !== Object.keys(data).length)) {
-      lr = GuiLayoutParser.computeRects(this.rect, this._layoutData, screen.iconScale);
+    if ((!lr) || (Object.keys(lr).length !== Object.keys(dataRep).length)) {
+
+      // compute single layout
+      lr = GuiLayoutParser.computeRects(
+        this.rect, this._layoutData, screen.iconScale, this._getLayoutAnimState());
+
       this._layout = lr;
     }
+
     return lr;
   }
 

@@ -1,8 +1,12 @@
+/**
+ * @file super-params-spread.cjs
+ */
+
 module.exports = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: `ObjectExpressions in super arguments must include '...params'`,
+      description: 'ObjectExpressions in super arguments must include \'...params\'',
       recommended: false,
     },
     schema: [], // no options
@@ -11,23 +15,23 @@ module.exports = {
     return {
       'CallExpression[callee.type="Super"]'(node) {
 
-        node.arguments.forEach(arg => {
+        node.arguments.forEach((arg) => {
           if (arg.type === 'ObjectExpression') {
-            const hasSpreadParams = arg.properties.some(property =>
+            const hasSpreadParams = arg.properties.some((property) =>
               property.type === 'SpreadElement' &&
               property.argument.type === 'Identifier' &&
-              property.argument.name === 'params'
+              property.argument.name === 'params',
             );
 
             if (!hasSpreadParams) {
               context.report({
                 node: arg,
-                message: "ObjectExpressions in super calls must include '...params'."
+                message: 'ObjectExpressions in super calls must include \'...params\'.',
               });
             }
           }
         });
-      }
+      },
     };
-  }
+  },
 };

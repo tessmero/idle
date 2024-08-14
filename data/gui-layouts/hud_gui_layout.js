@@ -1,7 +1,7 @@
 /**
  * @file layout data for HUD visible when playing
  */
-const HUD_GUI_LAYOUT = {
+HUD_GUI_LAYOUT = {
 
   // helper referenced as parent below
   _sr: {

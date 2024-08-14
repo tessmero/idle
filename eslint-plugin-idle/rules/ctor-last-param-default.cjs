@@ -1,3 +1,7 @@
+/**
+ * @file ctor-last-param-default.cjs
+ */
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -7,11 +11,11 @@ module.exports = {
     },
     schema: [], // No options
   },
-  create: function (context) {
+  create(context) {
     return {
-      'MethodDefinition[kind="constructor"] > FunctionExpression': function (node) {
+      'MethodDefinition[kind="constructor"] > FunctionExpression'(node) {
         const lastParam = node.params[node.params.length - 1];
-        
+
         if (
           !lastParam ||
           lastParam.type !== 'AssignmentPattern' ||
@@ -20,7 +24,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            message: "The last parameter of the constructor should be `params = {}`.",
+            message: 'The last parameter of the constructor should be `params = {}`.',
           });
         }
       },

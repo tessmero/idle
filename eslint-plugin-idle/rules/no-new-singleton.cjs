@@ -1,9 +1,12 @@
+/**
+ * @file no-new-singleton.cjs
+ */
 
 module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: `Disallow using "new" keyword with singleton classes`,
+      description: 'Disallow using "new" keyword with singleton classes',
       recommended: false,
     },
     schema: [

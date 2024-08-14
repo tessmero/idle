@@ -1,7 +1,7 @@
 /**
  * @file layout data for upgrades tab in upgrade menu in play mode
  */
-const UPGRADES_TAB_LAYOUT = {
+UPGRADES_TAB_LAYOUT = {
 
   // helper
   _inner: {
@@ -16,8 +16,8 @@ const UPGRADES_TAB_LAYOUT = {
   },
 };
 
-// layout for one row in upgrades (0.08 thick)
-STAT_UPGRADER_LAYOUT = {
+// layout for row in upgrades (0.08 thick)
+_THIN_STAT_UPGRADER_LAYOUT = {
 
   // helper
   _inner: {
@@ -66,7 +66,7 @@ STAT_UPGRADER_LAYOUT = {
 };
 
 // alternate layout that takes up two rows (0.16 thick)
-THICK_STAT_UPGRADER_LAYOUT = {
+_THICK_STAT_UPGRADER_LAYOUT = {
 
   // helper
   _inner: {
@@ -114,5 +114,10 @@ THICK_STAT_UPGRADER_LAYOUT = {
     repeat: 'right',
     margin: 0.003,
   },
+};
+
+STAT_UPGRADER_LAYOUT = {
+  '@thick=0': _THIN_STAT_UPGRADER_LAYOUT,
+  '@thick=1': _THICK_STAT_UPGRADER_LAYOUT,
 };
 

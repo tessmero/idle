@@ -8,9 +8,10 @@ class GuiLayoutParser {
    * @param {number[]} screenRect The overall bounding rectangle.
    * @param {?object} data reference to css in data folder.
    * @param {number} iconScale The scale factor for raw numeric distances.
+   * @param {object} animParams
    */
-  static computeRects(screenRect, data, iconScale = 1) {
-    const glp = new GuiLayoutParser(screenRect, data, iconScale);
+  static computeRects(screenRect, data, iconScale = 1, animParams = {}) {
+    const glp = new GuiLayoutParser(screenRect, data, iconScale, animParams);
     const rects = glp.#computedRects;
 
     // wrap repeating rects
@@ -39,19 +40,62 @@ class GuiLayoutParser {
   #parent = [0, 0, 1, 1];
   #iconScale;
 
+  #animParams;
+
   /**
    * Called in computeRects
    * @param {number[]} screenRect The overall bounding rectangle.
    * @param {?object} data The value in GUI_LAYOUTS
    * @param {number} iconScale The scale factor for raw numeric distances.
+   * @param {object} animParams
    */
-  constructor(screenRect, data, iconScale) {
+  constructor(screenRect, data, iconScale, animParams = {}) {
     this.#iconScale = iconScale;
+    this.#animParams = animParams;
+
     if (data) {
-      for (const [key, cssRules] of Object.entries(data)) {
-        this.#computedRects[key] = this._computeRect(screenRect, cssRules);
+
+      // check for extra layer with @params keys
+      let currentData = data;
+      for (const [rawKey, newData] of Object.entries(data)) {
+
+        // @param by itself points to layout object
+        const { key, params } = this._parseKey(rawKey);
+        if (key === '') {
+          if (this._shouldParse(params)) {
+
+            // set layout data source
+            currentData = newData;
+          }
+        }
+      }
+
+      // start parsing
+      // iterate over rulesets
+      for (const [rawKey, cssRules] of Object.entries(currentData)) {
+
+        // check for @ parameter
+        const { key: rulesetKey, params: rulesetParams } = this._parseKey(rawKey);
+
+        if (this._shouldParse(rulesetParams)) {
+
+          // parse ruleset
+          this.#computedRects[rulesetKey] = this._computeRect(screenRect, cssRules);
+        }
       }
     }
+  }
+
+  /**
+   * @param  {object} keyParams The parsed @ parameter content
+   */
+  _shouldParse(keyParams) {
+    for (const [name, value] of Object.entries(keyParams)) {
+      const current = this.#animParams[name];
+      if (current === 0 && value === 1) { return false; }
+      if (current === 1 && value === 0) { return false; }
+    }
+    return true;
   }
 
   /**
@@ -66,11 +110,44 @@ class GuiLayoutParser {
     this.#parent = screenRect;
     let result = screenRect;
 
-    // modify rect once for each rule
-    for (const [key, value] of Object.entries(cssRules)) {
-      result = this._applyRule(result, key, value);
+    // iterate over rules
+    for (const [rawKey, value] of Object.entries(cssRules)) {
+
+      // check for @ params
+      const { key: ruleKey, params: ruleParams } = this._parseKey(rawKey);
+      if (this._shouldParse(ruleParams)) {
+
+        // modify rectangle
+        result = this._applyRule(result, ruleKey, value);
+      }
     }
+
+    // return final rectangle
     return result;
+  }
+
+  /**
+   * Parse ruleset or rule key which may have @anim=0 or @anim=1
+   * @param  {string} rawKey The raw key from layout data
+   * @returns {object}     The parsed key,params={}
+   */
+  _parseKey(rawKey) {
+    const [key, paramsString] = rawKey.split('@');
+
+    const params = {};
+    if (paramsString) {
+      const paramPairs = paramsString.split('&');
+      paramPairs.forEach((pair) => {
+        const [paramKey, paramValue] = pair.split('=');
+        params[paramKey] = parseInt(paramValue);
+      });
+    }
+
+    if (Object.keys(params).length > 1) {
+      throw new Error('layout parser only supports one @param per key');
+    }
+
+    return { key, params };
   }
 
   /**

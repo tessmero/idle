@@ -1,7 +1,7 @@
 /**
  * @file layout data for special popup for story interventions
  */
-const STORY_GUI_LAYOUT = {
+STORY_GUI_LAYOUT = {
 
   // special outer border
   borderDiv: {

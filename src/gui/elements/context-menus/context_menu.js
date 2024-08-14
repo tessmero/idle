@@ -35,23 +35,18 @@ class ContextMenu extends CompositeGuiElement {
    */
   static pickRect(screen, pointOfInterest = null) {
     const rect = global.screenRect;// screen.rect;
-
-    // load layout data depending on screen orientation
     const axis = Number(global.verticalDisplay);
-    const css = axis ? VS_CONTEXT_MENU_BOUNDS : HS_CONTEXT_MENU_BOUNDS;
-    const layout = GuiLayoutParser.computeRects(rect, css, screen.iconScale);
+    const poi = pointOfInterest ? pointOfInterest.xy() : [0, 0];
 
-    if (!pointOfInterest) {
+    // use bottom/right position by default
+    let side = 1;
+    if (pointOfInterest) {
 
-      // use bottom/right position
-      return layout[1];
+      // pick target side (0 or 1) of the screen to avoid covering poi
+      side = Number(poi[axis] < (rect[axis] + rect[axis + 2] / 2));
     }
 
-    // pick target side (0 or 1) of the screen to avoid covering poi
-    const poi = pointOfInterest.xy();
-    let side = Number(poi[axis] < (rect[axis] + rect[axis + 2] / 2));
-
-    // initally spawn context menu off screen
+    // initially spawn context menu off screen
     if (true && (_lastContextMenuSide === -1)) {
       _lastContextMenuSide = 2 * (side - 0.5);
       _lastContextMenuTime = global.t;
@@ -62,7 +57,7 @@ class ContextMenu extends CompositeGuiElement {
 
       // check if poi is obstructed
       const d = 0.1 + Math.abs(poi[axis] - (rect[axis] + 0.5 * rect[axis + 2])); // dist from screen center
-      const sax = Math.min(layout[0][2], layout[0][3]);// short axis of context menu
+      const sax = 0.4; // Math.min(layout[0][2], layout[0][3]);// short axis of context menu
       const maxd = 0.5 * rect[axis + 2] - sax;
       if (d < maxd) {
 
@@ -94,15 +89,26 @@ class ContextMenu extends CompositeGuiElement {
     if (side < 0) { side = 0; }
     if (side > 1) { side = 1; }
 
-    // compute precise bounding rect based on two extremes given in layout
-    const result = ContextMenu._interpolate(layout[0], layout[1], side);
-    return result;
+    // compute extremes given in layout
+    const ext = {};
+    for (const si of [0, 1]) {
+      ext[si] = GuiLayoutParser.computeRects(
+        rect, CONTEXT_MENU_BOUNDS, screen.iconScale,
+        {
+          orientation: axis,
+          side: si,
+        }
+      ).bounds;
+    }
+
+    // return interpolated rectangle
+    return ContextMenu._interpolate(ext[0], ext[1], side);
   }
 
   /**
    * Compute animated bounding rectangle between two extremes.
-   * @param {number[]} r0 The bounds at left/top extreme position.
-   * @param {number[]} r1 The bounds at right/bottom extreme position.
+   * @param {number[]} r0 The bounds at extreme position 0.
+   * @param {number[]} r1 The bounds at extreme position 1.
    * @param {number} side The animation state in range [0,1]
    */
   static _interpolate(r0, r1, side) {
