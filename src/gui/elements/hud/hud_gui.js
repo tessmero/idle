@@ -192,9 +192,9 @@ class HudGui extends Gui {
 
     sim.selectedBody = null;
     sim.selectedParticle = null;
-    screen.contextMenu = null;
+    screen.setContextMenu(null);
 
-    // switch to default tool
+    // switch to default tool / mouse cursor
     screen.setTool(screen.toolList[0]);
   }
 }

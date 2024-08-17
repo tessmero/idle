@@ -1,6 +1,10 @@
 /**
  * @file tutorial for sandbox mode experience-granting cheat tool
  */
+
+/**
+ *
+ */
 class ExpToolTutorial extends Macro {
 
   /**

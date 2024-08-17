@@ -13,7 +13,6 @@ class UpgradesTab extends CompositeGuiElement {
    */
   constructor(rect, params = {}) {
     super(rect, {
-      // border: new RoundedBorder(), // doesn't work with hole
       ...params,
     });
   }
@@ -38,7 +37,9 @@ class UpgradesTab extends CompositeGuiElement {
         rect = [rect[0], rect[1], rect[2], 2 * rect[3]];
       }
       return new StatUpgrader(rect, {
-        useThickLayout,
+        layoutAnimState: {
+          thick: useThickLayout ? 1 : 0,
+        },
         gutse,
         tooltipFunc: () => {
           const ttpr = UpgradeTooltip.pickRect(this.screen);
@@ -47,6 +48,7 @@ class UpgradesTab extends CompositeGuiElement {
       });
     });
 
+    /*
     // fill remaining rows with art elem
     const size = 0.4;
     const [x, y, w, _h] = rows[rowIndex];
@@ -55,9 +57,17 @@ class UpgradesTab extends CompositeGuiElement {
     const c = v(x + w / 2, avg(y, y1));
     const maxy = this.rect[1] + this.rect[3] - size - 0.01;
     const rect = [c.x - size / 2, Math.min(c.y - size / 2, maxy), size, size];
-    const hole = new HoleElement(rect, { border: new StarWindowBorder(rect) });
+    const hole = new HoleElement(rect, {
+      border: new StarBorder(rect),
+    });
+    */
 
-    return [hole, ...upgraders];
+    return [
+
+      // hole,
+
+      ...upgraders,
+    ];
   }
 
 }

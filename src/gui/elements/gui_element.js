@@ -48,10 +48,25 @@ class GuiElement {
   }
 
   /**
-   *
+   * Public getter.
    */
   get rect() {
     return this.#rect;
+  }
+
+  /**
+   * Rectangle that may be overridden by CompositeGuiElement for convenient 'bounds' in layout data.
+   */
+  get bounds() {
+    return this.#rect;
+  }
+
+  /**
+   *
+   * @param {number[]} r
+   */
+  setRect(r) {
+    this.#rect = r;
   }
 
   /**
@@ -168,7 +183,7 @@ class GuiElement {
 
   /**
    *
-   * @param {number} dt The time elapsed in millseconds.
+   * @param {number} dt The time elapsed in milliseconds.
    * @param {boolean} disableHover The if mouse hovering should be disabled.
    */
   update(dt, disableHover = false) {
@@ -188,34 +203,45 @@ class GuiElement {
 
     // check if a tooltip should be shown
     if (this.hovered && (this.#tempTooltip || this.tooltipFunc || this.tooltip)) {
-      if (this.#tempTooltip) {
-        this.tooltip = this.#tempTooltip;
-      }
-      else if (this.tooltipFunc) {
-        this.tooltip = this.tooltipFunc();
-      }
-
-      if (this.tooltip instanceof Tooltip) {
-        if (screen) {
-          screen.tooltip = this.tooltip;
-        }
-
-      }
-      else if ((typeof this.tooltip === 'string' || this.tooltip instanceof String)) {
-
-        // build standard tooltip gui element
-        let rect = this.pickTooltipRect(screen, this.tooltip, this.tooltipScale);
-        rect = padRect(...rect, 0.005);
-        if (screen) {
-          screen.tooltip = new LabelTooltip(rect, {
-            label: this.tooltip,
-            scale: this.tooltipScale,
-          });
-        }
+      if (screen) {
+        screen.tooltip = this.constructTooltipElement();
       }
     }
 
     return this.hovered;
+  }
+
+  /**
+   *
+   */
+  constructTooltipElement() {
+    const screen = this.screen;
+
+    if (this.#tempTooltip) {
+      this.tooltip = this.#tempTooltip;
+    }
+    else if (this.tooltipFunc) {
+      this.tooltip = this.tooltipFunc();
+    }
+
+    if (this.tooltip instanceof Tooltip) {
+      if (screen) {
+        return this.tooltip;
+      }
+
+    }
+    else if ((typeof this.tooltip === 'string' || this.tooltip instanceof String)) {
+
+      // build standard tooltip gui element
+      let rect = this.pickTooltipRect(screen, this.tooltip, this.tooltipScale);
+      rect = padRect(...rect, 0.005);
+      return new LabelTooltip(rect, {
+        label: this.tooltip,
+        scale: this.tooltipScale,
+      });
+    }
+
+    return null;
   }
 
   /**

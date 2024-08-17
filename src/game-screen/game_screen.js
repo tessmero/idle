@@ -18,6 +18,8 @@ class GameScreen {
   #titleKey;
   #rect;
 
+  #contextMenu = null;
+
   /**
    *
    */
@@ -62,7 +64,6 @@ class GameScreen {
     this.drawOffset = [0, 0];
 
     // modal gui elements
-    this.contextMenu = null;
     this.tooltip = null;
 
     // start animating mouse cursor if idle
@@ -88,7 +89,21 @@ class GameScreen {
    * Prevent changing tool with equal sign.
    */
   set tool(_t) {
-    throw new Error('should use setTool');
+    throw new Error('should use setTool()');
+  }
+
+  /**
+   *
+   */
+  get contextMenu() {
+    return this.#contextMenu;
+  }
+
+  /**
+   * disallow assigning contextMenu with equals sign
+   */
+  set contextMenu(_c) {
+    throw new Error('should use setContextMenu()');
   }
 
   /**
@@ -241,6 +256,11 @@ class GameScreen {
     // reset idle countdown
     this.idleCountdown = this.idleDelay;
 
+    // check if dragging gui element
+    if (this.draggingElem) {
+      this.draggingElem.drag();
+    }
+
     // trigger selected tool movement behavior
     const tool = this.tool;
     if (tool) { tool.mouseMove(p); }
@@ -250,6 +270,9 @@ class GameScreen {
    * Called when mouse button is released
    */
   mouseUp() {
+
+    // release any element that was being dragged
+    this.draggingElem = null;
 
     // release tool if it was being held down
     const tool = this.tool;
@@ -264,7 +287,7 @@ class GameScreen {
     // context menu
     // (GuiElement instance)
     const gui = this.gui;
-    const cm = this.contextMenu;
+    const cm = this.#contextMenu;
     let clicked = false;
     if (cm) {
       clicked = cm.click();
@@ -292,7 +315,7 @@ class GameScreen {
       clicked = bgGui.click();
     }
     if (clicked) {
-      // console.log('clicked bg hud gui')
+      // console.log('clicked bg gui')
       return;
     }
 
@@ -328,6 +351,58 @@ class GameScreen {
   }
 
   /**
+   * Set context menu gui element.
+   * @param {?GuiElement} cm The new context menu.
+   */
+  setContextMenu(cm) {
+
+    if (cm instanceof TestContextMenu) {
+      _cmSideState.side = 1;
+    }
+
+    if (cm instanceof LayoutContextMenu) {
+      _cmSideState.side = 1;
+    }
+
+    if (cm) {
+      cm.setScreen(this);
+      this.#contextMenu = cm;
+
+      // expand context menu
+      this._setCmTargetExpand(1);
+
+      // _cmExpandState.targetExpand = 1;
+    }
+    else {
+
+      // collapse context menu
+      this._setCmTargetExpand(0);
+
+      // _cmExpandState.targetExpand = 0;
+
+    }
+  }
+
+  /**
+   * Used for planning if the context menu is opening or closing.
+   * @param {number} e
+   */
+  _setCmTargetExpand(e) {
+    this._plannedCmTargetExpand = e;
+  }
+
+  /**
+   *
+   */
+  _finalizeCmTargetExpand() {
+    const e = this._plannedCmTargetExpand;
+    if (e !== _cmExpandState.targetExpand) {
+      _cmExpandState.targetExpand = e;
+      _cmExpandState.lastTime = -1;
+    }
+  }
+
+  /**
    *
    * @param {number} dt The time elapsed in millisecs.
    */
@@ -342,6 +417,9 @@ class GameScreen {
     const gui = this.gui;
     const macro = this.macro;
 
+    // point of interest to not cover with context menu
+    let poi = null;
+
     // stop if game is paused
     if ((!this.stateManager) || (this.stateManager.state !== GameStates.pauseMenu)) {
 
@@ -354,8 +432,14 @@ class GameScreen {
 
     // delete popups, knowing that any persistent
     // popups will be reinstated below
-    if (!(this.contextMenu instanceof TestContextMenu)) {
-      this.contextMenu = null;
+    if ((
+      (this.#contextMenu instanceof TestContextMenu) ||
+      (this.#contextMenu instanceof LayoutContextMenu)
+    )) {
+      poi = v(...this.rect);
+    }
+    else {
+      this.setContextMenu(null);
     }
     this.tooltip = null;
 
@@ -366,33 +450,50 @@ class GameScreen {
     if (gui && sim.selectedBody && (this === global.mainScreen) &&
         (this.state !== GameStates.startMenu) && (this.state !== GameStates.startTransition)) {
       const bod = sim.selectedBody;
-      let bodPos = bod.pos;
+      poi = bod.pos;
       if (bod instanceof CompoundBody) {
-        bodPos = bod.getMainBody().pos;
+        poi = bod.getMainBody().pos;
       }
-      const cmr = ContextMenu.pickRect(this, bodPos);
 
       if (bod instanceof Buddy) {
-        this.contextMenu = bod.buildContextMenu(cmr);
+        this.setContextMenu(bod.buildContextMenu(this.rect));
       }
       else {
-        this.contextMenu = new BodyContextMenu(cmr, { body: bod });
+        this.setContextMenu(new BodyContextMenu(this.rect, { body: bod }));
       }
 
     }
     else if (gui && sim.selectedParticle) {
       const p = sim.selectedParticle;
       const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
-      const cmr = ContextMenu.pickRect(this, v(x, y));
-      this.contextMenu = new PiContextMenu(cmr, { sim: this.sim, pData: p });
+      poi = v(x, y);
+      this.setContextMenu(new PiContextMenu(this.rect, { sim: this.sim, pData: p }));
     }
 
-    if (this.contextMenu) { this.contextMenu.buildElements(this); }
+    if (this.#contextMenu) {
+
+      // update context menu bounds animation
+      this._finalizeCmTargetExpand();
+      const lap = ContextMenu.pickLayoutAnimParams(this, poi);
+      this.#contextMenu.setLayoutAnimState(lap);
+      this.#contextMenu._layout = null;
+      this.#contextMenu.buildElements(this);
+
+      // check if closing animation just finished
+      if (_cmExpandState.expand === 0 && _cmExpandState.targetExpand === 0) {
+        this.#contextMenu = null;
+      }
+    }
+
+    let disableHover = false;
+    if (this.draggingElem) {
+      disableHover = true;
+      this.tooltip = this.draggingElem.constructTooltipElement();
+    }
 
     // update popups just in case they are persistent
-    let disableHover = false;
-    if (this.contextMenu) {
-      disableHover = this.contextMenu.update(dt, disableHover);
+    if (this.#contextMenu) {
+      disableHover = this.#contextMenu.update(dt, disableHover);
     }
 
     // update main gui
@@ -458,7 +559,9 @@ class GameScreen {
     keyframes.forEach((event) => {
       if (event[1] === 'down') { this.mouseDown(p); }
       if (event[1] === 'up') { this.mouseUp(p); }
-      if (event[1] === 'tool') { this.setTool(this.getTool(event[2])); }
+      if (event[1] === 'tool') {
+        this.setTool(this.getTool(event[2]));
+      }
     });
 
     // like update.js
@@ -468,10 +571,14 @@ class GameScreen {
 
   /**
    * Find owned tool matching the given class.
-   * @param {object} clazz The tool subclass to search for.
+   * @param {string|object} s The tool subclass/name to search for.
    * @returns {?Tool} The matching tool instance.
    */
-  getTool(clazz) {
+  getTool(s) {
+    let clazz = s;
+    if (typeof s === 'string') {
+      clazz = window[s];
+    }
     return this.toolList.find((t) => t instanceof clazz);
   }
 
@@ -576,9 +683,20 @@ class GameScreen {
     }
 
     if (gui && (!gui.blocksPopups)) {
-      // draw modal gui popups
-      if (this.contextMenu) {
-        this.contextMenu.draw(g);
+
+      // draw extra elements
+      const cm = this.#contextMenu;
+      if (cm) {
+
+        if (cm._layout) {
+          console.log('good');
+        }
+        else {
+          console.log('bad');
+          cm._computeLayoutRects(this);
+        }
+
+        cm.draw(g);
       }
       if (this.tooltip) {
         this.tooltip.draw(g);

@@ -1,8 +1,7 @@
 /**
  * @file Layout data for context menu.
  *
- * parameters 'orientation' and 'side'
- * are used to pick overall bounds in context_menu.js
+ * uses parameters 'orientation' and 'side'
  */
 
 // helpers for aligning bounding rectangle in screen
@@ -12,35 +11,43 @@ _PAD = 0.05; // padding around content squares
 _SAX = _SQR + 2 * _PAD; // length of short axis
 _LAX = 2 * _SQR + 3 * _PAD; // length of long axis
 
-CONTEXT_MENU_BOUNDS = {
+// helpers for positioning common buttons
+_BTN_MARGIN = 0.015;
 
-  // horizontal screen
+CONTEXT_MENU_LAYOUT = {
+
+  // bounds in horizontal screen
   'bounds@orientation=0': {
     width: _SAX,
-    height: _LAX,
-    top: 0.14, // align under menu/pause button
+
+    // expand/collapse
+    'height@expand=0': 0.1,
+    'height@expand=1': _LAX,
+    'top@expand=0': 'auto',
+    'top@expand=1': 0.14, // align under menu/pause button
+
+    // slide across screen
     'left@side=0': _MAR,
     'right@side=1': _MAR,
   },
 
-  // vertical screen
+  // bounds in vertical screen
   'bounds@orientation=1': {
-    width: _LAX,
     height: _SAX,
+
+    // expand/collapse
+    'width@expand=0': 0.1,
+    'width@expand=1': _LAX,
     left: 'auto',
+
+    // slide across screen
     'top@side=0': _MAR,
     'bottom@side=1': 0.11, // align above toolbar
   },
-};
-
-// helpers for positioning common buttons
-_BTN_MARGIN = 0.015;
-
-// base layout in context menu
-CONTEXT_MENU_LAYOUT = {
 
   // close button on top right
   closeBtn: {
+    parent: 'bounds',
     width: 0.04,
     height: 0.04,
     top: _BTN_MARGIN,
@@ -49,6 +56,7 @@ CONTEXT_MENU_LAYOUT = {
 
   // two content squares
   squares: {
+    parent: 'bounds',
     top: _PAD / 2,
     left: _PAD / 2,
     width: _SQR + _PAD,
@@ -84,6 +92,7 @@ BODY_CONTEXT_MENU_LAYOUT = {
 
   // delete button on bottom right
   trashBtn: {
+    parent: 'bounds',
     width: 0.07,
     height: 0.07,
     bottom: _BTN_MARGIN,
@@ -101,6 +110,40 @@ BUDDY_CONTEXT_MENU_LAYOUT = {
     height: 0.05,
     repeat: 'down',
     margin: 0.005,
+  },
+};
+
+// extended layout for layout tester in sandbox mode
+LAYOUT_CONTEXT_MENU_LAYOUT = {
+  ...CONTEXT_MENU_LAYOUT,
+
+  // title over first/left content square
+  title: {
+    parent: 'squares[0]',
+    height: 0.05,
+    top: -0.05,
+  },
+
+  // aspect ratio slider with icons
+  arSlider: {
+    parent: 'squares[0]',
+    top: '100%',
+    height: 0.04,
+  },
+
+  // rows in bottom/right content square
+  rows: {
+    parent: 'squares[1]',
+    height: 0.04,
+    repeat: 'down',
+  },
+
+  // optional preset buttons in first row
+  presets: {
+    parent: 'rows[0]',
+    width: '50%',
+    repeat: 'right',
+    margin: 0.002,
   },
 };
 

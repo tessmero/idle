@@ -2,8 +2,16 @@
  * @file ContextMenu global sliding animation state
  * and base class for various context menu displays.
  */
-let _lastContextMenuSide = -1;
-let _lastContextMenuTime = -1;
+const _cmSideState = {
+  side: 1, // animation state [0,1]
+  lastTime: -1, // system time of last update
+};
+
+const _cmExpandState = {
+  expand: 0,
+  targetExpand: 1, // 0 or 1
+  lastTime: -1, // system time of last update
+};
 
 /**
  * Context Menu modal gui element.
@@ -12,6 +20,20 @@ let _lastContextMenuTime = -1;
  */
 class ContextMenu extends CompositeGuiElement {
   _layoutData = CONTEXT_MENU_LAYOUT;
+
+  /**
+   * Set threshold to decide if this menu is too collapsed
+   * to build and display child elements
+   * @type {number} 0-1
+   */
+  _minExpandToBuildElements = 0.2;
+
+  // speed of sliding anim including expand/collapse segments
+  // data/gui-anims/context_menu_anim.js
+  static _slideSpeed = 4e-3;
+
+  // speed of expand/collapse just to open or close
+  static _openCloseSpeed = 1e-2;
 
   /**
    * get params using ContextMenu.pickRects
@@ -27,33 +49,136 @@ class ContextMenu extends CompositeGuiElement {
   }
 
   /**
+   * Override CompositeGuiElement,
+   * skip inner layout parsing and element construction
+   * if outer bounds are too collapsed.
+   * @param  {GameScreen} screen
+   */
+  buildElements(screen) {
+
+    // check if collapsed
+    const current = this.layoutAnimState;
+    if (current && (current.expand < this._minExpandToBuildElements)) {
+
+      // emulate building empty list of elements
+      this._clearChildren(screen);
+      this.setScreen(screen);
+
+    }
+    else {
+
+      // behave like normal CompositeGuiElement
+      super.buildElements(screen);
+    }
+  }
+
+  /**
+   *
+   * @param {GameScreen} screen
+   * @param {?Vector} pointOfInterest
+   */
+  static pickLayoutAnimParams(screen, pointOfInterest = null) {
+    const rect = screen.rect;
+    const axis = Number(global.verticalDisplay);
+
+    let side = _cmSideState.side;
+    let expand = _cmExpandState.expand;
+
+    // check if correctly expanded/collapsed
+    if (_cmExpandState.expand === _cmExpandState.targetExpand) {
+
+      // animate sliding if necessary
+      side = ContextMenu._getAnimatedSide(rect, axis, pointOfInterest);
+
+      // return animation params
+      const animParams = GuiAnimParser.computeLayoutAnimParams(CONTEXT_MENU_ANIM, side);
+      return {
+        orientation: axis,
+        ...animParams,
+      };
+
+    }
+    else if (_cmExpandState.lastTime === -1) {
+      _cmExpandState.lastTime = global.t;
+    }
+    else {
+
+      // animate expanding or collapsing
+      const dt = global.t - _cmExpandState.lastTime;
+      const target = _cmExpandState.targetExpand;
+      const de = ContextMenu._openCloseSpeed * dt;
+
+      if (expand < target) {
+        expand = Math.min(target, expand + de);
+      }
+      else if (expand > target) {
+        expand = Math.max(target, expand - de);
+      }
+
+      if (expand < 0) { expand = 0; }
+      if (expand > 1) { expand = 1; }
+      _cmExpandState.expand = expand;
+      _cmExpandState.lastTime = global.t;
+    }
+
+    // 20240602 bandaid for when test context menu stops appearing
+    if (side < 0) { side = 0; }
+    if (side > 1) { side = 1; }
+
+    // return animation params
+    return {
+      orientation: axis,
+      expand,
+      side,
+    };
+  }
+
+  /**
    * pick region for context menu
    * - within given screen rectangle
    * - leaving poit of interest visible
    * @param {GameScreen[]} screen The screen to align menu in.
    * @param {?Vector} pointOfInterest The position on-screen that should be kept visible.
+   * @param {?object} layoutAnimParams
    */
-  static pickRect(screen, pointOfInterest = null) {
-    const rect = global.screenRect;// screen.rect;
-    const axis = Number(global.verticalDisplay);
+  static pickRect(screen, pointOfInterest = null, layoutAnimParams = null) {
+    const rect = screen.rect;
+
+    const lap = layoutAnimParams ? layoutAnimParams :
+      ContextMenu.pickLayoutAnimParams(screen, pointOfInterest);
+
+    // return interpolated rectangle
+    return GuiLayoutParser.computeRects(
+      rect, CONTEXT_MENU_LAYOUT, screen.iconScale, lap
+    ).bounds;
+  }
+
+  /**
+   *
+   * @param {number[]} rect
+   * @param {number} axis
+   * @param {Vector} pointOfInterest
+   */
+  static _getAnimatedSide(rect, axis, pointOfInterest) {
     const poi = pointOfInterest ? pointOfInterest.xy() : [0, 0];
 
     // use bottom/right position by default
-    let side = 1;
+    let { side = 1 } = _cmSideState;
+
     if (pointOfInterest) {
 
       // pick target side (0 or 1) of the screen to avoid covering poi
       side = Number(poi[axis] < (rect[axis] + rect[axis + 2] / 2));
     }
 
-    // initially spawn context menu off screen
-    if (true && (_lastContextMenuSide === -1)) {
-      _lastContextMenuSide = 2 * (side - 0.5);
-      _lastContextMenuTime = global.t;
+    // initially spawn context menu
+    if (_cmSideState.side === -1) {
+      _cmSideState.side = 2 * (side - 0.5);
+      _cmSideState.sideTime = global.t;
     }
 
     // check if previously at different location
-    if ((_lastContextMenuSide !== side) && (_lastContextMenuSide !== -1)) {
+    if ((_cmSideState.side !== side) && (_cmSideState.side !== -1)) {
 
       // check if poi is obstructed
       const d = 0.1 + Math.abs(poi[axis] - (rect[axis] + 0.5 * rect[axis + 2])); // dist from screen center
@@ -63,46 +188,28 @@ class ContextMenu extends CompositeGuiElement {
 
         // leave context menu in non-ideal spot
         // since poi is not obstructed
-        side = _lastContextMenuSide;
+        side = Math.round(_cmSideState.side);
 
       }
       else {
 
         // poi is obstructed, so slide to target
         const targetSide = side;
-        side = _lastContextMenuSide;
-        const dt = global.t - _lastContextMenuTime;
-        const ds = 1e-2 * dt;
-        if (_lastContextMenuSide < targetSide) {
+        side = _cmSideState.side;
+        const dt = global.t - _cmSideState.lastTime;
+        const ds = ContextMenu._slideSpeed * dt;
+        if (_cmSideState.side < targetSide) {
           side = Math.min(targetSide, side + ds);
         }
-        else if (_lastContextMenuSide > targetSide) {
+        else if (_cmSideState.side > targetSide) {
           side = Math.max(targetSide, side - ds);
         }
       }
     }
-    _lastContextMenuSide = side;
-    _lastContextMenuTime = global.t;
+    _cmSideState.side = side;
+    _cmSideState.lastTime = global.t;
 
-    // 20240602 working bandaid? for bug
-    // where test context menu stops appearing
-    if (side < 0) { side = 0; }
-    if (side > 1) { side = 1; }
-
-    // compute extremes given in layout
-    const ext = {};
-    for (const si of [0, 1]) {
-      ext[si] = GuiLayoutParser.computeRects(
-        rect, CONTEXT_MENU_BOUNDS, screen.iconScale,
-        {
-          orientation: axis,
-          side: si,
-        }
-      ).bounds;
-    }
-
-    // return interpolated rectangle
-    return ContextMenu._interpolate(ext[0], ext[1], side);
+    return side;
   }
 
   /**

@@ -14,6 +14,9 @@ class TabPaneGroup extends CompositeGuiElement {
   #tabContents;
   #tabTooltips;
 
+  // space between labels (if possible)
+  #padBetweenHeaders = 0.05;
+
   /**
    * tabContent is list of rect->element callbacks
    * @param {number[]} rect The rectangle to align elements in.
@@ -39,6 +42,21 @@ class TabPaneGroup extends CompositeGuiElement {
   }
 
   /**
+   * Get distance neighboring headers have to overlap so they fit.
+   * Returns 0 if tab headers fit easily.
+   * @param {number[][]} tabLabelDims the [w,h] of each of the tab labels
+   */
+  _computeTabHeaderCollapse(tabLabelDims) {
+    const maxWidth = this._layout.content[2]; // this.rect[2];
+    const p = this.#padBetweenHeaders;
+    const totalWidth = tabLabelDims.reduce((total, [w, _h]) => total + w + p, 0);
+    if (totalWidth < maxWidth) {
+      return 0;
+    }
+    return (totalWidth - maxWidth) / tabLabelDims.length;
+  }
+
+  /**
    * Construct direct children for this composite.
    * @returns {GuiElement[]} The children.
    */
@@ -46,37 +64,44 @@ class TabPaneGroup extends CompositeGuiElement {
     const layout = this._layout;
     const result = [];
 
-    // tab labels at top
-    let i = 0;
-    const p = 0.05;
-    const tabLabelScale = 0.4;
+    // check if tab labels will fit easily
+    const tabLabels = this.#tabLabels;
+    const tabLabelScale = 0.4; // font size
+    const tabLabelDims = tabLabels.map(
+      (label) => getTextDims(label, tabLabelScale)
+    );
+    const collapse = this._computeTabHeaderCollapse(tabLabelDims);
+
+    // construct tab header buttons
     const [cx, y, _w, _h] = layout.tabsRow;
     let x = cx + 0.02;
-    this.#tabLabels.map((label) => {
-      const [w, h] = getTextDims(label, tabLabelScale);
+    const p = this.#padBetweenHeaders;
+    tabLabels .map((label, i) => {
+      const [w, h] = tabLabelDims[i];
       const rr = padRect(x, y, w, h, 0.02);
-      const ii = i;
-      x = x + (w + p);
+      x = x + (w + p) - collapse;
       const tb = new TabHeaderButton(rr, {
         parent: this,
-        tabIndex: ii,
+        tabIndex: i,
         label,
         action: () => {
-          this.#selectedTabIndex = ii;
-          this.#tabChangeListeners.forEach((l) => l(ii));
+          this.#selectedTabIndex = i;
+          this.#tabChangeListeners.forEach((l) => l(i));
         },
         tooltip: this.#tabTooltips ? this.#tabTooltips[i] : null,
         scale: tabLabelScale,
       });
 
       result.push(tb);
-      i = i + 1;
     });
 
     // contents for each tab are technically not children
     // so they aren't all drawn automatically
     const r = this._layout.content;
-    const conts = this.#tabContents.map((cons) => cons(r, { opaque: true }));
+    const conts = this.#tabContents.map((cons) => cons(r, {
+      opaque: true,
+      border: new OctBorder(),
+    }));
     this.tabContent = conts;
 
     return result;

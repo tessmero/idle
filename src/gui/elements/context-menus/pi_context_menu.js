@@ -29,7 +29,9 @@ class PiContextMenu extends ContextMenu {
    * @returns {GuiElement[]} The children.
    */
   _buildElements() {
-    const [s0, s1] = this._layout.squares;
+    const layout = this._layout;
+    const s0 = layout.squares[0];
+    const s1 = layout.squares[1];
 
     // idenfity particle type
     const [subgroup, i, _x, _y, _dx, _dy, _hit] = this.#pData;
@@ -150,7 +152,7 @@ class PiContextMenu extends ContextMenu {
     const screen = this.screen;
     const sim = screen.sim;
 
-    screen.contextMenu = null;
+    screen.setContextMenu(null);
     sim.selectedParticle = null;
     screen.setTool(screen.toolList[0]);
   }

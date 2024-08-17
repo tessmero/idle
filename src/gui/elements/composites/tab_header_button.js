@@ -14,51 +14,15 @@ class TabHeaderButton extends TextButton {
    * @param {Function} params.action The function to call when clicked.
    */
   constructor(rect, params = {}) {
-    super(rect, { tooltipScale: 0.4, ...params });
+    super(rect, {
+      tooltipScale: 0.4,
+      border: new OctBorder(),
+      ...params,
+    });
 
     const { parent, tabIndex } = params;
 
     this.parent = parent;
     this.tabIndex = tabIndex;
-  }
-
-  /**
-   * Override the standard button appearance to draw tab header.
-   * @param {object} g The graphics context.
-   */
-  draw(g) {
-    const rect = this.rect;
-    let lineCol = global.colorScheme.fg;
-
-    if (this.hovered) {
-      lineCol = global.colorScheme.hl;
-    }
-
-    g.strokeStyle = lineCol;
-    g.clearRect(...rect);
-
-    const selected = (this.parent.getSelectedTabIndex() === this.tabIndex);
-    if (selected) {
-      const [x, y, w, h] = rect;
-      g.beginPath();
-      g.moveTo(x, y + h);
-      g.lineTo(x, y);
-      g.lineTo(x + w, y);
-      g.lineTo(x + w, y + h);
-      g.stroke();
-    }
-    else {
-      g.strokeRect(...rect);
-    }
-
-    drawText(g, ...rectCenter(...this.rect), this.label, this.center, new FontSpec(0, this.scale, false));
-
-    if (global.debugUiRects) {
-
-      // draw debug rectangle
-      g.strokeStyle = 'red';
-      g.lineWidth = global.lineWidth;
-      g.strokeRect(...this.rect);
-    }
   }
 }

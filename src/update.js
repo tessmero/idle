@@ -7,8 +7,9 @@ let lastCanvasOffsetHeight = -1;
 
 /**
  * Helper to continuously fit game to browser window.
+ * @param {?boolean} forceUpdate
  */
-function fitToContainer() {
+function fitToContainer(forceUpdate = false) {
   const cvs = global.canvas;
   const screen = global.mainScreen;
 
@@ -17,7 +18,9 @@ function fitToContainer() {
   if (ow === 0) { ow = 200; }
   if (oh === 0) { oh = 200; }
 
-  if ((!global.screenCorners) || (ow !== lastCanvasOffsetWidth) || (oh !== lastCanvasOffsetHeight)) {
+  if (forceUpdate || (
+    (!global.screenCorners) || (ow !== lastCanvasOffsetWidth) || (oh !== lastCanvasOffsetHeight)
+  )) {
 
     lastCanvasOffsetWidth = ow;
     lastCanvasOffsetHeight = oh;

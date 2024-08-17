@@ -10,12 +10,28 @@ class HoleElement extends GuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    const rect = this.rect;
     const border = this.border;
+    if (!border) { return; }
+
+    const rect = this.rect;
+    const outerCorners = rectCorners(...padRect(...rect, 0.001));
     const verts = border.verts(rect);
 
+    // invert border
+    // trace bounding rect then border shape to fill between them
+    const innerShape = verts;
+    const inverts = [
+
+      // trace outer rectangle counter-clockwise
+      outerCorners[0], ...outerCorners.reverse(),
+
+      // trace animated inner shape clockwise
+      ...innerShape, innerShape[0],
+
+    ];
+
     g.globalCompositeOperation = 'destination-out';
-    border.path(g, verts);
+    border.path(g, inverts);
     g.fill();
     g.globalCompositeOperation = 'source-over';
 

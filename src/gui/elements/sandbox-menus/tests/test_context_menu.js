@@ -11,6 +11,9 @@ let _testLoopTooltip = '';
 class TestContextMenu extends ContextMenu {
   _layoutData = TEST_CONTEXT_MENU_LAYOUT;
 
+  // require outer bounds to be fully expanded
+  _minExpandToBuildElements = 1;
+
   // test data
   #test;
   #testCat;
@@ -74,8 +77,12 @@ class TestContextMenu extends ContextMenu {
       // do nothing
     }
     else {
-      this._builtElements = true;
+
+      // build elements if not collapsed
       super.buildElements(s);
+      if (this.children.length > 0) {
+        this._builtElements = true;
+      }
     }
   }
 
@@ -87,7 +94,7 @@ class TestContextMenu extends ContextMenu {
     const asserts = this.#asserts;
     const test = this.#test;
     const titleRect = this._layout.title;
-    const [s0, _s1] = this._layout.squares;
+    const s0 = this._layout.squares[0];
     const botRows = this._layout.rows;
 
     // center simulation in first content square
@@ -296,11 +303,7 @@ class TestContextMenu extends ContextMenu {
    *
    */
   playClicked() {
-    const screen = this.screen;
-    screen.contextMenu = new TestContextMenu(
-      ContextMenu.pickRect(screen),
-      { testIndex: this.#testIndex });
-    screen.contextMenu.setScreen(screen);
+    this._gotoOtherTest(this.#testIndex);
   }
 
   /**
@@ -308,11 +311,7 @@ class TestContextMenu extends ContextMenu {
    */
   prevClicked() {
     const prevIndex = nnmod(this.#testIndex - 1, allTests.length);
-    const screen = this.screen;
-    screen.contextMenu = new TestContextMenu(
-      ContextMenu.pickRect(screen),
-      { testIndex: prevIndex });
-    screen.contextMenu.setScreen(screen);
+    this._gotoOtherTest(prevIndex);
   }
 
   /**
@@ -320,11 +319,20 @@ class TestContextMenu extends ContextMenu {
    */
   nextClicked() {
     const nextIndex = nnmod(this.#testIndex + 1, allTests.length);
+    this._gotoOtherTest(nextIndex);
+  }
+
+  /**
+   * set a new context menu to replace this one.
+   * Used to switch to a different test or to reset the current test.
+   * @param {number} otherTestIndex The index of the new test to show
+   */
+  _gotoOtherTest(otherTestIndex) {
     const screen = this.screen;
-    screen.contextMenu = new TestContextMenu(
-      ContextMenu.pickRect(screen),
-      { testIndex: nextIndex });
-    screen.contextMenu.setScreen(screen);
+    screen.setContextMenu(new TestContextMenu(
+      screen.rect,
+      { testIndex: otherTestIndex }
+    ));
   }
 
   /**
@@ -334,6 +342,12 @@ class TestContextMenu extends ContextMenu {
    */
   update(dt, disableHover) {
     const hovered = super.update(dt, disableHover);
+
+    // check if not built because outer bounds are too collapsed
+    if (this.children.length === 0) {
+      return hovered;
+    }
+
     const ttDisplay = this.#ttDisplay;
 
     this.#t = this.#t + dt;
@@ -391,7 +405,7 @@ class TestContextMenu extends ContextMenu {
         this.#checksPassed.push(success);
       }
 
-      const icon = this.pickIcon(i);
+      const icon = this._pickIcon(i);
       ttDisplay.setCheckboxIcon(i, icon);
       this.#checkReadouts[i].icon = icon;
     }
@@ -405,7 +419,7 @@ class TestContextMenu extends ContextMenu {
    * @param  {number} assertIndex The index of the assertion.
    * @returns {Icon} The pass/fail/blank icon to reflect the status of the assertion.
    */
-  pickIcon(assertIndex) {
+  _pickIcon(assertIndex) {
     if (assertIndex >= this.#checksPassed.length) {
 
       // assertion is in the future

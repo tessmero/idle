@@ -1,7 +1,7 @@
 /**
  * @file UPGRADE_TRACKS data for purchasable global upgrades.
  */
-const UPGRADE_TRACKS = {
+UPGRADE_TRACKS = {
   'nparticles': {
     beforeCard: ((screen) => {
       screen.sim.rainGroup.n = 10;

@@ -3,7 +3,44 @@
  * used in src/gui/icons
  */
 
-const ICON_LAYOUTS = {
+ICON_LAYOUTS = {
+  layout: [[
+    'wwwwwwww',
+    'w      w',
+    'w      w',
+    'w  www w',
+    'w  w w w',
+    'w  www w',
+    'w      w',
+    'wwwwwwww',
+  ], [
+    'wwwwwwww',
+    'w      w',
+    'w      w',
+    'w www  w',
+    'w w w  w',
+    'w www  w',
+    'w      w',
+    'wwwwwwww',
+  ], [
+    'wwwwwwww',
+    'w      w',
+    'w www  w',
+    'w w w  w',
+    'w www  w',
+    'w      w',
+    'w      w',
+    'wwwwwwww',
+  ], [
+    'wwwwwwww',
+    'w      w',
+    'w  www w',
+    'w  w w w',
+    'w  www w',
+    'w      w',
+    'w      w',
+    'wwwwwwww',
+  ]],
   umbrella: [[
     '     ww ',
     '   www  ',

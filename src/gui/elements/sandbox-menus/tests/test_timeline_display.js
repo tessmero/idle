@@ -8,6 +8,8 @@ class TestTimelineDisplay extends CompositeGuiElement {
   #checkLabels;
 
   #t;
+
+  // handles for some children
   #checkboxes;
 
   /**

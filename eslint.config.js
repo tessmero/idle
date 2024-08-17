@@ -156,7 +156,7 @@ const baseRules = {
   'jsdoc/require-example': 0,
   'jsdoc/require-file-overview': 1,
   'jsdoc/require-hyphen-before-param-description': 0,
-  'jsdoc/require-jsdoc': ['error', {
+  'jsdoc/require-jsdoc': ['warn', {
     'require': {
       'FunctionDeclaration': false,
       'MethodDefinition': true,
@@ -503,7 +503,7 @@ const baseRules = {
 
   // disallow use of undefined variable
   'no-undefined': 1,
-  'no-unused-vars': ['error',
+  'no-unused-vars': ['warn',
     {
       'vars': 'local',
       'argsIgnorePattern': '^_',

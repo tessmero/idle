@@ -8,39 +8,136 @@ class GuiLayoutParser {
    * @param {number[]} screenRect The overall bounding rectangle.
    * @param {?object} data reference to css in data folder.
    * @param {number} iconScale The scale factor for raw numeric distances.
-   * @param {object} animParams
+   * @param {object} animParams the animation state which may have one non-extreme
    */
   static computeRects(screenRect, data, iconScale = 1, animParams = {}) {
-    const glp = new GuiLayoutParser(screenRect, data, iconScale, animParams);
-    const rects = glp.#computedRects;
 
-    // wrap repeating rects
-    // to access OOB index safely
-    for (const [key, rlist] of Object.entries(rects)) {
-      if (typeof rlist[0] !== 'number') {
-        const proxy = new Proxy({}, {
-          get(_target, prop) {
-            let p = prop;
-            if ((typeof p === 'number') && (p >= rlist.length)) {
-              p = rlist.length - 1;
-            }
-            return rlist[p];
-          },
-        });
-        rects[key] = proxy;
+    // check if a param calls for interpolation
+    const interp = Object.entries(animParams).find(
+      ([_prm, val]) => (val > 0) && (val < 1)
+    );
+
+    if (interp) {
+      const [iParam, iVal] = interp;
+
+      // compute extremes versions of layout
+      const ext = {};
+      for (const si of [0, 1]) {
+        ext[si] = GuiLayoutParser._computeRects(
+          screenRect, data, iconScale, {
+            ...animParams,
+            [iParam]: si,
+          });
       }
+
+      // return interpolated layout
+      return GuiLayoutParser._iLayouts(ext[0], ext[1], iVal);
     }
 
-    return rects;
+    // no interpolation needed
+    return GuiLayoutParser._computeRects(
+      screenRect, data, iconScale, animParams);
   }
 
-  #computedRects = [];
+  /**
+   * interpolate two layouts
+   * @param {number[]} l0 The layout at extreme position 0.
+   * @param {number[]} l1 The layout at extreme position 1.
+   * @param {number} side The animation state in range [0,1]
+   */
+  static _iLayouts(l0, l1, side) {
+    const result = {};
+    Object.keys(l0).forEach((param) => {
+      const r0 = l0[param];
+      const r1 = l1[param];
+      if (typeof r0[0] === 'number') {
+        // single rectangle
+        result[param] = GuiLayoutParser._iRects(r0, r1, side);
+      }
+      else {
+        // list of rectangles
+        const n = Math.min(r0.length, r1.length);
+        const ilist = [];
+        for (let i = 0; i < n; i++) {
+          ilist.push(GuiLayoutParser._iRects(r0[i], r1[i], side));
+        }
+        result[param] = GuiLayoutParser._safeRepeat(ilist);
+      }
+
+    });
+    return result;
+  }
+
+  /**
+   * interpolate two rectangles
+   * @param {number[]} r0 The bounds at extreme position 0.
+   * @param {number[]} r1 The bounds at extreme position 1.
+   * @param {number} side The animation state in range [0,1]
+   */
+  static _iRects(r0, r1, side) {
+    const result = [];
+    for (let i = 0; i < 4; i++) {
+      result[i] = avg(r0[i], r1[i], side);
+    }
+    return result;
+  }
+
+  /**
+   * Compute x,y,w,h rectangles from css rules.
+   * @param {number[]} screenRect The overall bounding rectangle.
+   * @param {?object} data reference to css in data folder.
+   * @param {number} iconScale The scale factor for raw numeric distances.
+   * @param {object} animParams Assumed to be at extremes
+   */
+  static _computeRects(screenRect, data, iconScale = 1, animParams = {}) {
+    const glp = new GuiLayoutParser(screenRect, data, iconScale, animParams);
+    return glp.#computedRects;
+  }
+
+  /**
+   * Wrap a list of rectangles so if an index >= n is accessed,
+   * it returns the last available rectangle.
+   * @param {number[][]} rlist The list of rectangles.
+   */
+  static _safeRepeat(rlist) {
+    return new Proxy({}, {
+      get(_target, prop) {
+        if (typeof prop === 'symbol') {
+          // being unpacked like [a,b,c] = myProxy
+          return rlist[prop];
+        }
+        const index = Number(prop);
+        if (!isNaN(index) && (index >= rlist.length)) {
+          return rlist[rlist.length - 1];
+        }
+        return rlist[prop];
+      },
+    });
+  }
+
+  // to decide which axis is relevant
+  // when computing % of parent length
   #xKeys = ['left', 'right', 'width', 'max-width'];
   #yKeys = ['top', 'bottom', 'height', 'max-height'];
-  #parent = [0, 0, 1, 1];
+
+  // screen scale factor set in constructor
   #iconScale;
 
-  #animParams;
+  // current animation state set in constructor
+  #currentAnim;
+
+  // animation parameter names encountered during parsing
+  #animParamsInData = new Set();
+
+  // current parent rectangle set during parsing
+  #parent;
+
+  // parsed extreme rectangles that are waiting for
+  // the opposite extreme to be parsed
+  #toInterpolate = [];
+
+  // final parsed absolute rectangles
+  #computedRects = [];
 
   /**
    * Called in computeRects
@@ -51,7 +148,7 @@ class GuiLayoutParser {
    */
   constructor(screenRect, data, iconScale, animParams = {}) {
     this.#iconScale = iconScale;
-    this.#animParams = animParams;
+    this.#currentAnim = animParams;
 
     if (data) {
 
@@ -80,18 +177,34 @@ class GuiLayoutParser {
         if (this._shouldParse(rulesetParams)) {
 
           // parse ruleset
-          this.#computedRects[rulesetKey] = this._computeRect(screenRect, cssRules);
+          let computed = this._computeRect(screenRect, cssRules);
+
+          //
+          if (typeof computed[0] !== 'number') {
+
+            // result is list of rectangles
+            // wrap it to safely access any index
+            computed = GuiLayoutParser._safeRepeat(computed);
+          }
+
+          this.#computedRects[rulesetKey] = computed;
         }
       }
     }
   }
 
   /**
+   * Get set of animation parameter names referenced in data.
+   * @returns {string[]} The parameter names.
+   */
+  get animParamsInData() { return this.#animParamsInData; }
+
+  /**
    * @param  {object} keyParams The parsed @ parameter content
    */
   _shouldParse(keyParams) {
     for (const [name, value] of Object.entries(keyParams)) {
-      const current = this.#animParams[name];
+      const current = this.#currentAnim[name];
       if (current === 0 && value === 1) { return false; }
       if (current === 1 && value === 0) { return false; }
     }
@@ -140,6 +253,9 @@ class GuiLayoutParser {
       paramPairs.forEach((pair) => {
         const [paramKey, paramValue] = pair.split('=');
         params[paramKey] = parseInt(paramValue);
+
+        //
+        this.#animParamsInData.add(paramKey);
       });
     }
 
@@ -157,10 +273,11 @@ class GuiLayoutParser {
   _parseIndexFromString(str) {
     const match = str.match(/\[(\d+)\]/);
     if (match) {
-      return [str.split('[')[0], parseInt(match[1], 10)];
+      const name = str.split('[')[0];
+      const index = parseInt(match[1]);
+      return [name, index];
     }
     return null;
-
   }
 
   /**
@@ -178,13 +295,20 @@ class GuiLayoutParser {
       // lookup previously defined rectangle
       const pi = this._parseIndexFromString(cssVal);
       const cr = this.#computedRects;
-      const newp = pi ? cr[pi[0]][pi[1]] : cr[cssVal];
+      let newp;
+      if (pi) {
+        const [parent, index] = pi;
+        newp = cr[parent][index];
+      }
+      else {
+        newp = cr[cssVal];
+      }
 
       if (!newp) {
         throw new Error(`parent css not defined: ${cssVal}`);
       }
 
-      // set as parent and start alligning from parent
+      // set as parent and start aligning from parent
       this.#parent = newp;
       return newp;
     }

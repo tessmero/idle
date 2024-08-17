@@ -1,22 +1,22 @@
 /**
- * @file StarWindowBorder window with cached star animation
+ * @file StarBorder cached star animation
  */
-class StarWindowBorder extends WindowBorder {
+class StarBorder extends Border {
 
   /**
-   * Trace thick border shape.
+   * Trace shadow/ribbon decoration along shape.
    * @param {number[]} rect The rectangle to align in.
    * @param {Vector[]} verts The computed border shape.
    * @returns {Vector[][]} The vertices to loop over.
    */
   _decorations(rect, verts) {
-    const shape = verts.slice(5);
+    const shape = verts.slice(0);
     const d = v(0.01, 0.01);
-    return [[...shape, ...shape.reverse().map((v) => v.add(d))]];
+    return [[...shape, shape[0], ...shape.reverse().map((v) => v.add(d)), shape[0].add(d)]];
   }
 
   /**
-   * Override WindowBorder
+   * get animated star shape
    * @param {number[]} rect the outer bounding
    */
   _verts(rect) {
@@ -30,26 +30,11 @@ class StarWindowBorder extends WindowBorder {
       return cached.verts;
     }
 
-    const outerCorners = rectCorners(...rect);
-
-    // use star edge for inner shape
+    // get shape from star edge
     const starEdge = EdgeManager().getEdge('star');
     const pos = v(...rectCenter(...rect));
-
     const animFrames = [-1, -0.95, -0.8, -0.5, 0, 0.5, 0.8, 0.95, 1];
-    const dv = v(0, 0);
-    const result = animFrames.map((anim) => {
-      const innerShape = [...starEdge.vTrace(pos, 0 + 0.05 * anim)];
-      return [
-
-        // trace outer rectangle clockwise
-        ...outerCorners, outerCorners[0],
-
-        // trace animated inner shape counter-clockwise
-        innerShape[0].add(dv.mul(anim)), ...innerShape.reverse().map((v) => v.add(dv.mul(anim))),
-
-      ];
-    });
+    const result = animFrames.map((anim) => [...starEdge.vTrace(pos, 0 + 0.05 * anim)]);
 
     // make animation loop cleanly
     const loopedResult = [...result, ...result.reverse()];

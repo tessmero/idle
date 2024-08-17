@@ -17,6 +17,7 @@ class CompositeGuiElement extends GuiElement {
    * @type {object}
    */
   _layout = null;
+  #layoutAnimState;
 
   /**
    * Rectangle to avoid drawing over even if opaque
@@ -42,8 +43,21 @@ class CompositeGuiElement extends GuiElement {
   constructor(rect, params = {}) {
     super(rect, params);
 
-    const { opaque = false } = params;
+    const {
+      opaque = false,
+      layoutAnimState = {},
+    } = params;
+
     this.#opaque = opaque;
+    this.#layoutAnimState = layoutAnimState;
+  }
+
+  /**
+   * Override gui element if 'bounds' ruleset exists in layout.
+   */
+  get bounds() {
+    const lyt = this._layout;
+    return (lyt && lyt.bounds) ? lyt.bounds : this.rect;
   }
 
   /**
@@ -56,12 +70,25 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
-   * Get parameters for layout animation.
-   * Used for when _layoutData is a list of layout objects with KEYFRAME properties.
-   * @returns {object} The animation parameters matching or lying between keyframe parameters
+   *
    */
-  _getLayoutAnimState() {
-    return {};
+  get layoutAnimState() {
+    return this.#layoutAnimState;
+  }
+
+  /**
+   *
+   */
+  set layoutAnimState(_s) {
+    throw new Error('should use setLayoutAnimState()');
+  }
+
+  /**
+   *
+   * @param {object} s The new animation state parameters.
+   */
+  setLayoutAnimState(s) {
+    this.#layoutAnimState = s;
   }
 
   /**
@@ -123,7 +150,7 @@ class CompositeGuiElement extends GuiElement {
 
       // compute single layout
       lr = GuiLayoutParser.computeRects(
-        this.rect, this._layoutData, screen.iconScale, this._getLayoutAnimState());
+        this.rect, this._layoutData, screen.iconScale, this.#layoutAnimState);
 
       this._layout = lr;
     }
@@ -141,6 +168,13 @@ class CompositeGuiElement extends GuiElement {
    */
   set children(_c) {
     throw new Error('not allowed');
+  }
+
+  /**
+   *
+   */
+  _clearChildren() {
+    this.#children = [];
   }
 
   /**
@@ -212,20 +246,13 @@ class CompositeGuiElement extends GuiElement {
   draw(g) {
     const opaque = this.#opaque; // true if should be filled
     const hole = this.#hole; // region requested to show through anyways
-
-    if (opaque && hole) {
-      // fill around hole rectangle
-      const border = new WindowBorder({ hole: padRect(...hole, -0.01) });
-      g.globalCompositeOperation = 'destination-out';
-      border.path(g, border.verts(this.rect));
-      g.fill();
-      g.globalCompositeOperation = 'source-over';
-    }
+    const rect = this.bounds;
 
     if (opaque || this.border) {
-      Border.draw(g, this.rect, {
-        fill: opaque && (!hole),
+      Border.draw(g, rect, {
+        fill: opaque,
         border: this.border || new DefaultBorder(),
+        hole,
       });
     }
 
@@ -238,14 +265,14 @@ class CompositeGuiElement extends GuiElement {
       // draw debug rectangle
       g.strokeStyle = 'red';
       g.lineWidth = global.lineWidth;
-      g.strokeRect(...this.rect);
+      g.strokeRect(...rect);
     }
 
     if (global.debugCssRects && layout) {
       g.strokeStyle = 'orange';
       g.lineWidth = global.lineWidth * 3;
       g.setLineDash([0.01, 0.01]);
-      g.strokeRect(...this.rect);
+      g.strokeRect(...rect);
       g.lineWidth = global.lineWidth;
       g.setLineDash([]);
 
@@ -256,11 +283,11 @@ class CompositeGuiElement extends GuiElement {
       for (const [key, rectOrList] of Object.entries(layout)) {
         if (!key.startsWith('_')) {
           const rlist = ((typeof rectOrList[0] === 'number') ? [rectOrList] : rectOrList);
-          rlist.forEach((rect) => {
+          rlist.forEach((rr) => {
 
             // const c = rectCenter(...rect);
             // drawText(g, ...c, key, true, new FontSpec(0, 0.3 * this.screen.iconScale, false));
-            g.strokeRect(...rect);
+            g.strokeRect(...rr);
           });
         }
       }
@@ -284,7 +311,7 @@ class CompositeGuiElement extends GuiElement {
     if (this.#children.toReversed().some((e) => vInRect(mousePos, ...e.rect) &&
                 e.click())) { return true; }
 
-    if (this.#opaque && vInRect(mousePos, ...this.rect)) {
+    if (this.#opaque && vInRect(mousePos, ...this.bounds)) {
       // console.log('clicked opaque composite element background');
       return true;
     }

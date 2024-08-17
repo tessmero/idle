@@ -5,7 +5,7 @@
  */
 class UpgradeMenuGui extends Gui {
   title = 'Upgrade Menu';
-  _layoutData = (global.verticalDisplay ? VS_UPGRADE_MENU_GUI_LAYOUT : HS_UPGRADE_MENU_GUI_LAYOUT);
+  _layoutData = UPGRADE_MENU_GUI_LAYOUT;
 
   /**
    * Construct Gui with given rectangle.
@@ -46,25 +46,27 @@ class UpgradeMenuGui extends Gui {
    */
   _buildElements() {
     const layout = this._layout;
-    const r0 = layout.r0;
+    const r0 = layout.main;
 
     let tabLabels; let tabContents;
     if (global.sandboxMode) {
-      tabLabels = ['debug', 'tests', 'performance',
+      tabLabels = ['tests', 'debug', 'performance',
         'skills',
         'UPGRADES',
+        'STATS',
+        'layouts',
 
-        // 'STATS'
       ];
       tabContents = [
-        (rect, params) => new DebugTab(rect, params),
         (rect, params) => new TestsTab(rect, params),
+        (rect, params) => new DebugTab(rect, params),
         (rect, params) => new PerformanceTab(rect, params),
 
         (rect, params) => new SkillsTab(rect, params),
         (rect, params) => new UpgradesTab(rect, params),
+        (rect, params) => new StatsTab(rect, params),
+        (rect, params) => new LayoutsTab(rect, params),
 
-        // (rect, params) => new StatsTab(rect, params),
       ];
 
     }
@@ -107,7 +109,7 @@ class UpgradeMenuGui extends Gui {
    */
   close() {
     // close context menu
-    this.screen.contextMenu = null;
+    this.screen.setContextMenu(null);
 
     // restart transition animation
     this.transitionRadius = 0;

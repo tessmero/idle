@@ -1,7 +1,7 @@
 /**
  * @file SKILL_TREE data for skill tree gui in sandbox mode
  */
-const SKILL_TREE = {
+SKILL_TREE = {
   basicRain: {
     skill: 'basicRain',
     pos: [0.5, 0.7], // position in gui

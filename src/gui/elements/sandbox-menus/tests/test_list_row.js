@@ -38,7 +38,7 @@ class TestListRow extends CompositeGuiElement {
     sr.isAnimated = () => sr.hovered || this.isActive();
 
     return [
-      new Button(this.rect, { action: () => this.clicked() }),
+      new Button(this.rect, { action: () => this.tlrClicked() }),
       sr,
     ];
   }
@@ -68,11 +68,12 @@ class TestListRow extends CompositeGuiElement {
    * Called when this element is clicked.
    * Activate the test context menu which will run the test.
    */
-  clicked() {
-    // position context menu on bottom/right
+  tlrClicked() {
     const screen = this.screen;
-    const rect = ContextMenu.pickRect(screen);
-    screen.contextMenu = new TestContextMenu(rect, { testIndex: this.#testIndex });
-    screen.contextMenu.setScreen(screen);
+    screen.setContextMenu(
+      new TestContextMenu(screen.rect, {
+        testIndex: this.#testIndex,
+      })
+    );
   }
 }

@@ -6,7 +6,6 @@
 class StatUpgrader extends CompositeGuiElement {
   _layoutData = STAT_UPGRADER_LAYOUT; // upgrades_tab_layout.js
 
-  #useThickLayout;
   #gutse;
 
   // animation for progress indicator boxes
@@ -21,21 +20,11 @@ class StatUpgrader extends CompositeGuiElement {
    * @param {object} params.gutse The value in global.upgradeTracks.state.
    */
   constructor(rect, params = {}) {
-    super(rect, { ...params, opaque: true });
-
-    const { gutse, useThickLayout } = params;
-
-    this.#useThickLayout = useThickLayout;
+    super(rect, { opaque: true, ...params });
+    const { gutse } = params;
     this.#gutse = gutse;
     const lvls = gutse.maxLevel;
     this.#boxAnimStates = new Array(lvls).fill(-1);
-  }
-
-  /**
-   * @returns {object} The animation parameters matching KEYFRAME parameters in layout data
-   */
-  _getLayoutAnimState() {
-    return { thick: this.#useThickLayout ? 1 : 0 };
   }
 
   /**
@@ -52,7 +41,7 @@ class StatUpgrader extends CompositeGuiElement {
       label: 'upgrade',
       action: () => this.upgradeButtonClicked(),
       scale: 0.3,
-      border: this.#useThickLayout ? new RoundedBorder() : new SlantBorder(),
+      border: this.layoutAnimState.thick ? new RoundedBorder() : new SlantBorder(),
       valueFunc: () => {
         const budget = screen.sim.particlesCollected;
         const cost = gutse.cost.f(gutse.level - 1);

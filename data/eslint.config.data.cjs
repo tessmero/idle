@@ -5,7 +5,8 @@
  */
 module.exports = [
   {
-    'files': ['data/gui-layouts/**/*.js'],
+    // add rules for all data files
+    'files': ['data/**/*.js'],
     'rules': {
 
       // disallow control structures like 'if'
@@ -14,19 +15,48 @@ module.exports = [
       // disallow 'var', 'let', and 'const'
       'idle/no-var-let-const': 'warn',
 
-      // layout objects must be flat lists of rulesets
-      'idle/max-object-depth': ['error', { maxDepth: 1 }],
-
-      // 'max-depth': ['error', 1], // doesn't count object expressions
-
-      // layout object names must be UPPER_SNAKE_CASE, may start with underscore
+      // data object names must be UPPER_SNAKE_CASE, may start with underscore
       'idle/valid-var-name': ['error', {
-        description: 'upper snake case like `MY_LAYOUT_OBJECT` or `_HELPER`',
+        description: 'upper snake case like `MY_DATA_OBJECT` or `_HELPER`',
         patterns: [
           '^[A-Z][A-Z0-9_]*$', // UPPER_SNAKE_CASE
           '^_[A-Z][A-Z0-9_]*$', // _UPPER_SNAKE_CASE
         ],
       }],
+
+      // default limit for nesting objects and arrays
+      'idle/max-object-depth': ['error', { maxDepth: 2 }],
+    },
+  },
+  {
+    // make exception for upgrade tracks
+    'files': ['data/upgrade_tracks_data.js'],
+    'rules': {
+      'idle/no-control-structure': ['error', {
+
+        // allow upgrade tracks to use arrow functions
+        // to setup before/after mini screen displays
+        allow: ['ArrowFunctionExpression'],
+      }],
+    },
+  },
+  {
+    // add rules for gui animations
+    'files': ['data/gui-anims/**/*.js'],
+    'rules': {
+
+      // animations must be flat lists of keyframes
+      'idle/max-object-depth': ['error', { maxDepth: 1 }],
+    },
+  },
+
+  {
+    // add rules for gui layouts
+    'files': ['data/gui-layouts/**/*.js'],
+    'rules': {
+
+      // layouts must be flat lists of rulesets
+      'idle/max-object-depth': ['error', { maxDepth: 1 }],
 
       // restrict keys based on depth in layout objects
       'idle/valid-key': ['error', [

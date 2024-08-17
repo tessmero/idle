@@ -30,6 +30,7 @@ class Border {
    * @returns {Vector[]} The vertices to loop over.
    */
   verts(rect) {
+
     const verts = this._verts(rect);
 
     if (verts[0] instanceof Vector) {
@@ -111,8 +112,9 @@ class Border {
    * @param {number[]} rect The x,y,w,h of the rectangle.
    * @param {object} options
    * @param {boolean} options.hovered True if the user is hovering over the button.
-   * @param {boolean} options.fill True if the interior of the button should be filled.
+   * @param {boolean} options.fill True if the interior of the border should be filled.
    * @param {object} options.border optional Border style instance.
+   * @param {number[]} options.hole optional inner rectangle to leave unfilled
    */
   static draw(g, rect, options = {}) {
 
@@ -120,6 +122,7 @@ class Border {
       border = new DefaultBorder(),
       fill = true,
       hovered,
+      hole,
     } = options;
 
     let lineCol = global.colorScheme.fg;
@@ -133,10 +136,11 @@ class Border {
 
     const verts = border.verts(rect);
 
-    // clear interior if necessary
     if (fill) {
+
+      // fill inside border but account for hole
       g.globalCompositeOperation = 'destination-out';
-      border.path(g, verts);
+      border.path(g, hole ? Border._withHole(verts, hole) : verts);
       g.fill();
       g.globalCompositeOperation = 'source-over';
     }
@@ -152,5 +156,23 @@ class Border {
     border.path(g, verts);
     g.stroke();
     g.strokeStyle = global.colorScheme.fg;
+  }
+
+  /**
+   * Get modified vertices to leave hole unfilled.
+   * @param {Vector[]} verts The computed border shape.
+   * @param {number[]} hole The hole rectangle
+   */
+  static _withHole(verts, hole) {
+    const holeCorners = rectCorners(...hole);
+    return [
+
+      // trace outer shape clockwise
+      ...verts, verts[0],
+
+      // trace hole rectangle counter-clockwise
+      holeCorners[0], ...holeCorners.reverse(),
+
+    ];
   }
 }

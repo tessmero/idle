@@ -336,13 +336,15 @@ class GameStateManager {
 
         // trigger screen change before animation
         screen.gsp.setInnerScreen(outerScreen);
+        fitToContainer(true);
 
         // trigger box animation
         const boxBuddy = screen.containingBoxBuddy;
         outerScreen.stateManager.setState(GameStates.boxTransition, {
           fromSquare: BoxTransitionGui._car(screen.gsp.rect),
           toSquare: BoxTransitionGui._car(boxBuddy.square),
-          toScreen: null });
+          toScreen: null,
+        });
       }
     }
   }

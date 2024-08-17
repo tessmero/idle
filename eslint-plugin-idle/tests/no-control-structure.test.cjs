@@ -13,44 +13,73 @@ ruleTester.run(
   // disallow ternary operator (inline if)
   // disallow function expressions
   {
-    valid: [{
+    valid: [
+      {
 
-      // layout data
-      code: `
-        MY_LAYOUT = {
-          r0: {
-            margin: 0.1,
-            'max-width': 1.2,
-            left: 'auto',
-          },
+        // layout data
+        code: `
+          MY_LAYOUT = {
+            r0: {
+              margin: 0.1,
+              'max-width': 1.2,
+              left: 'auto',
+            },
 
-          ..._COMMON,
-        };
-      `,
-    },
+            ..._COMMON,
+          };
+        `,
+      },
+      {
+        // upgrade tracks with allowed arrow func
+        code: `
+          UPGRADE_TRACKS = {
+            'nparticles': {
+              beforeCard: ((screen) => {
+                screen.sim.rainGroup.n = 10;
+              }),
+            }
+          }
+        `,
+        options: [{ allow: ['ArrowFunctionExpression'] }],
+      },
     ],
 
     invalid: [
       {
         code: `
-        if( true ){}
-      `,
+          if( true ){}
+        `,
         errors: 1,
       },
       {
 
         // layout with inline if-statement
         code: `
-        MY_LAYOUT = {
-          r0: {
-            margin: 0.1,
-            'max-width': true ? 1.2 : 1.0,
-            left: 'auto',
-          },
+          MY_LAYOUT = {
+            r0: {
+              margin: 0.1,
+              'max-width': true ? 1.2 : 1.0,
+              left: 'auto',
+            },
 
-          ..._COMMON,
-        };
+            ..._COMMON,
+          };
         `,
+        errors: 1,
+      },
+
+      {
+        // upgrade tracks with inline if
+        code: `
+          UPGRADE_TRACKS = {
+            'nparticles': {
+              beforeCard: ((screen) => {
+                screen.sim.rainGroup.n = true ? 20 : 10;
+              }),
+            }
+          }
+        `,
+        options: [{ allow: ['ArrowFunctionExpression'] }],
         errors: 1,
       },
     ],

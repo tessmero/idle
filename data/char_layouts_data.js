@@ -2,7 +2,53 @@
  * @file CHAR_LAYOUTS data for drawing ascii characters
  * used in src/gui/text
  */
-const CHAR_LAYOUTS = {
+CHAR_LAYOUTS = {
+
+  // underscore
+  '_': [
+    '     ',
+    '     ',
+    '     ',
+    '     ',
+    '     ',
+    '     ',
+    '     ',
+    'wwwww',
+  ],
+
+  // at symbol
+  '@': [
+    ' www ',
+    'w   w',
+    'www w',
+    'ww ww',
+    'ww ww',
+    'w ww ',
+    'w    ',
+    ' www ',
+  ],
+
+  // left curly bracket
+  '{': [
+    '  #  ',
+    ' #   ',
+    ' #   ',
+    '##   ',
+    ' #   ',
+    ' #   ',
+    '  #  ',
+  ],
+
+  // right curly bracket
+  '}': [
+    '  #  ',
+    '   # ',
+    '   # ',
+    '   ##',
+    '   # ',
+    '   # ',
+    '  #  ',
+  ],
 
   // apostrophe / single quote
   '\'': [

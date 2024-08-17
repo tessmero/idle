@@ -43,9 +43,8 @@ class BodyContextMenu extends ContextMenu {
    * @returns {GuiElement[]} The children.
    */
   _buildElements() {
-    const body = this.#body;
     const layout = this._layout;
-    const [_s0, _s1] = layout.squares;
+    const body = this.#body;
     if (!body.title) { body.title = 'body'; }
     if (!body.icon) { body.icon = circleIcon; }
 
@@ -110,7 +109,7 @@ class BodyContextMenu extends ContextMenu {
    */
   closeBodyContextMenu() {
     const screen = this.screen;
-    screen.contextMenu = null;
+    screen.setContextMenu(null);
     screen.sim.selectedBody = null;
   }
 

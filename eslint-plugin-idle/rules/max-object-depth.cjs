@@ -9,7 +9,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'Limit the depth of nested object expressions',
+      description: 'Limit the depth of nested object and array expressions',
       category: 'Best Practices',
       recommended: false,
     },
@@ -19,7 +19,7 @@ module.exports = {
         properties: {
           maxDepth: {
             type: 'integer',
-            minimum: 1,
+            minimum: 0,
           },
         },
         required: ['maxDepth'],
@@ -33,26 +33,29 @@ module.exports = {
   create(context) {
     const options = context.options[0] || {};
     const { maxDepth } = options;
+    const relevantTypes = new Set(['ObjectExpression', 'ArrayExpression']);
 
-    return {
-      ObjectExpression(node) {
-        let depth = 0;
-        let currentNode = node;
-        while (currentNode) {
-          currentNode = currentNode.parent;
-          if (currentNode && currentNode.type === 'ObjectExpression') {
-            depth = depth + 1;
-          }
-          if (depth > maxDepth) {
-            context.report({
-              node,
-              messageId: 'excessiveDepth',
-              data: { maxDepth },
-            });
-            return;
-          }
+    // Helper function to check nodes
+    function check(node) {
+      let depth = 0;
+      let currentNode = node;
+      while (currentNode) {
+        currentNode = currentNode.parent;
+        if (currentNode && relevantTypes.has(currentNode.type)) {
+          depth = depth + 1;
         }
-      },
-    };
+        if (depth > maxDepth) {
+          context.report({
+            node,
+            messageId: 'excessiveDepth',
+            data: { maxDepth },
+          });
+          return;
+        }
+      }
+    }
+
+    // Define visitors for relevant types
+    return Object.fromEntries([...relevantTypes].map((type) => [type, check]));
   },
 };
