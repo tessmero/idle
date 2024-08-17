@@ -21,6 +21,8 @@
     "lint:test": "mocha eslint-plugin-idle/tests/*.test.cjs",
     "lint": "npm run lint:test && eslint src data build eslint-plugin-idle",
     "build:test": "npm run lint && npm run link",
-    "build:prod": "npm run build:test && npm run concat && npm run uglify"
+    "build:prod": "npm run build:test && npm run concat && npm run uglify",
+
+    "build": "npm run build:test"
   }
 }

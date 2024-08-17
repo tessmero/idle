@@ -357,11 +357,11 @@ class GameScreen {
   setContextMenu(cm) {
 
     if (cm instanceof TestContextMenu) {
-      _cmSideState.side = 1;
+      _cmSideActor.setState(1);
     }
 
     if (cm instanceof LayoutContextMenu) {
-      _cmSideState.side = 1;
+      _cmSideActor.setState(1);
     }
 
     if (cm) {
@@ -369,36 +369,17 @@ class GameScreen {
       this.#contextMenu = cm;
 
       // expand context menu
-      this._setCmTargetExpand(1);
+      _cmExpandActor.setTarget(1);
 
       // _cmExpandState.targetExpand = 1;
     }
     else {
 
       // collapse context menu
-      this._setCmTargetExpand(0);
+      _cmExpandActor.setTarget(0);
 
       // _cmExpandState.targetExpand = 0;
 
-    }
-  }
-
-  /**
-   * Used for planning if the context menu is opening or closing.
-   * @param {number} e
-   */
-  _setCmTargetExpand(e) {
-    this._plannedCmTargetExpand = e;
-  }
-
-  /**
-   *
-   */
-  _finalizeCmTargetExpand() {
-    const e = this._plannedCmTargetExpand;
-    if (e !== _cmExpandState.targetExpand) {
-      _cmExpandState.targetExpand = e;
-      _cmExpandState.lastTime = -1;
     }
   }
 
@@ -473,14 +454,22 @@ class GameScreen {
     if (this.#contextMenu) {
 
       // update context menu bounds animation
-      this._finalizeCmTargetExpand();
+      const axis = (this.rect[2] > this.rect[3]) ? 0 : 1;
+      _cmOrientActor.setTarget(axis);
       const lap = ContextMenu.pickLayoutAnimParams(this, poi);
       this.#contextMenu.setLayoutAnimState(lap);
       this.#contextMenu._layout = null;
       this.#contextMenu.buildElements(this);
 
+      // check if poi obstructed
+      if ((_cmSlideActor.state === 0 || _cmSlideActor.state === 1) && poi && vInRect(poi, ...this.#contextMenu.bounds)) {
+
+        // target farthest side next time
+        _cmSlideActor.setTarget(1 - Math.round(lap.side));
+      }
+
       // check if closing animation just finished
-      if (_cmExpandState.expand === 0 && _cmExpandState.targetExpand === 0) {
+      if (lap.expand === 0 && _cmExpandActor.target === 0) {
         this.#contextMenu = null;
       }
     }
@@ -689,10 +678,10 @@ class GameScreen {
       if (cm) {
 
         if (cm._layout) {
-          console.log('good');
+          // console.log('good');
         }
         else {
-          console.log('bad');
+          // console.log('bad');
           cm._computeLayoutRects(this);
         }
 

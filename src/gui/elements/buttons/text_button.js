@@ -17,8 +17,8 @@ class TextButton extends Button {
     super(rect, params);
     const {
       label = '',
-      center = true,
       text,
+      center = true,
     } = params;
 
     if (text) {

@@ -26,6 +26,19 @@ const filesToLint = {
 // additional rules for data folder
 import dataConfigs from './data/eslint.config.data.cjs';
 
+// rules from local plugin to apply to all source
+const idleSrcConfigs = [
+  {
+    'files': ['src/**/*.js'],
+    'rules': {
+
+      // constructors must document
+      // properties unpacked from any variable named 'params'
+      'idle/ctor-params-jsdoc': 'warn',
+    },
+  },
+];
+
 // common rules for constructor 'params' object pattern
 // to be enforced in different ways for some source folders
 const ctorParamsRules = {
@@ -33,14 +46,14 @@ const ctorParamsRules = {
   // constructors must have last parameter 'params={}'
   'idle/ctor-last-param-default': 'error',
 
-  // constructors must pass parameters to super
+  // must pass parameters to super
   // but last argument may be ObjectExpression
   'idle/ctor-params-super-args': 'error',
 
   // ObjectExpression in super must include '...params'
   'idle/super-params-spread': 'error',
 
-  // constructors must use destructuring if they access 'params'
+  // must use destructuring if they access 'params'
   'idle/ctor-params-destructure': 'error',
 
   // constructors can only have one param
@@ -846,6 +859,8 @@ export default [
     },
     'rules': baseRules,
   },
+  
+  ...idleSrcConfigs,
   ...sglConfigs,
   ...guiConfigs,
   ...dataConfigs,

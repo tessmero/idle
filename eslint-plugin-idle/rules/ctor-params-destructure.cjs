@@ -15,6 +15,8 @@ module.exports = {
   },
   create(context) {
     return {
+
+      // select references to 'params' in constructors
       'MethodDefinition[kind="constructor"] BlockStatement Identifier[name="params"]'(node) {
 
         // Check if in 'super' call
