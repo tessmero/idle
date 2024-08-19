@@ -111,7 +111,7 @@ class CircleBuddy extends Buddy {
    * Extend BuddyContextMenu with satiety indicator.
    * @param {number[]} rect The bounding rectangle containing the menu.
    */
-  buildContextMenu(rect) {
+  getContextMenu(rect) {
     return new CircleBuddyContextMenu(rect, { buddy: this });
   }
 
@@ -123,7 +123,7 @@ class CircleBuddy extends Buddy {
    */
   buildSatietyGuiElems(rect, scale) {
     return [
-      new DynamicTextLabel(rect, {
+      new GuiElement(rect, {
         labelFunc: () => this._satLabel(),
         scale,
         autoAdjustRect: false,

@@ -43,13 +43,14 @@ class BuddyContextMenu extends BodyContextMenu {
     const buddy = this._buddy;
 
     // first row has exp level with progress overlay
+    this.#nextRowIndex = 0;
     this.addBuddyContextRow(result, (rect, scale) => [
-      new StatReadout(rect, {
+      new GuiElement(rect, {
         icon: buddy.expMechIcon,
         labelFunc: () => `LEVEL ${buddy.expLevel}`,
         tooltipFunc: () => this._getExpLevelTooltip(),
         scale,
-        center: true,
+        textAlign: 'center',
       }),
       new ProgressIndicator(rect, {
         valueFunc: () => buddy.getLevelProgress(),

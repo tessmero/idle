@@ -22,6 +22,13 @@ class BodyContextMenu extends ContextMenu {
   }
 
   /**
+   * called in game_screen
+   */
+  get body() {
+    return this.#body;
+  }
+
+  /**
    * Pick categorical title to show in small font at top of context menu.
    */
   _miniTitle() {
@@ -52,21 +59,21 @@ class BodyContextMenu extends ContextMenu {
 
       this._buildArtElem(),
 
-      new TextLabel(layout.miniTitle, {
+      new GuiElement(layout.miniTitle, {
         label: this._miniTitle(),
         scale: 0.15,
-        center: false,
+        textAlign: 'left',
       }),
 
-      new TextLabel(layout.title, {
+      new GuiElement(layout.title, {
         label: body.title,
         scale: 0.4,
-        center: false,
+        textAlign: 'left',
       }),
 
-      new IconButton(layout.closeBtn, {
+      new Button(layout.closeBtn, {
         icon: xIcon,
-        action: () => this.closeBodyContextMenu(),
+        action: () => this.screen.setContextMenu(null),
         scale: 0.4,
         tooltip: 'close menu',
       }),
@@ -75,7 +82,7 @@ class BodyContextMenu extends ContextMenu {
 
     if (this.deleteEnabled()) {
       result.push(
-        new IconButton(layout.trashBtn, {
+        new Button(layout.trashBtn, {
           icon: trashIcon,
           action: () => this.deleteBody(),
           tooltip: `delete ${body.title}\n(no refunds)`,
@@ -100,17 +107,9 @@ class BodyContextMenu extends ContextMenu {
   deleteBody() {
     let b = this.#body;
     while (b.parent) { b = b.parent; }// got top parent
+    this.screen.sim.selectedBody = null;
+    this.screen.setContextMenu(null);
     this.screen.sim.removeBody(b);
-    this.closeBodyContextMenu();
-  }
-
-  /**
-   *
-   */
-  closeBodyContextMenu() {
-    const screen = this.screen;
-    screen.setContextMenu(null);
-    screen.sim.selectedBody = null;
   }
 
   /**

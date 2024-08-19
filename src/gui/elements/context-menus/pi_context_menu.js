@@ -25,6 +25,16 @@ class PiContextMenu extends ContextMenu {
   }
 
   /**
+   *
+   * @param {object} pData
+   */
+  pcmMatches(pData) {
+    return (this.#pData[0] === pData[0]) && // matching subgroup
+      (this.#pData[1] === pData[1]); // matching index in subgroup
+
+  }
+
+  /**
    * Construct direct children for this composite.
    * @returns {GuiElement[]} The children.
    */
@@ -57,20 +67,22 @@ class PiContextMenu extends ContextMenu {
 
     return [
 
-      new StatReadout(s0, {
+      new GuiElement(s0, {
         icon,
         labelFunc: () => `\n${flavor}\nparticle\nno. ${i}`,
+        scale: statScale,
+        textAlign: 'left',
       }),
 
-      new TextLabel(s1, {
+      new GuiElement(s1, {
         label: stats,
         scale: statScale,
       }),
 
-      new IconButton(this._layout.closeBtn, {
+      new Button(this._layout.closeBtn, {
         icon: xIcon,
         action: () => this.closePiContextMenu(),
-        scale: 0.4,
+        scale: statScale,
         tooltip: 'close',
       }),
     ];

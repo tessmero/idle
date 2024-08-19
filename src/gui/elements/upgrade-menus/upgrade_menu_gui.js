@@ -86,7 +86,7 @@ class UpgradeMenuGui extends Gui {
       global.upgradeMenuTabIndex = i;
     });
 
-    const closeButton = new IconButton(layout.closeBtn, {
+    const closeButton = new Button(layout.closeBtn, {
       icon: xIcon,
       action: () => this.gsm.toggleStats(),
       scale: 0.5,

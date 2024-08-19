@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 /**
  * @file unit tests
  * Test body register and unregister methods.

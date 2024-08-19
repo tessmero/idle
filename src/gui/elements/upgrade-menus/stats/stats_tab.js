@@ -15,10 +15,11 @@ class StatsTab extends CompositeGuiElement {
     if (!bsum) { return []; }
 
     return bsum.map((sumEntry, i) =>
-      new StatReadout(this._layout.rows[i], {
+      new GuiElement(this._layout.rows[i], {
         icon: sumEntry[0],
         labelFunc: () => sumEntry[1],
         scale: 0.4,
+        textAlign: 'left',
       })
     );
   }

@@ -15,6 +15,7 @@ class LayoutListRow extends CompositeGuiElement {
    *
    * @param {number[]} rect
    * @param {object} params
+   * @param {object} params.context The LayoutContextMenu context
    */
   constructor(rect, params = {}) {
     super(rect, params);
@@ -30,10 +31,11 @@ class LayoutListRow extends CompositeGuiElement {
   _buildElements() {
     const layout = this._layout;
 
-    const sr = new StatReadout(layout.title, {
+    const sr = new GuiElement(layout.title, {
       icon: layoutIcon,
       labelFunc: () => this.#context.title,
       scale: 0.4,
+      textAlign: 'left',
     });
     sr.isAnimated = () => sr.hovered;
 

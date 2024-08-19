@@ -50,19 +50,19 @@ class UpgradeTooltip extends Tooltip {
         innerScreen: aft,
       }),
 
-      new TextLabel(layout.label, {
+      new GuiElement(layout.label, {
         label: gutse.label,
         scale: 0.4,
       }),
 
       // text readout
-      new StatReadout(layout.cost, {
+      new GuiElement(layout.cost, {
         icon: collectedIcon,
         labelFunc: () => bc((budget, cost) => {
           if (budget > cost) { return `${cost.toFixed(0)}`; }
           return `${budget.toFixed(0)}/${cost.toFixed(0)}`;
         }),
-        center: true,
+        textAlign: 'center',
         scale: 0.35,
       }),
 
@@ -71,7 +71,7 @@ class UpgradeTooltip extends Tooltip {
         valueFunc: () => bc((budget, cost) => budget / cost),
       }),
 
-      new IconElement(layout.arrow, {
+      new GuiElement(layout.arrow, {
         icon: playIcon,
         scale: 0.4,
       }),

@@ -13,7 +13,8 @@ class Button extends GuiElement {
    */
   constructor(rect, params = {}) {
     super(rect, {
-      border: new RoundedBorder(), // default border is rounded
+      border: new RoundedBorder(),
+      textAlign: 'center',
       ...params,
     });
 
@@ -25,22 +26,19 @@ class Button extends GuiElement {
   }
 
   /**
-   *
+   * Override GuiElement
+   */
+  isAnimated() {
+    return this.hovered;
+  }
+
+  /**
+   * execute action and by default consume the click event.
+   * If action returns truthy value, return false to indicate
+   * that the click was not consumed.
    */
   click() {
     const result = !this.#action();
     return result;
-  }
-
-  /**
-   *
-   * @param {object} g The graphics context.
-   */
-  draw(g) {
-    Border.draw(g, this.rect, {
-      hovered: this.hovered,
-      fill: true,
-      border: this.border,
-    });
   }
 }

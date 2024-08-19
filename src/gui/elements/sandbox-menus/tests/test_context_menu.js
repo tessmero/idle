@@ -69,22 +69,9 @@ class TestContextMenu extends ContextMenu {
   }
 
   /**
-   * Hack to prevent rebuilding elements in game screen update
-   * @param {GameScreen} s
+   *
    */
-  buildElements(s) {
-    if (this._builtElements) {
-      // do nothing
-    }
-    else {
-
-      // build elements if not collapsed
-      super.buildElements(s);
-      if (this.children.length > 0) {
-        this._builtElements = true;
-      }
-    }
-  }
+  get testIndex() { return this.#testIndex; }
 
   /**
    * Construct direct children for this composite.
@@ -93,13 +80,16 @@ class TestContextMenu extends ContextMenu {
   _buildElements() {
     const asserts = this.#asserts;
     const test = this.#test;
-    const titleRect = this._layout.title;
-    const s0 = this._layout.squares[0];
-    const botRows = this._layout.rows;
+    const layout = this._layout;
+    const titleRect = layout.title;
+    const s0 = layout.squares[0];
+    const botRows = layout.rows;
 
     // center simulation in first content square
     const screen = test.screen;
-    Test.resetBoxSims(screen);
+    if (!this._tcmBuilt) {
+      Test.resetBoxSims(screen);
+    }
     const sim = screen.sim;
     const tut = screen.tut;
     this.sim = sim;
@@ -110,11 +100,13 @@ class TestContextMenu extends ContextMenu {
     const gsp = new GuiScreenPanel(gspRect, { innerScreen: screen, allowScaling: true });
     screen.loop = false; // disable loop flag set in gsp constructor
     gsp.tut = tut;
-    gsp.reset();
+    if (!this._tcmBuilt) {
+      gsp.reset();
+    }
     this.gsp = gsp;
 
     const gui = screen.gui;
-    if (gui) {
+    if (gui && (!this._tcmBuilt)) {
       gui.buildElements(screen);
     }
 
@@ -130,10 +122,12 @@ class TestContextMenu extends ContextMenu {
     // play/pause/etc buttons at bottom of first square
     const controlButtons = this._buildControlButtons();
 
-    const titleLabel = new TextLabel(titleRect, {
+    const titleLabel = new GuiElement(titleRect, {
       label: test.title,
       scale: 0.3,
     });
+
+    this._tcmBuilt = true;
 
     return [
 
@@ -154,6 +148,14 @@ class TestContextMenu extends ContextMenu {
 
       // conclusion in second square
       this.#finalDisplay,
+
+      new Button(layout.closeBtn, {
+        icon: xIcon,
+        action: () => this.screen.setContextMenu(null),
+        scale: 0.4,
+        tooltip: 'close test runner',
+      }),
+
     ];
   }
 
@@ -177,12 +179,13 @@ class TestContextMenu extends ContextMenu {
       checkTimes.push(time);
       checkTooltips.push(tooltip);
       checkReadouts.push(
-        new StatReadout(rows[i], {
+        new GuiElement(rows[i], {
           icons: uncheckedIcon,
           labelFunc: () => label,
           tooltip,
           scale: this.#guiLetterScale,
           tooltiScale: this.#guiLetterScale,
+          textAlign: 'left',
         })
       );
       i = i + 1;
@@ -199,7 +202,7 @@ class TestContextMenu extends ContextMenu {
     });
     this.#ttDisplay = ttDisplay;
 
-    const finalDisplay = new TextLabel(rows.at(-1), {
+    const finalDisplay = new GuiElement(rows.at(-1), {
       label: '',
       scale: 0.3,
     });
@@ -209,7 +212,7 @@ class TestContextMenu extends ContextMenu {
 
   /**
    * Get elements and set member 'loopButton'
-   * @returns {GuiElement[]} The new IconButton instances.
+   * @returns {GuiElement[]} The new Button instances.
    */
   _buildControlButtons() {
     const rects = this._layout.buttons;
@@ -238,7 +241,7 @@ class TestContextMenu extends ContextMenu {
     ];
 
     const controlButtons = specs.map((params, i) =>
-      new IconButton(rects[i], {
+      new Button(rects[i], {
         ...params,
         scale: 0.3,
         tooltipScale: this.#guiLetterScale,
@@ -333,6 +336,7 @@ class TestContextMenu extends ContextMenu {
       screen.rect,
       { testIndex: otherTestIndex }
     ));
+    screen._updateContextMenuAnim();
   }
 
   /**
@@ -398,8 +402,8 @@ class TestContextMenu extends ContextMenu {
         try {
           success = func();
         }
-        catch (error) {
-          console.error(error);
+        catch (_error) {
+          // console.error(error);
         }
 
         this.#checksPassed.push(success);

@@ -12,6 +12,7 @@ class ProgressIndicator extends GuiElement {
    * @param {number[]} rect The rectangle that will be fully covered at value=1
    * @param {object} params The parameters.
    * @param {Function} params.valueFunc The function to pick progress, 0 is empty, 1 is full.
+   * @param {object} params.border The border which should be unset or DefaultBorder
    */
   constructor(rect, params = {}) {
     super(rect, { border: new DefaultBorder(), ...params });

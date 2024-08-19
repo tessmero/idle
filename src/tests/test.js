@@ -116,7 +116,9 @@ class Test {
     const f = (crit.prototype instanceof Body) ?
       ((b) => b instanceof crit) : ((b) => crit(b));
     const matches = screen.sim.bodies.filter(f);
-    console.assert(matches.length === 1);
+    if (matches.length === 0) {
+      return null;
+    }
     return matches[0];
   }
 

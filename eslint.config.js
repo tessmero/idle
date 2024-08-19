@@ -237,7 +237,7 @@ const baseRules = {
   'no-cond-assign': [1, 'except-parens'],
 
   // disallow use of console in the node environment (recommended)
-  'no-console': 0,
+  'no-console': 1,
 
   // disallow use of constant expressions in conditions (recommended)
   'no-constant-condition': 1,
@@ -859,7 +859,7 @@ export default [
     },
     'rules': baseRules,
   },
-  
+
   ...idleSrcConfigs,
   ...sglConfigs,
   ...guiConfigs,

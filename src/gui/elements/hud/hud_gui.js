@@ -21,24 +21,26 @@ class HudGui extends Gui {
     let result = [
 
       // upgrade menu button
-      new IconButton(layout.topLeftBtn, {
+      new Button(layout.topLeftBtn, {
         icon: statsIcon,
         action: () => { this.gsm.toggleStats(); },
         tooltip: 'toggle upgrades menu',
+        fill: true,
       }),
 
       // particles on screen
-      new StatReadout(layout.leftDiv, {
+      new GuiElement(layout.leftDiv, {
         icon: rainIcon,
         labelFunc: () => sim.rainGroup.n.toString(),
         style: 'hud',
         tooltipFunc: () => `max ${sim.rainGroup.n} raindrops on screen`,
         autoAdjustRect: true,
+        scale: 0.5,
       }),
 
       // sandbox banner
       global.sandboxMode ?
-        new DynamicTextLabel(layout.midDiv, {
+        new GuiElement(layout.midDiv, {
           labelFunc: () => 'SANDBOX MODE',
           autoAdjustRect: true,
           scale: 0.5,
@@ -46,22 +48,24 @@ class HudGui extends Gui {
 
       // catch rate %
       global.sandboxMode ? null :
-        new StatReadout(layout.midDiv, {
+        new GuiElement(layout.midDiv, {
           icons: catchIcon,
           labelFunc: () => this.getPct(),
           style: 'hud',
           tooltipFunc: () => this.getPctTooltip(),
           autoAdjustRect: true,
+          scale: 0.5,
         }),
 
       // total caught
       global.sandboxMode ? null :
-        new StatReadout(layout.rightDiv, {
+        new GuiElement(layout.rightDiv, {
           icon: collectedIcon,
           labelFunc: () => sim.particlesCollected.toFixed(0),
           style: 'hud',
           tooltipFunc: () => `${sim.particlesCollected.toFixed(0)} raindrops collected`,
           autoAdjustRect: true,
+          scale: 0.5,
         }),
 
     ];
@@ -74,17 +78,19 @@ class HudGui extends Gui {
     result.push(screen.boxOuterScreen ?
 
       // exit box button if this screen is inside a box
-      new IconButton(layout.topRightBtn, {
+      new Button(layout.topRightBtn, {
         icon: boxIcon,
         action: () => this.gsm.quit(),
         tooltip: 'exit box',
+        fill: true,
       }) :
 
       // otherwise pause button
-      new IconButton(layout.topRightBtn, {
+      new Button(layout.topRightBtn, {
         icon: pauseIcon,
         action: () => this.gsm.pause(),
         tooltip: 'pause or quit the game',
+        fill: true,
       })
     );
 
@@ -152,7 +158,7 @@ class HudGui extends Gui {
         tooltipFunc: () => {
           const ttpr = ToolbarTooltip.pickRect(this.screen, tooltip);
           const innerScreen = ToolbarTooltip.getTutorialScreen(tool);
-          return new ToolbarTooltip(ttpr, { label: tooltip, innerScreen, tool });
+          return new ToolbarTooltip(ttpr, { innerLabel: tooltip, innerScreen, tool });
         },
       });
 

@@ -30,30 +30,17 @@ class TestListRow extends CompositeGuiElement {
   _buildElements() {
     const test = this.#test;
 
-    const sr = new StatReadout(this.rect, {
+    const sr = new ProgressButton(this.rect, {
       icon: playIcon,
+      textAlign: 'left',
       labelFunc: () => test.title,
+      valueFunc: () => (this.isActive() ? 1 : 0),
       scale: 0.4,
+      action: () => this.tlrClicked(),
     });
     sr.isAnimated = () => sr.hovered || this.isActive();
 
-    return [
-      new Button(this.rect, { action: () => this.tlrClicked() }),
-      sr,
-    ];
-  }
-
-  /**
-   * Extend standard composite gui element draw,
-   * by overlaying a progress indicator.
-   * @param {object} g The graphics context.
-   */
-  draw(g) {
-    super.draw(g);
-
-    if (this.isActive()) {
-      ProgressIndicator.draw(g, this.rect, 1);
-    }
+    return [sr];
   }
 
   /**

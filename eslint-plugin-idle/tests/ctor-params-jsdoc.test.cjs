@@ -106,6 +106,27 @@ class GuiScreenPanel {
         `,
         errors: 2,
       },
+
+      {
+        // param not documented
+        // but docs have another param starting with same name
+        code: `
+class GuiElement {
+
+  /**
+   *
+   * @param {string} params.textAlign 'center' or 'left'
+   */
+  constructor(params = {}) {
+
+    const {
+      text,
+    } = params;
+  }
+}
+        `,
+        errors: 1,
+      },
     ],
   },
 );

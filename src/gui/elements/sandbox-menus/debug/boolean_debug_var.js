@@ -31,14 +31,14 @@ class BooleanDebugVar extends CompositeGuiElement {
     const layout = this._layout;
 
     // text label
-    const dtl = new DynamicTextLabel(layout.label, {
+    const dtl = new GuiElement(layout.label, {
       labelFunc: () => varname,
       scale: 0.4,
-      center: false,
+      textAlign: 'left',
     });
 
     const icon = getGlobal(varname) ? checkedIcon : uncheckedIcon;
-    this.checkbox = new IconButton(layout.toggle, {
+    this.checkbox = new Button(layout.toggle, {
       icon,
       action: () => this.toggle(),
       scale: 0.5,

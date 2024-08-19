@@ -2,7 +2,7 @@
  * @file TabHeaderButton gui element
  * A button owned by a TabPaneGroup, used to switch tabs.
  */
-class TabHeaderButton extends TextButton {
+class TabHeaderButton extends Button {
 
   /**
    * called in TabPaneGroup constructor
@@ -17,6 +17,7 @@ class TabHeaderButton extends TextButton {
     super(rect, {
       tooltipScale: 0.4,
       border: new OctBorder(),
+      fill: true,
       ...params,
     });
 

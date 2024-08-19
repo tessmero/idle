@@ -29,10 +29,13 @@ class LayoutContextMenu extends ContextMenu {
   // adjustable rect drawn within #display
   #displayRect;
 
+  #arKey = '_aspect_ratio';
+
   /**
    *
    * @param {number[]} rect
    * @param {object} params
+   * @param {object} params.context the layout test context
    */
   constructor(rect, params = {}) {
     super(rect, params);
@@ -54,24 +57,9 @@ class LayoutContextMenu extends ContextMenu {
     this.#testIconScale = testIconScale;
     this.#testLayoutAnimParams = this._pickDefaultAnimParams(testLayoutData);
 
-  }
-
-  /**
-   * Copied from test context menu.
-   * Hack to prevent rebuilding elements in game screen update
-   * @param {GameScreen} s
-   */
-  buildElements(s) {
-    if (this._builtElements) {
-      // do nothing
-    }
-    else {
-
-      // build elements if not collapsed
-      super.buildElements(s);
-      if (this.children.length > 0) {
-        this._builtElements = true;
-      }
+    // apply first preset if available
+    if (presets && presets.length > 0) {
+      this._applyPreset(presets[0]);
     }
   }
 
@@ -127,7 +115,7 @@ class LayoutContextMenu extends ContextMenu {
     const layout = this._layout;
 
     // title label at top
-    const title = new TextLabel(layout.title, {
+    const title = new GuiElement(layout.title, {
       label: this.#title,
       scale: 0.3,
     });
@@ -147,6 +135,7 @@ class LayoutContextMenu extends ContextMenu {
 
     // slider for aspect ratio of layout container in display
     const arSlider = new SliderButton(layout.arSlider, {
+      titleKey: `ctm_${this.#arKey}`,
       action: () => this._updateFromArSlider(),
       tooltipFunc: () => this._arTooltip(),
     });
@@ -155,11 +144,14 @@ class LayoutContextMenu extends ContextMenu {
     // buttons for presets
     const presetButtons = this.#presets
       .map((presetParams, presetIndex) =>
-        new TextButton(layout.presets[presetIndex], {
+        new Button(layout.presets[presetIndex], {
           label: `PRESET ${presetIndex}`,
           scale: 0.2,
           tooltip: JSON.stringify(presetParams, null, 2),
-          action: () => this._applyPreset(presetParams),
+          action: () => {
+            this._applyPreset(presetParams);
+            this._updateSliders();
+          },
         })
       );
     this.#presetButtons = presetButtons;
@@ -173,10 +165,11 @@ class LayoutContextMenu extends ContextMenu {
     // slider for each layout anim param
     const paramSliders = Object.fromEntries(
       Object.entries(this.#testLayoutAnimParams)
-        .filter(([param, _value]) => param !== '_aspect_ratio')
+        .filter(([param, _value]) => param !== this.#arKey)
         .map(([param, _value]) => [
           param,
           new SliderButton(rows[rowIndex++], {
+            titleKey: `ctm_${param}`,
             action: () => this._updateFromSlider(param),
             tooltipFunc: () => this._sliderTooltip(param),
           }),
@@ -184,15 +177,20 @@ class LayoutContextMenu extends ContextMenu {
     );
     this.#paramSliders = paramSliders;
 
-    // apply first preset if available
-    const presets = this.#presets;
-    if (presets && presets.length > 0) {
-      this._applyPreset(presets[0]);
-    }
+    // update sliders
+    this._updateSliders();
 
     return [title, display,
       ...presetButtons,
       arSlider, ...Object.values(paramSliders),
+
+      new Button(layout.closeBtn, {
+        icon: xIcon,
+        action: () => this.screen.setContextMenu(null),
+        scale: 0.4,
+        tooltip: 'close layout tester',
+      }),
+
     ];
   }
 
@@ -201,22 +199,28 @@ class LayoutContextMenu extends ContextMenu {
    * @param {object} presetParams The preset parameters.
    */
   _applyPreset(presetParams) {
-
-    const { '_aspect_ratio': ar } = presetParams;
-    if (ar) {
-      this._updateAr(ar);
-
-      // update aspect ratio slider
-      this.#arSlider.setSliderVal(ar);
-    }
-
     this.#testLayoutAnimParams = {
       ...this.#testLayoutAnimParams,
       ...presetParams,
     };
+  }
+
+  /**
+   *
+   */
+  _updateSliders() {
+    let { [this.#arKey]: ar } = this.#testLayoutAnimParams;
+    if (!ar) { ar = this.#testAspectRatio; }
+    if (ar) {
+      this._updateAr(ar);
+      this.#arSlider.setSliderVal(ar);
+    }
 
     // update sliders to match params
-    this._updateFromSlider();
+    Object.entries(this.#testLayoutAnimParams)
+      .filter(([param, _value]) => param !== this.#arKey)
+      .forEach(([param, value]) =>
+        this.#paramSliders[param].setSliderVal(value));
   }
 
   /**
@@ -253,6 +257,7 @@ class LayoutContextMenu extends ContextMenu {
     if (ar < minAr) { ar = minAr; }
     if (ar > (1 - minAr)) { ar = (1 - minAr); }
     this.#testAspectRatio = ar;
+    this.#testLayoutAnimParams[this.#arKey] = ar;
 
     // update aspect ratio for layout container
     this._updateAr(ar);

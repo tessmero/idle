@@ -23,13 +23,15 @@ class PauseMenuGui extends Gui {
     const quitLabel = 'QUIT';
 
     return [
-      new TextButton(layout.resumeBtn, {
+      new Button(layout.resumeBtn, {
         label: 'RESUME',
+        fill: true,
         action: () => this.gsm.resume(),
       }),
 
-      new TextButton(layout.quitBtn, {
+      new Button(layout.quitBtn, {
         label: quitLabel,
+        fill: true,
         action: () => window.location.reload(), // this.gsm.quit()),
       }),
     ];

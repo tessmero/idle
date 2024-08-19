@@ -1,7 +1,8 @@
 /**
  * @file Layout data for context menu.
- *
- * uses parameters 'orientation' and 'side'
+ * @param orientation
+ * @param expand
+ * @param side
  */
 
 // helpers for aligning bounding rectangle in screen

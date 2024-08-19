@@ -64,7 +64,11 @@ class SkillCard extends CompositeGuiElement {
       tooltip = 'purchased';
     }
     tooltip = `skill: ${skill.name}}\n${tooltip}`;
-    const statusIcon = new IconButton(rr, { icon, tooltip, scale: 0.3 });
+    const statusIcon = new Button(rr, {
+      icon, tooltip,
+      scale: 0.3,
+      fill: true,
+    });
     gsp.tooltip = tooltip;
 
     this.gsp = gsp;

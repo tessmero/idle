@@ -41,8 +41,9 @@ class GameScreen {
     this.#rect = rect;
 
     ScreenManager().submitNewScreen(this);
-    console.assert(gsm instanceof GameStateManager);
-    console.assert(sim instanceof ParticleSim);
+
+    // console.assert(gsm instanceof GameStateManager);
+    // console.assert(sim instanceof ParticleSim);
 
     this.sim = sim;
     sim.screen = this;
@@ -257,13 +258,24 @@ class GameScreen {
     this.idleCountdown = this.idleDelay;
 
     // check if dragging gui element
-    if (this.draggingElem) {
-      this.draggingElem.drag();
+    const dragging = this._getDraggingElem();
+    if (dragging) {
+      dragging.drag();
     }
 
     // trigger selected tool movement behavior
     const tool = this.tool;
     if (tool) { tool.mouseMove(p); }
+  }
+
+  /**
+   *
+   */
+  _getDraggingElem() {
+    if (!this.draggingElem) { return null; }
+    const { parent, titleKey } = this.draggingElem;
+    const match = parent.children.find((c) => c.titleKey === titleKey);
+    return match;
   }
 
   /**
@@ -355,31 +367,31 @@ class GameScreen {
    * @param {?GuiElement} cm The new context menu.
    */
   setContextMenu(cm) {
-
-    if (cm instanceof TestContextMenu) {
-      _cmSideActor.setState(1);
+    if (this !== global.mainScreen) {
+      return;
     }
-
-    if (cm instanceof LayoutContextMenu) {
-      _cmSideActor.setState(1);
-    }
+    _cmExpandActor.resetGuiActor();
 
     if (cm) {
+
+      // now setting new different context menu
       cm.setScreen(this);
       this.#contextMenu = cm;
 
+      // place test context menu on right side
+      if (this.state !== GameStates.playing) {
+        _cmSlideActor.setTarget(1);
+      }
+
       // expand context menu
       _cmExpandActor.setTarget(1);
-
-      // _cmExpandState.targetExpand = 1;
     }
     else {
+      this.sim.selectedBody = null;
+      this.sim.selectedParticle = null;
 
       // collapse context menu
       _cmExpandActor.setTarget(0);
-
-      // _cmExpandState.targetExpand = 0;
-
     }
   }
 
@@ -397,6 +409,7 @@ class GameScreen {
     const sim = this.sim;
     const gui = this.gui;
     const macro = this.macro;
+    const cm = this.#contextMenu;
 
     // point of interest to not cover with context menu
     let poi = null;
@@ -411,73 +424,52 @@ class GameScreen {
       }
     }
 
-    // delete popups, knowing that any persistent
-    // popups will be reinstated below
-    if ((
-      (this.#contextMenu instanceof TestContextMenu) ||
-      (this.#contextMenu instanceof LayoutContextMenu)
-    )) {
-      poi = v(...this.rect);
-    }
-    else {
-      this.setContextMenu(null);
-    }
+    // delete tooltip, knowing that any persistent
+    // tooltip will be reinstated below
     this.tooltip = null;
 
     // update context menu
     // if (global.gameState !== GameStates.playing) {
     //   sim.selectedBody = null;
     // }
-    if (gui && sim.selectedBody && (this === global.mainScreen) &&
-        (this.state !== GameStates.startMenu) && (this.state !== GameStates.startTransition)) {
-      const bod = sim.selectedBody;
-      poi = bod.pos;
-      if (bod instanceof CompoundBody) {
-        poi = bod.getMainBody().pos;
-      }
+    if ((this === global.mainScreen) && (this.state === GameStates.playing)) {
+      if (sim.selectedBody) {
+        const bod = sim.selectedBody;
+        poi = bod.pos;
+        if (bod instanceof CompoundBody) {
+          poi = bod.getMainBody().pos;
+        }
 
-      if (bod instanceof Buddy) {
-        this.setContextMenu(bod.buildContextMenu(this.rect));
-      }
-      else {
-        this.setContextMenu(new BodyContextMenu(this.rect, { body: bod }));
-      }
+        // check if new buddy or body context menu is warranted
+        if (bod instanceof Buddy) {
+          if ((!cm) || (cm._buddy !== bod)) {
+            this.setContextMenu(bod.getContextMenu(this.rect));
+          }
+        }
+        else if ((!cm) || (cm.body !== bod)) {
+          this.setContextMenu(new BodyContextMenu(this.rect, { body: bod }));
+        }
 
-    }
-    else if (gui && sim.selectedParticle) {
-      const p = sim.selectedParticle;
-      const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
-      poi = v(x, y);
-      this.setContextMenu(new PiContextMenu(this.rect, { sim: this.sim, pData: p }));
+      }
+      else if (sim.selectedParticle) {
+        const p = sim.selectedParticle;
+        const [_subgroup, _i, x, y, _dx, _dy, _hit] = p;
+        poi = v(x, y);
+        if ((!cm) || (!((cm instanceof PiContextMenu) && cm.pcmMatches(p)))) {
+          this.setContextMenu(new PiContextMenu(this.rect, { sim: this.sim, pData: p }));
+        }
+      }
     }
 
     if (this.#contextMenu) {
-
-      // update context menu bounds animation
-      const axis = (this.rect[2] > this.rect[3]) ? 0 : 1;
-      _cmOrientActor.setTarget(axis);
-      const lap = ContextMenu.pickLayoutAnimParams(this, poi);
-      this.#contextMenu.setLayoutAnimState(lap);
-      this.#contextMenu._layout = null;
-      this.#contextMenu.buildElements(this);
-
-      // check if poi obstructed
-      if ((_cmSlideActor.state === 0 || _cmSlideActor.state === 1) && poi && vInRect(poi, ...this.#contextMenu.bounds)) {
-
-        // target farthest side next time
-        _cmSlideActor.setTarget(1 - Math.round(lap.side));
-      }
-
-      // check if closing animation just finished
-      if (lap.expand === 0 && _cmExpandActor.target === 0) {
-        this.#contextMenu = null;
-      }
+      this._updateContextMenuAnim(poi);
     }
 
     let disableHover = false;
-    if (this.draggingElem) {
+    const de = this._getDraggingElem();
+    if (de) {
       disableHover = true;
-      this.tooltip = this.draggingElem.constructTooltipElement();
+      this.tooltip = de.constructTooltipElement();
     }
 
     // update popups just in case they are persistent
@@ -516,6 +508,35 @@ class GameScreen {
     const menuGui = this.stateManager.getGuiForState(GameStates.upgradeMenu);
     if (menuGui) { menuGui.updateTransitionEffect(dt); } // upgrade_menu.js
 
+  }
+
+  /**
+   * Called in update()
+   * @param {Vector} poi The point of interest to avoid covering.
+   */
+  _updateContextMenuAnim(poi) {
+    const cm = this.#contextMenu;
+
+    // update context menu bounds animation
+    const axis = (this.rect[2] > this.rect[3]) ? 0 : 1;
+    _cmOrientActor.setTarget(axis);
+    const lap = ContextMenu.pickLayoutParams(this, poi);
+    cm.setLytParams(lap);
+    cm.setRect(this.rect);
+    cm.buildElements(this);
+
+    // check if poi obstructed
+    if ((_cmSlideActor.state === 0 || _cmSlideActor.state === 1) &&
+      poi && (!cm.collapsed) && vInRect(poi, ...cm.bounds)) {
+
+      // target farthest side next time
+      _cmSlideActor.setTarget(1 - Math.round(lap.side));
+    }
+
+    // check if closing animation just finished
+    if (lap.expand === 0 && _cmExpandActor.target === 0) {
+      this.#contextMenu = null;
+    }
   }
 
   /**
@@ -677,12 +698,8 @@ class GameScreen {
       const cm = this.#contextMenu;
       if (cm) {
 
-        if (cm._layout) {
-          // console.log('good');
-        }
-        else {
-          // console.log('bad');
-          cm._computeLayoutRects(this);
+        if (!cm._layout) {
+          throw new Error('context menu has no layout');
         }
 
         cm.draw(g);

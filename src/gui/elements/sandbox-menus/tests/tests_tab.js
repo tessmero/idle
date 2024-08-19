@@ -75,10 +75,11 @@ class TestsTab extends CompositeGuiElement {
         // play all button in first slot
         rab,
 
-        new StatReadout(rab.rect, {
+        new GuiElement(rab.rect, {
           icon: nextIcon,
           labelFunc: () => 'run all tests',
           scale,
+          textAlign: 'left',
         }),
 
         // ui rows

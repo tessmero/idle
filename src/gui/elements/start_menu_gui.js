@@ -36,7 +36,7 @@ class StartMenuGui extends Gui {
     // build title display with large readable text
     const slots = layout.titleRows;
     this.labels = specs.map((s) =>
-      new TextLabel(slots[s[0]], {
+      new GuiElement(slots[s[0]], {
         label: s[1],
         letterPixelPad: 0.01,
         style: 'hud',
@@ -46,16 +46,18 @@ class StartMenuGui extends Gui {
     return [
       ...this.labels,
 
-      new TextButton(layout.playBtn, {
+      new Button(layout.playBtn, {
         label: 'PLAY',
         action: () => this.gsm.playClicked(),
         border: new SlantBorder(),
+        fill: true,
       }),
 
-      new IconButton(layout.sandboxBtn, {
+      new Button(layout.sandboxBtn, {
         icon: sandboxIcon,
         action: () => this.gsm.sandboxClicked(),
         border: new SlantBorder(),
+        fill: true,
       }),
 
     ];

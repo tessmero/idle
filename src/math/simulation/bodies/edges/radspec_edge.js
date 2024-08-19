@@ -33,8 +33,6 @@ class RadspecEdge extends Edge {
       angleLut[i * angleLutNDims + 1] = rad * rad;
       angleLut[i * angleLutNDims + 2] = circ;
       circ = circ + angleStep * rad;
-
-      if (isNaN(circ)) { throw new Error('poop'); }
     }
     this.angleLutN = angleLutN;
     this.angleLutNDims = angleLutNDims;

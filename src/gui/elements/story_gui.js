@@ -42,14 +42,14 @@ class StoryGui extends Gui {
         border: new StoryBorder(),
       });
 
-    this._okayBtn = new TextButton(layout.moreBtn, {
+    this._okayBtn = new Button(layout.moreBtn, {
       label: '...',
       action: () => { this.#moreClicked = !this.#moreClicked; },
       scale: fontSize,
       border: new RoundedBorder(),
     });
 
-    this._extraBtn = new TextButton(layout.okayBtn, {
+    this._extraBtn = new Button(layout.okayBtn, {
       label: 'Okay',
       action: () => this.closeStoryGui(),
       scale: fontSize,
@@ -64,7 +64,7 @@ class StoryGui extends Gui {
 
       this._borderElem,
 
-      new DynamicTextLabel(layout.messageDiv, {
+      new GuiElement(layout.messageDiv, {
         labelFunc: () => this.buildDisplayText(),
         scale: fontSize,
       }),

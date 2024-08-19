@@ -5,7 +5,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'Ensure destructured properties from `params` are documented in JSDoc comments in constructors',
+      description: 'constructors must documen properties unpacked from \'params\'',
       category: 'Best Practices',
       recommended: false,
     },
@@ -52,7 +52,7 @@ module.exports = {
 
           // Check if destructured properties are documented in JSDoc
           destructuredProps.forEach((prop) => {
-            const jsdocRegex = new RegExp(`@param\\s+\\{.*?\\}\\s+params\\.${prop}`);
+            const jsdocRegex = new RegExp(`@param\\s+\\{.*?\\}\\s+params\\.${prop}\\b`);
             if (!jsdocRegex.test(jsdocText)) {
               context.report({
                 node,

@@ -37,7 +37,7 @@ class UpgradesTab extends CompositeGuiElement {
         rect = [rect[0], rect[1], rect[2], 2 * rect[3]];
       }
       return new StatUpgrader(rect, {
-        layoutAnimState: {
+        lytParams: {
           thick: useThickLayout ? 1 : 0,
         },
         gutse,

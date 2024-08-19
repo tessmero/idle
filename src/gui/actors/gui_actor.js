@@ -5,7 +5,7 @@
  * - ...or multiple following script in data/gui-anims
  */
 class GuiActor {
-  #param; // name of single parameter to adjust
+  #lytParam; // name of single layout parameter to animate
   #data; // ...or object in data/gui-anims
 
   // last update time
@@ -21,20 +21,42 @@ class GuiActor {
   #speed;
 
   /**
-   * @param {object} params.data The object in data/gui-anims
    * @param {object} params The parameters.
+   * @param {string} params.lytParam The layout parameter to animate
+   * @param {object} params.data The object in data/gui-anims to animate multiple layout parameters
+   * @param {string} params.param should use lytParam instead. Unpacked to throw error message.
+   * @param {number} params.speed The amount per ms to move state towards target
    */
   constructor(params = {}) {
     const {
       data,
       param,
-      speed = 1e-5,
+      lytParam,
+      speed = 1e-3,
     } = params;
 
-    this.#param = param;
+    if (param) {
+      throw new Error('invalid parameter \'param\'. Should use \'lytParam\'.');
+    }
+
+    this.#lytParam = lytParam;
     this.#data = data;
     this.#speed = speed;
     this.#t = global.t;
+  }
+
+  /**
+   * called in game_screen
+   */
+  resetGuiActor() {
+    this.#t = global.t;
+  }
+
+  /**
+   *
+   */
+  debug() {
+    return `${this.#state}->${this.#target}`;
   }
 
   /**
@@ -85,16 +107,24 @@ class GuiActor {
     }
     this.#state = s;
 
-    // return updated layout parameters
-    if (this.#param) {
+    // return animated layout parameter(s)
+    return this._getLytParams();
 
-      // return state as single animated parameter set in constructor
-      return { [this.#param]: s };
+  }
+
+  /**
+   * compute animated layout parameter(s)
+   */
+  _getLytParams() {
+
+    if (this.#lytParam) {
+
+      // return single param
+      return { [this.#lytParam]: this.#state };
 
     }
 
-    // compute state based on anim data set in constructor
-    return GuiAnimParser.computeLayoutAnimParams(this.#data, s);
-
+    // return multiple params using anim data
+    return GuiAnimParser.computeLayoutParams(this.#data, this.#state);
   }
 }

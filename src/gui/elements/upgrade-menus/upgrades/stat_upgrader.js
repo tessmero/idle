@@ -41,7 +41,7 @@ class StatUpgrader extends CompositeGuiElement {
       label: 'upgrade',
       action: () => this.upgradeButtonClicked(),
       scale: 0.3,
-      border: this.layoutAnimState.thick ? new RoundedBorder() : new SlantBorder(),
+      border: this.lytParams.thick ? new RoundedBorder() : new SlantBorder(),
       valueFunc: () => {
         const budget = screen.sim.particlesCollected;
         const cost = gutse.cost.f(gutse.level - 1);
@@ -52,19 +52,19 @@ class StatUpgrader extends CompositeGuiElement {
 
     // visual progression display
     this.progressDisplayRect = layout.progress;
-    const progLabel = new DynamicTextLabel(layout.progressLabel, {
+    const progLabel = new GuiElement(layout.progressLabel, {
       labelFunc: () => `LEVEL ${gutse.level}`,
-      center: false,
+      textAlign: 'left',
       scale: 0.25,
     });
 
     // main label
-    const dtl = new StatReadout(layout.mainLabel, {
+    const dtl = new GuiElement(layout.mainLabel, {
       icon: gutse.icon,
       labelFunc: () => `${gutse.label}`,
       scale: 0.35,
       tooltipScale: 0.35,
-      center: false,
+      textAlign: 'left',
     });
 
     return [btn, dtl, progLabel];

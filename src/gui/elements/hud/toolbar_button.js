@@ -12,7 +12,7 @@ class ToolbarButton extends CompositeGuiElement {
    * @param {number} params.indexInToolbar The index of this button in the toolbar.
    */
   constructor(rect, params = {}) {
-    super(rect, params);
+    super(rect, { ...params });
 
     const { tool, indexInToolbar } = params;
 
@@ -29,9 +29,10 @@ class ToolbarButton extends CompositeGuiElement {
     const tool = this.tool;
     const rect = this.rect;
 
-    const btn = new IconButton(rect, {
+    const btn = new Button(rect, {
       icon: tool.icon,
       action: () => this.click(),
+      fill: true,
     });
     btn.isAnimated = (() => // override IconButton
       btn.hovered || (

@@ -1,8 +1,9 @@
 /**
  * @file SliderButton
  */
-class SliderButton extends TextButton {
+class SliderButton extends Button {
 
+  #titleKey;
   #sliderVal = 0; // state
 
   // drawing settings
@@ -13,17 +14,29 @@ class SliderButton extends TextButton {
   /**
    *
    * @param {number[]} rect
-   * @param {object} params
+   * @param {object} params The parameters.
+   * @param {string} params.titleKey Used to maintain dragging state if parent rebuilds
+   * @param {number} params.sliderVal The initial value for the slider button
    */
   constructor(rect, params = {}) {
     super(rect, params);
-    const { sliderVal = 1 } = params;
+    const {
+      sliderVal = 1,
+      titleKey,
+    } = params;
+
     this.#sliderVal = sliderVal;
+    this.#titleKey = titleKey;
 
     // compute terminals, leaving space for circle to hang off
     const [x, y, w, h] = padRect(...rect, -this.#rad);
     this.#line = [v(x, y + h / 2), v(x + w, y + h / 2)];
   }
+
+  /**
+   *
+   */
+  get titleKey() { return this.#titleKey; }
 
   /**
    *
@@ -53,7 +66,10 @@ class SliderButton extends TextButton {
     this._slideToMouse();
 
     // start dragging
-    this.screen.draggingElem = this;
+    this.screen.draggingElem = {
+      parent: this._parentCge,
+      titleKey: this.#titleKey,
+    };
 
     // execute action like regular button
     return super.click();
@@ -100,7 +116,7 @@ class SliderButton extends TextButton {
     g.arc(x, y, rad, 0, twopi);
     g.fill();
 
-    if (this.hovered || (this.screen.draggingElem === this)) {
+    if (this.hovered || this._isBeingDragged()) {
 
       // highlight circle
       g.strokeStyle = global.colorScheme.hl;
@@ -109,6 +125,14 @@ class SliderButton extends TextButton {
       g.arc(x, y, rad, 0, twopi);
       g.stroke();
     }
+  }
+
+  /**
+   *
+   */
+  _isBeingDragged() {
+    const de = this.screen.draggingElem;
+    return de && (de.parent === this._parentCge) && (de.titleKey === this.#titleKey);
   }
 
 }

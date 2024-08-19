@@ -87,29 +87,33 @@ class DefaultTool extends Tool {
    * @param {Vector} p the position of the mouse
    */
   mouseDown(p) {
+    const sim = this.sim;
 
     // either grab control point or start catching rain
-    this.sim.updateControlPointHovering(p);
-    this.held = this.sim.hoveredControlPoint;
-    this.sim.draggingControlPoint = this.held;
+    sim.updateControlPointHovering(p);
+    this.held = sim.hoveredControlPoint;
+    sim.draggingControlPoint = this.held;
 
     // trigger callback
     // used in main_psim.js to open context menu
     if (this.held) {
-      this.sim.bodyClicked(this.held);
+      sim.bodyClicked(this.held);
     }
     else {
       this.held = 'catching';
-      this.sim.selectedBody = null; // close context menu
-      this.sim.selectedParticle = null;
+
+      // close context menu
+      sim.selectedBody = null;
+      sim.selectedParticle = null;
+      this.screen.setContextMenu(null);
     }
 
     // toggle grabbing particles
     if (this.held === 'catching') {
-      this.sim.addGrabber(this.grabber);
+      sim.addGrabber(this.grabber);
     }
     else {
-      this.sim.removeGrabber(this.grabber);
+      sim.removeGrabber(this.grabber);
     }
   }
 

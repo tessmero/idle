@@ -59,20 +59,20 @@ class ScalarDebugVar extends CompositeGuiElement {
     const layout = this._layout;
 
     const result = [
-      new DynamicTextLabel(layout.value, {
+      new GuiElement(layout.value, {
         labelFunc: () => this._fmtVal(),
         scale: 0.4,
-        center: false,
+        textAlign: 'left',
       }),
 
-      new DynamicTextLabel(layout.label, {
+      new GuiElement(layout.label, {
         labelFunc: () => varname,
         scale: 0.4,
-        center: false,
+        textAlign: 'left',
       }),
 
       // buttons
-      new IconButton(layout.buttons[0], {
+      new Button(layout.buttons[0], {
         icon: decreaseIcon,
         action: () => {
           let m = 1;
@@ -85,7 +85,7 @@ class ScalarDebugVar extends CompositeGuiElement {
           screen.stateManager.rebuildGuis(screen, false);
         },
       }),
-      new IconButton(layout.buttons[1], {
+      new Button(layout.buttons[1], {
         icon: increaseIcon,
         action: () => {
           let m = 1;

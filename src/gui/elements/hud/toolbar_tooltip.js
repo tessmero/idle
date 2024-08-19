@@ -57,13 +57,13 @@ class ToolbarTooltip extends LabelTooltip {
       };
 
       // text readout
-      result.push(new StatReadout(layout.cost, {
+      result.push(new GuiElement(layout.cost, {
         icon: collectedIcon,
         labelFunc: () => bc((budget, cost) => {
           if (budget > cost) { return `${cost.toFixed(0)}`; }
           return `${budget.toFixed(0)}/${cost.toFixed(0)}`;
         }),
-        center: true,
+        textAlign: 'center',
         scale: 0.35,
       }));
 

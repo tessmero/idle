@@ -18,7 +18,7 @@ const _cmSlideActor = new GuiActor({
 const _cmExpandActor = new GuiActor({
 
   // adjusts one layout  param
-  param: 'expand',
+  lytParam: 'expand',
 
   // speed of expand/collapse just to open or close
   speed: 1e-2,
@@ -28,7 +28,7 @@ const _cmExpandActor = new GuiActor({
 const _cmOrientActor = new GuiActor({
 
   // adjust one layout param
-  param: 'orientation',
+  lytParam: 'orientation',
 
   // speed of switching screen orientation
   speed: 1e-2,
@@ -50,8 +50,7 @@ class ContextMenu extends CompositeGuiElement {
   _minExpandToBuildElements = 0.2;
 
   /**
-   * get params using ContextMenu.pickRects
-   * @param {number[]} rect The rectangle enclosing the whole menu.
+   * @param {number[]} rect The layout alignment rectangle (whole screen)
    * @param {object} params The parameters.
    */
   constructor(rect, params = {}) {
@@ -71,8 +70,7 @@ class ContextMenu extends CompositeGuiElement {
   buildElements(screen) {
 
     // check if collapsed
-    const current = this.layoutAnimState;
-    if (current && (current.expand < this._minExpandToBuildElements)) {
+    if (this.collapsed) {
 
       // emulate building empty list of elements
       this._clearChildren(screen);
@@ -87,40 +85,33 @@ class ContextMenu extends CompositeGuiElement {
   }
 
   /**
-   * pick region for context menu
-   * - within given screen rectangle
-   * - leaving poit of interest visible
-   * @param {GameScreen[]} screen The screen to align menu in.
-   * @param {?object} layoutAnimParams
+   * return true if this context menu is too collapsed to display children.
    */
-  static pickRect(screen, layoutAnimParams = null) {
-    const rect = screen.rect;
-
-    const lap = layoutAnimParams ? layoutAnimParams :
-      ContextMenu.pickLayoutAnimParams();
-
-    // return interpolated rectangle
-    return GuiLayoutParser.computeRects(
-      rect, CONTEXT_MENU_LAYOUT, screen.iconScale, lap
-    ).bounds;
+  get collapsed() {
+    const prm = this.lytParams;
+    return prm && (prm.expand < this._minExpandToBuildElements);
   }
 
   /**
    *
    */
-  static pickLayoutAnimParams() {
+  static pickLayoutParams() {
+
+    const orientParams = _cmOrientActor.update();
 
     // smaller expand takes priority
     const slideParams = _cmSlideActor.update();
     const expandParams = _cmExpandActor.update();
     const expand = Math.min(slideParams.expand, expandParams.expand);
 
-    return {
+    const final = {
       ...this.layoutAnimParams,
-      ..._cmOrientActor.update(),
+      ...orientParams,
       ...slideParams,
       ...expandParams,
       expand,
     };
+
+    return final;
   }
 }

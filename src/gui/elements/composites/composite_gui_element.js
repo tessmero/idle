@@ -17,7 +17,7 @@ class CompositeGuiElement extends GuiElement {
    * @type {object}
    */
   _layout = null;
-  #layoutAnimState;
+  #lytParams;
 
   /**
    * Rectangle to avoid drawing over even if opaque
@@ -39,17 +39,18 @@ class CompositeGuiElement extends GuiElement {
    * @param {number[]} rect The rectangle for this composite.
    * @param {object} params The parameters.
    * @param {string} params.opaque true if this should have a solid background
+   * @param {object} params.lytParams The object with values for @parameters in layout data
    */
   constructor(rect, params = {}) {
     super(rect, params);
 
     const {
       opaque = false,
-      layoutAnimState = {},
+      lytParams = {},
     } = params;
 
     this.#opaque = opaque;
-    this.#layoutAnimState = layoutAnimState;
+    this.#lytParams = lytParams;
   }
 
   /**
@@ -72,23 +73,25 @@ class CompositeGuiElement extends GuiElement {
   /**
    *
    */
-  get layoutAnimState() {
-    return this.#layoutAnimState;
+  get lytParams() {
+    return this.#lytParams;
   }
 
   /**
    *
    */
-  set layoutAnimState(_s) {
-    throw new Error('should use setLayoutAnimState()');
+  set lytParams(_s) {
+    throw new Error('should use setLytParams()');
   }
 
   /**
    *
-   * @param {object} s The new animation state parameters.
+   * @param {object} s The new layout parameters.
    */
-  setLayoutAnimState(s) {
-    this.#layoutAnimState = s;
+  setLytParams(s) {
+    this.#lytParams = s;
+    this._layout = null;
+    this._computeLayoutRects(screen);
   }
 
   /**
@@ -114,9 +117,7 @@ class CompositeGuiElement extends GuiElement {
 
     const elems = this._buildElements();
     elems.forEach((e) => {
-      if (e instanceof CompositeGuiElement) {
-        e._parentCge = this; // used in _setHole()
-      }
+      e._parentCge = this; // used in _setHole()
       if (e instanceof HoleElement) {
         this._setHole(e.rect);
       }
@@ -137,25 +138,10 @@ class CompositeGuiElement extends GuiElement {
    * @param {GameScreen} screen The screen needed to pick icon scale.
    */
   _computeLayoutRects(screen) {
-    const data = this._layoutData;
-    if (!data) { return null; }
-    let lr = this._layout;
-
-    // get one representative if multiple layouts given
-    const dataRep = data[0] ? data[0] : data;
-
-    // check if not yet computed, or was computed in
-    // superclass constructor and layout was extended
-    if ((!lr) || (Object.keys(lr).length !== Object.keys(dataRep).length)) {
-
-      // compute single layout
-      lr = GuiLayoutParser.computeRects(
-        this.rect, this._layoutData, screen.iconScale, this.#layoutAnimState);
-
-      this._layout = lr;
+    if (this._layoutData && (!this._layout)) {
+      this._layout = GuiLayoutParser.computeRects(
+        this.rect, this._layoutData, screen.iconScale, this.#lytParams);
     }
-
-    return lr;
   }
 
   /**

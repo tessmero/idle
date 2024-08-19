@@ -6,11 +6,13 @@
 class GuiAnimParser {
 
   /**
-   * compute animation state at time t
-   * @param {object} data The anim object in data folder.
-   * @param {number} t the time in the animation
+   * Called in gui_actor.js
+   * Compute animation parameters at state between 0 and 1.
+   * @param {object} data The object in data/gui-anims.
+   * @param {number} state The animation state (t) in [0,1]
    */
-  static computeLayoutAnimParams(data, t) {
+  static computeLayoutParams(data, state) {
+    const t = state;
 
     // check if t is outside of data
     if (t <= data[0].t) { return data[0]; }

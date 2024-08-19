@@ -71,7 +71,7 @@ class Buddy extends CompoundBody {
    * @param {number[][]} _rects The rectangles to allign elements in.
    * @returns {GuiElement} The new context menu.
    */
-  buildContextMenu(_rects) {
+  getContextMenu(_rects) {
     throw new Error(`Method not implemented in ${this.constructor.name}.`);
   }
 

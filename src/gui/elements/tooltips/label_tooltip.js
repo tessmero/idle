@@ -9,18 +9,18 @@ class LabelTooltip extends Tooltip {
    */
   static defaultScale = 0.3;
 
-  #label;
+  #innerLabel;
 
   /**
    * get rect using LabelTooltip.pickRect
    * @param {number[]} rect The rectangle to align text in.
    * @param {object} params The parameters.
-   * @param {string} params.label The text content to display.
+   * @param {string} params.innerLabel The text content to display.
    */
   constructor(rect, params = {}) {
     super(rect, params);
-    const { label } = params;
-    this.#label = label;
+    const { innerLabel } = params;
+    this.#innerLabel = innerLabel;
   }
 
   /**
@@ -31,10 +31,10 @@ class LabelTooltip extends Tooltip {
     return [
       ...super._buildElements(),
 
-      new TextLabel(this._layout.label, {
-        label: this.#label,
+      new GuiElement(this._layout.label, {
+        label: this.#innerLabel,
         scale: this.scale,
-        center: false,
+        textAlign: 'left',
       }),
     ];
   }

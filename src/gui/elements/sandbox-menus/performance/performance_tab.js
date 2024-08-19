@@ -44,10 +44,11 @@ class PerformanceTab extends CompositeGuiElement {
 
     const result = specs.map((entry, i) => {
       const [icon, labelFunc, tooltipFunc] = entry;
-      return new StatReadout(rows[i], {
+      return new GuiElement(rows[i], {
         icon, labelFunc, tooltipFunc,
         scale: 0.4,
         tooltipScale: 0.3,
+        textAlign: 'left',
       });
     });
 
