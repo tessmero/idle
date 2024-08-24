@@ -70,7 +70,8 @@ function keyDown(event) {
   if (event.which === 16) {
     global.shiftHeld = true;
 
-    // startMusicLoop();
+    // new SoundEffect().play();
+    // global.mainScreen.soundManager.startMusicLoop();
   }
   if (event.which === 17) {
     global.controlHeld = true;

@@ -31,6 +31,7 @@ class TestListRow extends CompositeGuiElement {
     const test = this.#test;
 
     const sr = new ProgressButton(this.rect, {
+      titleKey: `test-list-row-${this.#testIndex}-progress-btn`,
       icon: playIcon,
       textAlign: 'left',
       labelFunc: () => test.title,

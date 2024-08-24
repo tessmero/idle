@@ -4,8 +4,11 @@
  * Top-level GUI container that appears when the menu button is clicked.
  */
 class UpgradeMenuGui extends Gui {
-  title = 'Upgrade Menu';
+  _titleKey = 'upgrade-menu-gui';
   _layoutData = UPGRADE_MENU_GUI_LAYOUT;
+  _soundData = UPGRADE_MENU_GUI_SOUNDS;
+
+  #tabGroup;
 
   /**
    * Construct Gui with given rectangle.
@@ -78,15 +81,14 @@ class UpgradeMenuGui extends Gui {
       ];
     }
     const tabGroup = new TabPaneGroup([...r0], {
+      titleKey: 'upgrade-menu-tab-group',
       tabLabels,
       tabContents,
     });
-    if (global.upgradeMenuTabIndex) { tabGroup.setSelectedTabIndex(global.upgradeMenuTabIndex); }
-    tabGroup.addTabChangeListener((i) => {
-      global.upgradeMenuTabIndex = i;
-    });
+    this.#tabGroup = tabGroup;
 
     const closeButton = new Button(layout.closeBtn, {
+      titleKey: 'upgrade-menu-close-btn',
       icon: xIcon,
       action: () => this.gsm.toggleStats(),
       scale: 0.5,
@@ -100,19 +102,34 @@ class UpgradeMenuGui extends Gui {
    *
    */
   open() {
+
     // restart transition animation
     this.transitionRadius = 0;
+
+    // restart animation in current tab
+    // as if we just switched to it from another tab
+    const i = this.#tabGroup._pState.selectedTabIndex;
+    this.#tabGroup._pState.selectedTabIndex = -1;
+    this.#tabGroup.setSelectedTabIndex(i);
+
+    this._sounds.open.play();
+
+    // close context menu
+    this.screen.setContextMenu(null);
   }
 
   /**
    *
    */
   close() {
+
     // close context menu
     this.screen.setContextMenu(null);
 
     // restart transition animation
     this.transitionRadius = 0;
+
+    this._sounds.close.play();
   }
 
   /**

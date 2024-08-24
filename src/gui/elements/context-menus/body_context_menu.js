@@ -72,6 +72,7 @@ class BodyContextMenu extends ContextMenu {
       }),
 
       new Button(layout.closeBtn, {
+        titleKey: 'bcmCloseBtn',
         icon: xIcon,
         action: () => this.screen.setContextMenu(null),
         scale: 0.4,
@@ -83,6 +84,7 @@ class BodyContextMenu extends ContextMenu {
     if (this.deleteEnabled()) {
       result.push(
         new Button(layout.trashBtn, {
+          titleKey: 'bcmTrashBtn',
           icon: trashIcon,
           action: () => this.deleteBody(),
           tooltip: `delete ${body.title}\n(no refunds)`,

@@ -3,8 +3,16 @@
  * Top-level gui container that appears during special story events.
  */
 class StoryGui extends Gui {
-  title = 'story';
+  _titleKey = 'story-gui';
   _layoutData = STORY_GUI_LAYOUT;
+  _layoutActors = {
+
+    // fly in
+    sgEnter: {
+      lytParam: 'enter',
+      speed: 2e-3,
+    },
+  };
 
   // flags checked in game_screen.js
   blocksPopups = true;
@@ -20,7 +28,7 @@ class StoryGui extends Gui {
    * @param  {object} params The gui element parameters.
    */
   constructor(rect, params = {}) {
-    super(rect, params);
+    super(rect, { lytParam: { enter: 0 }, ...params });
 
     const gusp = global._storyGuiStateParams;
     if (gusp) {
@@ -42,14 +50,16 @@ class StoryGui extends Gui {
         border: new StoryBorder(),
       });
 
-    this._okayBtn = new Button(layout.moreBtn, {
+    this._extraBtn = new Button(layout.moreBtn, {
+      titleKey: 'sgExtraBtn',
       label: '...',
       action: () => { this.#moreClicked = !this.#moreClicked; },
       scale: fontSize,
       border: new RoundedBorder(),
     });
 
-    this._extraBtn = new Button(layout.okayBtn, {
+    this._okayBtn = new Button(layout.okayBtn, {
+      titleKey: 'sgOkayBtn',
       label: 'Okay',
       action: () => this.closeStoryGui(),
       scale: fontSize,
@@ -137,6 +147,17 @@ class StoryGui extends Gui {
   /**
    *
    */
+  open() {
+    super.open();
+
+    // start entrance animation
+    this._actors.sgEnter.setState(0);
+    this._actors.sgEnter.setTarget(1);
+  }
+
+  /**
+   *
+   */
   close() {
     super.close();
     global._storyGuiStateParams = null;
@@ -146,8 +167,16 @@ class StoryGui extends Gui {
    * Make the previous GUI appear behind this.
    */
   getBackgroundGui() {
-    const p = this._stateParams;
-    return this.screen.stateManager.getGuiForState(p.prevState);
+    const state = this._stateParams;
+
+    if (!state) {
+
+      // in transition, state not yet set
+      // story gui will be drawn on top of current gui
+      return this.screen.gui;
+
+    }
+    return this.screen.stateManager.getGuiForState(state.prevState);
   }
 
   /**

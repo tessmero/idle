@@ -70,8 +70,8 @@ class GameStateManager {
     gui.gsm = this;
 
     // construct,layout,recurse children
-    gui.buildElements(screen);
-
+    gui.setScreen(screen);
+    gui._updateLytParams();
   }
 
   /**

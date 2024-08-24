@@ -70,6 +70,9 @@ class DefaultTool extends Tool {
     // show message
     const p = v(x, y);
     sim.floaters.signalChange(p, +1);
+
+    // play sound
+    sim.screen.sounds.collect.play(p);
   }
 
   /**
@@ -87,6 +90,15 @@ class DefaultTool extends Tool {
    * @param {Vector} p the position of the mouse
    */
   mouseDown(p) {
+
+    // change collect sound
+    // if (this.screen.sounds) {
+    //   this.screen.sounds.collect.setScale(
+    //     randChoice(['A4', 'B4', 'C4']),
+    //     randChoice(['chromaticScale', 'bluesScale'])
+    //   );
+    // }
+
     const sim = this.sim;
 
     // either grab control point or start catching rain

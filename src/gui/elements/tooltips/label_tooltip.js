@@ -46,9 +46,9 @@ class LabelTooltip extends Tooltip {
    * @param {number} scale
    */
   static pickRect(screen, label, scale = null) {
-
     let s = scale;
     if (!s) { s = LabelTooltip.defaultScale; }
+
     let [w, h] = getTextDims(label, s);
     w = w + 2 * global.tooltipPadding;
     h = h + 2 * global.tooltipPadding;

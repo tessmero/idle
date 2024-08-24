@@ -39,7 +39,9 @@ class StatUpgrader extends CompositeGuiElement {
     // upgrade button
     const btn = new ProgressButton(layout.button, {
       label: 'upgrade',
+      titleKey: `suBtn${gutse.label}`,
       action: () => this.upgradeButtonClicked(),
+      mute: true,
       scale: 0.3,
       border: this.lytParams.thick ? new RoundedBorder() : new SlantBorder(),
       valueFunc: () => {
@@ -104,18 +106,21 @@ class StatUpgrader extends CompositeGuiElement {
    */
   upgradeButtonClicked() {
     const gutse = this.#gutse;
-    const sim = this.screen.sim;
+    const screen = this.screen;
+    const sim = screen.sim;
     const budget = sim.particlesCollected;
     const lvl = gutse.level;
     const cost = gutse.cost.f(lvl - 1);
 
     // check if upgrade can be purchased
     if (cost > budget) {
-      this.setTemporaryTooltip('collect more raindrops!');
+      screen.sounds.dullClick.play(screen.mousePos);
+      screen.setTemporaryTooltip('collect more raindrops!');
       return;
     }
     if (lvl >= gutse.maxLevel) {
-      this.setTemporaryTooltip('max level!');
+      screen.sounds.dullClick.play(screen.mousePos);
+      screen.setTemporaryTooltip('max level!');
       return;
     }
 
@@ -130,13 +135,16 @@ class StatUpgrader extends CompositeGuiElement {
       }
     }
 
+    // play sound
+    screen.sounds.hooray.play();
+
     // purchase upgrade
     sim.particlesCollected = sim.particlesCollected - cost;
-    const screen = this.screen;
     screen.floaters.signalChange(screen.mousePos, -cost);
     gutse.level = gutse.level + 1;
     updateAllBonuses();
-    this.setTemporaryTooltip('upgrade purchased!');
+
+    // screen.setTemporaryTooltip('upgrade purchased!');
 
     // start animation for one box
     this.#boxAnimStates[gutse.level - 1] = 0;

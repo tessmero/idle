@@ -14,10 +14,15 @@ class ToolbarButton extends CompositeGuiElement {
   constructor(rect, params = {}) {
     super(rect, { ...params });
 
-    const { tool, indexInToolbar } = params;
+    const {
+      tool,
+      indexInToolbar,
+    } = params;
 
     this.tool = tool;
     this.indexInToolbar = indexInToolbar;
+
+    this._titleKey = `toolbarButton_${indexInToolbar}`;
   }
 
   /**
@@ -30,6 +35,7 @@ class ToolbarButton extends CompositeGuiElement {
     const rect = this.rect;
 
     const btn = new Button(rect, {
+      titleKey: `inner_${this._titleKey}`,
       icon: tool.icon,
       action: () => this.click(),
       fill: true,
@@ -69,9 +75,11 @@ class ToolbarButton extends CompositeGuiElement {
    */
   update(dt, disableHover) {
 
+    const { wasUsable = true } = this._pState;
+
     // check if tool just became usable
     const usable = this.tool.isUsable();
-    if ((!this.wasUsable) && (usable)) {
+    if ((!wasUsable) && (usable)) {
 
       // emmit particles
       const pps = this.screen.sim.leftoverPPS;
@@ -85,11 +93,14 @@ class ToolbarButton extends CompositeGuiElement {
         pps.spawnParticle(center, vel);
       }
 
+      // play sound
+      this.screen.sounds.hooray.play();
+
       // show message
       this.screen.floaters.spawnFloater(center, 'available');
 
     }
-    this.wasUsable = usable;
+    this._pState.wasUsable = usable;
 
     // this.button.hoverable = this.tool.isUsable()
     return super.update(dt, disableHover);
@@ -109,6 +120,9 @@ class ToolbarButton extends CompositeGuiElement {
   click() {
     if (this.tool.isUsable()) {
 
+      // play click sound
+      this.screen.sounds.click.play();
+
       const screen = this.screen;
       screen.setTool(this.tool);
 
@@ -119,7 +133,10 @@ class ToolbarButton extends CompositeGuiElement {
 
     }
     else {
-      this.setTemporaryTooltip('collect more raindrops!');
+
+      // play failed click sound
+      this.screen.sounds.dullClick.play();
+      this.screen.setTemporaryTooltip('collect more raindrops!');
     }
 
     return true;

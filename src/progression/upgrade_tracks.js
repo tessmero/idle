@@ -20,7 +20,7 @@ class UpgradeTracks {
     // make sure data is parsed
     for (const [_key, entry] of Object.entries(this.state)) {
       if (!(entry.icon instanceof Icon)) {
-        entry.icon = ICONS[entry.icon];
+        entry.icon = window[`${entry.icon}Icon`];
       }
       this.#vcKeys.forEach((vc) => {
         if (!(entry[vc] instanceof ValueCurve)) {

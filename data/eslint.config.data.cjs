@@ -29,7 +29,7 @@ module.exports = [
     },
   },
   {
-    // make exception for upgrade tracks
+    // make exception for UPGRADE_TRACKS data object
     'files': ['data/upgrade_tracks_data.js'],
     'rules': {
       'idle/no-control-structure': ['error', {
@@ -40,13 +40,76 @@ module.exports = [
       }],
     },
   },
+
+  {
+    // add rules for ICON_LAYOUTS data object
+    'files': ['data/icon_layouts_data.js'],
+    'rules': {
+
+      // must be flat list of icons, each is a list of anim frames
+      'idle/max-object-depth': ['error', { maxDepth: 2 }],
+
+      // restrict ICON_LAYOUTS data object keys based on depth
+      'idle/valid-key': ['error', [
+        {
+          // icon name must be lowerCamelCase
+          depth: 0,
+          description: 'lower camel case like `myIcon`',
+          patterns: [
+            '^[a-z][a-zA-Z0-9]*$', // lowerCamelCase
+          ],
+        },
+        {
+          // must not have named keys in pixel data
+          depth: 1,
+          description: 'arrays of pixel layout data',
+          patterns: [], // no acceptable patterns
+        },
+      ]],
+    },
+  },
+
+  {
+    // add rules for gui sound effects
+    'files': ['data/gui-sounds/**/*.js'],
+    'rules': {
+
+      // data objects must be flat lists of sound effects
+      'idle/max-object-depth': ['error', { maxDepth: 1 }],
+
+      // restrict data object keys based on depth
+      'idle/valid-key': ['error', [
+        {
+          // sound effect name
+          depth: 0,
+          description: 'lower camel case like `mySound` or `_autoSound`',
+          patterns: [
+            '^[a-z][a-zA-Z0-9]*$', // lowerCamelCase
+            '^_[a-z][a-zA-Z0-9]*$', // _lowerCamelCase
+          ],
+        },
+        {
+          // param name must be valid sound property
+          depth: 1,
+          description: 'trigger/sound property `volume`',
+          patterns: [
+            '^(from|to)$',
+            '^(duration|freq|wave|volume|env)$',
+            '^(startFreq|endFreq)$',
+          ],
+        },
+      ]],
+    },
+  },
+
   {
     // add rules for gui animations
     'files': ['data/gui-anims/**/*.js'],
     'rules': {
 
       // animations must be flat lists of keyframes
-      'idle/max-object-depth': ['error', { maxDepth: 1 }],
+      'idle/max-object-depth': ['error', { maxDepth: 2 }],
+
     },
   },
 
@@ -61,17 +124,17 @@ module.exports = [
       // restrict keys based on depth in layout objects
       'idle/valid-key': ['error', [
         {
-          // ruleset key must be lowerCamelCase, may start with underscore, may end with @something
+          // ruleset key must be lowerCamelCase, may start with underscore, may end with @anything
           depth: 0,
           description: 'lower camel case like `myRectangle` or `_helper`',
           patterns: [
-            '^@.+$', // @param by itself indicating extra layer pointing to layout object
-            '^[a-z][a-zA-Z0-9]*(@.*)?$', // lowerCamelCase
-            '^_[a-z][a-zA-Z0-9]*(@.*)?$', // _lowerCamelCase
+            '^@.+$', // @anything by itself indicating extra layer pointing to layout object
+            '^[a-z][a-zA-Z0-9]*(@.*)?$', // lowerCamelCase (+ optional @anything)
+            '^_[a-z][a-zA-Z0-9]*(@.*)?$', // _lowerCamelCase (+ optional @anything)
           ],
         },
         {
-          // rule key must be css layout property, may end with @something
+          // rule key must be css layout property, may end with @anything
           depth: 1,
           description: 'css layout property like `left`',
           patterns: [

@@ -40,7 +40,10 @@ class LayoutListRow extends CompositeGuiElement {
     sr.isAnimated = () => sr.hovered;
 
     return [
-      new Button(this.rect, { action: () => this._llrClicked() }),
+      new Button(this.rect, {
+        titleKey: `inner-${this._titleKey}`,
+        action: () => this._llrClicked(),
+      }),
       sr,
     ];
   }

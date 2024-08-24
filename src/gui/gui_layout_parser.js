@@ -2,6 +2,7 @@
  * @file LayoutParser object that computes rectangles from css rules.
  */
 class GuiLayoutParser {
+  #maxRepeat = 20;
 
   /**
    * Compute x,y,w,h rectangles from css rules.
@@ -14,7 +15,8 @@ class GuiLayoutParser {
 
     // check if a param calls for interpolation
     const interp = Object.entries(animParams).find(
-      ([_prm, val]) => (val > 0) && (val < 1)
+      ([_prm, val]) => ((typeof(val) === 'number') ? (val > 0) && (val < 1) :
+        (val.some((vv) => (vv > 0) && (vv < 1))))
     );
 
     if (interp) {
@@ -43,7 +45,7 @@ class GuiLayoutParser {
    * interpolate two layouts
    * @param {number[]} l0 The layout at extreme position 0.
    * @param {number[]} l1 The layout at extreme position 1.
-   * @param {number} side The animation state in range [0,1]
+   * @param {number|number[]} side The animation state (or states) in range [0,1]
    */
   static _iLayouts(l0, l1, side) {
     const result = {};
@@ -57,9 +59,10 @@ class GuiLayoutParser {
       else {
         // list of rectangles
         const n = Math.min(r0.length, r1.length);
+        const slist = (typeof side === 'number') ? Array(n).fill(side) : side;
         const ilist = [];
         for (let i = 0; i < n; i++) {
-          ilist.push(GuiLayoutParser._iRects(r0[i], r1[i], side));
+          ilist.push(GuiLayoutParser._iRects(r0[i], r1[i], slist[i]));
         }
         result[param] = GuiLayoutParser._safeRepeat(ilist);
       }
@@ -132,10 +135,6 @@ class GuiLayoutParser {
   // current parent rectangle set during parsing
   #parent;
 
-  // parsed extreme rectangles that are waiting for
-  // the opposite extreme to be parsed
-  #toInterpolate = [];
-
   // final parsed absolute rectangles
   #computedRects = [];
 
@@ -154,7 +153,7 @@ class GuiLayoutParser {
 
       // check for extra layer with @params keys
       let currentData = data;
-      for (const [rawKey, newData] of Object.entries(data)) {
+      for (const [rawKey, newDataName] of Object.entries(data)) {
 
         // @param by itself points to layout object
         const { key, params } = this._parseKey(rawKey);
@@ -162,7 +161,7 @@ class GuiLayoutParser {
           if (this._shouldParse(params)) {
 
             // set layout data source
-            currentData = newData;
+            currentData = window[newDataName];
           }
         }
       }
@@ -204,9 +203,10 @@ class GuiLayoutParser {
    */
   _shouldParse(keyParams) {
     for (const [name, value] of Object.entries(keyParams)) {
-      const current = this.#currentAnim[name];
-      if (current === 0 && value === 1) { return false; }
-      if (current === 1 && value === 0) { return false; }
+      let current = this.#currentAnim[name];
+      if (Array.isArray(current)) { current = current[0]; }
+      if (current <= 0 && value >= 1) { return false; }
+      if (current >= 1 && value <= 0) { return false; }
     }
     return true;
   }
@@ -322,7 +322,7 @@ class GuiLayoutParser {
       // return array of rectangles
       const [x, y, w, h] = rect;
       const result = [];
-      for (let i = 0; ; i++) {
+      for (let i = 0; i < this.#maxRepeat; i++) {
         const ix = x + (down ? 0 : i * w);
         const iy = y + (down ? i * h : 0);
         if (down) {
@@ -335,6 +335,7 @@ class GuiLayoutParser {
         }
         result.push([ix, iy, w, h]);
       }
+      return result;
     }
 
     // apply css layout rule, resulting in a new rectangle

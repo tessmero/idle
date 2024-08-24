@@ -13,12 +13,122 @@
  * or emulated user input (in this file)
  */
 class GameScreen {
+  #titleKey;
 
   #stateManager;
-  #titleKey;
+  #soundManager; // audio context
+  #sounds; // handles for some common sounds
   #rect;
 
   #contextMenu = null;
+
+  #layoutActors = {};
+
+  #tempTooltip;
+  #tempTooltipEndTime;
+
+  // keys are gui element titleKeys
+  // values are objects with whatever properties
+  #persistentStates = {};
+
+  /**
+   * Temporarily override the normal tooltip text.
+   * Reverts after the user stops hovering or some time passes.
+   * @param {string} s The temporary tooltip text.
+   */
+  setTemporaryTooltip(s) {
+    this.#tempTooltip = s;
+    this.#tempTooltipEndTime = global.t + 1000; // millisecs
+  }
+
+  /**
+   *
+   * @param {string|GuiElement} newTooltip
+   * @param {number} tooltipScale
+   */
+  constructTooltipElement(newTooltip, tooltipScale = 1) {
+
+    // reset temporary tooltip if necessary
+    if (global.t > this.#tempTooltipEndTime) { this.#tempTooltip = null; }
+
+    // choose temporary tooltip or given tooltip
+    const tooltip = this.#tempTooltip ? this.#tempTooltip : newTooltip;
+
+    if (tooltip instanceof Tooltip) {
+
+      // given tooltip is already gui element
+      this.tooltip = tooltip;
+    }
+    else if ((typeof tooltip === 'string' || tooltip instanceof String)) {
+
+      // build standard tooltip gui element
+      let rect = LabelTooltip.pickRect(this, tooltip, tooltipScale);
+      rect = padRect(...rect, 0.005);
+      this.tooltip = new LabelTooltip(rect, {
+        innerLabel: tooltip,
+        scale: tooltipScale,
+      });
+    }
+    else {
+      this.tooltip = null;
+    }
+  }
+
+  /**
+   * Get persistent state object, used by gui elements to
+   * store any properties they want to remember after being rebuilt.
+   * @param {string} titleKey
+   */
+  getPState(titleKey) {
+    const states = this.#persistentStates;
+    if (!Object.hasOwn(states, titleKey)) {
+      states[titleKey] = {};
+    }
+    return states[titleKey];
+  }
+
+  /**
+   * Called in composite_gui_element.js
+   * @param  {object} soundData The sound data object
+   */
+  registerSoundEffects(soundData) {
+    if (!soundData) {
+      return null;
+    }
+
+    return Object.fromEntries(
+      Object.entries(soundData).map(
+        ([name, data]) => [name, new SoundEffect(this, data)]
+      )
+    );
+  }
+
+  /**
+   * Called in composite_gui_element.js
+   * @param  {object} actors The named layout actor specs.
+   */
+  registerLayoutActors(actors) {
+    if (!actors) {
+      return null;
+    }
+
+    // prepare to return persistent GuiActor instances
+    const result = {};
+
+    // iterate over actor specs
+    Object.entries(actors).forEach(([name, params]) => {
+      if (!this.#layoutActors[name]) {
+
+        // this is the first time this actor was registered
+        this.#layoutActors[name] = new GuiActor(params);
+      }
+
+      // return existing GuiActor instance
+      result[name] = this.#layoutActors[name];
+    });
+
+    return result;
+  }
 
   /**
    *
@@ -48,6 +158,8 @@ class GameScreen {
     this.sim = sim;
     sim.screen = this;
     this.#stateManager = gsm;
+    this.#soundManager = new SoundManager();
+    this.#sounds = this.registerSoundEffects(SOUND_EFFECTS);
 
     const grabRad = global.rootScreen ? global.rootScreen.toolList[0].rad : global.mouseGrabRadius;
     this.toolList = [
@@ -130,6 +242,16 @@ class GameScreen {
    *
    */
   get stateManager() { return this.#stateManager; }
+
+  /**
+   *
+   */
+  get soundManager() { return this.#soundManager; }
+
+  /**
+   *
+   */
+  get sounds() { return this.#sounds; }
 
   /**
    * Prevent setting state with equals sign.
@@ -229,22 +351,43 @@ class GameScreen {
   /**
    * close() any existing gui, switch to the given gui,
    * then call gui's setScreen() and open()
-   * @param {Gui} gui instance to show on this screen
+   * @param {Gui} newGui The Gui instance to show on this screen
    */
-  setGui(gui) {
-
-    // close previous gui
+  setGui(newGui) {
     const oldGui = this.gui;
-    if (oldGui && (oldGui.title !== gui.title)) {
+
+    // check if old gui needs to be closed
+    if (oldGui && !this._getVisibleGuis(newGui).has(oldGui._titleKey)) {
+      // trigger closing sequence
       oldGui.close();
     }
 
     // switch to new gui
-    this._gui = gui;
-    if (gui) {
-      gui.setScreen(this);
-      gui.open();
+    this._gui = newGui;
+    if (newGui) {
+      newGui.setScreen(this);
+
+      // check if new gui needs to be opened
+      if (!this._getVisibleGuis(oldGui).has(newGui._titleKey)) {
+
+        // trigger opening sequence
+        newGui.open();
+      }
     }
+  }
+
+  /**
+   *
+   * @param {Gui} rootGui
+   */
+  _getVisibleGuis(rootGui) {
+    const vis = [];
+    let gui = rootGui;
+    while (gui) {
+      vis.push(gui._titleKey);
+      gui = gui.getBackgroundGui();
+    }
+    return new Set(vis);
   }
 
   /**
@@ -273,9 +416,8 @@ class GameScreen {
    */
   _getDraggingElem() {
     if (!this.draggingElem) { return null; }
-    const { parent, titleKey } = this.draggingElem;
-    const match = parent.children.find((c) => c.titleKey === titleKey);
-    return match;
+    const titleKey = this.draggingElem;
+    return this.#persistentStates[titleKey].element;
   }
 
   /**
@@ -370,29 +512,61 @@ class GameScreen {
     if (this !== global.mainScreen) {
       return;
     }
-    _cmExpandActor.resetGuiActor();
+    this._resetActor('cmExpand');
 
     if (cm) {
 
-      // now setting new different context menu
+      // start or switch to new different context menu
       cm.setScreen(this);
+
+      if (this.#contextMenu) {
+
+        // pass old menu's layout parameters to the new menu
+        // and build
+        cm._setLytParams(this.#contextMenu.lytParams);
+
+      }
+      else {
+
+        // start collapsed and build
+        cm._setLytParams({ expand: 0 });
+      }
       this.#contextMenu = cm;
 
       // place test context menu on right side
       if (this.state !== GameStates.playing) {
-        _cmSlideActor.setTarget(1);
+        this._setActorTarget('cmSlide', 1);
       }
 
       // expand context menu
-      _cmExpandActor.setTarget(1);
+      this._setActorTarget('cmExpand', 1);
     }
     else {
       this.sim.selectedBody = null;
       this.sim.selectedParticle = null;
 
       // collapse context menu
-      _cmExpandActor.setTarget(0);
+      this._setActorTarget('cmExpand', 0);
     }
+  }
+
+  /**
+   *
+   * @param {string} name
+   * @param {number} targetVal
+   */
+  _setActorTarget(name, targetVal) {
+    const actor = this.#layoutActors[name];
+    if (actor) { actor.setTarget(targetVal); }
+  }
+
+  /**
+   *
+   * @param {string} name
+   */
+  _resetActor(name) {
+    const actor = this.#layoutActors[name];
+    if (actor) { actor.resetGuiActor(); }
   }
 
   /**
@@ -469,27 +643,25 @@ class GameScreen {
     const de = this._getDraggingElem();
     if (de) {
       disableHover = true;
-      this.tooltip = de.constructTooltipElement();
+      this.constructTooltipElement(de.tooltipFunc ? de.tooltipFunc() : de.tooltip, de.tooltipScale);
     }
 
     // update popups just in case they are persistent
     if (this.#contextMenu) {
-      disableHover = this.#contextMenu.update(dt, disableHover);
+      disableHover = disableHover || this.#contextMenu.update(dt, disableHover);
     }
 
     // update main gui
     if (gui) {
       disableHover = gui.update(dt, disableHover) || disableHover;
 
-      // if applicable, update another gui in background
+      // if applicable, update guis in background
       // e.g. hud behind upgrade menu
-      const bgGui = gui.getBackgroundGui();
-      if (bgGui) {
-        if (this.stateManager.state === GameStates.startTransition) {
-          // skip bg hud updates during start transition
-        }
-        else {
-          bgGui.update(dt, disableHover);
+      if (this.stateManager.state !== GameStates.startTransition) {
+        let bgGui = gui.getBackgroundGui();
+        while (bgGui) {
+          disableHover = bgGui.update(dt, disableHover);
+          bgGui = bgGui.getBackgroundGui();
         }
       }
     }
@@ -507,7 +679,6 @@ class GameScreen {
     // update menu gui transition effect
     const menuGui = this.stateManager.getGuiForState(GameStates.upgradeMenu);
     if (menuGui) { menuGui.updateTransitionEffect(dt); } // upgrade_menu.js
-
   }
 
   /**
@@ -519,11 +690,16 @@ class GameScreen {
 
     // update context menu bounds animation
     const axis = (this.rect[2] > this.rect[3]) ? 0 : 1;
-    _cmOrientActor.setTarget(axis);
-    const lap = ContextMenu.pickLayoutParams(this, poi);
-    cm.setLytParams(lap);
+    this._setActorTarget('cmOrient', axis);
+
+    // cm._updateLytParams();
+    const lap = cm.lytParams;
     cm.setRect(this.rect);
-    cm.buildElements(this);
+
+    // cm.buildElements(this);
+
+    const _cmSlideActor = this.#layoutActors.cmSlide;
+    const _cmExpandActor = this.#layoutActors.cmExpand;
 
     // check if poi obstructed
     if ((_cmSlideActor.state === 0 || _cmSlideActor.state === 1) &&

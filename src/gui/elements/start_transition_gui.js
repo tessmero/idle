@@ -4,7 +4,7 @@
  * during transition from start menu to game
  */
 class StartTransitionGui extends Gui {
-  title = 'Start Transition';
+  _titleKey = 'start-transition-gui';
 
   /**
    * Construct Gui with given rectangle.
@@ -35,6 +35,7 @@ class StartTransitionGui extends Gui {
   getBackgroundGui() {
     const bgState = this._startTransFadeOut ?
       GameStates.startMenu : GameStates.playing;
+    if (!this.screen) { return null; }
     return this.screen.stateManager.getGuiForState(bgState);
   }
 

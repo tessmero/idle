@@ -1,46 +1,33 @@
 /**
- * @file ContextMenu global sliding animation state
- * and base class for various context menu displays.
- */
-
-// actor for sliding across screen
-const _cmSlideActor = new GuiActor({
-
-  // animate multiple parameters
-  // data/gui-anims/context_menu_anim.js
-  data: CONTEXT_MENU_ANIM,
-
-  // speed of sliding anim including expand/collapse segments
-  speed: 4e-3,
-
-});
-
-const _cmExpandActor = new GuiActor({
-
-  // adjusts one layout  param
-  lytParam: 'expand',
-
-  // speed of expand/collapse just to open or close
-  speed: 1e-2,
-
-});
-
-const _cmOrientActor = new GuiActor({
-
-  // adjust one layout param
-  lytParam: 'orientation',
-
-  // speed of switching screen orientation
-  speed: 1e-2,
-});
-
-/**
- * Context Menu modal gui element.
+ * @file ContextMenu gui element
  * - takes up a large fraction of screen
  * - content divided into two square regions
+ * - built in game_screen.js
  */
 class ContextMenu extends CompositeGuiElement {
+  _titleKey = 'context-menu';
   _layoutData = CONTEXT_MENU_LAYOUT;
+  _soundData = CONTEXT_MENU_SOUNDS;
+  _layoutActors = {
+
+    // sliding animation including expand/collapse segments
+    cmSlide: {
+      lytAnim: CONTEXT_MENU_ANIM,
+      speed: 4e-3,
+    },
+
+    // expand/collapse just to open or close
+    cmExpand: {
+      lytParam: 'expand',
+      speed: 1e-2,
+    },
+
+    // switching screen orientation
+    cmOrient: {
+      lytParam: 'orientation',
+      speed: 1e-2,
+    },
+  };
 
   /**
    * Set threshold to decide if this menu is too collapsed
@@ -75,6 +62,7 @@ class ContextMenu extends CompositeGuiElement {
       // emulate building empty list of elements
       this._clearChildren(screen);
       this.setScreen(screen);
+      this._computeLayoutRects(screen);
 
     }
     else {
@@ -93,25 +81,27 @@ class ContextMenu extends CompositeGuiElement {
   }
 
   /**
-   *
+   * Override composite_gui_element to add special handling for
+   * two actors both adjusting 'expand' layout parameter.
    */
-  static pickLayoutParams() {
+  _updateLytParams() {
+    const actors = this._actors;
 
-    const orientParams = _cmOrientActor.update();
+    const orientParams = actors.cmOrient.update();
 
     // smaller expand takes priority
-    const slideParams = _cmSlideActor.update();
-    const expandParams = _cmExpandActor.update();
+    const slideParams = actors.cmSlide.update();
+    const expandParams = actors.cmExpand.update();
     const expand = Math.min(slideParams.expand, expandParams.expand);
 
     const final = {
-      ...this.layoutAnimParams,
+      ...this.lytParams,
       ...orientParams,
       ...slideParams,
       ...expandParams,
       expand,
     };
 
-    return final;
+    this._setLytParams(final);
   }
 }

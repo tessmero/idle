@@ -39,6 +39,7 @@ class BooleanDebugVar extends CompositeGuiElement {
 
     const icon = getGlobal(varname) ? checkedIcon : uncheckedIcon;
     this.checkbox = new Button(layout.toggle, {
+      titleKey: `${this._titleKey}-toggle`,
       icon,
       action: () => this.toggle(),
       scale: 0.5,

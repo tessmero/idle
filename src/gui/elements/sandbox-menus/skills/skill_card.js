@@ -65,6 +65,7 @@ class SkillCard extends CompositeGuiElement {
     }
     tooltip = `skill: ${skill.name}}\n${tooltip}`;
     const statusIcon = new Button(rr, {
+      titleKey: `skill-${skill.name}-status-icon`,
       icon, tooltip,
       scale: 0.3,
       fill: true,

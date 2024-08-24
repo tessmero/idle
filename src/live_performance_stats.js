@@ -31,7 +31,7 @@ class LivePerformanceStats {
    * @param {boolean|string} value - The value to set for the flag.
    */
   flagGui(gui, flag, value = true) {
-    this.flagScreen(gui.screen, `${gui.title} ${flag}`, value);
+    this.flagScreen(gui.screen, `${gui._titleKey} ${flag}`, value);
   }
 
   /**

@@ -73,6 +73,7 @@ class ScalarDebugVar extends CompositeGuiElement {
 
       // buttons
       new Button(layout.buttons[0], {
+        titleKey: `${this._titleKey}-dec`,
         icon: decreaseIcon,
         action: () => {
           let m = 1;
@@ -86,6 +87,7 @@ class ScalarDebugVar extends CompositeGuiElement {
         },
       }),
       new Button(layout.buttons[1], {
+        titleKey: `${this._titleKey}-inc`,
         icon: increaseIcon,
         action: () => {
           let m = 1;

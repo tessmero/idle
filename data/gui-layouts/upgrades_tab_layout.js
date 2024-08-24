@@ -9,11 +9,29 @@ UPGRADES_TAB_LAYOUT = {
   },
 
   // rows for individual upgrades
-  rows: {
+  'rows@thick=0': {
     parent: '_inner',
     height: 0.08,
     repeat: 'down',
+
+    // drop in animation
+    'margin@drop=0': 0.01,
   },
+
+  'rows@thick=1': {
+    parent: '_inner',
+    height: 0.16,
+    repeat: 'down',
+
+    // drop in animation
+    'margin@drop=0': 0.02,
+  },
+};
+
+// layout within one row row
+STAT_UPGRADER_LAYOUT = {
+  '@thick=0': '_THIN_STAT_UPGRADER_LAYOUT',
+  '@thick=1': '_THICK_STAT_UPGRADER_LAYOUT',
 };
 
 // layout for row in upgrades (0.08 thick)
@@ -114,10 +132,5 @@ _THICK_STAT_UPGRADER_LAYOUT = {
     repeat: 'right',
     margin: 0.003,
   },
-};
-
-STAT_UPGRADER_LAYOUT = {
-  '@thick=0': _THIN_STAT_UPGRADER_LAYOUT,
-  '@thick=1': _THICK_STAT_UPGRADER_LAYOUT,
 };
 

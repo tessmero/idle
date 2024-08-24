@@ -45,6 +45,7 @@ module.exports = {
 
   create(context) {
     const options = context.options[0] || [];
+    const relevantTypes = new Set(['ObjectExpression', 'ArrayExpression']);
 
     function match(key, patterns) {
       return patterns.some((pattern) => new RegExp(pattern).test(key));
@@ -55,7 +56,7 @@ module.exports = {
       let currentNode = node;
       while (currentNode) {
         currentNode = currentNode.parent;
-        if (currentNode && currentNode.type === 'ObjectExpression') {
+        if (currentNode && relevantTypes.has(currentNode.type)) {
           depth = depth + 1;
         }
       }

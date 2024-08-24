@@ -4,7 +4,7 @@
  * Top-level GUI container that appears when the pause button is clicked.
  */
 class PauseMenuGui extends Gui {
-  title = 'Pause Menu';
+  _titleKey = 'Pause Menu';
   _layoutData = PAUSE_GUI_LAYOUT;
 
   /**
@@ -24,12 +24,14 @@ class PauseMenuGui extends Gui {
 
     return [
       new Button(layout.resumeBtn, {
+        titleKey: 'pause-menu-resume-btn',
         label: 'RESUME',
         fill: true,
         action: () => this.gsm.resume(),
       }),
 
       new Button(layout.quitBtn, {
+        titleKey: 'pause-menu-quit-btn',
         label: quitLabel,
         fill: true,
         action: () => window.location.reload(), // this.gsm.quit()),

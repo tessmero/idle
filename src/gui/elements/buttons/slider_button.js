@@ -3,7 +3,6 @@
  */
 class SliderButton extends Button {
 
-  #titleKey;
   #sliderVal = 0; // state
 
   // drawing settings
@@ -15,28 +14,20 @@ class SliderButton extends Button {
    *
    * @param {number[]} rect
    * @param {object} params The parameters.
-   * @param {string} params.titleKey Used to maintain dragging state if parent rebuilds
    * @param {number} params.sliderVal The initial value for the slider button
    */
   constructor(rect, params = {}) {
     super(rect, params);
     const {
       sliderVal = 1,
-      titleKey,
     } = params;
 
     this.#sliderVal = sliderVal;
-    this.#titleKey = titleKey;
 
     // compute terminals, leaving space for circle to hang off
     const [x, y, w, h] = padRect(...rect, -this.#rad);
     this.#line = [v(x, y + h / 2), v(x + w, y + h / 2)];
   }
-
-  /**
-   *
-   */
-  get titleKey() { return this.#titleKey; }
 
   /**
    *
@@ -66,10 +57,7 @@ class SliderButton extends Button {
     this._slideToMouse();
 
     // start dragging
-    this.screen.draggingElem = {
-      parent: this._parentCge,
-      titleKey: this.#titleKey,
-    };
+    this.screen.draggingElem = this.titleKey;
 
     // execute action like regular button
     return super.click();
@@ -82,7 +70,7 @@ class SliderButton extends Button {
     this._slideToMouse();
 
     // execute action like regular button
-    return super.click();
+    return super.click({ mute: true });
   }
 
   /**
@@ -98,6 +86,12 @@ class SliderButton extends Button {
    * @param  {object} g The graphics context.
    */
   draw(g) {
+
+    // draw text label
+    if (this.label) {
+      const [x, y] = rectCenter(...this.rect);
+      drawText(g, x, y - 0.02, this.label, true, new FontSpec(0, this.scale, false));
+    }
 
     // draw horizontal line
     const [a, b] = this.#line;
@@ -131,8 +125,6 @@ class SliderButton extends Button {
    *
    */
   _isBeingDragged() {
-    const de = this.screen.draggingElem;
-    return de && (de.parent === this._parentCge) && (de.titleKey === this.#titleKey);
+    return this.screen.draggingElem === this.titleKey;
   }
-
 }

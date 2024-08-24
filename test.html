@@ -44,10 +44,6 @@
   </div>
 </nav>
   </div>
-      
-
-
-<audio id="testAudio" src="data/audio/test.wav"></audio>      
   
   
 <canvas id="gameCanvas"></canvas>
@@ -55,10 +51,11 @@
 <!-- START_IMPORTS --><script src="src/math/vector.js"></script>
 <script src="src/math/rng.js"></script>
 <script src="src/math/util.js"></script>
-<script src="src/music/music_theory.js"></script>
+<script src="src/audio/music_theory.js"></script>
 <script src="data/char_layouts_data.js"></script>
 <script src="data/gui-anims/context_menu_anim.js"></script>
 <script src="data/gui-layouts/context_menu_layout.js"></script>
+<script src="data/gui-sounds/context_menu_sounds.js"></script>
 <script src="data/gui-layouts/debug_tab_layout.js"></script>
 <script src="data/gui-layouts/hud_gui_layout.js"></script>
 <script src="data/icon_layouts_data.js"></script>
@@ -66,15 +63,22 @@
 <script src="data/gui-layouts/pause_gui_layout.js"></script>
 <script src="data/gui-layouts/performance_tab_layout.js"></script>
 <script src="data/skill_tree_data.js"></script>
+<script src="data/sound_effects_data.js"></script>
+<script src="data/sound_env_data.js"></script>
 <script src="data/gui-layouts/start_gui_layout.js"></script>
+<script src="data/gui-anims/stats_tab_anim.js"></script>
 <script src="data/gui-layouts/stats_tab_layout.js"></script>
+<script src="data/gui-sounds/stats_tab_sounds.js"></script>
 <script src="data/gui-layouts/story_gui_layout.js"></script>
 <script src="data/story_hooks_data.js"></script>
 <script src="data/gui-layouts/tab_pane_layout.js"></script>
 <script src="data/gui-layouts/tooltip_layout.js"></script>
 <script src="data/gui-layouts/upgrade_menu_gui_layout.js"></script>
+<script src="data/gui-sounds/upgrade_menu_gui_sounds.js"></script>
 <script src="data/upgrade_tracks_data.js"></script>
+<script src="data/gui-anims/upgrades_tab_anim.js"></script>
 <script src="data/gui-layouts/upgrades_tab_layout.js"></script>
+<script src="data/gui-sounds/upgrades_tab_sounds.js"></script>
 <script src="src/math/simulation/bodies/body.js"></script>
 <script src="src/gui/borders/border.js"></script>
 <script src="src/color_scheme.js"></script>
@@ -92,26 +96,30 @@
 <script src="src/gui/gui_anim_parser.js"></script>
 <script src="src/gui/elements/gui_element.js"></script>
 <script src="src/gui/gui_layout_parser.js"></script>
+<script src="src/gui/gui_sound_parser.js"></script>
 <script src="src/gui/icon.js"></script>
 <script src="src/math/int_set.js"></script>
 <script src="src/live_performance_stats.js"></script>
 <script src="src/tutorials/macro.js"></script>
-<script src="src/music/music_note.js"></script>
+<script src="src/audio/music_note.js"></script>
 <script src="src/math/simulation/particles/particle_group.js"></script>
 <script src="src/math/simulation/particle_sim.js"></script>
 <script src="src/math/simulation/particles/physics/physics_particle_subgroup.js"></script>
 <script src="src/progression/skills/skill.js"></script>
 <script src="src/progression/skill_tree.js"></script>
-<script src="src/music/song.js"></script>
+<script src="src/audio/song.js"></script>
+<script src="src/audio/sound_effect.js"></script>
+<script src="src/audio/sound_envelope.js"></script>
+<script src="src/game-screen/sound_manager.js"></script>
 <script src="src/math/simulation/bodies/compound/spring.js"></script>
 <script src="src/gui/start-transitions/start_anim_stage.js"></script>
 <script src="src/tests/test.js"></script>
 <script src="src/tools/tool.js"></script>
 <script src="src/progression/upgrade_tracks.js"></script>
 <script src="src/progression/value_curve.js"></script>
-<script src="src/music/voice.js"></script>
-<script src="src/music/voice_measure.js"></script>
-<script src="src/music/voice_part.js"></script>
+<script src="src/audio/voice.js"></script>
+<script src="src/audio/voice_measure.js"></script>
+<script src="src/audio/voice_part.js"></script>
 <script src="src/tests/skills/basic_rain_skill_card_test.js"></script>
 <script src="src/game-screen/blank_gsm.js"></script>
 <script src="src/gui/elements/body_preview_element.js"></script>
@@ -241,7 +249,6 @@
 <script src="src/gui/elements/context-menus/box_buddy_context_menu.js"></script>
 <script src="src/gui/elements/context-menus/circle_buddy_context_menu.js"></script>
 <script src="src/__test__.js"></script>
-<script src="src/audio.js"></script>
 <script src="src/daemons/border_manager.js"></script>
 <script src="src/gui/text/characters.js"></script>
 <script src="src/progression/compute_bonuses_util.js"></script>

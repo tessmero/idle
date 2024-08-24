@@ -15,8 +15,9 @@ class LayoutContextMenu extends ContextMenu {
   #testLayoutData;
   #testIconScale;
   #presets;
+  #anims;
 
-  // adjustable params
+  // adjustable params state
   #testLayoutAnimParams;
   #testAspectRatio = 0.5;
 
@@ -25,6 +26,7 @@ class LayoutContextMenu extends ContextMenu {
   #arSlider;
   #presetButtons;
   #paramSliders;
+  #animSliders;
 
   // adjustable rect drawn within #display
   #displayRect;
@@ -49,11 +51,13 @@ class LayoutContextMenu extends ContextMenu {
       title = 'layout test',
       testIconScale,
       presets = [],
+      anims = [],
     } = context;
 
     this.#title = title;
     this.#testLayoutData = testLayoutData;
     this.#presets = presets;
+    this.#anims = anims;
     this.#testIconScale = testIconScale;
     this.#testLayoutAnimParams = this._pickDefaultAnimParams(testLayoutData);
 
@@ -135,7 +139,10 @@ class LayoutContextMenu extends ContextMenu {
 
     // slider for aspect ratio of layout container in display
     const arSlider = new SliderButton(layout.arSlider, {
-      titleKey: `ctm_${this.#arKey}`,
+      titleKey: `ctm_param_${this.#arKey}`,
+
+      // label: `aspect ratio`,
+      // scale: 0.2,
       action: () => this._updateFromArSlider(),
       tooltipFunc: () => this._arTooltip(),
     });
@@ -145,6 +152,7 @@ class LayoutContextMenu extends ContextMenu {
     const presetButtons = this.#presets
       .map((presetParams, presetIndex) =>
         new Button(layout.presets[presetIndex], {
+          titleKey: `lcmPresetBtn_${presetIndex}`,
           label: `PRESET ${presetIndex}`,
           scale: 0.2,
           tooltip: JSON.stringify(presetParams, null, 2),
@@ -162,29 +170,49 @@ class LayoutContextMenu extends ContextMenu {
     let rowIndex = 1;
     if (presetButtons.length > 0) { rowIndex++; } // buttons may use first row
 
-    // slider for each layout anim param
+    // slider for each layout param
     const paramSliders = Object.fromEntries(
       Object.entries(this.#testLayoutAnimParams)
         .filter(([param, _value]) => param !== this.#arKey)
         .map(([param, _value]) => [
           param,
           new SliderButton(rows[rowIndex++], {
-            titleKey: `ctm_${param}`,
-            action: () => this._updateFromSlider(param),
-            tooltipFunc: () => this._sliderTooltip(param),
+            titleKey: `ctm_param_${param}`,
+            label: param,
+            scale: 0.2,
+            action: () => this._updateFromParamSlider(param),
+            tooltipFunc: () => this._paramSliderTooltip(param),
           }),
         ])
     );
     this.#paramSliders = paramSliders;
+
+    // slider for each layout animation object
+    const animSliders = Object.fromEntries(
+      this.#anims.map((animName) => [
+        animName,
+        new SliderButton(rows[rowIndex++], {
+          titleKey: `ctm_anim_${animName}`,
+          label: animName,
+          scale: 0.2,
+          action: () => this._updateFromAnimSlider(animName),
+          tooltipFunc: () => this._animSliderTooltip(animName),
+        }),
+      ])
+    );
+    this.#animSliders = animSliders;
 
     // update sliders
     this._updateSliders();
 
     return [title, display,
       ...presetButtons,
-      arSlider, ...Object.values(paramSliders),
+      arSlider,
+      ...Object.values(animSliders),
+      ...Object.values(paramSliders),
 
       new Button(layout.closeBtn, {
+        titleKey: 'lcmCloseBtn',
         icon: xIcon,
         action: () => this.screen.setContextMenu(null),
         scale: 0.4,
@@ -238,11 +266,22 @@ class LayoutContextMenu extends ContextMenu {
    * explain param defined in layout data with @
    * @param {string} param The layout parameter name
    */
-  _sliderTooltip(param) {
+  _paramSliderTooltip(param) {
     const val = this.#testLayoutAnimParams[param];
+    const sval = (typeof val === 'number') ? val.toFixed(2) : val.map((v) => v.toFixed(2));
     return [
-      `${param}: ${val.toFixed(2)}`,
+      `${param}: ${sval}`,
       'defined in data/gui-layouts',
+    ].join('\n');
+  }
+
+  /**
+   * Explain animation data object in data/gui-anims.
+   * @param  {string} animName The animation object name
+   */
+  _animSliderTooltip(animName) {
+    return [
+      `${animName}: defined in data/gui-anims`,
     ].join('\n');
   }
 
@@ -287,7 +326,7 @@ class LayoutContextMenu extends ContextMenu {
    * @param  {string} sliderParam The name of the parameter
    *                              for the slider being dragged
    */
-  _updateFromSlider(sliderParam) {
+  _updateFromParamSlider(sliderParam) {
     const sliders = this.#paramSliders;
     Object.entries(sliders).forEach(([param, slider]) => {
 
@@ -301,6 +340,38 @@ class LayoutContextMenu extends ContextMenu {
 
       // update anim to reflect slider position
       this.#testLayoutAnimParams[param] = slider.sliderVal;
+    });
+  }
+
+  /**
+   * Update parameters to based on an animation slider.
+   * Set all param sliders to match anim state, or nearest extreme.
+   * @param  {string} sliderAnim The name of the animation
+   *                              for the slider being dragged
+   */
+  _updateFromAnimSlider(sliderAnim) {
+    const slider = this.#animSliders[sliderAnim];
+    const state = slider.sliderVal;
+    const anim = window[sliderAnim];
+
+    // round current params to extremes
+    Object.entries(this.#testLayoutAnimParams).forEach(([param, value]) => {
+      if (param !== this.#arKey) {
+        this.#testLayoutAnimParams[param] = Math.round(value);
+      }
+    });
+
+    // update layout params based on animation
+    const animParams = GuiAnimParser.computeLayoutParams(anim, state);
+    this.#testLayoutAnimParams = {
+      ...this.#testLayoutAnimParams,
+      ...animParams,
+    };
+
+    // update param sliders
+    const prmSliders = this.#paramSliders;
+    Object.entries(prmSliders).forEach(([param, parSlider]) => {
+      parSlider.setSliderVal(this.#testLayoutAnimParams[param]);
     });
   }
 }

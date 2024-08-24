@@ -7,9 +7,6 @@
 class TabPaneGroup extends CompositeGuiElement {
   _layoutData = TAB_PANE_LAYOUT;
 
-  #selectedTabIndex = 0;
-  #tabChangeListeners = [];
-
   #tabLabels;
   #tabContents;
   #tabTooltips;
@@ -21,7 +18,7 @@ class TabPaneGroup extends CompositeGuiElement {
    * tabContent is list of rect->element callbacks
    * @param {number[]} rect The rectangle to align elements in.
    * @param {object} params The parameters.
-   * @param {string[]} params.tabLabels The labels fot he tab header buttons.
+   * @param {string[]} params.tabLabels The labels for the tab header buttons.
    * @param {Function[]} params.tabContents The functions to build each tab's elements.
    * @param {string[]} params.tabTooltips The tooltips for the tab header buttons.
    */
@@ -37,8 +34,8 @@ class TabPaneGroup extends CompositeGuiElement {
     this.#tabLabels = tabLabels;
     this.#tabContents = tabContents;
     this.#tabTooltips = tabTooltips;
+
     this.nTabs = tabLabels.length;
-    this.#selectedTabIndex = 0;
   }
 
   /**
@@ -81,13 +78,11 @@ class TabPaneGroup extends CompositeGuiElement {
       const rr = padRect(x, y, w, h, 0.02);
       x = x + (w + p) - collapse;
       const tb = new TabHeaderButton(rr, {
+        titleKey: `${this._titleKey}_tab_${i}`,
         parent: this,
         tabIndex: i,
         label,
-        action: () => {
-          this.#selectedTabIndex = i;
-          this.#tabChangeListeners.forEach((l) => l(i));
-        },
+        action: () => this.setSelectedTabIndex(i),
         tooltip: this.#tabTooltips ? this.#tabTooltips[i] : null,
         scale: tabLabelScale,
       });
@@ -108,18 +103,31 @@ class TabPaneGroup extends CompositeGuiElement {
   }
 
   /**
+   *
+   */
+  _currentTabIndex() {
+    const { selectedTabIndex = 0 } = this._pState;
+    return selectedTabIndex;
+  }
+
+  /**
    * Make a tab visible.
    * @param {number} i The index of the tab to display.
    */
   setSelectedTabIndex(i) {
-    this.#selectedTabIndex = nnmod(i, this.nTabs);
-  }
+    const selectedTabIndex = nnmod(i, this.nTabs);
+    if (selectedTabIndex === this._pState.selectedTabIndex) {
 
-  /**
-   * @returns {number} The index of the currently displayed tab.
-   */
-  getSelectedTabIndex() {
-    return this.#selectedTabIndex;
+      // tab was already selected
+      return;
+    }
+    if (this.tabContent) {
+      const content = this.tabContent[selectedTabIndex];
+      if (content.tabOpened) {
+        content.tabOpened();
+      }
+    }
+    this._pState.selectedTabIndex = selectedTabIndex;
   }
 
   /**
@@ -129,14 +137,7 @@ class TabPaneGroup extends CompositeGuiElement {
   setScreen(s) {
     super.setScreen(s);
     if (this.tabContent) { this.tabContent.forEach((tb) => tb.setScreen(s)); }
-  }
-
-  /**
-   * Register new tab change callback.
-   * @param {Function} l The callback function.
-   */
-  addTabChangeListener(l) {
-    this.#tabChangeListeners.push(l);
+    this.setSelectedTabIndex(this._currentTabIndex());
   }
 
   /**
@@ -146,7 +147,10 @@ class TabPaneGroup extends CompositeGuiElement {
    */
   update(dt, disableHover) {
     super.update(dt, disableHover);
-    if (this.tabContent) { this.tabContent[this.#selectedTabIndex].update(dt, disableHover); }
+    if (this.tabContent) {
+      const tabIndex = this._currentTabIndex();
+      this.tabContent[tabIndex].update(dt, disableHover); // update current tab
+    }
   }
 
   /**
@@ -154,24 +158,32 @@ class TabPaneGroup extends CompositeGuiElement {
    * @param {object} g The graphics context.
    */
   draw(g) {
-    if (this.tabContent) { this.tabContent[this.#selectedTabIndex].draw(g); } // draw tab content
+    if (this.tabContent) {
+      const tabIndex = this._currentTabIndex();
+      this.tabContent[tabIndex].draw(g); // draw current tab content
+    }
     super.draw(g); // draw tab labels
   }
 
   /**
-   * Recursively populate #children with gui elements.
+   * Extend composite gui element so all tab contents are built
    * @param {GameScreen} screen The screen containing this.
    */
   buildElements(screen) {
     super.buildElements(screen);
-    if (this.tabContent) { this.tabContent.forEach((e) => e.buildElements(screen)); }
+    if (this.tabContent) {
+      this.tabContent.forEach((e) => {
+        e.buildElements(screen);
+      });
+    }
   }
 
   /**
    *
    */
   click() {
+    const tabIndex = this._currentTabIndex();
     return super.click() || // click tab label
-            (this.tabContent && this.tabContent[this.#selectedTabIndex].click()); // click tab content
+            (this.tabContent && this.tabContent[tabIndex].click()); // click tab content
   }
 }

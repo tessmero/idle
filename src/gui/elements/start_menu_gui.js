@@ -22,7 +22,7 @@ const _startMessageSpecs = randChoice([
  *
  */
 class StartMenuGui extends Gui {
-  title = 'Start Menu';
+  _titleKey = 'Start Menu';
   _layoutData = START_GUI_LAYOUT;
 
   /**
@@ -47,6 +47,7 @@ class StartMenuGui extends Gui {
       ...this.labels,
 
       new Button(layout.playBtn, {
+        titleKey: 'start-menu-play-btn',
         label: 'PLAY',
         action: () => this.gsm.playClicked(),
         border: new SlantBorder(),
@@ -54,6 +55,7 @@ class StartMenuGui extends Gui {
       }),
 
       new Button(layout.sandboxBtn, {
+        titleKey: 'start-menu-sandbox-btn',
         icon: sandboxIcon,
         action: () => this.gsm.sandboxClicked(),
         border: new SlantBorder(),

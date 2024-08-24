@@ -5,19 +5,47 @@
 class CompositeGuiElement extends GuiElement {
 
   /**
-   * Optional reference to layout css in data folder
+   * Layout css object in data/gui-layouts
    * @abstract
    * @type {object}
    */
   _layoutData;
 
   /**
+   * named actor specs for animating layout
+   * may reference objects in data/gui-anims
+   * @abstract
+   * @type {object}
+   */
+  _layoutActors;
+
+  /**
+   * sound data object in data/gui-sounds
+   * @abstract
+   * @type {object}
+   */
+  _soundData;
+
+  /**
    * Layout rectangles' absolute x,y,w,h
    * Computed in computeLayoutRects()
    * @type {object}
    */
-  _layout = null;
-  #lytParams;
+  _layout;
+
+  /**
+   * handles for persistent GuiActor instances
+   * assigned in game_screen.js.
+   * @type {object}
+   */
+  _actors;
+
+  /**
+   * handles for registered SoundEffect instances
+   * assigned in game_screen.js.
+   * @type {object}
+   */
+  _sounds;
 
   /**
    * Rectangle to avoid drawing over even if opaque
@@ -25,6 +53,7 @@ class CompositeGuiElement extends GuiElement {
    */
   #hole;
 
+  #lytParams;
   #children = [];
   #opaque;
 
@@ -71,6 +100,42 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
+   * Update any actors and let them adjust layout parameters.
+   */
+  _updateLytParams() {
+
+    // update actors and get new layout parameters
+    let pars = this.lytParams;
+    if (this._actors) {
+      Object.values(this._actors).forEach((actor) => {
+        pars = { ...pars, ...actor.update() };
+      });
+    }
+
+    // trigger sound effects, apply new layout params, rebuild
+    this._setLytParams(pars);
+  }
+
+  /**
+   * Play any appropriate sound effects, apply the given layout params, and rebuild children
+   * @param {object} pars The new layout parameters to apply.
+   */
+  _setLytParams(pars) {
+    const lastParams = this._pState ? this._pState.lytParams : null;
+
+    if (lastParams) {
+      const soundsToPlay = GuiSoundParser.getTriggeredSounds(this._soundData, lastParams, pars);
+      const soundPoint = rectCenter(...this.bounds);
+      soundsToPlay.forEach((soundName) => this._sounds[soundName].play(soundPoint));
+    }
+
+    this.#lytParams = pars;
+    if (this._pState) { this._pState.lytParams = pars; }
+    this._layout = null;
+    this.buildElements(this.screen);
+  }
+
+  /**
    *
    */
   get lytParams() {
@@ -82,16 +147,6 @@ class CompositeGuiElement extends GuiElement {
    */
   set lytParams(_s) {
     throw new Error('should use setLytParams()');
-  }
-
-  /**
-   *
-   * @param {object} s The new layout parameters.
-   */
-  setLytParams(s) {
-    this.#lytParams = s;
-    this._layout = null;
-    this._computeLayoutRects(screen);
   }
 
   /**
@@ -130,7 +185,10 @@ class CompositeGuiElement extends GuiElement {
     this.#children = elems;
     this.setScreen(screen); // make sure screen is set for children
 
-    elems.filter((e) => e instanceof CompositeGuiElement).forEach((e) => e.buildElements(screen));
+    elems.filter((e) => e instanceof CompositeGuiElement).forEach((e) => {
+      e.buildElements(screen);
+    });
+
   }
 
   /**
@@ -202,6 +260,8 @@ class CompositeGuiElement extends GuiElement {
   setScreen(s) {
     super.setScreen(s);
     this.#children.forEach((c) => c.setScreen(s));
+    this._actors = s.registerLayoutActors(this._layoutActors);
+    this._sounds = s.registerSoundEffects(this._soundData);
   }
 
   /**
@@ -217,11 +277,17 @@ class CompositeGuiElement extends GuiElement {
    * @param {boolean} disableHover
    */
   update(dt, disableHover = false) {
+
+    // animate and rebuild if necessary
+    this._updateLytParams();
+
+    // check if hovered
     let hovered = super.update(dt, disableHover);
     hovered = this.#opaque && hovered;
     this.#children.forEach((e) => {
       hovered = e.update(dt, disableHover) || hovered;
     });
+
     return hovered;
   }
 

@@ -22,10 +22,9 @@ class TestsTab extends CompositeGuiElement {
     const tabLabels = allCats;
     const tabTooltips = allCats.map((cat) => `${cat} tests`);
     const tabContents = allCats.map((cat) => (r, p) => this.buildTabContent(r, p, cat));
-    const tabGroup = new TabPaneGroup(layout.inner, { tabLabels, tabContents, tabTooltips });
-    if (global.testsMenuTabIndex) { tabGroup.setSelectedTabIndex(global.testsMenuTabIndex); }
-    tabGroup.addTabChangeListener((i) => {
-      global.testsMenuTabIndex = i;
+    const tabGroup = new TabPaneGroup(layout.inner, {
+      tabLabels, tabContents, tabTooltips,
+      titleKey: 'test-categories-tab-group',
     });
 
     return [tabGroup];
@@ -49,6 +48,7 @@ class TestsTab extends CompositeGuiElement {
 
       // run all button
       const rab = new Button(layout.rows[0], {
+        titleKey: 'test-runall-btn',
         action: () => this.playAllClicked(),
         scale,
       });

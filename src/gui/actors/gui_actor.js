@@ -6,7 +6,7 @@
  */
 class GuiActor {
   #lytParam; // name of single layout parameter to animate
-  #data; // ...or object in data/gui-anims
+  #lytAnim; // ...or object in data/gui-anims
 
   // last update time
   #t;
@@ -23,13 +23,13 @@ class GuiActor {
   /**
    * @param {object} params The parameters.
    * @param {string} params.lytParam The layout parameter to animate
-   * @param {object} params.data The object in data/gui-anims to animate multiple layout parameters
+   * @param {object} params.lytAnim The object in data/gui-anims to animate multiple layout parameters
    * @param {string} params.param should use lytParam instead. Unpacked to throw error message.
    * @param {number} params.speed The amount per ms to move state towards target
    */
   constructor(params = {}) {
     const {
-      data,
+      lytAnim,
       param,
       lytParam,
       speed = 1e-3,
@@ -40,7 +40,7 @@ class GuiActor {
     }
 
     this.#lytParam = lytParam;
-    this.#data = data;
+    this.#lytAnim = lytAnim;
     this.#speed = speed;
     this.#t = global.t;
   }
@@ -65,6 +65,7 @@ class GuiActor {
    */
   setState(s) {
     this.#state = s;
+    this.#t = global.t;
   }
 
   /**
@@ -125,6 +126,6 @@ class GuiActor {
     }
 
     // return multiple params using anim data
-    return GuiAnimParser.computeLayoutParams(this.#data, this.#state);
+    return GuiAnimParser.computeLayoutParams(this.#lytAnim, this.#state);
   }
 }

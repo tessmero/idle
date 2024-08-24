@@ -45,6 +45,12 @@ function StoryManager() {
       return false; // already in special story state
     }
 
+    if (hook.sound) {
+      global.mainScreen.sounds[hook.sound].play();
+
+      // play sound
+    }
+
     // enter new story state
     sm.setState(GameStates.storyIntervention,
       {

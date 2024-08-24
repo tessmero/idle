@@ -4,7 +4,27 @@
  * Contents for the "upgrades" tab in the upgrades menu.
  */
 class UpgradesTab extends CompositeGuiElement {
+  _titleKey = 'upgrades-tab';
   _layoutData = UPGRADES_TAB_LAYOUT;
+  _soundData = UPGRADES_TAB_SOUNDS;
+  _layoutActors = {
+
+    // individual rows expanding one by one
+    utDrop: {
+      lytAnim: UPGRADES_TAB_ANIM,
+      speed: 2e-3,
+    },
+  };
+
+  /**
+   * Called in tab_pane_group.js
+   */
+  tabOpened() {
+    const act = this._actors.utDrop;
+    act.setState(0);
+    act.setTarget(1);
+    act.resetGuiActor();
+  }
 
   /**
    *
@@ -13,6 +33,9 @@ class UpgradesTab extends CompositeGuiElement {
    */
   constructor(rect, params = {}) {
     super(rect, {
+      lytParams: {
+        thick: rect[2] < 0.9 ? 1 : 0,
+      },
       ...params,
     });
   }
@@ -25,20 +48,17 @@ class UpgradesTab extends CompositeGuiElement {
     if (!global.upgradeTracks) { return []; }
 
     const rows = this._layout.rows;
-    const useThickLayout = rows[0][2] < 0.9;
+    const { thick = 0 } = this.lytParams || {};
 
     const specs = global.upgradeTracks.state;
     let rowIndex = 0;
-    const rowSpan = useThickLayout ? 2 : 1;
+    const rowSpan = 1;// useThickLayout ? 2 : 1;
     const upgraders = Object.entries(specs).map(([_key, gutse]) => {
-      let rect = rows[rowIndex];
+      const rect = rows[rowIndex];
       rowIndex = rowIndex + rowSpan;
-      if (useThickLayout) {
-        rect = [rect[0], rect[1], rect[2], 2 * rect[3]];
-      }
       return new StatUpgrader(rect, {
         lytParams: {
-          thick: useThickLayout ? 1 : 0,
+          thick,
         },
         gutse,
         tooltipFunc: () => {

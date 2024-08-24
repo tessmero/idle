@@ -4,7 +4,7 @@
  * Top-level GUI container that appears during gameplay.
  */
 class HudGui extends Gui {
-  title = 'hud gui';
+  _titleKey = 'hud-gui';
   _layoutData = HUD_GUI_LAYOUT;
 
   /**
@@ -22,6 +22,7 @@ class HudGui extends Gui {
 
       // upgrade menu button
       new Button(layout.topLeftBtn, {
+        titleKey: 'hud-upgrade-menu-button',
         icon: statsIcon,
         action: () => { this.gsm.toggleStats(); },
         tooltip: 'toggle upgrades menu',
@@ -79,6 +80,7 @@ class HudGui extends Gui {
 
       // exit box button if this screen is inside a box
       new Button(layout.topRightBtn, {
+        titleKey: 'hud-exit-box-btn',
         icon: boxIcon,
         action: () => this.gsm.quit(),
         tooltip: 'exit box',
@@ -87,6 +89,7 @@ class HudGui extends Gui {
 
       // otherwise pause button
       new Button(layout.topRightBtn, {
+        titleKey: 'hud-pause-btn',
         icon: pauseIcon,
         action: () => this.gsm.pause(),
         tooltip: 'pause or quit the game',

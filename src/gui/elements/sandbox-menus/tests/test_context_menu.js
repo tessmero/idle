@@ -150,6 +150,7 @@ class TestContextMenu extends ContextMenu {
       this.#finalDisplay,
 
       new Button(layout.closeBtn, {
+        titleKey: 'tcmClose',
         icon: xIcon,
         action: () => this.screen.setContextMenu(null),
         scale: 0.4,
@@ -219,21 +220,25 @@ class TestContextMenu extends ContextMenu {
 
     const specs = [
       {
+        titleKey: 'tcmPrev',
         icon: prevIcon,
         tooltip: 'previous test',
         action: () => this.prevClicked(),
       },
       {
+        titleKey: 'tcmPlay',
         icon: playIcon,
         tooltip: 'reset',
         action: () => this.playClicked(),
       },
       {
+        titleKey: 'tcmNext',
         icon: nextIcon,
         tooltip: 'next test',
         action: () => this.nextClicked(),
       },
       {
+        titleKey: 'tcmLoop',
         icon: loopIcon,
         tooltipFunc: () => _testLoopTooltip,
         action: () => this.loopClicked(),

@@ -21,13 +21,18 @@ class BodyTool extends Tool {
   mouseDown(p) {
     if (this.isUsable()) {
 
-      // pay
+      // pay cost
       const cost = this.getCost();
       const sim = this.sim;
       if (sim.usesGlobalCurrency) {
         global.particlesCollected = global.particlesCollected - cost;
       }
+
+      // spawn floaters to indicate payment
       sim.floaters.signalChange(p, -cost);
+
+      // play sound
+      this.screen.sounds.plonk.play(p);
 
       // add body
       const poi = this.buildBody(p);

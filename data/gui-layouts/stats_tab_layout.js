@@ -14,5 +14,9 @@ STATS_TAB_LAYOUT = {
     height: 0.15,
     repeat: 'down',
     margin: 0.01,
+
+    // sliding animation
+    'width@poke=0': 0.05,
+    'width@poke=1': '100%',
   },
 };

@@ -3,8 +3,17 @@
  */
 STORY_GUI_LAYOUT = {
 
+  // overall bounds
+  bounds: {
+
+    // fly in from bottom
+    'top@enter=0': '100%',
+    'top@enter=1': 0,
+  },
+
   // special outer border
   borderDiv: {
+    parent: 'bounds',
     width: 1.4,
     height: 0.8,
     top: 'auto',
@@ -13,6 +22,7 @@ STORY_GUI_LAYOUT = {
 
   // helper
   _main: {
+    parent: 'bounds',
     width: 0.8,
     height: 0.35,
     top: 'auto',

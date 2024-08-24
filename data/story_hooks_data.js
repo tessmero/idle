@@ -33,6 +33,7 @@ STORY_HOOKS = {
       'The rain will never stop falling.',
       'Your job is to catch it.',
     ],
+    sound: 'uhOh',
   },
 
   /**
@@ -48,5 +49,6 @@ STORY_HOOKS = {
     extra: [
       'No. Bad.',
     ],
+    sound: 'uhOh',
   },
 };

@@ -65,12 +65,9 @@ class DebugTab extends CompositeGuiElement {
       tabLabels: specs.map((spec) => spec[0]),
       tabTooltips: specs.map((spec) => spec[1]),
       tabContents: specs.map((spec) => (
-        (rect, params) => this.buildTabContent(rect, params, spec[2])
+        (rect, params) => this.buildTabContent(rect, params, spec[0], spec[2])
       )),
-    });
-    if (global.debugMenuTabIndex) { tabGroup.setSelectedTabIndex(global.debugMenuTabIndex); }
-    tabGroup.addTabChangeListener((i) => {
-      global.debugMenuTabIndex = i;
+      titleKey: 'debug-categories-tab-group',
     });
 
     return [tabGroup];
@@ -80,17 +77,27 @@ class DebugTab extends CompositeGuiElement {
    * Build content for a tab within the debug tab.
    * @param {number[]} rect The rectangle to align elements in.
    * @param {object} params The parameters to pass to element constructor
-   * @param {object} tabSpecs Specifications for the tab.
+   * @param {string} tabLabel
+   * @param {object} rowSpecs Specifications for the rows in the tab.
    */
-  buildTabContent(rect, params, tabSpecs) {
+  buildTabContent(rect, params, tabLabel, rowSpecs) {
     const result = new CompositeGuiElement(rect, params);
     result._layoutData = DEBUG_TAB_LAYOUT;
-    result._buildElements = () => tabSpecs.map((spec, i) => {
+    result._buildElements = () => rowSpecs.map((spec, i) => {
       const r = result._layout.rows[i];
       if (spec[1] === 'bool') {
-        return new BooleanDebugVar(r, { varname: spec[0], tooltip: spec[2] });
+        return new BooleanDebugVar(r, {
+          titleKey: `${tabLabel}-row-${i}`,
+          varname: spec[0],
+          tooltip: spec[2],
+        });
       }
-      return new ScalarDebugVar(r, { varname: spec[0], inc: spec[1], desc: spec[2] });
+      return new ScalarDebugVar(r, {
+        titleKey: `${tabLabel}-row-${i}`,
+        varname: spec[0],
+        inc: spec[1],
+        desc: spec[2],
+      });
 
     });
     return result;

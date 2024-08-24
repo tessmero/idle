@@ -4,7 +4,7 @@
  * as player enters or exits a box.
  */
 class BoxTransitionGui extends Gui {
-  title = 'Box Transition';
+  _titleKey = 'Box Transition';
 
   #t = 0;
   #closeDur = 0;

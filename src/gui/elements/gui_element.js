@@ -3,6 +3,8 @@
  * instances represent rectangles positioned on-screen
  */
 class GuiElement {
+  _titleKey; // unique key necessary if _pState is used
+  _pState; // persistent state object
 
   #screen;
   #rect;
@@ -24,13 +26,11 @@ class GuiElement {
   // tooltip string
   // tooltipFunc
 
-  #tempTooltip;
-  #tempTooltipEndTime;
-
   /**
    *
    * @param {number[]} rect The rectangle for this element.
    * @param {object} params The parameters.
+   * @param {string} params.titleKey readable unique key used to store persistent state in GameScreen
    * @param {object} params.border The optional Border style instance
    * @param {boolean} params.fill True if the inside of the border should be filled.
    * @param {string} params.tooltip The tooltip text
@@ -53,6 +53,7 @@ class GuiElement {
    */
   constructor(rect, params = {}) {
     const {
+      titleKey, // optional titlekey for _pState
 
       icon,
       label,
@@ -83,6 +84,8 @@ class GuiElement {
       throw new Error('invalid parameter \'center\'. should use \'textAlign\'');
     }
 
+    this._titleKey = titleKey;
+
     this.#icon = icon;
     this.#label = label;
     this.#pad = pad;
@@ -101,6 +104,11 @@ class GuiElement {
     this.tooltipFunc = tooltipFunc;
     this.hoverable = hoverable;
   }
+
+  /**
+   *
+   */
+  get titleKey() { return this._titleKey; }
 
   /**
    * Called in dynamic_text_label and test_context_menu
@@ -207,6 +215,12 @@ class GuiElement {
    */
   setScreen(s) {
     this.#screen = s;
+
+    // get persistent state object
+    if (this._titleKey) {
+      this._pState = s.getPState(this._titleKey);
+      this._pState.element = this;
+    }
   }
 
   /**
@@ -249,16 +263,6 @@ class GuiElement {
   }
 
   /**
-   * Temporarily override the normal tooltip text.
-   * Reverts after the user stops hovering or some time passes.
-   * @param {string} s The temporary tooltip text.
-   */
-  setTemporaryTooltip(s) {
-    this.#tempTooltip = s;
-    this.#tempTooltipEndTime = global.t + 1000; // millisecs
-  }
-
-  /**
    *
    * @param {number} dt The time elapsed in milliseconds.
    * @param {boolean} disableHover The if mouse hovering should be disabled.
@@ -275,58 +279,16 @@ class GuiElement {
     const mousePos = screen.mousePos;
     this.hovered = mousePos ? (this.hoverable && vInRect(mousePos, ...this.bounds)) : false;
 
-    // reset temporary tooltip if necessary
-    if (!this.hovered || (global.t > this.#tempTooltipEndTime)) { this.#tempTooltip = null; }
-
     // check if a tooltip should be shown
-    if (this.hovered && (this.#tempTooltip || this.tooltipFunc || this.tooltip)) {
+    if (this.hovered && (this.tooltipFunc || this.tooltip)) {
       if (screen) {
-        screen.tooltip = this.constructTooltipElement();
+
+        const tooltip = this.tooltipFunc ? this.tooltipFunc() : this.tooltip;
+        screen.constructTooltipElement(tooltip, this.tooltipScale);
       }
     }
 
     return this.hovered;
-  }
-
-  /**
-   *
-   */
-  constructTooltipElement() {
-    const screen = this.screen;
-
-    if (this.#tempTooltip) {
-      this.tooltip = this.#tempTooltip;
-    }
-    else if (this.tooltipFunc) {
-      this.tooltip = this.tooltipFunc();
-    }
-
-    if (this.tooltip instanceof Tooltip) {
-      if (screen) {
-        return this.tooltip;
-      }
-
-    }
-    else if ((typeof this.tooltip === 'string' || this.tooltip instanceof String)) {
-
-      // build standard tooltip gui element
-      let rect = this.pickTooltipRect(screen, this.tooltip, this.tooltipScale);
-      rect = padRect(...rect, 0.005);
-      return new LabelTooltip(rect, {
-        innerLabel: this.tooltip,
-        scale: this.tooltipScale,
-      });
-    }
-
-    return null;
-  }
-
-  /**
-   *
-   * @param {GameScreen} screen
-   */
-  pickTooltipRect(screen) {
-    return LabelTooltip.pickRect(screen, this.tooltip, this.tooltipScale);
   }
 
   /**

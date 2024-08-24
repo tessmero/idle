@@ -15,6 +15,7 @@ class LayoutsTab extends CompositeGuiElement {
     const specs = {
       'CONTEXT_MENU_LAYOUT': {
         description: 'Base layout for context menu',
+        anims: ['CONTEXT_MENU_ANIM'],
 
         // presets emulate context_menu.js setting orientation
         presets: [
@@ -39,6 +40,14 @@ class LayoutsTab extends CompositeGuiElement {
       'TEST_CONTEXT_MENU_LAYOUT': {
         ext: 'CONTEXT_MENU_LAYOUT',
         description: 'Extended layout in test context menu',
+      },
+      'STATS_TAB_LAYOUT': {
+        description: 'stats tab',
+        anims: ['STATS_TAB_ANIM'],
+      },
+      'UPGRADES_TAB_LAYOUT': {
+        description: 'upgrades tab',
+        anims: ['UPGRADES_TAB_ANIM'],
       },
 
       /*
@@ -79,6 +88,7 @@ class LayoutsTab extends CompositeGuiElement {
       // construct one row
       innerTlrs.push(new LayoutListRow(
         rows[rowIndex], {
+          titleKey: `layout-list-row-${rowIndex}`,
           context: {
             title: layoutName,
             testLayoutData: window[layoutName],
