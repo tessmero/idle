@@ -21,7 +21,7 @@ SOUND_EFFECTS = {
     duration: 0.5,
     scale: 'A4_majorArp',
     wave: 'square',
-    volume: 0.05,
+    volume: 0.02,
   },
 
   //

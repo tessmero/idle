@@ -80,6 +80,7 @@ class PiContextMenu extends ContextMenu {
       }),
 
       new Button(this._layout.closeBtn, {
+        titleKey: 'pi-close-btn',
         icon: xIcon,
         action: () => this.closePiContextMenu(),
         scale: statScale,

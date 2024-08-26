@@ -70,12 +70,17 @@ module.exports = [
   },
 
   {
-    // add rules for gui sound effects
-    'files': ['data/gui-sounds/**/*.js'],
+    // add rules for sound effects
+    'files': [
+      'data/sound_effects_data.js',
+      'data/gui-sounds/**/*.js',
+    ],
     'rules': {
 
       // data objects must be flat lists of sound effects
-      'idle/max-object-depth': ['error', { maxDepth: 1 }],
+      'idle/max-object-depth': ['error', {
+        maxDepth: 2, // "scale" can use depth 2 for array of freqs
+      }],
 
       // restrict data object keys based on depth
       'idle/valid-key': ['error', [
@@ -89,13 +94,15 @@ module.exports = [
           ],
         },
         {
-          // param name must be valid sound property
+          // sound property (or trigger condition for some gui sounds)
           depth: 1,
-          description: 'trigger/sound property `volume`',
+          description: 'sound property like `volume`',
           patterns: [
-            '^(from|to)$',
-            '^(duration|freq|wave|volume|env)$',
-            '^(startFreq|endFreq)$',
+            '^(from|to)$', // for some gui-sounds triggered by layout parameters
+            '^(minDelay)$', // used to ignore rapid play() calls
+            '^(volume|duration|env)$', // volume over duration shape
+            '^(wave)$', // tone type "sh","sine","square","sawtooth","triangle",
+            '^(freq|startFreq|endFreq|scale)$', // single pitch or bend or sequence
           ],
         },
       ]],
@@ -103,13 +110,39 @@ module.exports = [
   },
 
   {
-    // add rules for gui animations
-    'files': ['data/gui-anims/**/*.js'],
+    // add rules for SOUND_ENVELOPES data object
+    'files': ['data/sound_env_data.js'],
     'rules': {
 
-      // animations must be flat lists of keyframes
+      // SOUND_ENVELOPES must be flat lists of sound effects
       'idle/max-object-depth': ['error', { maxDepth: 2 }],
 
+      // restrict SOUND_ENVELOPES keys based on depth
+      'idle/valid-key': ['error', [
+        {
+          // sound envelope name
+          depth: 0,
+          description: 'lower camel case like `myEnvelope`',
+          patterns: [
+            '^[a-z][a-zA-Z0-9]*$', // lowerCamelCase
+          ],
+        },
+        {
+          // array of rulesets must not have named keys
+          depth: 1,
+          description: 'array of sound env css rulesets',
+          patterns: [], // no acceptable patterns
+        },
+        {
+          // css rule name
+          depth: 2,
+          description: 'sound env rule like `volume`',
+          patterns: [
+            '^(volume|start|end)$', // css relative to base volume/duration rectangle
+            '^(repeat)$', // loop back to first ruleset
+          ],
+        },
+      ]],
     },
   },
 
@@ -117,6 +150,9 @@ module.exports = [
     // add rules for gui layouts
     'files': ['data/gui-layouts/**/*.js'],
     'rules': {
+
+      // enforce rule specific to gui-layouts
+      'idle/valid-layout-rect': ['error'],
 
       // layouts must be flat lists of rulesets
       'idle/max-object-depth': ['error', { maxDepth: 1 }],
@@ -152,6 +188,34 @@ module.exports = [
       // rule keys should not have quotes
       // unless they are necessary like for 'max-width'
       'quote-props': ['warn', 'as-needed'],
+    },
+  },
+
+  {
+    // add rules for gui animations
+    'files': ['data/gui-anims/**/*.js'],
+    'rules': {
+
+      // data objects must be flat lists of keyframes
+      'idle/max-object-depth': ['error', { maxDepth: 2 }],
+
+      // restrict keys based on depth in data objects
+      'idle/valid-key': ['error', [
+        {
+          // gui-anims data objects must be arrays of keyframes
+          depth: 0,
+          description: 'array of gui-anim keyframes',
+          patterns: [], // no acceptable patterns
+        },
+        {
+          // key in keyframe must be 't' or param defined with '@' in layout data
+          depth: 1,
+          description: 'keyframe property like `t` or `myLayoutParam`',
+          patterns: [
+            '^[a-z][a-zA-Z0-9]*$', // lowerCamelCase
+          ],
+        },
+      ]],
     },
   },
 ];

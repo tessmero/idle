@@ -18,7 +18,7 @@ class SoundEffect {
   #endFreq; // pitch at end of duration
 
   // standard or made up wave "sh"
-  #wave;// "sine","square","sawtooth","triangle",
+  #wave;// "sine","square","sawtooth","triangle"
 
   /**
    *
