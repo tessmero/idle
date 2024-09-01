@@ -166,6 +166,19 @@ class TabPaneGroup extends CompositeGuiElement {
   }
 
   /**
+   * Override composite gui element to support searching
+   * in current tab contents.
+   * @param {object} params The desired parameters to find
+   */
+  findDescendant(params) {
+    if (this.tabContent) {
+      const tabIndex = this._currentTabIndex();
+      return this.tabContent[tabIndex].findDescendant(params); // search in current tab content
+    }
+    return null;
+  }
+
+  /**
    * Extend composite gui element so all tab contents are built
    * @param {GameScreen} screen The screen containing this.
    */

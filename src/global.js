@@ -17,6 +17,22 @@ class Global {
   gsp = null;
 
   /**
+   * set in MuteButton
+   * checked in SoundEffect
+   * @type {boolean}
+   */
+  soundEnabled = true;
+
+  /**
+   * Graphical effects enabled.
+   * set in GfxButton
+   * set to false in update.js if lag detected
+   * checked in UpgradeMenuGui
+   * @type {boolean}
+   */
+  gfxEnabled = true;
+
+  /**
    * Prevent setting mainScreen with equals sign
    */
   set mainScreen(_s) { throw new Error('should use global.gsp.setInnerScreen()'); }

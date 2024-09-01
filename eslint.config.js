@@ -70,27 +70,59 @@ const guiConfigs = [
 
   }, {
 
-    // restrict gui element constructors
     'files': ['src/gui/elements/**/*.js'],
     'rules': {
 
+      // restrict gui element constructors
       ...ctorParamsRules,
 
-      // two parameters, and the first (rectangle) has no default
+      // constructors have two parameters, and the first (rectangle) has no default
       'idle/ctor-param-count': ['error', { 'count': 2 }],
-
     },
   },
 ];
 
+// static parsers
+// more rules to enforce encapsulated parsers
+const prsClasses = [
+  'SongParser', 'GuiLayoutParser', 'GuiAnimParser', 'GuiSoundParser',
+];
+const prsSource = ['src/parsers/**/*.js'];
+const prsConfigs = [
+  {
+    'files': ['src/**/*.js'],
+    'ignores': prsSource, // all source except parsers
+    'rules': {
+
+      // parser class names can only be used
+      // to call a lowerCamelCase static functions
+      'idle/static-class': ['error', { restrictedClasses: prsClasses }],
+    },
+  },
+
+  {
+    'files': prsSource, // only parsers' source
+    'rules': {
+
+      // parsers can only reference private variables when using "this"
+      'idle/this-no-public': ['error'],
+    },
+  },
+];
+
+// singleton daemons
 // overrides to enforce singleton "implicit constructor" style pattern
-const sglClasses = ['StoryManager', 'ScreenManager', 'EdgeManager', 'BorderManager'];
-const sglSrc = ['src/daemons/*_manager.js'];
+const sglClasses = [
+  'StoryManager', 'ScreenManager',
+  'EdgeManager', 'BorderManager',
+  'MusicManager',
+];
+const sglSource = ['src/daemons/**/*.js'];
 const sglConfigs = [
   {
     'rules': {
 
-      // warn against using "new" keyword singletons
+      // warn against using "new" keyword with singletons
       'idle/no-new-singleton': ['warn', { restrictedClasses: sglClasses }],
 
       // these PascalCase functions are allowed to called without new
@@ -98,9 +130,9 @@ const sglConfigs = [
     },
   },
 
-  // singletons' source can use nonstandard method declaration
   {
-    'files': sglSrc,
+    // singletons can use nonstandard method declaration
+    'files': sglSource,
     'rules': { 'func-names': 'off' },
   },
 ];
@@ -860,8 +892,9 @@ export default [
     'rules': baseRules,
   },
 
-  ...idleSrcConfigs,
-  ...sglConfigs,
-  ...guiConfigs,
-  ...dataConfigs,
+  ...idleSrcConfigs, // common rules from local plugin
+  ...sglConfigs, // singletons
+  ...prsConfigs, // parsers
+  ...guiConfigs, // src/gui
+  ...dataConfigs, // data folder
 ];

@@ -6,9 +6,6 @@ class Button extends GuiElement {
   #action;
   #mute;
 
-  // needs cleanup, used for buttons that aren't rebuilt constantly
-  #wasHovered = false;
-
   /**
    *
    * @param {number[]} rect The x,y,w,h of this button.
@@ -43,16 +40,20 @@ class Button extends GuiElement {
    * @param {...any} args
    */
   update(...args) {
-    super.update(...args);
+    const result = super.update(...args);
 
     // check if newly hovered
     const { wasHovered = false } = this._pState;
     if (!wasHovered && this.hovered) {
+
+      // play sound
       this.screen.sounds.hover.play(rectCenter(...this.bounds));
     }
 
     // remember for next time
     this._pState.wasHovered = this.hovered;
+
+    return result;
   }
 
   /**

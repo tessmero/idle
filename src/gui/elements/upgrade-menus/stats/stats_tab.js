@@ -4,6 +4,7 @@
  * Contents for the "stats" tab in the upgrade menu.
  */
 class StatsTab extends CompositeGuiElement {
+  _titleKey = 'stats-tab';
   _layoutData = STATS_TAB_LAYOUT;
   _soundData = STATS_TAB_SOUNDS;
   _layoutActors = {

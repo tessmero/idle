@@ -74,6 +74,9 @@ class LayoutsTab extends CompositeGuiElement {
       'STORY_GUI_LAYOUT': {
         description: '',
       },
+      'MUSIC_TAB_LAYOUT': {
+        description: '',
+      },
     };
 
     // build ui rows

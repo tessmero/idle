@@ -73,11 +73,8 @@ class LayoutContextMenu extends ContextMenu {
    */
   _pickDefaultAnimParams(layoutData) {
 
-    // parse layout with arbitrary bounding rectangle
-    const glp = new GuiLayoutParser([0, 0, 1, 1], layoutData, 1);
-
     // list of unique params referenced in data
-    const paramNames = [...glp.animParamsInData];
+    const paramNames = GuiLayoutParser.listAnimParams(layoutData);
 
     // give each param default value of 1
     const params = Object.fromEntries(paramNames.map((name) => [name, 1]));

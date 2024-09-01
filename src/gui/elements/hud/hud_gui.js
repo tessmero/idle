@@ -101,6 +101,24 @@ class HudGui extends Gui {
     const toolbarButtons = this._buildToolbarButtons();
     result = result.concat(toolbarButtons);
 
+    // append sound mute button
+    result.push(
+      new MuteButton(layout.muteBtn, {
+        titleKey: 'hud-mute-btn',
+        fill: true,
+        scale: 0.7,
+      })
+    );
+
+    // append gfx button
+    result.push(
+      new GfxButton(layout.gfxBtn, {
+        titleKey: 'hud-gfx-btn',
+        fill: true,
+        scale: 0.7,
+      })
+    );
+
     return result;
   }
 

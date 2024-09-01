@@ -2,7 +2,7 @@
 
 The user interface is composed of `GuiElement` instances. Various types of elements are defined by sub-classes such as `Button`. Elements that contain other elements extend `CompositeGuiElement`.
 
-## Lifecycle
+## Life Cycle
 
 Elements are first superficially "constructed" with `new`. For composite elements, they may later be "built", at which point they construct direct children. 
 
@@ -60,7 +60,8 @@ class Button extends GuiElement {
     this.#action = action;
   }
 
-  ...
+  // connect action with mouse click
+  // ...
 }
 ```
 `#action` is defined here because it is relevant at this level and not for the more general class. All buttons have actions, but not all gui elements. 

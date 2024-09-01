@@ -91,6 +91,27 @@ class CompositeGuiElement extends GuiElement {
   }
 
   /**
+   *
+   * @param {object} params The parameters (only titleKey supported)
+   * @param {string} params.titleKey The desired titleKey to find
+   */
+  findDescendant(params) {
+    const { titleKey } = params;
+    for (const child of this.#children) {
+      if (child.titleKey === titleKey) {
+        return child; // matching direct child
+      }
+      if (child instanceof CompositeGuiElement) {
+        const result = child.findDescendant(params);
+        if (result) {
+          return result; // matching descendant
+        }
+      }
+    }
+    return null; // no matching descendant
+  }
+
+  /**
    * Construct direct children for this composite.
    * @abstract
    * @returns {GuiElement[]} The children.
@@ -171,16 +192,17 @@ class CompositeGuiElement extends GuiElement {
     this._computeLayoutRects(screen);
 
     const elems = this._buildElements();
+
+    if (!elems.every(Boolean)) {
+      throw new Error('falsey child element(s)');
+    }
+
     elems.forEach((e) => {
       e._parentCge = this; // used in _setHole()
       if (e instanceof HoleElement) {
         this._setHole(e.rect);
       }
     });
-
-    if (!elems.every(Boolean)) {
-      throw new Error('falsey child element(s)');
-    }
 
     this.#children = elems;
     this.setScreen(screen); // make sure screen is set for children

@@ -4,6 +4,47 @@
  */
 
 ICON_LAYOUTS = {
+
+  gfx: [[
+    'www    ',
+    'w      ',
+    'www   w',
+    'w  w w ',
+    'w   w  ',
+    '   w w ',
+    '  w   w',
+  ]],
+
+  noGfx: [[
+    '  www  ',
+    ' w   w ',
+    'w w   w',
+    'w  w  w',
+    'w   w w',
+    ' w   w ',
+    '  www  ',
+  ]],
+
+  soundPlaying: [[
+    '       ',
+    '  w    ',
+    ' ww   w',
+    'www w w',
+    ' ww   w',
+    '  w    ',
+    '       ',
+  ]],
+
+  soundMuted: [[
+    '       ',
+    '  w    ',
+    ' ww w w',
+    'www  w ',
+    ' ww w w',
+    '  w    ',
+    '       ',
+  ]],
+
   layout: [[
     'wwwwwwww',
     'w      w',

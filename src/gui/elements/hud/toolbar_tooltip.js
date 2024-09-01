@@ -111,8 +111,13 @@ class ToolbarTooltip extends LabelTooltip {
     const w = 0.4;
     const h = w / (phi / 2);
 
-    const p = Tooltip.pickMouseAnchorPoint(screen);
-    const r = Tooltip.pickTooltipRect(p, w, h);
+    // make sure tooltip spans away from cursor
+    const anchorPoint = Tooltip.pickMouseAnchorPoint(screen);
+    const mp = screen.mousePos.add(v(0.01, 0.01)); // center or top-left of cursor
+    const notClear = va(anchorPoint, mp); // don't want tooltip on this point
+    const clearPoint = mp.sub(mp.sub(notClear).mul(100)); // somewhere on other side of mousePos
+
+    const r = Tooltip.pickTooltipRect(anchorPoint, clearPoint, w, h);
 
     return r;
   }

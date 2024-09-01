@@ -62,6 +62,11 @@ class StartMenuGui extends Gui {
         fill: true,
       }),
 
+      new MuteButton(layout.muteBtn, {
+        titleKey: 'start-menu-mute-btn',
+        fill: true,
+        scale: 0.7,
+      }),
     ];
   }
 }

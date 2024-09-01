@@ -76,4 +76,29 @@ SOUND_ENVELOPES = {
       repeat: 0.04,
     },
   ],
+
+  // envelope for percussion that can't be sustained
+  // "duration" is really a placeholder for rhythm timing
+  snareDrum: [
+
+    // start at full volume
+    {
+      start: 0,
+      volume: '100%',
+    },
+
+    // hold full volume for short period
+    {
+      start: 0.17,
+      volume: '100%',
+    },
+
+    // fall off over short period
+    {
+      start: 0.3,
+      volume: 0,
+    },
+
+    // silent for remaining "duration"
+  ],
 };

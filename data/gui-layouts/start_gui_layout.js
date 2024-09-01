@@ -45,4 +45,13 @@ START_GUI_LAYOUT = {
     width: 0.15,
     right: 0,
   },
+
+  // sound mute button
+  muteBtn: {
+    parent: '_bdiv',
+    width: 0.08,
+    left: -0.15,
+    height: 0.08,
+    top: 'auto',
+  },
 };

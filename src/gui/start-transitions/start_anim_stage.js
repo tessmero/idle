@@ -13,13 +13,6 @@ class StartAnimStage {
   }
 
   /**
-   * @returns {boolean} False to let the screen be cleared before draw.
-   */
-  stopScreenClear() {
-    return false;
-  }
-
-  /**
    *
    * @param {object} _g The graphics context.
    * @param {number[]} _rect The rectangle to cover with the animation.

@@ -22,6 +22,7 @@ function gameLoop(timeStamp) {
 
   update(msPassed);
   draw(fps);
+  postUpdate(msPassed);
 
   requestAnimationFrame(gameLoop);
 }

@@ -38,14 +38,6 @@ class Gui extends CompositeGuiElement {
   }
 
   /**
-   * return true to prevent clearing screen
-   * used for some screen transition animations
-   */
-  stopScreenClear() {
-    return false;
-  }
-
-  /**
    * Called in game_state_manager.js
    */
   open() {}

@@ -115,6 +115,7 @@ function drawText(g, x, y, s, center, fontSpec) {
   const lines = s.split('\n');
   const dy = fontSpec.scale * global.textPixelSize * (charHeight + global.textLineSpace);
   let yy = y;
+  if (center) { yy = yy - 0.5 * dy * (lines.length - 1); }
   lines.forEach((l) => {
     _drawTextLine(g, x, yy, l, center, fontSpec);
     yy = yy + dy;

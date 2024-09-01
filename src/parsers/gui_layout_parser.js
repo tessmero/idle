@@ -5,6 +5,16 @@ class GuiLayoutParser {
   #maxRepeat = 20;
 
   /**
+   * Get a list of unique '@' param names used in the data object.
+   * Used in LayoutContextMenu.
+   * @param {?object} data The css data object in data folder.
+   */
+  static listAnimParams(data) {
+    const glp = new GuiLayoutParser([0, 0, 1, 1], data, 1);
+    return glp.#animParamsInData;
+  }
+
+  /**
    * Compute x,y,w,h rectangles from css rules.
    * @param {number[]} screenRect The overall bounding rectangle.
    * @param {?object} data reference to css in data folder.
@@ -191,12 +201,6 @@ class GuiLayoutParser {
       }
     }
   }
-
-  /**
-   * Get set of animation parameter names referenced in data.
-   * @returns {string[]} The parameter names.
-   */
-  get animParamsInData() { return this.#animParamsInData; }
 
   /**
    * @param  {object} keyParams The parsed @ parameter content

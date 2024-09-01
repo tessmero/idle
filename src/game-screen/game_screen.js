@@ -416,8 +416,15 @@ class GameScreen {
    */
   _getDraggingElem() {
     if (!this.draggingElem) { return null; }
-    const titleKey = this.draggingElem;
-    return this.#persistentStates[titleKey].element;
+
+    // draggable elements can't be in the tooltip
+    const searchIn = [this.gui, this.contextMenu];
+
+    for (const composite of searchIn.filter(Boolean)) {
+      const match = composite.findDescendant({ titleKey: this.draggingElem });
+      if (match) { return match; }
+    }
+    return null;
   }
 
   /**
@@ -796,24 +803,22 @@ class GameScreen {
    * @param {boolean} hideGui True if the gui should not be drawn.
    */
   idraw(g, hideGui) {
-
-    // clear canvas, unless gui requests not to
-    const gui = this.gui;
-    const stopClear = gui ? gui.stopScreenClear() : false;
-    if (!stopClear) {
-
-      // make sure the whole screen is cleared,
-      // in case this is the main screen and we are
-      // inside a box with dimensions
-      // not matching the users's physical screen
-      const clearRect = (this === global.mainScreen) ?
-        global.rootScreen.rect : this.rect;
-      g.clearRect(...clearRect);
+    let hideSim = false;
+    if ((!global.gfxEnabled) && (this.stateManager.state !== GameStates.playing)) {
+      hideSim = true;
     }
 
+    // make sure the whole screen is cleared,
+    // in case this is the main screen and we are
+    // inside a box with dimensions
+    // not matching the users's physical screen
+    const clearRect = (this === global.mainScreen) ?
+      global.rootScreen.rect : this.rect;
+    g.clearRect(...clearRect);
+
     // draw screen
-    this.sim.draw(g);
-    if ((!stopClear) && (!hideGui)) {
+    this.sim.draw(g, hideSim);
+    if (!hideGui) {
       this._drawGui(g);
     }
     this._drawCursor(g);

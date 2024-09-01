@@ -18,6 +18,7 @@ module.exports = {
     return {
       VariableDeclaration(node) {
         // Report any instance of a variable declaration, regardless of the keyword used
+        // (var, let, const)
         context.report({
           node,
           messageId: 'noVariableKeywords',

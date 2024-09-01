@@ -74,6 +74,9 @@ function update(dt) {
   // perform full/standard update of main sim and gui
   // may also update descendant boxes
   global.mainScreen.update(dt);
+}
+
+function postUpdate(dt) {
 
   // make sure all black box heirarchies were updated
   // (in case the descendants weren't updated for some reason)

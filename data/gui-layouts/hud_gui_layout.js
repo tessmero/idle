@@ -56,4 +56,22 @@ HUD_GUI_LAYOUT = {
     height: 0.1,
     bottom: 0,
   },
+
+  // sound mute button at bottom right
+  muteBtn: {
+    parent: '_sr',
+    width: 0.08,
+    height: 0.08,
+    bottom: 0,
+    right: 0,
+  },
+
+  // GFX button at bottom right
+  gfxBtn: {
+    parent: '_sr',
+    width: 0.08,
+    height: 0.08,
+    bottom: 0,
+    right: 0.08 + _MAR,
+  },
 };

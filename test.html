@@ -52,6 +52,8 @@
 <script src="src/math/rng.js"></script>
 <script src="src/math/util.js"></script>
 <script src="src/audio/music_theory.js"></script>
+<script src="data/songs/blank_song.js"></script>
+<script src="data/songs/cerulean_city_song.js"></script>
 <script src="data/char_layouts_data.js"></script>
 <script src="data/gui-anims/context_menu_anim.js"></script>
 <script src="data/gui-layouts/context_menu_layout.js"></script>
@@ -60,6 +62,7 @@
 <script src="data/gui-layouts/hud_gui_layout.js"></script>
 <script src="data/icon_layouts_data.js"></script>
 <script src="data/gui-layouts/layouts_tab_layout.js"></script>
+<script src="data/gui-layouts/music_tab_layout.js"></script>
 <script src="data/gui-layouts/pause_gui_layout.js"></script>
 <script src="data/gui-layouts/performance_tab_layout.js"></script>
 <script src="data/skill_tree_data.js"></script>
@@ -72,6 +75,7 @@
 <script src="data/gui-layouts/story_gui_layout.js"></script>
 <script src="data/story_hooks_data.js"></script>
 <script src="data/gui-layouts/tab_pane_layout.js"></script>
+<script src="data/songs/to_bills_origin_song.js"></script>
 <script src="data/gui-layouts/tooltip_layout.js"></script>
 <script src="data/gui-layouts/upgrade_menu_gui_layout.js"></script>
 <script src="data/gui-sounds/upgrade_menu_gui_sounds.js"></script>
@@ -93,10 +97,10 @@
 <script src="src/math/simulation/grabbers/grabber.js"></script>
 <script src="src/tests/graphics-wrapper/graphics_wrapper.js"></script>
 <script src="src/gui/actors/gui_actor.js"></script>
-<script src="src/gui/gui_anim_parser.js"></script>
+<script src="src/parsers/gui_anim_parser.js"></script>
 <script src="src/gui/elements/gui_element.js"></script>
-<script src="src/gui/gui_layout_parser.js"></script>
-<script src="src/gui/gui_sound_parser.js"></script>
+<script src="src/parsers/gui_layout_parser.js"></script>
+<script src="src/parsers/gui_sound_parser.js"></script>
 <script src="src/gui/icon.js"></script>
 <script src="src/math/int_set.js"></script>
 <script src="src/live_performance_stats.js"></script>
@@ -107,7 +111,7 @@
 <script src="src/math/simulation/particles/physics/physics_particle_subgroup.js"></script>
 <script src="src/progression/skills/skill.js"></script>
 <script src="src/progression/skill_tree.js"></script>
-<script src="src/audio/song.js"></script>
+<script src="src/parsers/song_parser.js"></script>
 <script src="src/audio/sound_effect.js"></script>
 <script src="src/audio/sound_envelope.js"></script>
 <script src="src/game-screen/sound_manager.js"></script>
@@ -117,9 +121,6 @@
 <script src="src/tools/tool.js"></script>
 <script src="src/progression/upgrade_tracks.js"></script>
 <script src="src/progression/value_curve.js"></script>
-<script src="src/audio/voice.js"></script>
-<script src="src/audio/voice_measure.js"></script>
-<script src="src/audio/voice_part.js"></script>
 <script src="src/tests/skills/basic_rain_skill_card_test.js"></script>
 <script src="src/game-screen/blank_gsm.js"></script>
 <script src="src/gui/elements/body_preview_element.js"></script>
@@ -199,12 +200,15 @@
 <script src="src/math/simulation/bodies/compound/default_control_frame.js"></script>
 <script src="src/gui/start-transitions/reversible/dissolve_trans.js"></script>
 <script src="src/tools/emitter_tool.js"></script>
+<script src="src/gui/elements/buttons/gfx_button.js"></script>
 <script src="src/gui/start-transitions/reversible/grid_trans.js"></script>
 <script src="src/gui/elements/gui.js"></script>
 <script src="src/gui/elements/sandbox-menus/layouts/layout_list_row.js"></script>
 <script src="src/gui/elements/sandbox-menus/layouts/layouts_tab.js"></script>
 <script src="src/tools/line_tool.js"></script>
-<script src="src/gui/start-transitions/fade-out/noclear_fade_out.js"></script>
+<script src="src/gui/elements/sandbox-menus/music/music_note_elem.js"></script>
+<script src="src/gui/elements/sandbox-menus/music/music_tab.js"></script>
+<script src="src/gui/elements/buttons/mute_button.js"></script>
 <script src="src/gui/elements/sandbox-menus/performance/performance_tab.js"></script>
 <script src="src/tools/pi_tool.js"></script>
 <script src="src/math/simulation/bodies/edges/impl/polygon_edge.js"></script>
@@ -228,6 +232,7 @@
 <script src="src/gui/elements/hud/toolbar_button.js"></script>
 <script src="src/gui/elements/tooltips/tooltip.js"></script>
 <script src="src/gui/elements/upgrade-menus/upgrades/upgrades_tab.js"></script>
+<script src="src/gui/elements/sandbox-menus/music/voice_row.js"></script>
 <script src="src/gui/elements/context-menus/body_context_menu.js"></script>
 <script src="src/progression/buddies/box_buddy.js"></script>
 <script src="src/gui/elements/box_transition_gui.js"></script>
@@ -237,12 +242,14 @@
 <script src="src/gui/elements/sandbox-menus/layouts/layout_context_menu.js"></script>
 <script src="src/gui/elements/pause_menu_gui.js"></script>
 <script src="src/gui/elements/context-menus/pi_context_menu.js"></script>
+<script src="src/gui/elements/sandbox-menus/music/song_list_context_menu.js"></script>
 <script src="src/gui/elements/start_menu_gui.js"></script>
 <script src="src/gui/elements/start_transition_gui.js"></script>
 <script src="src/gui/elements/story_gui.js"></script>
 <script src="src/gui/elements/sandbox-menus/tests/test_context_menu.js"></script>
 <script src="src/gui/elements/upgrade-menus/upgrade_menu_gui.js"></script>
 <script src="src/gui/elements/upgrade-menus/upgrades/upgrade_tooltip.js"></script>
+<script src="src/gui/elements/sandbox-menus/music/voice_context_menu.js"></script>
 <script src="src/gui/elements/context-menus/buddy_context_menu.js"></script>
 <script src="src/progression/buddies/rain_boy.js"></script>
 <script src="src/gui/elements/hud/toolbar_tooltip.js"></script>
@@ -255,6 +262,7 @@
 <script src="src/draw.js"></script>
 <script src="src/daemons/edge_manager.js"></script>
 <script src="src/input.js"></script>
+<script src="src/daemons/music_manager.js"></script>
 <script src="src/daemons/screen_manager.js"></script>
 <script src="src/daemons/story_manager.js"></script>
 <script src="src/tests/test_list.js"></script>

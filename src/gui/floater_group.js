@@ -104,7 +104,7 @@ class FloaterGroup {
    */
   draw(g) {
 
-    // comput elapsed time
+    // compute elapsed time
     // since last draw
     const t = global.t;
     let t0 = this.#lastT;

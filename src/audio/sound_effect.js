@@ -13,7 +13,7 @@ class SoundEffect {
   #minDelay; // if set, may ignore rapid play() calls
   #lastPlayTime;
 
-  #scale; // list of freqs to randomly choose from
+  #scale; // name or list of freqs to play in sequence within one duration
   #startFreq; // pitch at start of play()
   #endFreq; // pitch at end of duration
 
@@ -108,11 +108,23 @@ class SoundEffect {
   }
 
   /**
+   * Schedule sound effect to play at precise time, used for music.
+   * @param  {number} time The audio context time in the near future
+   */
+  schedulePlay(time) {
+    this.play(null, time);
+  }
+
+  /**
    *
    * @param {Vector|number[]} position The position on screen producing sound.
+   * @param {number} t The scheduled play time only used for schedulePlay()
    */
-  play(position) {
-    if (this.#screen !== global.mainScreen) {
+  play(position, t = null) {
+    if (!global.soundEnabled) {
+      return;
+    }
+    if (!(this.#screen === global.mainScreen || this.#screen === MusicManager())) {
       return;
     }
 
@@ -121,7 +133,7 @@ class SoundEffect {
 
     const mgr = this.#screen.soundManager;
     const ac = mgr.getAudioContext();
-    const time = mgr.currentTime;
+    const time = t ? t : ac.currentTime;
     const outNode = mgr.node;
 
     // check if this is being called to rapidly
@@ -159,13 +171,8 @@ class SoundEffect {
       // set pitch ramp
       if (this.#scale) {
         this.#scale.forEach((freq, i) => {
-          if (i === 0) {
-            osc.frequency.setValueAtTime(freq, startTime);
-          }
-          else {
-            const t = startTime + i * this.#duration / (this.#scale.length + 2);
-            osc.frequency.setValueAtTime(freq, t);
-          }
+          const freqTime = startTime + i * this.#duration / (this.#scale.length + 2);
+          osc.frequency.setValueAtTime(freq, freqTime);
         });
       }
       else {

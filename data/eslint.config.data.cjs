@@ -70,6 +70,25 @@ module.exports = [
   },
 
   {
+    // add rules for songs (music tracks)
+    'files': ['data/songs/**/*.js'],
+    'rules': {
+
+      // songs data has depth 3 song->score->measure->part
+      'idle/max-object-depth': ['error', { maxDepth: 3 }],
+
+      // song object names must be UPPER_SNAKE_CASE
+      // song data files also allowed to define '_' and 's'
+      'idle/valid-var-name': ['error', {
+        description: 'upper snake case like `MY_SONG_OBJECT`',
+        patterns: [
+          '^[A-Z][A-Z0-9_]*$', // UPPER_SNAKE_CASE song object
+          '^(_|s)$', // 'rest' and sustain' shorthands
+        ],
+      }],
+    },
+  },
+  {
     // add rules for sound effects
     'files': [
       'data/sound_effects_data.js',

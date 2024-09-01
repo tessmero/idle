@@ -219,7 +219,6 @@ class GuiElement {
     // get persistent state object
     if (this._titleKey) {
       this._pState = s.getPState(this._titleKey);
-      this._pState.element = this;
     }
   }
 
@@ -435,23 +434,18 @@ class GuiElement {
    */
   _drawAsStatReadout(g) {
     const rect = this.rect;
-    const pad = this.#pad;
+    const _pad = this.#pad;
     const scale = this.#scale;
-
     const icon = this.#icon;
 
-    // draw icon
-    const tps = global.textPixelSize;
-    const xy = [rect[0] + pad, rect[1] + pad + scale * tps];
-
-    if (!icon) { return; }
     const layout = this.isAnimated() ?
-      icon.getCurrentAnimatedLayout() : icon.frames[0]; // icon.js
-
-    drawLayout(g, xy[0], xy[1], layout, false, new FontSpec(pad, scale, true)); // character.js
-    drawLayout(g, xy[0], xy[1], layout, false, new FontSpec(0, scale, false)); // character.js
+      icon.getCurrentAnimatedLayout() : icon.frames[0];
+    const [_x, y] = rectCenter(...this.rect);
+    const tps = global.textPixelSize;
+    const x = rect[0] + this.#pad + (tps * scale * layout[0].length) / 2;
+    drawLayout(g, x, y, layout, true, new FontSpec(0, scale));
 
     // draw label with extra space on left
-    this._drawAsTextLabel(g, `   ${ this.#label}`);
+    this._drawAsTextLabel(g, `  ${ this.#label}`);
   }
 }

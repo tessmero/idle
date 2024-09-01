@@ -52,7 +52,13 @@ class LabelTooltip extends Tooltip {
     let [w, h] = getTextDims(label, s);
     w = w + 2 * global.tooltipPadding;
     h = h + 2 * global.tooltipPadding;
-    const p = Tooltip.pickMouseAnchorPoint(screen);
-    return Tooltip.pickTooltipRect(p, w, h);
+    const anchorPoint = Tooltip.pickMouseAnchorPoint(screen);
+
+    // make sure tooltip spans away from cursor
+    const mp = screen.mousePos.add(v(0.01, 0.01)); // center or top-left of cursor
+    const notClear = va(anchorPoint, mp); // don't want tooltip on this point
+    const clearPoint = mp.sub(mp.sub(notClear).mul(100)); // somewhere on other side of mousePos
+
+    return Tooltip.pickTooltipRect(anchorPoint, clearPoint, w, h);
   }
 }

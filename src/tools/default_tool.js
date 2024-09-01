@@ -67,9 +67,13 @@ class DefaultTool extends Tool {
     // increase currency
     sim.particlesCollected = sim.particlesCollected + 1;
 
-    // show message
     const p = v(x, y);
-    sim.floaters.signalChange(p, +1);
+
+    if (global.gfxEnabled) {
+
+      // show message
+      sim.floaters.signalChange(p, +1);
+    }
 
     // play sound
     sim.screen.sounds.collect.play(p);

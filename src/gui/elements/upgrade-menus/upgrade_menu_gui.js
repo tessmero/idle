@@ -58,6 +58,7 @@ class UpgradeMenuGui extends Gui {
         'UPGRADES',
         'STATS',
         'layouts',
+        'music',
 
       ];
       tabContents = [
@@ -69,6 +70,7 @@ class UpgradeMenuGui extends Gui {
         (rect, params) => new UpgradesTab(rect, params),
         (rect, params) => new StatsTab(rect, params),
         (rect, params) => new LayoutsTab(rect, params),
+        (rect, params) => new MusicTab(rect, params),
 
       ];
 
@@ -189,6 +191,13 @@ class UpgradeMenuGui extends Gui {
    * @param {object} g The graphics context.
    */
   drawTransitionEffect(g) {
+
+    if (!global.gfxEnabled) {
+
+      // graphical effects disabled
+      return;
+    }
+
     const screen = this.screen;
     if ((!screen) || (!screen._upgradeMenuTransitionEffect)) { return; }
 

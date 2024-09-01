@@ -21,10 +21,12 @@ CONTEXT_MENU_LAYOUT = {
   'bounds@orientation=0': {
     width: _SAX,
 
-    // expand/collapse
+    // collapsed
     'height@expand=0': 0.1,
-    'height@expand=1': _LAX,
     'top@expand=0': 'auto',
+
+    // expanded
+    'height@expand=1': _LAX,
     'top@expand=1': 0.14, // align under menu/pause button
 
     // slide across screen
@@ -184,3 +186,39 @@ TEST_CONTEXT_MENU_LAYOUT = {
   },
 };
 
+// extended layout for voice editor
+// in music tab in sandbox mode
+VOICE_CONTEXT_MENU_LAYOUT = {
+  ...CONTEXT_MENU_LAYOUT,
+
+};
+
+// extended layout for song selector
+// in music tab in sandbox mode
+SONG_LIST_CONTEXT_MENU_LAYOUT = {
+  ...CONTEXT_MENU_LAYOUT,
+
+  // selected song info in first square
+  info: {
+    parent: 'squares[0]',
+    height: 0.16,
+  },
+
+  // load button in first square
+  loadBtn: {
+    parent: 'squares[0]',
+    height: 0.04,
+    width: 0.2,
+    left: 'auto',
+    bottom: 0.1,
+  },
+
+  // list of songs
+  // rows in bottom/right content square
+  songRows: {
+    parent: 'squares[1]',
+    height: 0.05,
+    repeat: 'down',
+    margin: 0.005,
+  },
+};
