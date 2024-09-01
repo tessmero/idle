@@ -11,7 +11,7 @@ class GuiLayoutParser {
    */
   static listAnimParams(data) {
     const glp = new GuiLayoutParser([0, 0, 1, 1], data, 1);
-    return glp.#animParamsInData;
+    return [...glp.#animParamsInData];
   }
 
   /**
