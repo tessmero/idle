@@ -17,7 +17,7 @@ var mgr = new ScreenManager() // safe but misleading
 Using the `new` keyword this way will trigger a warning in ESLint. It violates the coding standard `idle/no-new-singleton` configured in `eslint.config.js`. 
 
 ```js
-var mgr = NotSingleton() // 
+var mgr = NotSingleton() // incorrect
 ```
 Omitting `new` for a non-singleton uppercase function name is a violation of `new-cap`. This reversal of standards provides some extra free spell-checking. It is convenient for elevating a regular manager to daemon or vice-versa.
 
