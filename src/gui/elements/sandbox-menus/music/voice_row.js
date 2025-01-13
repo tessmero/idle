@@ -30,6 +30,9 @@ class VoiceRow extends CompositeGuiElement {
     const scale = this.scale;
 
     const measureVoices = this.songData.score[this.measureIndex];
+    if (!measureVoices) {
+      return [];
+    }
     if (this.#voiceIndex >= measureVoices.length) {
       return [];
     }

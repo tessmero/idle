@@ -4,10 +4,6 @@
  * and a budget/cost indicator
  */
 const _allTutorialScreens = {};
-
-/**
- *
- */
 class ToolbarTooltip extends LabelTooltip {
   _layoutData = TOOLBAR_TOOLTIP_LAYOUT;
 

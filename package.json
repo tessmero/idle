@@ -20,9 +20,9 @@
     "uglify": "uglifyjs dist/production.js --mangle toplevel -o dist/production.min.js",
     "lint:test": "mocha eslint-plugin-idle/tests/*.test.cjs",
     "lint": "npm run lint:test && eslint src data build eslint-plugin-idle",
+    "build": "npm run build:test",
     "build:test": "npm run lint && npm run link",
-    "build:prod": "npm run build:test && npm run concat && npm run uglify",
-
-    "build": "npm run build:test"
+    "build:prod": "npm run build:test && npm run concat && npm run uglify && npm run zip",
+    "zip": "node build/update-index.cjs && cd www && zip -r - . >../dist/rain-catcher.zip"
   }
 }

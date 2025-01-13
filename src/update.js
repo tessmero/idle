@@ -25,13 +25,15 @@ function fitToContainer(forceUpdate = false) {
     lastCanvasOffsetWidth = ow;
     lastCanvasOffsetHeight = oh;
 
-    cvs.width = ow;
-    cvs.height = oh;
+    const dpr = window.devicePixelRatio
+
+    cvs.width = ow*dpr;
+    cvs.height = oh*dpr;
     const padding = 0; // Padding around the square region
     const dimension = Math.min(ow, oh) - padding * 2;
-    global.canvasScale = dimension;
-    global.canvasOffsetX = (ow - dimension) / 2;
-    global.canvasOffsetY = (oh - dimension) / 2;
+    global.canvasScale = dimension*dpr;
+    global.canvasOffsetX = (ow - dimension) / 2*dpr;
+    global.canvasOffsetY = (oh - dimension) / 2*dpr;
     global.canvasTransform = [global.canvasScale, 0, 0,
       global.canvasScale, global.canvasOffsetX, global.canvasOffsetY];
     if (global.ctx) {
