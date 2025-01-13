@@ -4,7 +4,7 @@ Incremental / physics game used to practice game development.
 
 ## Demo
 
-https://tessmero.github.io/raincatcher.html
+https://tessmero.github.io/rain-catcher.html
 
 ## Usage with web browser
 
